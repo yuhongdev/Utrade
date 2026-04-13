@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Setting>
+
+	<!-- Main Setting -->
+	<node id="TickerFeedURL">/ref/gc/IndicesTicker.xml?timeStamp=[TimeStamp]</node>
+	<node id="IndicesMovementURL">http://www.arbahtadawul.com/gcArbah/applet/pdt_StkIndicesTracker.jsp?indexCode=[StkCode]&indexName=[StkName]</node>
+	<node id="Lang">EN</node>	
+	<node id="LeftToRightMode">true</node>
+	<node id="LabelSpacing">30</node>
+	<node id="TextFieldSpacing">10</node>
+	<node id="FrameRate">120</node>			<!-- #Instruction: The greater the smoother (default = 120) -->
+	<node id="MinTimer">1</node>			<!-- #Instruction: Time (in millisecond) to move 'MovePixelBy' pixel(s); The smaller the smoother -->
+	<node id="MaxTimer">30</node>
+	<node id="StartTimer">15</node>
+	<node id="MovePixelBy">1</node>
+	<node id="PriceDisplaySequence">0|1|3|2</node>	<!-- #Instruction: 0=StockName; 1=LastDone; 2=Change; 3=ArrowIndicator -->
+	<node id="Pauseable">true</node>
+	<node id="Clickable">false</node>
+	
+	<!-- Controller Setting -->
+	<node id="Controller">false</node>		<!-- #Instruction: If turn on the controller, the 'CornerRadius' should be always 0 -->
+	<node id="ControllerPosition">right</node>	<!-- #Instruction: left/right -->
+	<node id="ControllerPaddingLeft">5</node>
+	<node id="ControllerPaddingRight">5</node>
+
+	<!-- Background Setting -->
+	<node id="ShowBg">true</node>
+	<node id="BgColor">0x000000|0x000000</node>
+	<node id="CornerRadius">0</node>
+
+	<node id="ShowGradientBevel">false</node>
+	<node id="BorderColor">0xFF0000</node>
+	<node id="Distance">1</node>
+
+	<node id="Fading">true</node>
+	<node id="FaderWidth">100</node>
+	<node id="FaderColor">0x000000</node>
+
+	<!-- Announcement Label Text Format -->
+	<node id="Annc_Bold">true</node>
+	<node id="Annc_Color">0xFFFFFF</node>
+	<node id="Annc_Font">Verdana</node>
+	<node id="Annc_Italic">false</node>
+	<node id="Annc_LetterSpacing">0</node>
+	<node id="Annc_Size">11</node>
+	<node id="Annc_Underline">false</node>
+
+	<!-- Date & Time Label Text Format -->
+	<node id="Time_Bold">true</node>
+	<node id="Time_Color">0xFFFFFF</node>
+	<node id="Time_Font">Verdana</node>
+	<node id="Time_Italic">false</node>
+	<node id="Time_LetterSpacing">0</node>
+	<node id="Time_Size">11</node>
+	<node id="Time_Underline">false</node>
+
+	<!-- Stk Name Label Text Format -->
+	<node id="StkName_Bold">true</node>
+	<node id="StkName_Color">0xFFFFFF</node>
+	<node id="StkName_Font">Verdana</node>	<!-- #Instruction: Always use 'Simplified Arabic' which supports RTL text for Arabic -->
+	<node id="StkName_Italic">false</node>
+	<node id="StkName_LetterSpacing">0</node>
+	<node id="StkName_Size">11</node>
+	<node id="StkName_Underline">false</node>
+
+	<!-- Last Done Price Text Format -->
+	<node id="LastDone_Bold">true</node>
+	<node id="LastDone_Color">0xFFFFFF</node>
+	<node id="LastDone_Color_Up">0x00FF00</node>
+	<node id="LastDone_Color_Down">0xFF0000</node>
+	<node id="LastDone_Color_NoChange">0xFFFF00</node>
+	<node id="LastDone_Font">Verdana</node>
+	<node id="LastDone_Italic">false</node>
+	<node id="LastDone_LetterSpacing">0</node>
+	<node id="LastDone_Size">11</node>
+	<node id="LastDone_Underline">false</node>
+
+	<!-- Change Label Text Format -->
+	<node id="Change_Bold">true</node>
+	<node id="Change_Color">0xFFFFFF</node>
+	<node id="Change_Color_Up">0x00FF00</node>
+	<node id="Change_Color_Down">0xFF0000</node>
+	<node id="Change_Color_NoChange">0xFFFF00</node>
+	<node id="Change_Font">Verdana</node>
+	<node id="Change_Italic">false</node>
+	<node id="Change_LetterSpacing">0</node>
+	<node id="Change_Size">11</node>
+	<node id="Change_Underline">false</node>
+
+	<!-- Arrow Indicators Setting -->
+	<node id="Show_Arrow">true</node>
+	<node id="Arrow_Scale_Width">1</node>
+	<node id="Arrow_Scale_Height">1</node>
+
+</Setting>

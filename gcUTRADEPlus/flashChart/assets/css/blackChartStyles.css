@@ -1,0 +1,147 @@
+/* CSS file */
+.background
+{
+	backgroundColor:#0;
+	backgroundGradientColors:#0,#0;
+}
+
+.chartBackground
+{
+	color : #0;
+}
+
+.xAxis
+{
+	color: #ffffff;
+}
+
+.yAxis
+{
+	color: #ffffff;
+}
+
+.chartShadow
+{
+	show: false;
+}
+
+.chartBorder
+{
+	borderColor: #777777
+}
+
+.symbolTitle
+{
+	rollOverColor: #1191CE;
+}
+
+.historyViewUnselectedArea
+{
+	blendMode:darken;
+	backgroundColor: #333333;
+}	
+
+.GridLinesVerticalStroke
+{
+	color:#444444;
+}
+
+.GridLinesHorizontalStroke
+{
+	alpha:0;
+}
+
+.GridLinesHorizontalFill
+{
+	color:#333333;
+}
+
+.GridLinesHorizontalFill
+{
+	color:#333333;
+}
+
+.crosshair
+{
+	lineColor:#aaaacc;
+}
+
+.lastLine
+{
+	color:#888855;
+}
+
+Button
+{
+	cornerRadius: 3;
+    upSkin:ClassReference('tt.styles.GradientSkin');
+	downSkin:ClassReference('tt.styles.GradientSkin');
+	overSkin:ClassReference('tt.styles.GradientSkin');
+	selectedUpSkin:ClassReference('tt.styles.GradientSkin');
+	selectedDownSkin:ClassReference('tt.styles.GradientSkin');
+	selectedOverSkin:ClassReference('tt.styles.GradientSkin');
+	color:#000000;
+}
+
+ComboBox
+{
+    upSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	downSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	overSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	selectedUpSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	selectedDownSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	selectedOverSkin:ClassReference('tt.styles.GradientComboBoxSkin');
+	color:#000000;
+}
+
+.buttonUpSkin
+{
+	gradientRatios: 0, 0.49, 0.5, 1;
+	color: #ffffff, #B4B4B4, #A9A9A9, #B3B3B3;
+}
+.buttonDownSkin
+{
+	gradientRatios: 0, 1;
+	color: #616161, #ffffff;
+}
+.buttonOverSkin
+{
+	gradientRatios: 0, 0.49, 0.5, 1;
+	color: #C8FF78, #A3C573, #A9A9A9, #B3B3B3;
+}
+.buttonDownOverSkin
+{
+	gradientRatios: 0, 0.49, 0.5, 1;
+	color: #647f39, #A3C573, #b0b0b0, #ffffff;
+}
+
+.buttonUpBorderSkin
+{
+	color: #181818;
+}
+.buttonDownBorderSkin
+{
+	color: #6C6C6C, #4D4D4D;
+}
+.buttonDownInnerBorderSkin
+{
+	color: #e9e9e9, #e9e9e9;
+	alpha: 1, 0;
+}
+.buttonOverBorderSkin
+{
+	color: #181818;
+}
+.toolbar
+{
+	backgroundColor:#444444;
+}
+.lastLabel
+{
+	fontWeight : bold;
+	color:#000000;
+}
+.copyright
+{
+	color : #bbbbbb;
+}

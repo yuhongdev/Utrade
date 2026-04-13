@@ -1,0 +1,1 @@
+var sRanking_SG='4 October 2012|TRevolution|SMU BIBI Team|M Cube Partners|Awesome Team|Market Movers|NTUtraders|L@C|Gangnam Style|team az|OnlyWeWin|';

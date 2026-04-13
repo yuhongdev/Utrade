@@ -1,0 +1,191 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<link rel="stylesheet" type="text/css" href="../style/default.css">
+<script src="../../js/jquery-3.6.0.js"></script>
+<script src="../../js/jquery-ui.js"></script>
+<script src="../../js/jquery.jcryption.min.js"></script>
+<script src='../../js/validate/jquery.uniform.js'></script>
+<script src="../../js/validate/jquery.metadata.js"></script>
+<script src="../../js/validate/jquery.validate.js"></script>
+<script src="../../js/AesUtil.js"></script>
+<script src="../../js/aes.js"></script>
+<script src="../../js/pbkdf2.js"></script>
+<script src="../../js/login_util.js"></script>
+<script src="../../js/login_encrypt.js"></script>
+<script src="../js/ca_util.js"></script>
+<script src="../js/ca_encrypt.js?v=2"></script>
+<script src="../../js/ga.js"></script>
+<script>
+	<!--Check login status-->				
+		$(document).ready(function(){								
+				if(login_agent!=null){
+					if(login_agent.status=="true"){					
+						tradeAccInfoStatus();
+						//getSubsLogEncryptValue();
+					}else{
+						//$('#tblTDHdr').hide();
+						$("#caSubsStatus").css("display","none"); 
+						alert("Please Login");
+					}
+				}
+			});
+</script>
+<title>CA Subscription Status</title>
+
+<style type="text/css">
+<!--
+.style1 {color: #FF0000}
+-->
+</style>
+</head>
+<!--BODY onload='Body_OnLoad()' style='background:#FFFFFF;margin:5px 0px 0px 6px'-->
+<!--body onLoad="Body_OnLoad()" class="clsBody"-->
+<body class="clsBody">
+<div id="caSubsStatus">
+<table width="780" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr height="19">
+      <td class="clsSectionHeader" colspan="3" width="60%">&nbsp;&nbsp;Application Status</td>
+      <td class="clsSectionHeader" align="right" valign="bottom" width="30%"><img src="../img/refresh.png" title="Click to refresh" style="cursor:hand" onClick="window.location.reload(true);" height="18" width="15" border="0">&nbsp;</td>
+      <td width="10%"><img src="../img/butPrint.gif" title="Print" style="cursor:pointer" onClick="window.print();" height="18" width="18" border="0"> <img id="imgHelp" src="../img/lightbulboff.jpg" onMouseOver="this.src='../img/lightbulbon.jpg'" onMouseOut="this.src='../img/lightbulboff.jpg'" title="Summary: Display all your CA Subscription." height="19" width="20" border="0"></td>
+    </tr>
+    <tr height="20">
+      <td width="18%">Client's Name</td>
+      <td width="2%">:</td>
+      <td id="" colspan="3" width="80%">&nbsp;<label id="lblLoginID"></label>&nbsp;&nbsp;
+        [<label id="lblCliName"></label>]</td>
+    </tr>
+    <tr height="20">
+      <td>Account Number</td>
+      <td>:</td>
+      <td colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td><form id="frmTrdAcc" onSubmit="return frmTrdAccSrch_OnSubmit(this);">
+                  <select id="selTrdAcc" name="selTrdAcc" style="height:22px;width:270px" onchange=''>                   
+                  </select>
+                  <input id="txtTrdAccSrch" name="txtTrdAccSrch" style="display:none;width:180px" autocomplete="off">
+                  &nbsp;
+                  
+                </form></td>
+              <td align="right">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table></td>
+    </tr>
+    <tr height="20">
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td colspan="2" align="right"><input id="btnCAHistory" name="btnCAHistory" value="Application(s) History" onclick="toggleTodayOrHistory()" type="button"></td>
+    </tr>
+  </tbody>
+</table>
+<table width="650" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    
+  </tbody>
+</table>
+<br>
+<table class="tblCASubsLog" width="700" cellpadding="0" cellspacing="0">
+  <colgroup>
+           <col style="width:18%;">
+            <col >
+            <col style="width:18%;">
+            <col style="width:18%;">
+            <col style="width:15%;">
+			<col style="width:8%;">
+          </colgroup>
+  <tbody>
+  
+    <tr class="clsRepHeader">
+      <td class="clsRepFirstCol" style="border-right-color: #FFFFFF">Application Date</td>
+  
+      <td class="clsRepMidCol" style="border-right-color: #FFFFFF" >Stock</td>
+      <td class="clsRepMidCol" style="border-right-color: #FFFFFF">Quantity of Shares</td>
+      <td class="clsRepMidCol" style="border-right-color: #FFFFFF">Status</td>
+      <td class="clsRepMidCol" style="border-right-color: #FFFFFF" >App Ref No.</td>
+      <td class="clsRepLastCol"  >Tax Invoice</td>
+    </tr>
+  </tbody>
+</table>
+<div id="divBOSPrtf" style="overflow: auto; height: auto; max-height : 400px">
+  <table id="tblCASubsLogContent" class="tblCASubsLog" width="700" cellpadding="0" cellspacing="0">
+     <colgroup>
+           <col style="width:18%;">
+            <col >
+            <col style="width:18%;">
+            <col style="width:18%;">
+            <col style="width:15%;">
+			<col style="width:8%;">
+          </colgroup>
+          
+    <!--<tbody>
+      <tr width="100%" class="clsRepRowOdd">
+        <td class="clsRepFirstCol" >&nbsp;22/08/2013</td>
+        <td class="clsRepMidCol" >&nbsp;Zelan Berhad</td>
+        <td class="clsRepMidCol" align="right">10,000&nbsp;</td>
+        <td class="clsRepMidCol" >&nbsp;Completed</td>
+        <td class="clsRepMidCol" >&nbsp;21910</td>
+        <td class="clsRepLastCol"  align="center"><img src="../img/butPrint.png" width="18" height="18"></td>
+      </tr>
+      <tr width="100%" class="clsRepRowEven">
+        <td class="clsRepFirstCol" >&nbsp;22/08/2013</td>
+        <td class="clsRepMidCol" >&nbsp;Zelan Berhad</td>
+        <td class="clsRepMidCol" align="right">10,000&nbsp;</td>
+        <td class="clsRepMidCol" >&nbsp;<a href="#">Pending Payment</a></td>
+        <td class="clsRepMidCol" >&nbsp;21909</td>
+        <td class="clsRepLastCol"  align="center">&nbsp;</td>
+      </tr>
+    </tbody>-->
+  </table>
+</div>
+<table width="700" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr class="clsRepHeader">
+      <td style="FONT-SIZE: 1mm" colspan="8">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<table width="700" border="0" cellspacing="0" cellpadding="0" style=" margin:15px 0">
+<colgroup>
+    		<col>
+            <col style="width:12%;">
+            <col style="width:10%;">
+  </colgroup>
+  <tr>
+    <td width="568">&nbsp;</td>
+    <td width="70"><input id="btnCancel" name="btnCancel" value="Cancel"  style="width:100px" onClick="cancelSubscription()" type="button" disabled></td>
+    <td width="62"><input id="btnResubmit" name="btnResubmit" value="Resubmit" style="width:100px; margin-left:20px" onClick="reSubmit()" type="button"  disabled></td>
+  </tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="0" height="60" width="700">
+  <tbody>
+    <tr>
+      <td align="left"><strong>Notes:</strong></td>
+    </tr>
+    <tr>
+      <td align="left"><p>For Resubmission or cancellation, please click on &lt;Pending Payment&gt; column<br>
+          <span class="style1">* </span>With supplementary prospectus.<br>
+      </p></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>&nbsp;</p>
+<form id="frmCASubsEnc" name="frmCASubsEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="CASubsubmit" name="CASubsubmit" style="display:none;" />
+</form>
+<input type="hidden" id="crypted" name="crypted" value="" onchange="caSubsBeginEnc();" />
+<form id=frmPaymentSubmit name=frmPaymentSubmit action="../../stlProcessERights.jsp" method=post>
+	<!--<input type=hidden id=Pin name=Pin value=''></input>-->
+	<input type=hidden id="Acc" name="Acc"></input>
+	<input type=hidden id="Amt" name="Amt"></input>	
+	<input type=hidden id="Bank" name="Bank"></input>
+	<input type=hidden id="refID" name="refID"></input>
+	<input type=hidden id="AccTypeDesc" name="AccTypeDesc"></input>	
+	<input type=hidden id="caID" name="caID"></input>	
+</form>
+</body>
+</html>

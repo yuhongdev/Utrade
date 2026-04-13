@@ -1,0 +1,18 @@
+.sliderwrapper {
+	POSITION: relative; WIDTH: 495px; HEIGHT: 200px; OVERFLOW: hidden
+}
+.sliderwrapper .contentdiv {
+	POSITION: absolute; FILTER: progid:DXImageTransform.Microsoft.alpha(opacity=100); WIDTH: 500px; BACKGROUND: white; HEIGHT: 100%; VISIBILITY: hidden; TOP: 0px; LEFT: 0px; -moz-opacity: 1; opacity: 1
+}
+.pagination {
+	WIDTH: 495px; HEIGHT: 30px
+}
+.pagination A {
+	BORDER-BOTTOM: #ffffff 1px solid; TEXT-ALIGN: center; PADDING-BOTTOM: 0px; PADDING-LEFT: 3px; WIDTH: 162px; PADDING-RIGHT: 3px; DISPLAY: inline-block; FONT: 12px/30px Arial bold; BACKGROUND: #f2f2f2; COLOR: #002b54; TEXT-DECORATION: none; PADDING-TOP: 0px
+}
+.pagination A:hover {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; BACKGROUND: url(../images/icon/highlighted.jpg) #0099cc no-repeat 50% 130%; COLOR: #ffffff; PADDING-TOP: 0px
+}
+.pagination A.selected {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; BACKGROUND: url(../images/icon/highlighted.jpg) #0099cc no-repeat 50% 130%; COLOR: #ffffff; PADDING-TOP: 0px
+}

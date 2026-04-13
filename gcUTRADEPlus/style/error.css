@@ -1,0 +1,51 @@
+.normalFont {
+	FONT-FAMILY: Verdana;
+	FONT-SIZE: 9pt;
+	FONT-WEIGHT: normal;
+	TEXT-ALIGN: LEFT;
+	Color: #000000;		
+}
+
+.titleFont {
+	FONT-FAMILY: Verdana;
+	FONT-SIZE: 16pt;
+	FONT-WEIGHT: normal;
+	TEXT-ALIGN: LEFT;
+	Color:#023263;		
+}
+
+
+.subtitleFont {
+	FONT-FAMILY: Verdana;
+	FONT-SIZE: 8pt;
+	FONT-WEIGHT: normal;
+	TEXT-ALIGN: LEFT;
+	Color:#890000;		
+}
+
+.linkFont {
+	Color: #900200;		
+}
+
+.footerFont {
+	FONT-FAMILY: Verdana;
+	FONT-SIZE: 8pt;
+	FONT-WEIGHT: normal;
+	TEXT-ALIGN: CENTER;
+	Color: #0E365A;		
+}
+
+A
+{
+    FONT-SIZE: 8pt;
+}
+
+A.Ex0:link {Color:#900200;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 9pt }
+A.Ex0:visited {Color:#900200;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 9pt}
+A.Ex0:hover {Color:#900200;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 9pt}
+
+
+
+A.Ex1:link {Color:#0E365A;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 8pt;text-decoration:none}
+A.Ex1:visited {Color:#0E365A;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 8pt;text-decoration:none}
+A.Ex1:hover {Color:#0E365A;FONT-WEIGHT: normal;FONT-FAMILY: Verdana; FONT-SIZE: 8pt;text-decoration:none}

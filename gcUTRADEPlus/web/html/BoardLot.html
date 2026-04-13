@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Board Lot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/styleBL.css">
+<!--[if !IE]><!-->
+	<style>
+
+	/*
+	Max width before this PARTICULAR table gets nasty
+	This query will take effect for any screen smaller than 760px
+	and also iPads specifically.
+	@media
+	only screen and (max-width: 460px),
+	(min-device-width: 461px) and (max-device-width: 1024px)
+	*/
+	@media
+	only screen and (max-width: 460px){
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		tr { border: 1px solid #ccc; }
+
+		.boardTable td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding-left: 45%;
+		}
+		.boardTable td, .boardTable th { 
+		text-align: left; 
+		}
+	
+
+		td:before {
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 6px;
+			left: 6px;
+			width: 38%;
+			padding-right: 10px;
+			white-space: nowrap;
+			text-align: left; 
+			font-weight: 700;
+			color:#438543;
+		}
+		.boardTable td:nth-child(2),
+		.boardTable td:nth-child(3),
+		.boardTable td:nth-child(4),
+		.boardTable td:nth-child(5),
+		.boardTable td:nth-child(6){
+			text-align: left; 
+		}
+
+		/*
+		Label the data
+		*/
+		td:nth-of-type(1):before { content: "Currency Code"; }
+		td:nth-of-type(2):before { content: "Minimum Price"; }
+		td:nth-of-type(3):before { content: "Maximum Price"; }
+		td:nth-of-type(4):before { content: "Fluctuation"; }
+		td:nth-of-type(5):before { content: "Board Lot"; }
+	}
+
+	/* Smartphones (portrait and landscape) ----------- */
+	@media only screen
+	and (min-device-width : 320px)
+	and (max-device-width : 480px) {
+		body {
+			padding: 0;
+			margin: 0;
+			width: 100% }
+		}
+
+	/* iPads (portrait and landscape) ----------- */
+	@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+		body {
+			width: 100%;
+		}
+	}
+
+  body{
+    background-color: #FFFFFF;
+  }
+	</style>
+	<!--<![endif]-->
+</head>
+<body>
+<!--<div id="report-top-bar">
+  <div id="report-bar-inside">
+    <h3 id="report-bar-badge"> BOARD LOT </h3>
+    <div id="report-bar-buttons"> <a href="#"> close</a> </div>
+  </div>
+</div>-->
+<div id="page-wrap">
+  <h1></h1>
+  <table class="boardTable">
+    <thead>
+      <tr>
+        <th>Currency Code</th>
+        <th>Minimum Price</th>
+        <th>Maximum Price</th>
+        <th>Fluctuation</th>
+        <th>Board Lot</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PHP</td>
+        <td>0.0001</td>
+        <td>0.0099</td>
+        <td>0.0001</td>
+        <td>1000000</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>0.01</td>
+        <td>0.049</td>
+        <td>0.001</td>
+        <td>100000</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>0.05</td>
+        <td>0.249</td>
+        <td>0.001</td>
+        <td>10000</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>0.25</td>
+        <td>0.495</td>
+        <td>0.005</td>
+        <td>10000</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>0.5</td>
+        <td>4.99</td>
+        <td>0.01</td>
+        <td>1000</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>5</td>
+        <td>9.99</td>
+        <td>0.01</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>10</td>
+        <td>19.98</td>
+        <td>0.02</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>20</td>
+        <td>49.95</td>
+        <td>0.05</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>50</td>
+        <td>99.95</td>
+        <td>0.05</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>100</td>
+        <td>199.9</td>
+        <td>0.1</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>200</td>
+        <td>499.8</td>
+        <td>0.2</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>500</td>
+        <td>999.5</td>
+        <td>0.5</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>1000</td>
+        <td>1999</td>
+        <td>1</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>2000</td>
+        <td>4998</td>
+        <td>2</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>PHP</td>
+        <td>5000</td>
+        <td>1000000</td>
+        <td>5</td>
+        <td>5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+* { 
+	margin: 0; 
+	padding: 0; 
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 1.4;
+}
+#page-wrap {
+	margin: 15px 10px;
+}
+p {
+	margin: 10px 0; 
+}
+
+	/* 
+	Generic Styling, for Desktops/Laptops 
+	*/
+	table { 
+		width: 100%; 
+		border-collapse: collapse; 
+	}
+	/* Zebra striping */
+	.boardTable tr:nth-of-type(odd) { 
+		background: #edf4f0; 
+	}
+	.boardTable th {
+	color: white;
+	font-weight: bold;
+	//background-color: #39BE15;
+	background-color: #019c50;
+	}
+	.boardTable td, .boardTable th { 
+		padding: 4px 8px; 
+		border: 1px solid #ddd; 
+		text-align: left; 
+	}
+	.boardTable td:nth-child(2),
+	.boardTable td:nth-child(3),
+	.boardTable td:nth-child(4),
+	.boardTable td:nth-child(5),
+	.boardTable td:nth-child(6){
+		text-align: right; 
+	}
+	
+
+	#report-top-bar {
+	text-align: left;
+	background: #CCC;
+	position: relative;
+	zoom: 1;
+	width: 100% !important;
+	z-index: 6000;
+	padding: 5px 0px 5px;
+	}
+	#report-bar-inside {
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+	}
+	#report-bar-buttons {
+	padding-right: 10px;
+	float: right;
+	}
+	#report-bar-buttons a {
+	font-size: 12px;
+	margin-left: 20px;
+	color: white;
+	margin: 2px 0;
+	text-decoration: none;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+	#report-bar-buttons a:hover,
+	#report-bar-buttons a:focus {
+		text-decoration: underline;
+	}
+	#report-bar-badge {
+		display: inline-block;
+		padding: 0 10px !important;
+		margin: 0 !important;
+		background-color: transparent !important;
+	}

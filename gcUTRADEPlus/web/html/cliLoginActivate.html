@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>	
+	<head>
+		<!-- stylesheet ================================================== -->
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+        <link rel="stylesheet" href="../css/bootstrap-5.3.6.min.css" />
+        <link rel="stylesheet" href="../css/login.css" />
+        <link rel="stylesheet" href="/passport/login/css/popup-modal-bootstrap5.css" />
+		<style>
+			body{
+				margin:0;
+				padding:0;
+				font-family:Arial;
+			}
+		</style>
+		
+		<!-- javascript ================================================== -->
+		<script src="../js/jquery-3.7.1.min.js"></script>		
+		<script src="../js/jquery.jcryption.min.js"></script>
+		<script src="../../js/crypto/crypto-js-4.2.0.min.js"></script>
+		<script src="../js/AesUtil.js"></script>
+		<!-- <script src="../js/aes.js"></script>
+		<script src="../js/pbkdf2.js"></script> -->				
+		<script src="../js/common_util.js"></script>
+		<script src="../js/login_conf.js"></script>
+		<script src="../js/login_main.js"></script>
+		<script src="../js/bms_setting.js"></script>
+		<script src="../js/validate/jquery.validate-1.22.0.min.js"></script>
+		<script src="../js/cliLoginActivate.js"></script>
+        <script>		
+			
+			
+			function cliTradingHall_parent(){
+				top.location = trading_hall_url;
+			}
+			
+			function cliLogout_parent(){
+				var logout_response;
+				logout();
+			}
+		           
+        </script>
+	</head>
+	<body>
+		<div style="position:relative">
+			<div id="divLogo" style="text-align:center;margin:auto;padding-top:10px;"><img border="0" src="../../img/Login/logo.png" /><hr></div>
+			<!-- start divLogin -->
+			<div id="divLogin" style="display:none;width:300px;margin: auto;" class="box-body ">
+				<p><b>Login here to activate your login account.</b></p>
+				<form id="frmLogin" method="post">
+					<div class="mb-3">
+						<label class="form-label">Username</label>
+						<div class="controls">
+							<input type="text" class="form-control"  name="frmLogin_userID" id="frmLogin_userID" autocomplete="off" disabled/>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Password</label>
+						<div class="controls">
+							<input type="password" class="form-control" name="frmLogin_password" id="frmLogin_password" autocomplete="off" />
+						</div>
+					</div>
+					<div class="form-actions">
+						<input type='hidden' id='selDefPg' name='selDefPg' value=''>
+						<input id="frmLogin_submit" type="submit" class="btn w-100 btn-lg btn-primary openModalBtn" data-type="login" value="Activate Login" />
+					</div>
+				</form>
+			</div>
+			<!-- end divLogin -->
+			<!-- start divLogon -->
+			<div id="divLogon" style="display:none;width:500px; margin: auto;">
+				<h4>Congratulations!</h4>
+				<p style="line-height:25px; text-align:justify;">
+					You have successfully applied for your online account with UTRADE. You�can�now�access�to real time stock prices, research reports
+					and news. Our�Customer Relationship Management�officer�(CRM Officer)�will contact you to arrange for your�account application and activation. 
+					An email notification will be sent to you once your trading account has been activated. 
+					Please note that account activation is�subject to you submitting the following�documents duly completed, signed and witnessed.
+				</p>
+				<br/>
+				<div>
+					<!--changes made on 12/18/2018
+					<input type="button" class="btn btn-sm btn-primary" value="Proceed to Trading Hall" onclick="window.location=tradingHall_url;" />
+					-->
+					<input type="button" class="btn btn-sm btn-primary" value="Back to Homepage" onclick="logout();" />
+				</div>
+			</div>
+			<!-- end divLogon -->
+			<form id="frmLoginEnc" name="frmLoginEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="submit" name="submit" style="display:none;" />
+			</form>
+			<input type="hidden" id="crypted" name="crypted" value="" onchange="beginEnc();" />
+		</div>
+		<div id="response" name="response" style="display:none;position:absolute;top:50%;width:100%;text-align:center;"><img src="../../img/loading.gif" /></div>
+        
+        <script src="../js/bootstrap-5.3.6.bundle.min.js"></script>
+        <script src="../../passport-login-bc.jsp"></script>
+        <script src="/passport/login/js/login-popup-bootstrap5.js"></script>
+        
+	</body>
+</html>

@@ -1,0 +1,1 @@
+var sRanking='4 October 2012|diamond|TRevolution|Jackpot|Amazon Lily|RBH|Wuthering Height|In hoc signo vinces|Twin Tower|M&N-51|Sleeping Dogs|';

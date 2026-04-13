@@ -1,0 +1,208 @@
+/*------------------ selectDark -----------------*/
+		
+.selectDark .styleSelect_item{
+		border:0;
+		outline:none;
+		width:170px;
+		}
+		
+.selectDark .styleSelect_item_start{
+		display:none;
+		}
+		
+.selectDark .styleSelect_item_content{
+		height:100px;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		background:#525252;
+		}
+		
+.selectDark .styleSelect_item_end{
+		display:none;
+		}
+
+.selectDark{
+		font-family:Verdana, Arial;
+		font-size:8pt;
+		}
+
+.selectDark .passiveSelect,.selectDark .activeSelect{
+		height:20px;
+		line-height:18px;
+		display:block;
+		cursor:pointer;	
+		padding-left:10px;
+		margin-right:10px;
+		}
+		
+.selectDark .passiveSelect{
+		background:url("/gcCIMB/img/game/darkNormal.jpg") no-repeat top right;
+		color:#fff;
+		}
+		
+.selectDark .activeSelect{
+		background:url("/gcCIMB/img/game/darkActive.jpg") no-repeat top right;
+		color:#000000;
+		}
+		
+.selectDark ul{
+		padding:0;
+		margin:0;
+		list-style:none;
+		cursor:pointer;	
+		}
+		
+.selectDark li{
+		padding:0;
+		margin:0;
+		font-weight:normal;
+		padding:2px 0 2px 12px;
+		color:#aeaeae;
+		}
+		
+.selectDark li:hover{
+		color:#00aeef;
+		}
+		
+.selectDark .selected{
+		color:#fff;
+		}
+		
+/*------------------ selectInstitute -----------------*/
+
+.selectInstitute .styleSelect_item{
+	border:0;
+	outline:none;
+	width:350px;
+	}
+
+.selectInstitute .styleSelect_item_start{
+	display:none;
+	}
+
+.selectInstitute .styleSelect_item_content{
+	height:140px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background:#525252;
+	}
+
+.selectInstitute .styleSelect_item_end{
+	display:none;
+	}
+
+.selectInstitute{
+	font-family:Verdana, Arial;
+	font-size:8pt;
+	}
+
+.selectInstitute .passiveSelect,.selectInstitute .activeSelect{
+	height:20px;
+	line-height:18px;
+	display:block;
+	cursor:pointer;	
+	padding-left:10px;
+	margin-right:10px;
+	}
+
+.selectInstitute .passiveSelect{
+	background:url("/gcCIMB/img/game/darkNormal.jpg") no-repeat top right;
+	color:#000000;
+	}
+
+.selectInstitute .activeSelect{
+	background:url("/gcCIMB/img/game/darkActive.jpg") no-repeat top right;
+	color:#000000;
+	}
+
+.selectInstitute ul{
+	padding:0;
+	margin:0;
+	list-style:none;
+	cursor:pointer;	
+	}
+
+.selectInstitute li{
+	padding:0;
+	margin:0;
+	font-weight:normal;
+	padding:2px 0 2px 12px;
+	color:#aeaeae;
+	}
+
+.selectInstitute li:hover{
+	color:#00aeef;
+	}
+
+.selectInstitute .selected{
+	color:#fff;
+}
+		
+/*------------------ selectFruits -----------------*/
+
+.selectFruits{
+		font-family:Verdana, Arial, Helvetica, sans-serif;
+		font-size:12px;
+		background:url("images/fruitsBackground.jpg") repeat-x top right;
+		height:27px;
+		width:160px;
+		}
+
+.selectFruits .passiveSelect,.selectFruits .activeSelect{
+		height:25px;
+		line-height:2.4em;
+		display:block;
+		cursor:pointer;	
+		padding-left:10px;
+		margin-right:6px;
+		color:#fff;
+		font-weight:bold;
+		background:url("images/fruitsNormal.jpg") no-repeat top right;
+		}
+		
+.selectFruits .activeSelect{
+		color:#86c729;
+		background:url("images/fruitsSelected.jpg") no-repeat top right;
+		}
+		
+.selectFruits ul{
+		padding:0;
+		margin:0;
+		list-style:none;
+		max-height:350px;
+		overflow-y: visible;
+		overflow-x: visible;
+		cursor:pointer;
+		width:350px;
+		padding:3px;
+		background:#5a5a5a url("images/fruitsBackground2.jpg") repeat-x top right;
+		}
+		
+.selectFruits li{
+		padding:0;
+		margin:0;
+		width:110px;
+		color:#fff;
+		display:block;
+		float:left;
+		padding:3px;
+		}
+	
+.selectFruits  .special{
+		font-weight:bold;
+		}
+		
+.selectFruits .selected,.selectFruits li:hover{
+		color:#86c729;
+		}
+
+/*------------------ otherStyles -----------------*/
+
+.select{
+		padding:20px;
+		float:left;
+		}
+
+.clear{
+	clear:both;
+	}

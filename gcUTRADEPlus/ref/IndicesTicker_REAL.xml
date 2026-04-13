@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Ticker>	<QuoteDate>2011-12-14</QuoteDate>
+
+	<QuoteTime> 14:25:05</QuoteTime>
+
+	<Data>
+
+		<StkCode>200000</StkCode>
+
+		<StkName>IND-PROD</StkName>
+
+		<LastDone>107.81</LastDone>
+
+		<Change>-0.26</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>300008</StkCode>
+
+		<StkName>CONSTRUCTN</StkName>
+
+		<LastDone>232.20</LastDone>
+
+		<Change>-0.03</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>400006</StkCode>
+
+		<StkName>TRAD/SERV</StkName>
+
+		<LastDone>186.54</LastDone>
+
+		<Change>-0.11</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>500003</StkCode>
+
+		<StkName>TECHNOLOGY</StkName>
+
+		<LastDone>13.26</LastDone>
+
+		<Change>-0.05</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>1000003</StkCode>
+
+		<StkName>FINANCE</StkName>
+
+		<LastDone>13,039.72</LastDone>
+
+		<Change>32.11</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>2000002</StkCode>
+
+		<StkName>PROPERTIES</StkName>
+
+		<LastDone>951.44</LastDone>
+
+		<Change>-0.71</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>2500001</StkCode>
+
+		<StkName>PLANTATION</StkName>
+
+		<LastDone>7,930.00</LastDone>
+
+		<Change>-55.38</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>3000001</StkCode>
+
+		<StkName>MINING</StkName>
+
+		<LastDone>352.60</LastDone>
+
+		<Change>0.00</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>20000000</StkCode>
+
+		<StkName>FBMKLCI</StkName>
+
+		<LastDone>1,465.79</LastDone>
+
+		<Change>0.40</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>30000008</StkCode>
+
+		<StkName>INDUSTRIAL</StkName>
+
+		<LastDone>2,647.30</LastDone>
+
+		<Change>-5.14</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>82600002</StkCode>
+
+		<StkName>FBMPALMOIL</StkName>
+
+		<LastDone>15,948.09</LastDone>
+
+		<Change>-63.29</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>82700000</StkCode>
+
+		<StkName>FBMAPUSD</StkName>
+
+		<LastDone>19,451.14</LastDone>
+
+		<Change>-77.21</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>82800008</StkCode>
+
+		<StkName>FBMAPMYR</StkName>
+
+		<LastDone>21,532.67</LastDone>
+
+		<Change>-54.93</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86100009</StkCode>
+
+		<StkName>FBMT100</StkName>
+
+		<LastDone>9,859.53</LastDone>
+
+		<Change>1.82</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86300005</StkCode>
+
+		<StkName>FBM70</StkName>
+
+		<LastDone>11,001.58</LastDone>
+
+		<Change>-1.48</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86400003</StkCode>
+
+		<StkName>FBMSCAP</StkName>
+
+		<LastDone>11,426.95</LastDone>
+
+		<Change>-3.98</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86500000</StkCode>
+
+		<StkName>FBMEMAS</StkName>
+
+		<LastDone>10,040.84</LastDone>
+
+		<Change>1.37</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86600008</StkCode>
+
+		<StkName>FBMFLG</StkName>
+
+		<LastDone>8,675.33</LastDone>
+
+		<Change>-18.34</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86700006</StkCode>
+
+		<StkName>FA40</StkName>
+
+		<LastDone>9,529.20</LastDone>
+
+		<Change>-12.17</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86800004</StkCode>
+
+		<StkName>FBMSHA</StkName>
+
+		<LastDone>9,846.23</LastDone>
+
+		<Change>-1.61</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>86900002</StkCode>
+
+		<StkName>FBMHIJRAH</StkName>
+
+		<LastDone>10,485.87</LastDone>
+
+		<Change>-0.40</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>87100008</StkCode>
+
+		<StkName>FBMACE</StkName>
+
+		<LastDone>4,148.70</LastDone>
+
+		<Change>7.43</Change>
+
+	</Data>
+
+	<Data>
+
+		<StkCode>100002</StkCode>
+
+		<StkName>CONSUMER</StkName>
+
+		<LastDone>474.23</LastDone>
+
+		<Change>0.32</Change>
+
+	</Data>
+
+	<TotColCnt>4</TotColCnt>
+
+	<Color>00FF00|FF0000|FFFF00|FFFF00|</Color>
+
+	<AnnouncementText>Indices Summary :</AnnouncementText>
+
+	<AnnouncementColor>#FFFFFF</AnnouncementColor>
+
+	<AnnouncementURL>http://www.n2nconnect.com</AnnouncementURL>
+
+	<Setting>3|11|740|1|</Setting></Ticker>
+

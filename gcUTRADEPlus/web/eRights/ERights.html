@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corporate Action Subscription</title>
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/ca.css">
+<link rel="stylesheet" href="../../style/default.css">
+<link rel="stylesheet" href="../../style/mod_poplogin.css" />
+<!--<link rel="stylesheet" href="../../style/mod_poplogin.css" />-->
+<script src="../../js/jquery-3.6.0.js"></script>
+<script src="../../js/jquery-ui.js"></script>
+<script src="../../js/jquery.jcryption.min.js"></script>
+<script src='../../js/validate/jquery.uniform.js'></script>
+<script src="../../js/validate/jquery.metadata.js"></script>
+<script src="../../js/validate/jquery.validate.js"></script>
+<script src="../../js/AesUtil.js"></script>
+<script src="../../js/aes.js"></script>
+<script src="../../js/pbkdf2.js"></script>
+<script src="js/login_util.js"></script>
+<script src="js/login_encrypt.js"></script>
+<script src="js/ca_util.js"></script>
+<script src="js/ca_encrypt.js?v=5"></script>
+<!--<script src="../../js/ga.js"></script>-->
+<script type="text/javascript" src="../../js/mod_poplogin.js"></script>
+<script language=javascript src="../../js/popupWindow.js"></script>
+        <script>		
+		<!--Check login status-->				
+		$(document).ready(function(){								
+				if(login_agent!=null){
+					if(login_agent.status=="true"){					
+						tradeAccInfoSubs();
+						//caSubsEncryptValue();
+					}else{
+						//$('#tblTDHdr').hide();
+						$("#divSelectAcc").css("display","none"); 
+						$("#divReadAgree").css("display","none"); 
+						$("#divSubscript").css("display","none"); 
+						$("#divComplete").css("display","none"); 
+						alert("Please Login");
+					}
+				}
+				
+
+				
+				
+
+				$('input[type="radio"]').click(function(){
+					if ($(this).is(':checked'))
+					{
+						$('#txtCimbAcc').addClass("required");						
+					}
+				});
+				
+				/* $('#btnPaymentSubmit').click( function() { 
+					//var validPaymentInfo = $("#formSubscriptPayment").valid();  // test the form for validity					
+					var totAmount = parseFloat($('.totPay').html());
+					if(totAmount==0){
+						alert("Please enter quantity.");
+					}else{
+						if(validPaymentInfo){
+							var bankVal = $('input[name=MerBank]:checked', '#divSubscriptPayment').val();					
+						
+							if(typeof bankVal=="undefined"){					
+								alert("Please choose mode of payment");
+							}else{
+								$('.qty').prop('disabled',true);
+								$('#bankAccNo').html($('#txtCimbAcc').val());
+								chgLayout(8);
+							}	 
+						}
+					}
+					
+				}); */
+				
+				 $('#btnConfirm').click( function() { 
+					//var validPaymentInfo = $("#formSubscriptConfirm").valid();  // test the form for validity	
+				//alert(validPaymentInfo);					
+					var trdPin = $('#txtTrdPin').val();
+					var subsQty =  $("input[name=qty1]").val();
+					var eRights1 = $('#eRights').html();
+					
+					if(subsQty == "" ){					
+					alert("Subscribe Quantity cannot be empty")
+					}else if(subsQty > parseInt(eRights1)){
+						alert("Subscribe Quantity cannot be more than Entitled Rights")
+					}else if(trdPin =="" || trdPin.length !=6 ){
+						alert("Trading Pin is required and must be in 6 digits in length.") 
+					}else{
+						execSubsciptionEncryptValue();
+						
+					}
+				 });
+				
+			});
+		
+		function chgLayout(layout){
+				$("#divSelectAcc").css("display","none"); 
+				$("#divReadAgree").css("display","none"); 
+				$("#divSubscript").css("display","none"); 
+				$("#divSubscriptConfirm").css("display","none"); 		
+				$("#divSubscriptPayment").css("display","none"); 										
+				$("#divComplete").css("display","none"); 
+				$("#divRead").css("display","none"); 
+				$("#divAgree").css("display","none"); 
+				
+				switch(layout){
+					case 1: // Select Account
+						$("#divProcess").removeClass().addClass("title_h2 step1");
+						$("#divSelectAcc").css("display",""); 
+						$('.qty').prop('disabled',false);
+						break;
+					case 2: // Read/Agree
+						$("#divProcess").removeClass().addClass("title_h2 step2");
+						$("#divReadAgree").css("display","");						
+						break;
+					case 3: // display Subscription Page
+						$("#divProcess").removeClass().addClass("title_h2 step3");
+						$("#divSubscript").css("display",""); 
+						break;
+					case 4: //display complete page
+						$("#divProcess").removeClass().addClass("title_h2 step4");
+						$("#divComplete").css("display","");
+						break;
+					case 5: //display Read
+						$("#divProcess").removeClass().addClass("title_h2 step2");						
+						$("#divReadAgree").css("display","");
+						$("#divRead").css("display","");
+						break;
+					case 6: //display Agree
+						$("#divProcess").removeClass().addClass("title_h2 step2");						
+						$("#divReadAgree").css("display","");
+						$("#divAgree").css("display","");
+						break;
+					case 7: // display Subscription Payment Page
+						$("#divProcess").removeClass().addClass("title_h2 step3");
+						$("#divSubscript").css("display",""); 
+						$("#divSubscriptPayment").css("display",""); 
+						$('.qty').prop('disabled',false);
+						break;
+					case 8: // display Subscription confirm Page
+						$("#divProcess").removeClass().addClass("title_h2 step3");
+						$("#divSubscript").css("display",""); 
+						$("#divSubscriptConfirm").css("display",""); 
+						break;
+				}	
+			}
+			
+			function validateTnc(){
+				if($('#tcChkBox').attr('checked')){
+					chgLayout(7);		
+					subsBalEncryptValue();		
+					clientInfoEncryptValue();
+				}else{
+					alert("Please agree on the General Term & Conditions for e-Rights before proceed.");
+				}
+			}
+        </script>
+</head>
+<body>
+<section id="contents">
+  <div class="wrap_in">
+    <div class="wrap_in2">
+      <div class="header ">
+        <table width="780" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr height="19">
+              <td class="clsSectionHeader" width="50%">&nbsp;e-Rights Subscription</td>
+              <td class="clsSectionHeader" align="right" width="43%">Last Update <span id="lastUpdate"></span>&nbsp;&nbsp;</td>
+             
+            </tr>
+          </tbody>
+        </table>
+         <div id="divProcess" class="title_h2 step1">
+                <h2>CA Subscription</h2>
+                <div class="process">
+                    <em>Dubscription process</em>
+                    <ol>
+                        <li>step1</li>
+                        <li>step2</li>
+                        <li>step3</li>
+                    </ol>
+                </div>
+            </div>
+      </div>
+  <!-- ============================================================================================================================-->     
+   <!-- divSelectAcc -->
+      <div id="divSelectAcc" class="wrap_in3" style="display:">
+	   <form id="formSelect" name="formRead" action="" method="get" >
+	    <div class="tbl_row_in ">
+      <table width="780" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr>
+            <th scope="row">&nbsp;Client's Name</th>
+            <td colspan="2" width="80%">&nbsp;<label id="lblLoginID"></label>&nbsp;&nbsp;
+                <label id="lblCliName"></label></td>
+          </tr>
+          <tr height="25">
+            <td>&nbsp;Account Number</td>
+            <td colspan="2"><form id="frmTrdAcc" onsubmit="return frmTrdAccSrch_OnSubmit(this);">
+                      <select id="selTrdAcc" name="selTrdAcc2" style="height:22px;width:270px">                          
+                        </select>
+                          <input id="txtTrdAccSrch2" name="txtTrdAccSrch2" style="display:none;width:180px" autocomplete="off" />
+                        &nbsp;               
+            </form></td>
+			<td id='bhBranchComplete' style='display:none'> </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="caSubsTitle" class="tit_h3" style="display:none"><strong>e-Rights Information</strong></h3>
+      <div class="tbl_col big">
+          <table id="tblCASubs" style="display:none">
+            <caption>
+            </caption>
+            <colgroup>
+			<col class="col-xs-4">
+            <col>
+            <col>
+            <col class="col-xs-2">
+            <col >
+            <col>
+            </colgroup>
+            <thead>
+              <tr>
+                 <th scope="col">Stock Name</th>
+                 <th scope="col">Start <span class="hidden-xs">of Offer </span>Period</th>
+                 <th scope="col">End <span class="hidden-xs">of Offer </span>Period</th>
+                 <th scope="col" style="min-width: 150px;">Ratio</th>
+                 <th scope="col">Offer Price</th>
+                 <th scope="col">Exclusion Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!--<tr>
+                <td><u><p class="clickable">asdasdasd</p></u></td>
+                <td>17 Feb 2014</td>
+                <td>05 Mar 2014</td>
+                <td>Dividend Reinvestment</td>
+                <td>Dividend Reinvestment Plan That Provides Shareholders Of Sime Darby With An Option To Reinvest Their Final Cash Dividend For The Financial Year Ended 30 June 2013 In New Ordinary Shares Of Rm0.50 Each In Sime Darby (“Sime Darby Shares”) (“1St DRP”)</td>
+                <td>23 Dec 2013</td>
+                <td>26 Dec 2013</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td><a href="#"><u>SIME Darby Berhad (4197)</u></a></td>
+                <td>17 Feb 2014</td>
+                <td>05 Mar 2014</td>
+                <td>Dividend Reinvestment</td>
+                <td>Dividend Reinvestment Plan That Provides Shareholders Of Sime Darby With An Option To Reinvest Their Final Cash Dividend For The Financial Year Ended 30 June 2013 In New Ordinary Shares Of Rm0.50 Each In Sime Darby (“Sime Darby Shares”) (“1St DRP”)</td>
+                <td>23 Dec 2013</td>
+                <td>26 Dec 2013</td>
+                <td>-</td>
+              </tr>-->
+            </tbody>
+          </table>
+        </div>
+		<p id="noDataMsg" class="nofound"></p>
+      </div>
+	 </div>
+      <!-- /divSelectAcc -->
+<!-- ============================================================================================================================-->
+      <!-- divReadAgree -->
+      <div id="divReadAgree" class="wrap_in3" style="display:none">
+      
+      <!-- divReadAgree : Read -->
+      <div id="divRead" style="display:">
+      <form id="formRead" name="formRead" action="" method="get" >
+      <h3 id="titAction" class="tit_h3"></h3>
+      <div class="tbl_row">
+        <table id="tblCARead">
+          <colgroup>
+          <col class="col-sm-3 col-xs-4">
+          <col>
+          </colgroup>
+          <!--
+		  <tbody>
+            <tr>
+              <th scope="row">Company Action Type</th>              
+              <td> Rights Subscription<strong class="em3" itemprop="productID"></strong></td>
+            </tr>
+            <tr>              
+              <th scope="row">Description</th>
+              <td> RENOUNCEABLE RIGHTS ISSUE OF 166,403,924 NEW ORDINARY SHARES OF RM0.25 EACH IN QL RESOURCES BERHAD (QL) (QL SHARE(S)) (RIGHTS SHARE(S)) AT AN ISSUE PRICE OF RM1.80 PER QL SHARE ON THE BASIS OF TWO (2) RIGHTS SHARES FOR EVERY TEN (10) EXISTING QL SHARES HELD BY OUR SHAREHOLDERS AS AT 5.00 P.M. ON 14 FEBRUARY 2014 (RIGHTS ISSUE)</td>
+            </tr>
+            <tr>              
+              <th scope="row">Ex-Date / Meeting-Date</th>
+              <td> 14 Feb 2014</td>
+            </tr>
+            <tr>              
+              <th scope="row">Record Date</th>
+              <td>- </td>
+            </tr>
+            <tr>
+              <th scope="row">Last Trading Date</th>
+              <td>05 Mar 2014</td>
+            </tr>
+          </tbody>-->
+        </table>
+      </div>
+    
+
+      <!-- Button Area -->
+      <div class="btnRArea">
+        <div class="btn_r"> <a href="#" onClick="chgLayout(6);return false;" class="btn_gb3 btn_s3">Continue</a> </div>
+      </div>
+      </form>
+      <p>&nbsp;</p>
+    </div>  
+      
+      <!-- /divReadAgree : Read -->
+      <!-- divReadAgree : Agree -->
+       <div id="divAgree" style="display:">
+      <form id="formAgree" action="" method="get" >
+       <h3 id="titRead" class="tit_h3">Terms and Conditions</h3>
+       <div class="tbl_row">
+        <iframe src="../../doc/Terms of service.pdf#view=FitV" scrolling="no" height="430" width="100%"></iframe>   
+       </div>
+       <div class=" tbl_row_in">
+       <p>&nbsp;</p>
+	<input id="tcChkBox" name="tcChkBox" type="checkbox" /> I have read, understood and agreed with all the above terms and conditions
+	<p>&nbsp;</p>
+	</div>
+      <!-- Button Area -->
+      <div class="btnRArea">
+        <div class="btn_r"> <a href="javascript:void(0)" onClick="validateTnc();return false;" class="btn_gb3 btn_s4" name="">Next</a> </div>
+         <div class="btn_r"> <a href="javascript:void(0)" onClick="chgLayout(1);return false;" class="btn_gb3 btn_s4" name="">Cancel</a> </div>
+      </div>
+      </form>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      </div>
+      <!-- /divReadAgree : Agree -->
+    </div>
+      <!-- /divReadAgree -->
+<!-- ============================================================================================================================-->
+      <!-- divSubscript-->
+      <div  id="divSubscript" class="wrap_in3" style="display:none">
+	  <form novalidate="novalidate" id="frmSubscript" name="frmSubscript" method="post" action="">
+        <h3 class="tit_h3">e-Rights Subscription</h3>
+        <div class="tbl_row cimb">
+          <table id="tblSubscriptAction">
+             <caption>
+                    </caption>
+                    <colgroup>
+                    <col />
+                    <col style="width:40%;" />
+                    <col style="width:20%;" />
+                    <col style="width:20%;" />
+                    </colgroup>
+                    <thead>
+            <!--<tbody>
+              <tr>
+                <th scope="row">Corporate Action Type</th>
+                <td> Rights Subscription<strong class="em3" itemprop="productID"></strong></td>
+              </tr>
+              <tr>
+                <th scope="row">Issuer Name</th>
+                <td>QL Resources Berhad (7084)</td>
+              </tr>
+            </tbody>-->
+          </table>
+        </div>
+        <!--<div>
+         <h3 class="mtit">Chargers:</h3>
+            <div class="tbl_row_in chargers">
+              <table>
+                <caption>
+                applicant particular
+                </caption>
+                <colgroup>
+                <col style="width:60%">
+                <col >
+                <col>
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <th scope="row">Stamp Duty</th>
+                    <td>10.00</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">* Registrar Fee</th>
+                    <td>3.18</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">* Bank Draft</th>
+                    <td>5.98</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>-->
+        <p>&nbsp;</p>
+        <div class=" tbl_col">
+          <table id="tblCASubsBalance">
+            <caption>
+                    </caption>
+                    <colgroup>
+                    <col />
+                    <col style="width:40%;" />
+                    <col style="width:20%;" />
+                    <col style="width:20%;" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th scope="col">Stock Name</th>
+                        <th scope="col">Entitlement Ratio</th>
+                        <th scope="col">Mother Share</th>
+                        <th scope="col">Entitled Rights</th>
+                      </tr>
+                    </thead>
+            <!--<tbody>
+              <tr id="tr2">
+                <td>20,000</td>
+                <td>0</td>
+                <td>20,000</td>
+                <td>15,000</td>
+                <td>5,000</td>
+              </tr>
+            </tbody>-->
+          </table>
+        </div>
+        <p>&nbsp;</p>
+        <div class=" tbl_col">
+          <table id="tblSubscriptOption">
+            <caption>
+                    </caption>
+                    <colgroup>
+                    <col style="width:25%;" />
+                    <col style="width:25%;" />
+                    <col  />
+                    </colgroup>
+                    <thead>
+					<tr>
+                    <th scope="col">Subscribe Quantity</th>
+                    <th scope="col">Offer Price</th>
+                    <th scope="col">Total Amount</th>
+                    </tr>
+                    </thead>
+            <!--<tbody>
+              <tr id="tr">
+                        <td><input type="text" name="qty" maxlength="8" size="8" style="width: 100% " /></td>
+                        <td>@ Php31.00</td>
+                        <td>0.00</td>
+                      </tr>
+            </tbody>-->
+          </table>
+        </div>
+		<div class="tbl_row_in">
+                  <div class="tbl_PIN">
+                    <table>
+                      <caption>
+                      Trading PIN
+                      </caption>
+                      <colgroup>
+                      <col style="width:30%">
+                      <col>
+                      </colgroup>
+                    <tbody>
+                      <tr>
+                        <td > Trading PIN </td>
+                        <td><input type="password" name="txtTrdPin" id="txtTrdPin" maxlength="6" autocomplete="off"/>
+                      <!--    <span ><a href="javascript:void(0)" onClick="popupWin('forgetPin')" class="btn btn_gb1 btn_m2 ">Forgot PIN?</a> </span></td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+        
+		   <div class="bottom-box btnRArea center"> 
+		    <div class="btn_r"> <a href="javascript:void(0)" onClick="chgLayout(1);return false;" class="btn_nor2 btn_m2">Cancel</a> </div>
+              <div class="btn_r"> <a id="btnConfirm" href="javascript:void(0)" onClick="return false;" class="btn_em4 btn_m2">Submit</a> </div>
+			   <div class="btn"><a href="javascript:void(0)" onclick="chgLayout(6);return false;" class="btn_nor2 btn_m2">Back</a></div>
+            </div>
+          </div>
+		  </form>
+        </div>
+       <!-- divSubscriptPayment -->
+	   
+       
+        
+      </div> 
+      <!-- /divSubscript-->
+      <!-- ============================================================================================================================-->       
+      <!-- divComplete-->
+     <div id="divComplete"  class="divComplete wrap_in3 " style="display:none">
+                <div class="titbox center">
+                  <p class="h3 red ">Subscription successful</p>
+                </div>
+              <!-- //title -->
+              <!-- detail -->
+                <h3 class="tit_h3">e-Rights Subscription</h3>
+                <div class="tbl_row">
+                  <table id="tblComplete" >
+                    <colgroup>
+                    <col class="col-sm-3 col-xs-4">
+                    <col>
+                    </colgroup>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Order No.</th>
+                        <td><span id="orderNo"></span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Stock</th>
+                        <td><span id="stockNameComplete"></span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Subscribe Qty x Price</th>
+                        <td><span id="subsQty"></span>x<span id="priceComplete"></span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Total Amount</th>
+                        <td><span id="totAmt"></span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Application Date</th>
+                        <td><span id="appDate"></span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>&nbsp;</p>
+                <p >&nbsp;</p>
+				<p >&nbsp;</p>
+				<div class="btnRArea center">
+                <!-- Button Area -->
+                <div class="btn"><a href="javascript:void(0)" onclick="#" class="btn_nor2 btn_m1">Check Subscription Status</a></div>
+              </div></td>
+          </tr>
+          </td>
+          
+          </tr>
+          
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+      </div>
+       <!-- /divComplete-->
+    </div>
+    <!-- wrap_in2-->
+  </div>
+  <!-- wrap_in-->
+</section>
+<div id="stickydiv-anchor" style="display:none;">&nbsp;</div>
+<div id="stickydiv">
+	<div id="stickContent">
+		<div style="display:none;"><a id="triggerAnchor" rel="tppoplogin" class="poplogin" href="#">trigger</a></div>
+		<div style="display: none; width: 500px; margin-top: -238.5px; margin-left: -340px; " id="tppoplogin" class="popbox">
+			<iframe id="popupIFrame" name="popupIFrame" style="position:relative;" src="" scrolling="no" frameborder="0" height="470" width="500"></iframe>
+		</div>
+	</div>
+</div>
+<form id="frmCASubsEnc" name="frmCASubsEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="CASubsubmit" name="CASubsubmit" style="display:none;" />
+</form>
+<input type="hidden" id="crypted" name="crypted" value="" onchange="caSubsBeginEnc();" />
+
+
+</body>
+</html>

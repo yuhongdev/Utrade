@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+	<head>
+		<script type="text/javascript" src="/gcUTRADEPlus/js/jquery-2.1.1.js"></script>
+	</head>
+	<body>
+		<iframe frameborder="0" height="" id="tcpluswin" scrolling="no" src="/gcUTRADEPlus/tcplus/index2.jsp" style="border:none;min-height: 650px" width="100%"></iframe>
+		<script>
+			 var bodyHeight;
+			   var bodyWidth;
+			    if(typeof(window.innerWidth)=='number'){// for none IE
+			     bodyHeight = window.innerHeight;
+			     bodyWidth = window.innerWidth-15;
+			     bodyHeight = ""+parseInt(bodyHeight);
+			    }else{// for IE6+
+			     bodyHeight = document.body.offsetHeight;
+			     bodyWidth = document.body.offsetWidth-15;  
+			     bodyHeight = ""+parseInt(bodyHeight);
+			    }
+			   
+			   document.getElementById("tcpluswin").height = bodyHeight + "px";
+			   //document.getElementById("tcpluswin").width = bodyWidth+ "px";
+
+			 $(window).bind("orientationchange resize", function() {
+			    var bodyHeight;
+			   var bodyWidth;
+			    if(typeof(window.innerWidth)=='number'){// for none IE
+			     bodyHeight = window.innerHeight;
+			     bodyWidth = window.innerWidth-15;
+			     bodyHeight = ""+parseInt(bodyHeight);
+			    }else{// for IE6+
+			     bodyHeight = document.body.offsetHeight;
+			     bodyWidth = document.body.offsetWidth-15;  
+			     bodyHeight = ""+parseInt(bodyHeight);
+			    }
+			   
+			   document.getElementById("tcpluswin").height = bodyHeight + "px";
+			   //document.getElementById("tcpluswin").width = bodyWidth+ "px";
+			});
+		</script>
+	</body>
+</html>

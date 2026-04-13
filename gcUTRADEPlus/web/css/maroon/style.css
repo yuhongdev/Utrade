@@ -1,0 +1,159 @@
+body{
+	font-family: 'Roboto Slab', Arial, "Helvetica Neue", Helvetica, sans-serif;
+	padding-top: 40px;
+	font-size: 13px;
+}
+
+h1,h2,h3,h4,h5{
+	font-family: 'Roboto Slab', Arial, "Helvetica Neue", Helvetica, sans-serif;
+	font-weight: 400 !important;
+}
+
+ul.form-steps{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 20px;
+	text-align: center;
+	display: block;
+}
+
+ul.form-steps > li{
+	display: inline-block;
+	margin: 0 5px 10px;
+	padding: 5px 12px;
+	background-color: #ffca36;
+    color: #34495e;
+    font-family: "Montserrat", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 13px;
+}
+
+ul.form-steps > li.fin-step {
+    background-color: #34495e;
+    color: #ffca36;
+}
+
+
+
+
+/* FORMS */
+.form-control{
+	font-size: 13px;
+	border-radius: 4px;
+	background: #e6e6e6;
+	border: 1px solid #e9e9e9;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.form-control:focus{
+	border-color: #019c4e;
+	-webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+
+.form-action-wrap{
+	border-top: 1px solid #eee;
+	padding: 30px 0;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+input[type=checkbox], input[type=radio]{
+	margin: 1px 0 0;
+}
+
+.ui-datepicker .ui-datepicker-title select{
+	color: #333;
+}
+
+
+
+/* BUTTONS */
+.btn{
+	font-family: "Montserrat", Arial, "Helvetica Neue", Helvetica, sans-serif;
+	font-weight: 600;
+	letter-spacing: 1px;
+    font-size: 12px;
+    border-radius: 30px;
+    text-transform: uppercase;
+}
+.btn-sm{
+	padding: 6px 20px;
+}
+.btn-primary{
+	border-color: #ffca36;
+	background: #ffca36;
+    color: #34495e;
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus{
+	background: #ffca36 !important;
+	color: #34495e !important;
+	border-color: #ffca36 !important;
+	outline: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.no-gutter {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.no-gutter > [class*='col-']:not(:first-child),
+.no-gutter > [class*='col-']:not(:last-child) {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.gutter-20.row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+.gutter-20 > [class^="col-"], .gutter-20 > [class^=" col-"] {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.gutter-10.row {
+  margin-right: -5px;
+  margin-left: -5px;
+}
+.gutter-10 > [class^="col-"], .gutter-10 > [class^=" col-"] {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.gutter-0.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+.gutter-0 > [class^="col-"], .gutter-0 > [class^=" col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+
+
+
+
+
+
+
+@media (max-width: 991px) {
+    .float-break-md{
+        float: none !important;
+    }   
+
+}

@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Demo</title>
+<script type="text/javascript" src="swfobject.js"></script>
+<script language="JavaScript" type="text/javascript">
+<!--
+var flashvars = {};
+flashvars.path = "";
+
+var params = {};
+params.menu = "false";
+params.quality = "high";
+params.bgcolor = "#FFFFFF";
+params.allowScriptAccess = "always";
+params.type = "application/x-shockwave-flash";
+params.wmode = "transparent";
+params.salign = "lt";
+params.allowFullScreen = "false";
+
+var attributes = {};
+attributes.name = "Demo";
+attributes.id = "Demo";
+
+swfobject.embedSWF("Demo.swf", "myContent", "650", "480", "6.0.0","Demo.swf", flashvars, params, attributes);
+
+
+// -->
+</script>
+
+</head>
+<body bgcolor="#FFFFFF">
+
+<div id="myContent"><p>Alternative content</p></div>
+
+</body>
+<script language="JavaScript">
+function OpenWinCliReg()
+{
+	var scrWidth=screen.width, scrHeight=screen.height, nLeft, nTop
+
+	nLeft = (scrWidth - 780) /2
+	nTop = (scrHeight - 520) /2
+	window.open('/gcCIMB/registration.jsp', 'winCliReg', 'left='+ nLeft +',top='+ nTop +',width=780,height=520,location=no,toolbar=no,menubar=no,scrollbars=no,resizable=yes', false)
+}
+</script>
+</html>

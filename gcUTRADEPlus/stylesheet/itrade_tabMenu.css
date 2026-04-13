@@ -1,0 +1,42 @@
+.ddcolortabs {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; WIDTH: 100%; PADDING-RIGHT: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; PADDING-TOP: 0px; voice-family: inherit
+}
+.ddcolortabs UL {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT: 11px Arial, Verdana, sans-serif; PADDING-TOP: 0px
+}
+.ddcolortabs LI {
+	PADDING-BOTTOM: 0px; TEXT-TRANSFORM: capitalize; MARGIN: 0px 2px 0px 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; DISPLAY: inline; PADDING-TOP: 0px
+}
+.ddcolortabs A {
+	PADDING-BOTTOM: 1px; MARGIN: 0px 2px 0px 0px; PADDING-LEFT: 3px; PADDING-RIGHT: 0px; BACKGROUND: url(../images/color_tabs_left.gif) #b0aeaf no-repeat left top; FLOAT: left; LETTER-SPACING: 1px; COLOR: #ffffff; TEXT-DECORATION: none; PADDING-TOP: 0px
+}
+.ddcolortabs A SPAN {
+	PADDING-BOTTOM: 3px; PADDING-LEFT: 7px; PADDING-RIGHT: 8px; DISPLAY: block; BACKGROUND: url(../images/color_tabs_right.gif) no-repeat right top; FLOAT: left; PADDING-TOP: 6px
+}
+.ddcolortabs A SPAN {
+	FLOAT: none
+}
+.ddcolortabs A:hover {
+	BACKGROUND: url(../images/color_tabs_left.gif) #e8e8e8 no-repeat left top; COLOR: #0099cc
+}
+.ddcolortabs A:hover SPAN {
+	BACKGROUND: url(../images/color_tabs_right.gif) #e8e8e8 no-repeat right top; COLOR: #0099cc
+}
+.ddcolortabs A.current {
+	BACKGROUND: url(../images/color_tabs_left.gif) #e8e8e8 no-repeat left top; COLOR: #0099cc
+}
+#ddcolortabs A.current SPAN {
+	BACKGROUND: url(../images/color_tabs_left.gif) #e8e8e8 no-repeat left top; COLOR: #0099cc
+}
+.ddcolortabs A.current SPAN {
+	BACKGROUND: url(../images/color_tabs_right.gif) #e8e8e8 no-repeat right top; COLOR: #0099cc
+}
+.ddcolortabsline {
+	
+}
+.tabcontainer {
+	WIDTH: 95%; FONT-FAMILY: Arial,Helvetica,sans-serif; COLOR: #000000; CLEAR: left; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+.tabcontent {
+	DISPLAY: none
+}

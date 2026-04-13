@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Corporate Action Application Status</title>
+<link rel="stylesheet" href="../css/bootstrap-5.3.6.min.css">
+<link rel="stylesheet" href="../css/ca.css">
+<script src="../../js/jquery-3.6.0.js"></script>
+<script src="../../js/jquery-ui.js"></script>
+<script src="../../js/jquery.jcryption.min.js"></script>
+<script src='../../js/validate/jquery.uniform.js'></script>
+<script src="../../js/validate/jquery.metadata.js"></script>
+<script src="../../js/validate/jquery.validate.js"></script>
+<script src="../../js/AesUtil.js"></script>
+<script src="../../js/aes.js"></script>
+<script src="../../js/pbkdf2.js"></script>
+<script src="js/login_util.js"></script>
+<script src="js/login_encrypt.js"></script>
+<script src="js/ca_util.js"></script>
+<script src="js/ca_encrypt.js?v=2"></script>
+<!--<script src="../../js/ga.js"></script>-->
+<script type="text/javascript" src="../../js/mod_poplogin.js"></script>
+<script language=javascript src="../../js/popupWindow.js"></script>
+
+
+        <script>		
+
+			
+			$(document).ready(function(){								
+				if(login_agent!=null){
+					if(login_agent.status=="true"){					
+						tradeAccInfoStatus();
+						//getSubsLogEncryptValue();
+					}else{
+						//$('#tblTDHdr').hide();
+						$("#caSubsStatus").css("display","none"); 
+						alert("Please Login");
+					}
+				}
+			});
+
+        </script>
+</head>
+<body>
+<section id="contents" class="container">
+  <div class="wrap_in" id="caSubsStatus">
+    <div class="wrap_in2">
+      <div class="header ">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr height="19">
+              <td class="clsSectionHeader col-xs-6">&nbsp;e-Rights Application Status</td>
+              <td class="clsSectionHeader col-xs-6 text-right">Last Update <span id="lastUpdate"></span>&nbsp;&nbsp;</td>
+             <!--<td width="7%" ><img src="img/butPrint.gif" title="Print" style="cursor:pointer" onclick="window.print();" height="18" width="18" border="0" / class="hidden-xs">-->
+			  <!--<img id="imgHelp" src="img/lightbulboff.jpg" onmouseover="this.src='/img/gcCIMBV/lightbulbon.jpg'" onmouseout="this.src='/img/gcCIMBV/lightbulboff.jpg'" title="Summary: Display your financial position in this securities" height="19" width="20" border="0" /> --></td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+  <!-- ============================================================================================================================-->     
+   <!-- divcaHistory -->
+      <div id="divdivcaHistory" class="wrap_in3">
+	 <form id="formSelect" name="formRead" action="" method="get">
+	 <h3 id="" class="tit_h3">Select Account</h3>
+      <div class="tbl_row_in ">
+        <table id="">
+          <colgroup>
+          <col style="width:24%">
+          <col>
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">Client's Name</th>
+              <!--Product Status/Purchase Method  -->
+              <td colspan="2" width="80%">&nbsp;<label id="lblLoginID"></label>&nbsp;&nbsp;
+                <label id="lblCliName"></label></td>
+            </tr>
+            <tr>
+              <!-- GST -->
+              <th scope="row">&nbsp;Account Number</th>
+              <td colspan="2"> <form id="frmTrdAcc" onsubmit="return frmTrdAccSrch_OnSubmit(this);">
+                      <select id="selTrdAcc" name="selTrdAcc2" style="height:22px;width:270px">                          
+                        </select>
+                          <input id="txtTrdAccSrch2" name="txtTrdAccSrch2" style="display:none;width:180px" autocomplete="off" /></td>
+            </tr>
+          </tbody>
+        </table>
+	</div>	
+      </form>
+	   <!-- Button Area -->
+		  <div class="btnRArea">
+			<div class="btn_r"><a href="#" id="btnCAHistory" name="btnCAHistory" class="btn_gb1 btn_m2" onclick="toggleTodayOrHistory(); return:false;">Application(s) History</a>
+			</div>
+		  </div>
+		  <!-- Button Area end -->
+	  <h3 id="" class="tit_h3">e-Rights Subscription</h3>
+      <div class="tbl_col table-responsive big " >
+		  <table class="table table-striped tblcahistory" id="tblCASubsLogContent">
+            <caption>
+            </caption>
+            <colgroup>
+            <col >
+            <col class="col-xs-3">
+            <col>
+            <col class="col-xs-3">
+            <col >
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Application Date</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Quantity Of Shares</th>
+                <th scope="col" style="min-width: 150px;">Status</th>
+                <th scope="col">App Ref No.</th>
+              </tr>
+            </thead>
+           <tbody>
+               <!--<tr>
+                <td>Oct 24, 2017</td>
+                <td>CHINA BANKING CORPORATION</td>
+                <td>300</td>
+                <td>You are only allowed to subscribe. Subscription date from [Oct 5 2017 12:00AM] until [Nov 5 2017 5:00PM].</td>
+                <td> 2191001</td>
+              </tr>
+              <tr>
+                <td>Dec 1, 2014</td>
+                <td>
+ALLIANCE SELECT FOODS INC</td>
+                <td>400</td>
+                <td><a href="#">Pending</a></td>
+                <td> 219510</td>
+              </tr>
+              <tr>
+                <td>Oct 24, 2017</td>
+                <td>AG FINANCE INCORPORATED</td>
+                <td><p>1000</p></td>
+                <td>Approve</td>
+                <td> 219104</td>
+              </tr>
+              <tr>
+                <td>Dec 24, 2017</td>
+                <td>UNIVERSAL ROBINA CORPORATION</td>
+                <td><p>200</p></td>
+                <td>Cancelled</td>
+                <td> 219204</td>
+              </tr>
+              <tr>
+                <td>Dec 30, 2014</td>
+                <td>SM PRIME HOLDINGS INC</td>
+                <td>300</td>
+                <td>Cancelled</td>
+                <td> 219302</td>
+              </tr> -->
+            </tbody>
+          </table>
+		  
+        </div>
+		<!-- Button Area -->
+		  <div class="btnRArea">
+		  <div class="btn_r">
+		  	<!--<input id="btnResubmit" name="btnResubmit" value="Resubmit" style="width:100px; margin-left:20px" class="btn btn_nor2 btn_m2" onClick="reSubmit()" type="button"  disabled>-->
+			<a href="#" class="btn btn_nor2 btn_m2 disabled" id="btnCancel" name="btnCancel" role="button" onClick="cancelSubscription()" aria-disabled="true">Cancel</a>
+			</div>
+
+	    </div>
+		  <!-- Button Area end -->
+		<p>&nbsp;</p>
+		  <div  class="ls_note" >
+					  <p > Note:</p>
+					  <p>For Resubmission or cancellation, please click on &lt;Pendingt&gt; column<br />
+					  </p>
+					</div>
+      </div>
+      <!-- /divcaHistory -->
+<!-- ============================================================================================================================-->
+      <!-- divReadAgree --><!-- /divReadAgree -->
+<!-- ============================================================================================================================-->
+      <!-- divSubscript--><!-- /divSubscript-->
+      <!-- ============================================================================================================================-->       
+      <!-- divComplete-->
+        
+      </div>
+	  <form id="frmCASubsEnc" name="frmCASubsEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="CASubsubmit" name="CASubsubmit" style="display:none;" />
+</form>
+<input type="hidden" id="crypted" name="crypted" value="" onchange="caSubsBeginEnc();" />
+<input type=hidden id="Acc" name="Acc"></input>
+	<input type=hidden id="Amt" name="Amt"></input>	
+	<input type=hidden id="Bank" name="Bank"></input>
+	<input type=hidden id="refID" name="refID"></input>
+	<input type=hidden id="AccTypeDesc" name="AccTypeDesc"></input>	
+	<input type=hidden id="caID" name="caID"></input>	
+
+
+
+       <!-- /divComplete-->
+    </div>
+    <!-- wrap_in2-->
+  </div>
+  <!-- wrap_in-->
+</section>
+</body>
+</html>

@@ -1,0 +1,14 @@
+--_BeginData_
+NTU|Investment Interactive Club|110,000|118,054.24|7.32
+NTU|NTU Taekwondo Club|100,000|101,700.05|1.7
+RP|Republic Polytechnic|80,000|80,000|0
+OU|Apple|80,000|80,000|0
+NUS|pool club|80,000|80,000|0
+NUS|FIN3101|80,000|80,000|0
+SIM|Jackoff All Trades (JAT)|110,000|109,809.72|-0.17
+SIM|SIM Investment & Networking Club|100,000|99,671.53|-0.33
+NP|nss club|110,000|108,352.86|-1.5
+NTU|NTU Buddhist Society|100,000|98,167.72|-1.83
+SIM|INC|80,000|77,162.6|-3.55
+NTU|hihi123|100,000|92,584.02|-7.42
+--_EndData_

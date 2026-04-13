@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Setting>
+<MenuConfig>
+	<Menu level="1">
+		<SubMenu Pos="0" PanelPos="0,0,47,20|0,0,61,20|0,0,75,20">
+			<Title TermID="1000007">Filter</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnFilter_mouseReleased</ActionID>
+			<Value></Value>
+
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000014">All</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>ALL_COUNTER_MODE</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+
+				</SubMenu>
+				<SubMenu>
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+
+				<SubMenu>
+<Title TermID=""/>
+<URL Source="" ParamName=""/>
+<ActionID>FILTER_BY_FEED</ActionID>
+<Value/>
+<Enabled>1</Enabled>
+</SubMenu>
+
+				<SubMenu>
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+
+					<Title TermID="1000046">IPO/New Listing</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>IPO_NEW_LISTING</ActionID>
+					<Value>N</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="47,0,40,20|61,0,51,20|75,0,63,20">
+
+			<Title TermID="1000047">Menu</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnNav_mouseReleased</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000048">Trade</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000049">Buy</Title>
+							<URL Source="" ParamName=""></URL>
+
+							<ActionID>BuySellStockPopup</ActionID>
+							<Value>Buy</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000050">Sell</Title>
+							<URL Source="" ParamName=""></URL>
+
+							<ActionID>BuySellStockPopup</ActionID>
+							<Value>Sell</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000053">Cancel/Revise</Title>
+							<URL Source="web" ParamName="CANCELLED_ORDERS_URL">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000054">My Portfolio</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000055">Personal Portfolio</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfSumm.jsp|height=600&amp;tw=WinPrtf</URL>
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000056">Realized Gain/Loss</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfRealGL.jsp|tw=WinGainLoss</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000057">Order Status</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000058">All Orders</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=A</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000059">Pending Orders</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000060">Matched Orders</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=M</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000061">Cancelled Orders</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=L</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000062">Expired Orders</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=X</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000269">Instructions</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordInst.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdInst</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000063">Report</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000064">Client Summary</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptSumm.jsp?|left=30&amp;top=100&amp;width=720&amp;height=550&amp;tw=WinRptSumm</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000292">Monthly Statement</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptBOSMth.jsp?|left=30&amp;top=100&amp;width=720&amp;height=450&amp;tw=WinRptBOSMth&amp;scrollbars=yes</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>0</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000305">Margin Account Summary</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptMgnSumm.jsp?|left=130&amp;top=160&amp;width=555&amp;height=430&amp;tw=WinRptMgnSumm</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>0</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="87,0,40,20|112,0,51,20|138,0,63,20">
+
+			<Title TermID="1000065">Tools</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnTools_mouseReleased</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000066">Reset</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>Reset</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000067">Setting</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000551">Screen View</Title>
+							<URL Source="" ParamName=""></URL>
+
+							<ActionID>ShowScreenMgr</ActionID>
+							<Value></Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000068">Portfolio View</Title>
+							<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfView.jsp|tw=WinPrtf</URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>0</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000069">Stock Alert</Title>
+							<URL Source="web" ParamName="STOCK_ALERT_URL"></URL>
+
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>1</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000107">News</Title>
+
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/newsReader.jsp?|left=20&amp;top=40&amp;width=730&amp;height=460&amp;scrollbars=yes&amp;tw=WinNewsReader|</URL>
+					<ActionID>NewsPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="127,0,103,20|163,0,133,20|201,0,162,20">
+			<Title TermID="1001467">My Watchlists</Title>
+           	 	<URL Source="" ParamName=""></URL>
+            		<ActionID>btnFavourites_mouseReleased</ActionID>
+            		<Value></Value>
+            		<Enabled>1</Enabled>
+
+	            	<SubMenu>
+	                    <Title TermID="1001476">View Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>ViewFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+
+	                <SubMenu>
+	                    <Title TermID="0">Add Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>AddFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+
+	                <SubMenu>
+	                    <Title TermID="0">Edit Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>EditFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+
+	                <SubMenu>
+	                    <Title TermID="0">Remove Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>DelFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+
+	                <SubMenu>
+						<Title TermID=""></Title>
+						<URL Source="" ParamName=""></URL>
+						<ActionID>LINE_SEPARATOR</ActionID>
+						<Value></Value>
+						<Enabled>1</Enabled>
+					</SubMenu>
+					<SubMenu>
+
+	                    <Title TermID="1001475">Add To Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>AddToFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+	                <SubMenu>
+
+	                    <Title TermID="0">Remove Counter From Watchlists</Title>
+	                    <URL Source="" ParamName=""></URL>
+	                    <ActionID>DelFromFavourites</ActionID>
+	                    <Value></Value>
+	                    <Enabled>1</Enabled>
+	                </SubMenu>
+		</SubMenu>
+
+		<SubMenu Pos="0" PanelPos="230,0,40,20|296,0,51,20|363,0,63,20">
+			<Title TermID="1000078">Chart</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnChart_mouseReleased</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+
+					<Title TermID="1000079">Stock Tracker</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/stkTracker.jsp?c=1&amp;|left=20&amp;top=40&amp;width=795&amp;height=575&amp;tw=WinStkTracker|</URL>
+					<ActionID>StockTrackerPopin</ActionID>
+					<Value>9</Value>
+
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000601">Barton</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>dropdown menu</ActionID>
+					<Value>0</Value>
+
+					<Enabled>1</Enabled>
+						<SubMenu>
+							<Title TermID="1000602">KLCI Chart</Title>
+							<URL Source="" ParamName="">http://www.asiachart.com/kl.html?|width=670&amp;height=450&amp;scrollbars=yes</URL>
+							<ActionID>DirectURLPopup</ActionID>
+							<Value>0</Value>
+
+							<Enabled>1</Enabled>
+						</SubMenu>
+						<SubMenu>
+							<Title TermID="1000603">KLCI History</Title>
+							<URL Source="" ParamName="">http://www.asiachart.com/klrecent.html?|width=670&amp;height=450&amp;scrollbars=yes</URL>
+							<ActionID>DirectURLPopup</ActionID>
+
+							<Value>0</Value>
+							<Enabled>1</Enabled>
+						</SubMenu>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000137">End of Day Chart</Title>
+					<URL Source="web" ParamName="LINK_TYPE_EODCHART_URL"></URL>
+
+					<ActionID>StockInfoPopup</ActionID>
+					<Value>11</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000440">Analysis Chart</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/anlyChart.jsp?c=1&amp;|left=20&amp;top=40&amp;width=800&amp;height=585&amp;tw=WinAnalysis|</URL>
+
+					<ActionID>StockInfoPopup</ActionID>
+					<Value>10</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="270,0,56,20|347,0,72,20|426,0,87,20">
+			<Title TermID="1000267">Indices</Title>
+
+			<URL Source="web" ParamName="INDICES_URL">http://218.100.22.129/gcCIMB/stkIndices.jsp?c=1&amp;exchg=KL&amp;mode=0&amp;feedoption=1|left=20&amp;top=40&amp;width=710&amp;height=460&amp;tw=WinStkIndices</URL>
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="3326,0,79,20|419,0,102,20|513,0,125,20">
+			<Title TermID="1000274">Scoreboard</Title>
+			<URL Source="web" ParamName="SCOREBOARD_URL">http://218.100.22.129/gcCIMB/stkScoreBoard.jsp?mode=0&amp;c=1&amp;exchg=KL&amp;feedoption=1&amp;|left=20&amp;top=40&amp;width=710&amp;height=340&amp;tw=WinStkScoreBoard</URL>
+
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+	<SubMenu Pos="0" PanelPos="405,0,47,20|521,0,61,20|638,0,75,20">
+		<Title TermID="1000302">Market</Title>
+		<URL Source="" ParamName=""></URL>
+
+		<ActionID>btnMkt_mouseReleased</ActionID>
+		<Value>0</Value>
+		<Enabled>1</Enabled>
+		<SubMenu>
+			<Title TermID="1000454">Normal</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+			<SubMenu>
+				<Title TermID="1001696">Board Lot</Title>
+				<URL Source="" ParamName=""></URL>
+				<ActionID>MarketBoardLot</ActionID>
+				<Value>10</Value>
+
+				<Enabled>1</Enabled>
+			</SubMenu>
+			<SubMenu>
+				<Title TermID="1000284">Odd Lot</Title>
+				<URL Source="" ParamName=""></URL>
+				<ActionID>MarketOddLot</ActionID>
+				<Value>1000284|OddLot|15|255,255,0|0,0,0</Value>
+
+				<Enabled>1</Enabled>
+			</SubMenu>
+		</SubMenu>
+		<SubMenu>
+			<Title TermID="1000283">Buying In</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+			<SubMenu>
+				<Title TermID="1001696">Board Lot</Title>
+				<URL Source="" ParamName=""></URL>
+				<ActionID>MarketBuyingInBoardLot</ActionID>
+				<Value>1000283|BuyingIn|17|255,0,0|0,0,0</Value>
+
+				<Enabled>1</Enabled>
+			</SubMenu>
+			<SubMenu>
+				<Title TermID="1000284">Odd Lot</Title>
+				<URL Source="" ParamName=""></URL>
+				<ActionID>MarketBuyingInOddLot</ActionID>
+				<Value>1001695|BuyingIn OddLot|18|255,128,128|0,0,0</Value>
+
+				<Enabled>1</Enabled>
+			</SubMenu>
+		</SubMenu>
+		<SubMenu>
+			<Title TermID="1000303">Off Mkt</Title>
+		
+			<URL Source="" ParamName=""></URL>
+		
+			<ActionID>MarketOffMkt</ActionID>
+
+			<Value>1000303|Off Mkt|19</Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+	</SubMenu>
+	
+		<SubMenu Pos="0" PanelPos="452,0,40,20|582,0,51,20|713,0,63,20">
+			<Title TermID="1000275">Info</Title>
+			<URL Source="web" ParamName="STOCK_GENERAL_URL">http://n2ntbfd22.asiaebroker.com/java/jar/swing/xml/Info.xml</URL>
+
+			<ActionID>StockInfoPopin</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="492,0,63,20|633,0,82,20|776,0,100,20">
+			<Title TermID="1000213">Analysis</Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>btnAnalysis_mouseReleased</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000286">Dividend</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/anlyDividend.jsp?df=MYUPCOMING&amp;sc=N|tw=WinAnalysis</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000287">Warrant</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/anlyWarrant.jsp?sc=N|tw=WinAnalysis</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="555,0,63,20|715,0,82,20|876,0,100,20">
+			<Title TermID="1000145">Message</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnMessage_mouseReleased()</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000146">Message Box</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/msgMain.jsp|scrollbars=yes&amp;tw=WinMsgMain</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="618,0,56,20|797,0,72,20|976,0,87,20">
+			<Title TermID="1000276">Demo</Title>
+
+			<URL Source="" ParamName="">http://www.itradecimb.com/web/demo/demo.htm|left=20&amp;top=40&amp;width=650&amp;height=485&amp;location=no&amp;toolbar=no&amp;menubar=no&amp;scrollbars=no&amp;resizable=no&amp;tw=WinDemo</URL>
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="674,0,40,20|869,0,51,20|1063,0,63,20">
+			<Title TermID="1000285">Reward</Title>
+			<URL Source="" ParamName="">http://reward.ebrokerconnect.com/ebcReward/rwdHome.jsp?bhcode=065|left=0&amp;top=10&amp;width=800&amp;height=550&amp;scrollbars=yes&amp;tw=WinReward</URL>
+
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="714,0,56,20|920,0,72,20|1126,0,87,20">
+			<Title TermID="1000277">Calc</Title>
+			<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/anlyCalc.jsp|left=20&amp;top=40&amp;width=620&amp;height=260&amp;tw=WinCalc|</URL>
+
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+	</Menu>
+	<Menu level="2">
+		<SubMenu Pos="0" PanelPos="0,20,47,20|0,20,61,20|0,20,75,20">
+
+			<Title TermID=""></Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>STOCK_SEARCH_BUTTON</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="47,20,80,20|61,20,102,20|75,20,126,20">
+			<Title TermID=""></Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>STOCK_CODE_NAME_TEXTFIELD</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="127,20,199,20|163,20,256,20|201,20,312,20">
+			<Title TermID=""></Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>FEEDBACK_TEXTFIELD</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="326,20,79,20|419,20,102,20|513,20,125,20">
+			<Title TermID="1000048">Trade</Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000049">Buy</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>BuySellStockPopup</ActionID>
+
+					<Value>Buy</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000050">Sell</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>BuySellStockPopup</ActionID>
+
+					<Value>Sell</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000053">Cancel/Revise</Title>
+					<URL Source="web" ParamName="CANCELLED_ORDERS_URL">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="405,20,87,20|521,20,112,20|638,20,138,20">
+			<Title TermID="1000054">My Portfolio</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000055">Personal Portfolio</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfSumm.jsp|height=600&amp;tw=WinPrtf</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000056">Realized Gain/Loss</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfRealGL.jsp|tw=WinGainLoss</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="492,20,126,20|633,20,164,20|776,20,200,20">
+			<Title TermID="1000057">Order Status</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000058">All Orders</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=A</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000059">Pending Orders</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000060">Matched Orders</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=M</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000061">Cancelled Orders</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=L</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000062">Expired Orders</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=X</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000269">Instructions</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/ordInst.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdInst</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="618,20,96,20|797,20,123,20|976,20,150,20">
+			<Title TermID="1000063">Report</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000064">Client Summary</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptSumm.jsp?|left=30&amp;top=100&amp;width=720&amp;height=550&amp;tw=WinRptSumm</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000292">Monthly Statement</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptBOSMth.jsp?|left=30&amp;top=100&amp;width=720&amp;height=450&amp;tw=WinRptBOSMth&amp;scrollbars=yes</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000305">Margin Account Summary</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/rptMgnSumm.jsp?|left=130&amp;top=160&amp;width=555&amp;height=430&amp;tw=WinRptMgnSumm</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="714,20,56,20|920,20,72,20|1126,20,87,20">
+			<Title TermID="1000067">Setting</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000551">Screen View</Title>
+					<URL Source="" ParamName=""></URL>
+
+					<ActionID>ShowScreenMgr</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000068">Portfolio View</Title>
+					<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/prtfView.jsp|tw=WinPrtf</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000069">Stock Alert</Title>
+					<URL Source="web" ParamName="STOCK_ALERT_URL"></URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="0,335,320,160|0,335,370,160|0,335,420,160">
+			<Title TermID=""></Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>MARKET_DEPT</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>  
+		<SubMenu Pos="0" PanelPos="320,335,470,160|370,335,621,160|420,335,791,160">
+			<Title TermID=""></Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>ALL_NEWS</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>
+	</Menu>
+</MenuConfig>
+<MenuConfig2>
+
+<Menu>
+<Title TermID="1000049">Buy</Title>
+<URL Source="" ParamName=""></URL>
+<ActionID>BuySellStockPopup</ActionID>
+<Value>Buy</Value>
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1000050">Sell</Title>
+<URL Source="" ParamName=""></URL>
+<ActionID>BuySellStockPopup</ActionID>
+
+<Value>Sell</Value>
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1000053">Cancel/Revise</Title>
+<URL Source="web" ParamName="CANCELLED_ORDERS_URL">http://218.100.22.129/gcCIMB/ordStatus.jsp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+<ActionID>DirectURLPopup</ActionID>
+<Value>1</Value>
+
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1000079">Stock Tracker</Title>
+<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/stkTracker.jsp?c=1&amp;|left=20&amp;top=40&amp;width=795&amp;height=575&amp;tw=WinStkTracker|</URL>
+<ActionID>StockTrackerPopin</ActionID>
+<Value>9</Value>
+
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1000069">Stock Alert</Title>
+<URL Source="web" ParamName="STOCK_ALERT_URL"></URL>
+<ActionID>DirectURLPopup</ActionID>
+<Value>1</Value>
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1001475">Add To Watchlists</Title>
+
+<URL Source="" ParamName=""></URL>
+<ActionID>AddToFavourites</ActionID>
+<Value></Value>
+<Enabled>1</Enabled>
+</Menu>
+<Menu>
+<Title TermID="1000136">Stock Info</Title>
+<URL Source="" ParamName=""></URL>
+<ActionID>StkInfoPopupMenu</ActionID>
+<Value></Value>
+<Enabled>1</Enabled>
+		<SubMenu>
+
+		<Title TermID="1000275">Info</Title>
+<URL Source="" ParamName=""></URL>
+		<ActionID>StockInfoPopin</ActionID>
+		<Value></Value>
+		<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu>
+		<Title TermID="1000137">End of Day Chart</Title>
+
+<URL Source="web" ParamName="LINK_TYPE_EODCHART_URL"></URL>
+		<ActionID>StockInfoPopup</ActionID>
+		<Value>11</Value>
+		<Enabled>1</Enabled>
+		</SubMenu>
+		<SubMenu>
+		<Title TermID="1000440">Analysis Chart</Title>
+
+<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/anlyChart.jsp?c=1&amp;|left=20&amp;top=40&amp;width=800&amp;height=585&amp;tw=WinAnalysis|</URL>
+		<ActionID>StockInfoPopup</ActionID>
+		<Value>10</Value>
+		<Enabled>1</Enabled>
+		</SubMenu>
+
+</Menu>
+<Menu>
+<Title TermID="1000107">News</Title>
+<URL Source="" ParamName="">http://218.100.22.129/gcCIMB/newsReader.jsp?|left=20&amp;top=40&amp;width=730&amp;height=460&amp;scrollbars=yes&amp;tw=WinNewsReader|</URL>
+<ActionID>NewsPopup</ActionID>
+<Value>0</Value>
+<Enabled>1</Enabled>
+
+</Menu>
+</MenuConfig2>
+</Setting>	

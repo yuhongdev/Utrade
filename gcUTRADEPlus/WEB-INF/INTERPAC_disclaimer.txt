@@ -1,0 +1,56 @@
+<html>
+<head>
+<link rel=stylesheet href=/style/gc/default.css>
+<title>Inter-Pacific Securities Sdn Bhd - Portfolio Manager</title>
+
+	<body style='background:#FFFFFF;margin:5px 0px 0px 5px' onload='body_onload();'>	
+	<table cellspacing=0 cellpadding=0 border=0 width='100%' bgcolor='white'>
+		<tr>
+			<td colspan='2'>
+				<table cellspacing=0 cellpadding=5 width='100%'>
+					<tr>
+						<td class='signup'>
+							<table cellspacing=0 cellpadding=3 border=0 bordercolor='#FFFFFF' width='100%'>
+								<tr>
+									<td>
+										<img src='/img/gc/pac/ips_logo.gif'/>
+									</td>
+									<td class='signup' valign='center' align='justify'>
+									In order to gain access to your stock portfolio, you are required to read and understand the authorisation statement 
+									below. Please click on the "ACCEPT" button if you agree to the authorisation or click on the "DECLINE"
+									button if you do not agree to the authorisation. <br><br>
+									</td>
+								</tr>
+								<tr><td colspan='2'><div id=divTermCond style="overflow:auto">
+								<b><u>AUTHORISATION TO ACCESS TO STOCK PORTFOLIO</u></b><br><br>
+									I/WE HEREBY AUTHORISE AND CONSENT TO INTER-PACIFIC SECURITIES SDN BHD AND ITS AUTHORISED OFFICERS TO ENQUIRE 
+									AND ACCESS INTO MY/OUR TRADING ACCOUNT(S) MAINTAINED WITH INTER-PACIFIC SECURITIES SDN BHD AND TO 
+									DISCLOSE ALL OR PART OF MY/OUR STOCK PORTFOLIO TO ME/US, TO MY/OUR DEALER'S 
+									REPRESENTATIVE OR TO YOUR AUTHORISED OFFICERS<!--OF THE EXEMPT DEALERS, AS THE CASE 
+									MAY BE-->, FOR THE PURPOSE OF FACILITATING MY/OUR SALE OR PURCHASE OF SECURITIES 
+									TRANSACTIONS.  I/WE HEREBY CONFIRM THAT THIS AUTHORISATION SHALL BE VALID FOR AN 
+									INDEFINITE PERIOD UNTIL REVOKED BY ME/US IN WRITING.<br><br>
+									I/WE DECLARE AND UNDERSTAND THAT THE DISCLOSURE OF MY/OUR STOCK PORTFOLIO IS MADE ON 
+									BEST EFFORT BASIS BASED ON SOURCES WHICH INTER-PACIFIC SECURITIES SDN BHD BELIEVED TO BE RELIABLE. 
+									IT HAS BEEN HIGHLIGHTED TO ME/US THAT THIS STOCK PORTFOLIO <!--REPORT--> MAY NOT BE <!--AS -->
+									ACCURATE AS PER THE CDS ACCOUNT BALANCE ENQUIRY REPORT. THUS, I/WE SHALL NOT HOLD 
+									INTER-PACIFIC SECURITIES SDN BHD LIABLE FOR ANY LOSSES OF WHATSOEVER NATURE THAT RESULTED FROM MY/OUR 
+									RELIANCE ON THE STOCK PORTFOLIO<!--REPORT-->. I/WE HEREBY UNDERTAKE TO INFORM 
+									INTER-PACIFIC SECURITIES SDN BHD IMMEDIATELY SHOULD THERE BE ANY DISCREPANCIES IN MY/OUR STOCK 
+									PORTFOLIO.<br><br>
+									I/WE HEREBY CONFIRM AND DECLARE THAT I/WE HAVE READ AND UNDERSTOOD THE ABOVE AUTHORISATION AND HEREBY 
+									RELEASE INTER-PACIFIC SECURITIES SDN BHD FROM ALL LIABILITIES OF WHATSOEVER NATURE ARISING FROM THIS 
+									AUTHORISATION. I/WE AGREE AND UNDERTAKE TO INDEMNIFY INTER-PACIFIC SECURITIES SDN BHD FROM ALL CLAIMS 
+									AND DEMANDS AS A RESULT OF ANY UNAUTHORISED ACTS OF MY DEALER'S REPRESENTATIVE OR 
+									<!--EXEMPT DEALER?S-->YOUR AUTHORISED OFFICERS<!--, AS THE CASE MAY BE-->. </div>
+								</td></tr>
+								<tr>
+									<td class='signup' height='1' colspan='2'>&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>

@@ -1,0 +1,1 @@
+var sRanking_TH='4 October 2012|RBH|M&N-51|TBVP|NewBiES|ChaChing$$|The Master|CU CHALLENGE|Golden boys|Love and Peace|Invincible:CU|';

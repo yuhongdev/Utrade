@@ -1,0 +1,66 @@
+<!--
+ @sStkLngName + '|' + @sCliName + '|' + @sIssueHouse @nIssueNum + '|' + @sStkCode + '|' + 
+ @dPriceOffer + '|' + ltrim(str(@nQty/100))  + '|' + ltrim(str(@nQtyAlloted/100)) + '|' + @nAmtRefund + '|'
+[PARAM4] 
+[PARAM5]
+[PARAM8]
+-->
+
+<html>
+<head><title>Successful Balloting</title></head>
+<style>
+	td { font-family: arial; font-size: 10pt; }
+</style>
+<body>
+
+<map name=mapTopBannerMenu>
+	<area href='http://www.itradecimb.com' shape=rect coords='450,70 620,90'>
+</map>
+
+<table border=0 cellSpacing=0 cellPadding=0 width=620 height=90>
+	<tr><td><img border=0 src=http://secure.itradecimb.com.my/img/TopBannerEmail.gif usemap=#mapTopBannerMenu style='cursor:auto' 
+		width=620 height=90>
+	</td></tr>
+</table>
+
+
+<table border=0 bordercolor=#909090 cellPadding=0 cellSpacing=0 width="620">
+
+<tr><td colSpan=2><b><p><font face='Times New Roman' color=#990000 style='font-size:14pt'><b>CIMB e-IPO: Successful Balloting - [PARAM1]</font></p></b></td></tr>
+
+<tr><td colspan=2><p><font face='Times New Roman' style='font-size:12pt'><br>Dear [PARAM2] ,</b></font></p></td></tr>
+<tr><td colspan=2><p><font face='Times New Roman' style='font-size:12pt'><br>
+	Congratulations! Your [PARAM1] e-IPO application has been fully allotted.
+</b></font></p></td></tr>
+
+<tr><td colspan=2><p><font face='Times New Roman' style='font-size:12pt'><br>
+	Allotted IPO Details
+</b></font></p></td></tr>
+
+<tr><td colspan=2>&nbsp;</td></tr>
+
+
+<tr><td colspan=2><PRE>
+Issuer				:	[PARAM1]
+Share Issue No.			:	[PARAM3]
+No. of Original Shares Applied	:	[PARAM6] x 100
+No. of Shares Allotted		:	[PARAM7] x 100
+</PRE></td></tr>
+
+<tr><td colspan=2><p><font face='Times New Roman' style='font-size:12pt'><br>
+	Contact us at 603 2084 9890 or e-mail itrade@cimb.com  for assistance.
+</b></font></p></td></tr>
+
+<tr><td colspan=2><p><font face='Times New Roman' style='font-size:12pt'><br>Thank you.</b></font></p></td></tr>
+
+<tr><td colspan=2>&nbsp;</td></tr>
+<tr><td colspan=2><p>Yours sincerely,<br></p></td></tr>
+<tr><td colspan=2><p>Retail Equities<br><br></p></td></tr>
+
+<tr><td colspan=2><p>
+	<font face=Courier New style='font-size:6pt;color:#999999'>This service is provided by CIMB Investment Bank Berhad.
+	<br>System is powered by N2N Connect Berhad.</font>
+</p></td></tr>
+</table>
+</body></html>
+

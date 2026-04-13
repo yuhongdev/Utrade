@@ -1,0 +1,162 @@
+#tppoplogin {   
+}
+
+
+#fade { /*--Transparent background layer--*/
+	display: none; /*--hidden by default--*/
+	background: #333;
+	position: fixed; left: 0; top: 0;
+	width: 100%; height: 100%;
+	opacity: .80;
+	z-index: 9999;
+}
+.poplogout, 
+.poplogin {
+	display: block;
+	background: #f9ea72; /* Old browsers */
+	background-image: -webkit-linear-gradient(top, #f9ea72 0%,#fceb55 50%,#f1da36 50%); /* Chrome10+,Safari5.1+ */
+	background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9ea72), color-stop(50%,#fceb55), color-stop(50%,#f1da36)); /* Chrome,Safari4+ */
+	background-image: -moz-linear-gradient(top, #f9ea72 0%, #fceb55 50%, #f1da36 50%); /* FF3.6+ */
+	background-image: -ms-linear-gradient(top, #f9ea72 0%,#fceb55 50%,#f1da36 50%); /* IE10+ */
+	background-image: -o-linear-gradient(top, #f9ea72 0%,#fceb55 50%,#f1da36 50%); /* Opera 11.10+ */
+	background-image: linear-gradient(to bottom, #f9ea72 0%,#fceb55 50%,#f1da36 50%); /* W3C */
+	-webkit-border-radius: 5;
+	-moz-border-radius: 8;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 2px 1px #666666;
+	-moz-box-shadow: 0px 2px 1px #666666;
+	box-shadow: 0px 2px 1px #666666;
+	font-family: Arial;
+	color: #000000;
+	font-size: 13px;
+	text-decoration: none;
+	width: 140px;
+	padding: 10px;
+
+!important;
+	font-weight: bold;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 15px;
+}
+
+.poplogin:hover {
+    background: #f1da36; /* Old browsers */
+	background-image: -webkit-linear-gradient(top, #f1da36 0%,#d6b600 100%); /* Chrome10+,Safari5.1+ */
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f1da36), color-stop(100%,#d6b600)); /* Chrome,Safari4+ */
+	background-image: -moz-linear-gradient(top, #f1da36 0%, #d6b600 100%); /* FF3.6+ */
+	background-image: -ms-linear-gradient(top, #f1da36 0%,#d6b600 100%); /* IE10+ */
+	background-image: -o-linear-gradient(top, #f1da36 0%,#d6b600 100%); /* Opera 11.10+ */
+	background-image: linear-gradient(to bottom, #f1da36 0%,#d6b600 100%); /* W3C */
+	
+	text-decoration: none;!important;
+}
+.poplogout {
+    border: none;
+    cursor: pointer;
+    background: url(/gcN2N/img/Login/button.png) no-repeat -83px -33px transparent!important;
+    width: 81px;
+    height: 31px;
+    margin: 0!important;
+    padding: 0!important;
+
+}
+.poplogout:hover {
+    background: url(/gcN2N/img/Login/button.png) no-repeat -83px 0px transparent!important;
+}
+.popbox{
+	display: none; /*--hidden by default--*/
+	background: #fff;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 50%; left: 50%;
+	z-index: 99999;
+	/*--CSS3 Box Shadows--*/
+	-webkit-box-shadow: 0px 0px 10px #000;
+	-moz-box-shadow: 0px 0px 10px #000;
+	box-shadow: 0px 0px 10px #000;
+	/*--CSS3 Rounded Corners--*/
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    
+}
+.close {
+    display: block;
+    width:50px;
+    height: 50px;            
+    background:url(/gcUTRADEPlus/img/Login/close.png) no-repeat transparent!important;
+    float: right;
+    text-indent: -9999999px;        
+}
+img.btn_close {
+	float: right;
+}
+
+/*--Making IE6 Understand Fixed Positioning--*/
+*html #fade {
+	position: absolute;
+}
+*html .popbox {
+	position: absolute;
+}
+
+
+/*responsive support*/
+@media screen and (max-width: 760px) {
+	.cell-3b .stdreg-fbloginbutton {
+		display: none;
+	}
+	
+	#tppoplogin{
+		width: 100%!important;
+		top: 0;
+		left: 0;
+		margin:0!important;
+		padding: 0!important;
+	}
+	#tppoplogin .inputbox {
+		/*width: 100%!important;*/
+		/*position: absolute;*/
+		padding-left: 80px!important;
+		border: 1px solid #333;
+		outline: none;
+	}
+	.tppoplogin {
+		position: relative!important;
+	}
+	div.tppopsigninbutton {
+        	width: auto;
+		float: none!important;
+		margin: 10px;
+	/*	padding: 10px!important;*/
+	}
+
+	.tpdiv1,.tpdiv2 {
+		float: none!important;
+		width: 100%!important;
+		padding: 0!important;
+		margin: 0!important;
+
+	}
+	.tpdiv2 .tppoplogin {
+		width: auto!important;
+		margin: 10px!important;
+	}
+	.tppoploginremember {
+		text-align: center;
+		float: left;
+		display: block;
+		margin: 15px 10px;
+	}
+	.tpdiv1 p ,
+	.tppoploginh1,.tppoploginavatar {
+		display: none!important;
+	}
+	.tppoploginbutton {
+		margin: 10px!important;
+		float: right!important;
+		width: 50%!important;
+	}
+}

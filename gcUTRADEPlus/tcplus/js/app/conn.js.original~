@@ -1,0 +1,3902 @@
+/**
+ * Provides websocket connection to vertx
+ */
+
+var conn = function() {
+    var qcFeed;
+    // listener IDs
+    var listen05 = "listen05";
+    var listen06 = "listen06";
+    var listen17 = "listen17";
+    var listenFundamental = "listenFundamental";
+    var listenStockInfo06 = "listenStockInfo06";
+    var listenWi = "listenWi";
+    var listenNormalMD = "listenMD";
+    var listenMultiMD = "listenMultiMD";
+    var listenMkt = 'listenMkt';
+    var listenInd = 'listenInd';
+    var listenTime = 'listenTime';
+    var listenTran = 'listenTran';
+    var listen18 = 'listen18';
+    var subColl = {};
+    var connectionRetry = vertxAutoRetry;
+    var stkcodes = new Array();
+    var fieldlists = new Array();
+    var prevStkCodes = new Array();
+    var prevFieldList = new Array();
+    var prevNormalMDList = new Array();
+    var prevMultiMDList = new Array();
+    var indicesList = []; // to cache subscribed indices codes
+    var marketCodes = {}; // to cache retrieving market code
+    var subscriptionTask;
+    var keepAliveRetry = 3;
+    var keepAliveTask = null;
+    var keepAliveTimer = null;
+    var logoutErrorCode = null;
+    var notified = false;
+    var infoInit = false;
+    var vertxAutoConnectTask = null;
+    var exchangeInfo = null;
+    var normalURLs = new Array();
+    var outboundURLs = new Array();
+    var activeIndex = 0;
+    var activeServers = new Array();
+    var _reqObjs = {}; // cache latest requests by listener
+    var warrantCodes = ['8', '16', '17', '19', '20', '31', '32', '35', '36', '37', '38', '39', '40', '41', '42'];
+    
+    function _addSub(coll) {
+        subColl[coll] = true;
+    }
+
+    function _deleteSub(coll) {
+        delete subColl[coll];
+        _reqObjs[coll] = null;
+    }
+     
+    function _getServers() {
+        return {
+            n: normalURLs,
+            ob: outboundURLs
+        };
+    }
+    
+    var _isInit = true;
+    function _init() {
+        var serverURLs = vertxfeed.split(',');
+        for (var i = 0; i < serverURLs.length; i++) {
+            var addr = serverURLs[i].trim();
+            if (addr !== '') {
+                if (/^ob:/.test(addr)) {
+                    outboundURLs.push(addr.substring(3));
+                } else {
+                    normalURLs.push(addr);
+                }
+            }
+        }
+
+        if (outbound) {
+            activeServers = outboundURLs.concat();
+        } else {
+            activeServers = normalURLs.concat();
+        }
+
+        // to provide compatibility with current config if not already updated 
+        if (activeServers.length === 0) {
+            if (outboundURLs.length > 0) {
+                activeServers.push(outboundURLs[0]);
+            }
+            if (normalURLs.length > 0) {
+                activeServers.push(normalURLs[0]);
+            }
+        }
+
+        _isInit = false;
+    }
+    
+    function connect() {
+        if (_isInit) {
+            _init();
+        }
+        
+        if (!qcFeed) {
+            if (activeServers.length > 0) {
+                var qcFeedVertxUrl = formatUrl(activeServers[activeIndex]);
+                
+                if (activeServers.length > 1) {
+                    console.log('Connecting server', activeIndex, '->', qcFeedVertxUrl, '...');
+                } else {
+                    console.log('Connecting server', qcFeedVertxUrl);
+                }
+
+                var t5 = new Date().getTime();
+
+                // Creates qcFeed connection
+                qcFeed = new QcFeed(qcFeedVertxUrl + '/eventbus', {
+                    debug: N2N_CONFIG.fDebug,
+                    devel: false
+                });
+                
+                // add centralized feed listener
+                qcFeed.addFeedListener({
+                    listenId: 'VListener',
+                    callback: updateHandler
+                });
+
+                qcFeed.onopen = function() {
+                    if (N2N_CONFIG.lDebug) {
+                        console.log('connected to server in ', (new Date().getTime() - t5) / 1000, 's');
+                        t5 = null;
+                    }
+                    if (topPanelBar != null) {
+                        topPanelBar.setSignal('Online');
+                    }
+                    
+                    // Resets connection retry back to 3
+                    connectionRetry = vertxAutoRetry;
+                };
+
+                qcFeed.onclose = function() {
+
+                    if (!onRefreshBrowser) {
+                        if (connectionRetry > 0) {
+                            connectionRetry -= 1;
+                            autoReconnect();
+                        } else if (activeServers[++activeIndex]) {
+                            connectionRetry = vertxAutoRetry;
+                            console.log('Could not connect server', activeIndex - 1);
+                            disconnect();
+                            connect();
+                        } else {
+                            if (topPanelBar != null) {
+                                topPanelBar.setSignal();
+                            }
+                            conn.notifySession("{t: 'local', d: 'feeddown'}");
+                        }
+                    }
+                    
+                };
+            } else {
+                msgutil.error('Sorry, no feed server is available.', conn.logout, false);
+                return;
+            }
+        }
+
+        if (!_isConnected() && !notified) {
+            if (topPanelBar != null) {
+                topPanelBar.setSignal('Loading');
+            }
+            // Connects to vertx
+            if (!infoInit) {
+                qcFeed.connect(function() {
+                    _configureSession(_getInfo);
+                }); // Don't pass with ()
+            } else {
+                // reconnect without getting info
+                qcFeed.connect(function() {
+                    _configureSession(function() {
+                        if (streaming) {
+                            _subscribeAll();
+                        }
+                    });
+                });
+            }
+        }
+    }
+    
+    function _configureSession(callback) {
+        if (!jsutil.isEmpty(defVToken)) {
+            vToken = defVToken;
+        }
+        
+        if (vToken == null) {
+            Ext.Ajax.request({
+                url: addPath + 'tcplus/getvtoken',
+                success: function(response) {
+                    if (response.responseText) {
+                        try {
+                            var resObj = Ext.decode(response.responseText);
+                            if (resObj.s) {
+                                vToken = resObj.v;
+                            }
+                        } catch (e) {
+                        }
+                    }
+                },
+                callback: function() {
+                    if (vToken) {
+                        connectionRetry = vertxAutoRetry;
+                        _configureSession(callback);
+                    } else {
+                        if (connectionRetry > 0) {
+                            connectionRetry -= 1;
+                            _configureSession(callback);
+                        } else {
+                            debugutil.debug('Could not get vtoken.');
+                            conn.notifySession("{t: 'local', d: 'err'}");
+                        }
+                    }
+                }
+            });
+
+            return;
+        }
+        
+        if (qcFeed) {
+            qcFeed.request({
+                action: 'session',
+                numAsStr: true,
+                user: loginId + '@' + sponsorID + '_' + sView,
+                token: vToken,
+                callback: function(qc, cfg, res) {
+                    // clears vtoken
+                    vToken = null;
+
+                    if (res.success) {
+                        connectionRetry = vertxAutoRetry;
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
+                    } else {
+                        if (connectionRetry > 0) {
+                            debugutil.debug('Failed to configure session');
+                            setTimeout(function() {
+                                _configureSession(callback);
+                            }, 100);
+                            connectionRetry -= 1;
+                        } else {
+                            debugutil.debug('Could not configure session');
+                            conn.notifySession("{t: 'local', d: 'err'}");
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function autoReconnect() {
+        if (vertxAutoConnect) {
+            debugutil.debug('conn > autoConnect (to vertx)...');
+
+            if (topPanelBar != null) {
+                topPanelBar.setSignal('Loading');
+            }
+            clearAutoConnectTask();
+            var retryMsg = vertxAutoConnect / 1000 + 's';
+            debugutil.debug('Retry in ' + retryMsg + '...');
+            vertxAutoConnectTask = setTimeout(function() {
+                connect();
+            }, vertxAutoConnect);
+        }
+    }
+
+    function notifyConnectionLost() {
+        msgutil.show({
+            msg: languageFormat.getLanguage(31111, 'We regret to inform that we are unable to connect to server at this time. Please try again later.'),
+            buttons: Ext.MessageBox.OK,
+            buttonText: {
+                ok: MSG.OK
+            },
+            fn: function(btn) {
+                if (btn == 'ok') {
+                }
+            }
+        });
+    }
+
+    function clearAutoConnectTask() {
+        if (vertxAutoConnectTask) {
+            clearInterval(vertxAutoConnectTask);
+            vertxAutoConnectTask = null;
+        }
+    }
+
+    function _isConnected() {
+        return qcFeed != null && qcFeed.isConnected();
+    }
+
+    function disconnect() {
+        if (_isConnected()) {
+            qcFeed.close();
+        }
+        qcFeed = null;
+    }
+
+    function logout() {
+        var url = '';
+
+        if (logoutDeviceDetection == "TRUE") {
+            if (isTablet || isPhone) {
+                url = logoutURLLite;
+            } else {
+                url = logoutURLOthers;
+            }
+        } else {
+            url = logoutURLLite;
+        }
+
+        if (parent)
+            parent.document.location = url;
+        else
+            document.location = url;
+    }
+
+    function requestLogout() {
+        debugutil.debug('conn > requestLogout');
+        
+        stopKeepAlive();
+        disconnect();
+        Ext.Ajax.request({
+            url: addPath + 'tcplus/logout?' + logoutErrorCode,
+            method: 'POST',
+            success: function(response) {
+            },
+            failure: function(response) {
+
+            }
+        });
+    }
+    
+    /**
+     * Keeps TCLite session
+     */
+    function keepAlive(doRelogin) {
+        var debugTitle = 'conn > keepAlive';
+        var time = N2N_CONFIG.frontKeepAliveInt;
+
+        if (keepAliveRetry <= 0) {
+            conn.notifySession("{t: 'local', d: '-999'}");
+            return;
+        }
+
+        if (keepAliveTask == null) {
+            keepAliveTask = {};
+        } else {
+            keepAliveTask.ajax = null;
+            if (keepAliveTask.alive == false) {
+                time = 5000;
+            }
+        }
+
+        var d = new Date();
+        var timeStr = d.getHours() + '' + d.getMinutes() + '' + d.getSeconds();
+        var url = addPath + 'tcplus/keepalive?' + (doRelogin ? 'dorelogin=true&' : '') + d.getFullYear() + d.getMonth() + d.getDate() + timeStr + '_' + loginId + '_' + N2N_CONFIG.confServerNo;
+
+        debugutil.debug(debugTitle, 'time: ' + timeStr);
+
+        var runKeepAlive = true;
+        keepAliveTask.ajax = Ext.Ajax.request({
+            url: url,
+            method: 'POST',
+            success: function(response) {
+                /*
+                 * success response {t:"a",s:true}
+                 * response {e:-999,t:"a",s:false,m:"Session not found"} 
+                 */
+                debugutil.debug(debugTitle, 'keep alive ok: response ---> ' + response.responseText);
+
+                var obj = null;
+                try {
+                    obj = Ext.decode(response.responseText);
+
+                    if (obj.s == true) {
+                        keepAliveRetry = 3;
+                        keepAliveTask.alive = true;
+                    } else {
+                        if (obj != null) {
+                            if ((obj.e == '-999') && (obj.m == 'Session not found')) {
+                                // temporarily stop keep alive
+                                stopKeepAlive();
+                                _relogin();
+                            } else {
+                                conn.notifySession("{t: 'local', d:'" + obj.e + "' , ms:'" + obj.m + "' }");
+                            }
+                            runKeepAlive = false;
+                        }
+
+                        keepAliveRetry--;
+                        keepAliveTask.alive = false;
+                    }
+                } catch (e) {
+                    keepAliveRetry--;
+                    keepAliveTask.alive = false;
+                }
+            },
+            failure: function(response) {
+                keepAliveRetry--;
+                keepAliveTask.alive = false;
+                debugutil.debug(debugTitle, 'keep alive failure: response ---> ' + response.responseText);
+            },
+            callback: function() {
+                if (runKeepAlive) {
+                    keepAliveTimer = setTimeout(function() {
+                        conn.keepAlive();
+                    }, time);
+                }
+            }
+        });
+
+    }
+    
+    function _relogin() {
+        var reloginSuccess = false;
+
+        n2nLayoutManager.setLoading('Reconnecting...');
+        Ext.Ajax.request({
+            url: N2N_CONFIG.reloginURL,
+            success: function(response) {
+                if (response.responseText != '') {
+                    try {
+                        var resObj = Ext.decode(response.responseText);
+                        if (resObj) {
+                            reloginSuccess = true;
+
+                            if (resObj.status > -1) {
+                                // starts keepalive again
+                                //conn.keepAlive(true);
+                            	location.reload();
+                            } else {
+                                n2nLayoutManager.setLoading(false);
+                                var msgObj = {
+                                    t: "relogin",
+                                    d: "",
+                                    ms: resObj.message
+                                };
+                                conn.notifySession(Ext.encode(msgObj));
+                            }
+                        }
+                    } catch (e) {
+                    }
+                }
+            },
+            callback: function() {
+                n2nLayoutManager.setLoading(false);
+                if (!reloginSuccess) {
+                    conn.notifySession("{t: 'local', d: '-999', ms: 'Session not found'}");
+                }
+            }
+        });
+    }
+
+    function stopKeepAlive() {
+        if (topPanelBar != null) {
+            topPanelBar.setSignal("Offline");
+        }
+        clearTimeout(keepAliveTimer);
+        keepAliveTimer = null;
+    }
+
+    function notifySession(responseText) {
+        var debugTitle = 'conn > notifySession';
+        debugutil.debug(debugTitle, 'result ---> ' + responseText);
+        
+        if (notified) {
+            return; // avoid duplicate notified message
+        }
+
+        /*
+         if (N2NLoginStatus.returnOnAliveSession() == false) {
+         return;
+         } else {
+         N2NLoginStatus.setOnAliveSession(false);
+         }
+         */
+
+        var obj = null;
+        try {
+            obj = Ext.decode(responseText);
+
+            var cleanTimer = function() {
+                if (orderStatusPanel != null)
+                    orderStatusPanel.stopRefreshTimer();
+                if (equityPrtfPanel != null)
+                    equityPrtfPanel.stopRefreshTimer();
+                if (equityManualPrtfPanel != null)
+                    equityManualPrtfPanel.stopRefreshTimer();
+                if (equityPrtfRealizedPanel != null)
+                    equityPrtfRealizedPanel.stopRefreshTimer();
+                if (topPanelBarPanel != null)
+                    topPanelBarPanel.stopLoopTime();
+                if (quoteScreen != null) {
+                    quoteScreen.stopAutoRefresh();
+                }
+                if (newsPanel) {
+                    newsPanel.stopRefresh();
+                }
+            };
+
+            var errorMessage = "";
+
+            if (obj.t == "scsl") {
+                errorMessage = obj.ms;
+            } else {
+                switch (obj.d) {
+                    case  'e':
+                        errorMessage = languageFormat.getLanguage(31105, 'We regret to inform that your session has expired. Kindly login again.(e)');
+                        break;
+                    case 's':
+                        errorMessage = languageFormat.getLanguage(31106, 'System detected you have login to another computer and this session will be stopped. - 1102 WEB');
+                        break;
+                    case 't':
+                        errorMessage = languageFormat.getLanguage(31107, 'We regret to inform that your session has expired. Kindly login again.(t)');
+                        break;
+                    case 'loginFail':
+                        errorMessage = languageFormat.getLanguage(31108, 'We regret to inform that your login attempt was unsuccessful. Kindly try again shortly.');
+                        break;
+                    case '-999':
+                        errorMessage = languageFormat.getLanguage(31109, 'We regret to inform that we are unable to process your request at this time. Kindly try again shortly.(9)');
+                        break;
+                    case 'idleMode':
+                        errorMessage = languageFormat.getLanguage(31110, 'We regret to inform that we are unable to connect to the server at this time. Kindly check your internet connection and try again.(dwr)');
+                        break;
+                    case 'feeddown':
+                        errorMessage = languageFormat.getLanguage(31111, 'We regret to inform that we are unable to connect to server at this time. Please try again later.');
+                        break;
+                    case 'err':
+                        errorMessage = languageFormat.getLanguage(31112, 'Error occurred.');
+                        break;
+                    case '-23001':
+                        errorMessage = languageFormat.getLanguage(31121, 'We regret to inform that we are unable to process your request at this time. Kindly try again shortly.(23001)');
+                        break;
+                    default:
+                        errorMessage = obj.ms;
+                }
+
+
+
+            }
+
+            cleanTimer();
+            stopKeepAlive();
+            onRefreshBrowser = true;
+            conn.disconnect();
+            if (n2nTicker != null) {
+                n2nTicker.stop();
+            }
+
+            logoutErrorCode = "ErrorType=";
+            if (obj.t != null) {
+                logoutErrorCode += obj.t;
+            }
+            logoutErrorCode += "&ErrorCode=";
+            if (obj.d != null) {
+                logoutErrorCode += obj.d;
+            }
+            logoutErrorCode += "&ErrorMessage=";
+            if (errorMessage != null) {
+                logoutErrorCode += errorMessage;
+            }
+
+            n2nLayoutManager.setLoading(false);
+            if (cookies.readCookie(loginId + '_defTrAccSync') == 'false') {
+                n2ncomponents.requestSaveDefaultTradingAccountSetting(false);
+            }
+            msgutil.error(n2br(errorMessage), conn.logout);
+            notified = true;
+
+        } catch (e) {
+            debugutil.debug(debugTitle, 'exception ---> ' + e, e, true);
+        }
+    }
+
+    function _request(reqObj) {
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+
+    function updateHandler(qc, lis, res) {
+
+        if (res.data) {
+            switch (res.data[fieldMsgType]) {
+                case 'A05':
+                case 'U05':
+                    // Update quote
+                    var qd = _formatSingleVertxData(res, typeQuote, null, formatData05);
+                    updater.updateQuote(qd);
+                    updater.updatePriceAlert(qd);
+                    
+                    if (n2ncomponents.worldIndices) {
+                        n2ncomponents.worldIndices.updateFeedRecord(res.data);
+                    }
+
+                    break;
+                case 'A06':
+                case 'U06':
+                    // Update quote
+                    var qd = _formatSingleVertxData(res, typeQuote, '666');
+                    updater.updateQuote06(qd);
+
+                    break;
+                case 'U12':
+                    var qd = _formatSingleVertxData(res, typeQuote);
+                    updater.updateQuote12(qd);
+
+                    break;
+                case 'U09':
+                    var fd = _formatSingleVertxData(res, 't');
+                    updater.updateTime(fd);
+
+                    break;
+                case 'A01':
+                case 'U01':
+                    var fd = _formatSingleVertxData(res, typeIndex);
+                    updater.updateSummary(fd);
+
+                    break;
+                case 'A02':
+                case 'U02':
+                    var fd = _formatSingleVertxData(res, typeScoreBoard, null, formatData02);
+                    updater.updateSummary(fd);
+
+                    break;
+                case 'A07':
+                case 'U07':
+                    if (marketStreamer) {
+                        marketStreamer.updateFeedRecord(res.data);
+                    }
+
+                    if (trackerRecord) {
+                        trackerRecord.updateFeedRecord(res.data);
+                    }
+
+                    break;
+                case 'A18':
+                case 'U18':
+                    for (var i = 0; i < n2ncomponents.brokerQViews.length; i++) {
+                        n2ncomponents.brokerQViews[i].updateFeedRecord(res.data);
+                    }
+                    
+                    break;
+            }
+        }
+    }
+
+    function subscribeFeed(forceSubscribe) {
+        if (t1) {
+            console.log('load spent in ', (new Date().getTime() - t1) / 1000, 's');
+            t1 = null;
+        }
+        
+        if (conn.isConnected()) {
+            stkcodes.sort();
+            fieldlists.sort();
+            
+            if (stkcodes.length === 0) {
+                fieldlists = [];
+            }
+            
+            if (forceSubscribe || (stkcodes.join(',') !== prevStkCodes.join(',') || fieldlists.join(',') !== prevFieldList.join(','))) {
+                prevStkCodes = stkcodes.concat();
+                prevFieldList = fieldlists.concat();
+
+                if (stkcodes.length > 0) {
+                    var columns = stockutil.filterCols(fieldlists);
+
+                    if (columns.col05.length > 0) {
+                        console.log('conn > subscribeFeed');
+
+                        // Unregister previous subscription (if any)
+                        /*
+                         qcFeed.request({
+                         action: 'unregister',
+                         listenId: listen05
+                         });
+                         */
+
+                        if (forceSubscribe) {
+                            columns.col05.push(fieldMsgType);
+                        }
+                        
+                        if (streaming) {
+                            // Register feed
+                            qcFeed.request({
+                                action: 'register',
+                                listenId: listen05,
+                                coll: ['05'],
+                                query: forceSubscribe || false,
+                                filter: [
+                                    {field: fieldStkCode, value: stkcodes, comparison: 'in'}
+                                ],
+                                column: jsutil.arrayUnique(columns.col05)
+                            });
+                        }
+
+                        _addSub(listen05);
+                    }
+
+                    if (columns.col06.length > 0) {
+                        if (forceSubscribe) {
+                            columns.col06.push(fieldMsgType);
+                        }
+                        subscribeFeed06(stkcodes, columns.col06, forceSubscribe);
+                    }
+                    
+                    if (columns.col17.length > 0) {
+                        if (forceSubscribe) {
+                            columns.col17.push(fieldMsgType);
+                        }
+                        subscribeFeed17(stkcodes, columns.col17, forceSubscribe);
+                    }
+                } else {
+                    qcFeed.request({
+                        action: 'unregister',
+                        listenId: listen05
+                    });
+                    qcFeed.request({
+                        action: 'unregister',
+                        listenId: listen06
+                    });
+                    qcFeed.request({
+                        action: 'unregister',
+                        listenId: listen17
+                    });
+                    
+                    _deleteSub(listen05);
+                    _deleteSub(listen06);
+                    _deleteSub(listen17);
+                }
+            }
+
+            subscribeMD(forceSubscribe);
+        }
+    }
+
+    function subscribeFeed06(codeList, colList, pullData) {
+        /*
+        qcFeed.request({
+            action: 'unregister',
+            listenId: listen06
+        });
+        */
+       
+        if (streaming) {
+            qcFeed.request({
+                action: 'register',
+                listenId: listen06,
+                coll: ['06'],
+                query: pullData || false,
+                column: colList,
+                filter: [
+                    {field: fieldStkCode, value: codeList, comparison: 'in'}
+                ]
+            });
+        }
+        
+        _addSub(listen06);
+    }
+    
+    function subscribeFeed17(codeList, colList, pullData) {
+        if (streaming) {
+            qcFeed.request({
+                action: 'register',
+                listenId: listen17,
+                coll: ['17'],
+                query: pullData || false,
+                column: colList,
+                filter: [
+                    {field: fieldStkCode, value: codeList, comparison: 'in'}
+                ]
+            });
+        }
+        
+        _addSub(listen17);
+    }
+    
+    function _subscribeStockInfo06(codeList, colList, pullData){
+    	if (streaming) {
+
+            if (!codeList || !colList) {
+                var reqObj = _reqObjs[listenStockInfo06];
+
+                if (reqObj) {
+                    if (pullData != null) {
+                        reqObj.query = pullData;
+                    }
+                    qcFeed.request(reqObj);
+                }
+            } else {
+                var reqObj = {
+                    action: 'register',
+                    listenId: listenStockInfo06,
+                    coll: ['06'],
+                    query: pullData || false,
+                    column: colList,
+                    filter: [
+                        {field: fieldStkCode, value: codeList, comparison: 'in'}
+                    ]
+                };
+
+                _reqObjs[listenStockInfo06] = reqObj;
+                qcFeed.request(reqObj);
+            }
+        }
+
+        _addSub(listenStockInfo06);
+    }
+    
+    function _unsubscribeStockInfo06() {
+        if (_isConnected()) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenStockInfo06
+            });
+
+            _deleteSub(listenStockInfo06);
+        }
+
+    }
+    
+    function _subscribeFundamental(codeList, colList, pullData) {
+        if (streaming) {
+
+            if (!codeList || !colList) {
+                var reqObj = _reqObjs[listenFundamental];
+
+                if (reqObj) {
+                    if (pullData != null) {
+                        reqObj.query = pullData;
+                    }
+                    qcFeed.request(reqObj);
+                }
+            } else {
+                var reqObj = {
+                    action: 'register',
+                    listenId: listenFundamental,
+                    coll: ['17'],
+                    query: pullData || false,
+                    column: colList,
+                    filter: [
+                        {field: fieldStkCode, value: codeList, comparison: 'in'}
+                    ]
+                };
+
+                _reqObjs[listenFundamental] = reqObj;
+                qcFeed.request(reqObj);
+            }
+        }
+
+        _addSub(listenFundamental);
+    }
+
+    function _unsubscribeFundamental() {
+        if (_isConnected()) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenFundamental
+            });
+
+            _deleteSub(listenFundamental);
+        }
+
+    }
+    
+    function _subscribe18(pullData) {
+        if (streaming) {
+            var codeList = n2ncomponents.getBrokerQCodeList();
+
+            if (codeList.length > 0) {
+                var reqObj = {
+                    action: 'register',
+                    listenId: listen18,
+                    coll: ['18'],
+                    query: pullData || false,
+                    filter: [
+                        {field: fieldStkCode, value: codeList, comparison: 'in'}
+                    ]
+                };
+
+                _reqObjs[listen18] = reqObj;
+                if (_isConnected()) {
+                    qcFeed.request(reqObj);
+                }
+
+                _addSub(listen18);
+            } else {
+                _unsubscribe18();
+            }
+        }
+    }
+
+    function _unsubscribe18() {
+        if (_isConnected() && subColl[listen18]) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listen18
+            });
+
+            _deleteSub(listen18);
+        }
+
+    }
+    
+    function _subscribeWorldIndices(codeList, colList, pullData) {
+        if (_isConnected() && streaming) {
+            qcFeed.request({
+                action: 'register',
+                listenId: listenWi,
+                coll: ['05'],
+                query: pullData || false,
+                column: colList,
+                filter: [
+                    {field: fieldStkCode, value: codeList, comparison: 'in'}
+                ],
+                exch: 'WIDX'
+            });
+
+            _addSub(listenWi);
+        }
+    }
+
+    function _unsubscribeWorldIndices() {
+        if (_isConnected()) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenWi
+            });
+
+            _deleteSub(listenWi);
+        }
+
+    }
+
+    function queryFeed06(codeList, colList) {
+        if (codeList.length > 0 && colList.length > 0) {
+            qcFeed.request({
+                action: 'query',
+                coll: ['06'],
+                column: colList,
+                filter: [
+                    {field: fieldStkCode, value: codeList, comparison: 'in'}
+                ],
+                callback: function(qc, cfg, res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        var qd = _formatSingleVertxData({data: res.data[i]}, typeQuote, '666');
+                        updater.updateQuote06(qd);
+                    }
+                }
+            });
+        }
+    }
+    
+    function queryFeed17(codeList, colList) {
+        if (codeList.length > 0 && colList.length > 0) {
+            qcFeed.request({
+                action: 'query',
+                coll: ['17'],
+                column: colList,
+                filter: [
+                    {field: fieldStkCode, value: codeList, comparison: 'in'}
+                ],
+                callback: function(qc, cfg, res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        var qd = _formatSingleVertxData({data: res.data[i]}, typeQuote);
+                        updater.updateQuote(qd);
+                    }
+                }
+            });
+        }
+    }
+
+    function subscribeMD(forceSubscribe) {
+        var mdList = n2ncomponents.getMDList(true);
+        var normal = mdList.normal;
+        normal.sort();
+        var mdl = mdList.mdl.sort();
+        mdl.sort();
+
+        if (conn.isConnected()) {
+            // normal
+            if (forceSubscribe || normal.join(',') !== prevNormalMDList.join(',')) {
+                prevNormalMDList = normal.concat();
+
+                if (normal.length > 0) {
+                    if (streaming) {
+                        console.log('conn > subscribeNormalMD');
+                        qcFeed.request({
+                            action: 'register',
+                            listenId: listenNormalMD,
+                            coll: ['05'],
+                            filter: [
+                                {field: fieldStkCode, value: normal, comparison: 'in'}
+                            ],
+                            query: forceSubscribe || false,
+                            column: MD_COLS
+                        });
+                    }
+
+                    _addSub(listenNormalMD);
+                } else {
+                    qcFeed.request({
+                        action: 'unregister',
+                        listenId: listenNormalMD
+                    });
+                    _deleteSub(listenNormalMD);
+                }
+            }
+
+            // mdl
+            if (forceSubscribe || mdl.join(',') !== prevMultiMDList.join(',')) {
+                prevMultiMDList = mdl.concat();
+
+                if (mdl.length > 0) {
+                    if (streaming) {
+                        console.log('conn > subscribeMultiMD');
+                        qcFeed.request({
+                            action: 'register',
+                            listenId: listenMultiMD,
+                            coll: ['12'],
+                            query: forceSubscribe || false,
+                            filter: [
+                                {field: fieldStkCode, value: mdl, comparison: 'in'}
+                            ]
+                        });
+                    }
+
+                    _addSub(listenMultiMD);
+                } else {
+                    qcFeed.request({
+                        action: 'unregister',
+                        listenId: listenMultiMD
+                    });
+                    _deleteSub(listenMultiMD);
+                }
+            }
+        }
+    }
+
+    function subscribeStatus(pullData) {
+        subscribeIndices(indicesList, pullData);
+        subscribeMarket(pullData);
+        subscribeTime();
+    }
+
+    function subscribeMarket(pullData) {
+        if (conn.isConnected()) {
+            var exchCode = exchangecode;
+            if (exchangecode === 'MY') {
+                exchCode = 'KL';
+            }
+            
+            /*
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenMkt
+            });
+            */
+           
+            var mkCols = [fieldSbUp, fieldSbDown, fieldSbUnchanged, fieldSbUntraded,
+                fieldSbTotalVol, fieldSbTotalValue, fieldSbTotalTrade];
+            if (pullData) {
+                mkCols.push(fieldMsgType);
+            }
+            
+            if (streaming) {
+                qcFeed.request({
+                    action: 'register',
+                    listenId: listenMkt,
+                    query: pullData || false,
+                    coll: '02',
+                    column: mkCols,
+                    filter: [
+                        {field: fieldSbEx, value: [exchCode], comparison: 'in'},
+                        {field: fieldSbName, value: 'TOTAL', comparison: 'eq'}
+                    ]
+                });
+            }
+            
+            _addSub(listenMkt);
+        }
+    }
+
+    function unsubscribeMarket() {
+        if (conn.isConnected()) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenMkt
+            });
+            
+            _deleteSub(listenMkt);
+        }
+    }
+
+    function subscribeIndices(codeList, pullData) {
+        if (conn.isConnected()) {
+            var exchCode = exchangecode;
+            if (exchangecode === 'MY') {
+                exchCode = 'KL';
+            }
+
+            if (!codeList || codeList.length === 0) {
+                codeList = [getIndiceKey(exchCode)];
+            }
+            
+            /*
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenInd
+            });
+            */
+            var indCols = [fieldLast, fieldLacp];
+            if (pullData) {
+                indCols.push(fieldMsgType);
+            }
+            
+            if (streaming) {
+                qcFeed.request({
+                    action: 'register',
+                    listenId: listenInd,
+                    coll: '01',
+                    query: pullData || false,
+                    column: indCols,
+                    filter: [
+                        {field: fieldStkCode, value: codeList, comparison: 'in'}
+                    ],
+                    exch: exchCode
+                });
+            }
+            
+            _addSub(listenInd);
+        }
+    }
+
+    function unsubscribeIndices() {
+        if (conn.isConnected()) {
+            qcFeed.request({
+                action: 'unregister',
+                listenId: listenInd
+            });
+            _deleteSub(listenInd);
+        }
+    }
+
+    function subscribeTime() {
+        if (conn.isConnected()) {
+            
+            if (streaming) {
+                qcFeed.request({
+                    action: 'register',
+                    listenId: listenTime,
+                    coll: '09',
+                    filter: [
+                        {field: fieldSbEx, value: exchangecode, comparison: 'eq'}
+                    ]
+                });
+            }
+            
+            _addSub(listenTime);
+        }
+    }
+
+    function subscribeTransaction(request) {
+        if (conn.isConnected()) {
+            var listenId = request.listenId;
+            
+            if (streaming) {
+                // Register transaction
+                var reqObj = {
+                    action: 'register',
+                    listenId: listenId,
+                    coll: ['07']
+                };
+
+                var filter = [];
+                if (request.list) {
+                    filter.push({field: fieldStkCode, value: request.list, comparison: 'in'});
+                    reqObj.exch = getExchangeFromCodes(request.list);
+                } else if (request.exch) {
+                    reqObj.exch = request.exch;
+                } else {
+                    return; //
+                }
+
+                // filter by traded value
+                if (request.value && request.valueSign) {
+                    var value = String(request.value).trim();
+                    if (value) {
+                        filter.push({field: fieldLValue, value: request.value, comparison: getComparison(request.valueSign)});
+                    }
+                }
+                // filter by volume
+                if (request.vol && request.volSign) {
+                    var vol = String(request.vol).trim();
+                    if (vol) {
+                        filter.push({field: fieldUnit, value: request.vol, comparison: getComparison(request.volSign)});
+                    }
+                }
+                
+                if (filter.length > 0) {
+                    reqObj.filter = filter;
+                }
+
+                qcFeed.request(reqObj);
+            }
+
+            _addSub(listenId);
+        }
+    }
+
+    function unsubscribeTransaction(listenId) {
+        qcFeed.request({
+            action: 'unregister',
+            listenId: listenId
+        });
+        _deleteSub(listenId);
+    }
+    
+    function _getSimpleStockList(reqObj) {
+        _request({
+            action: 'query',
+            coll: ['05'],
+            start: 0,
+            limit: reqObj.list.length,
+            column: reqObj.col,
+            filter: [{field: fieldStkCode, value: reqObj.list, comparison: 'in'}],
+            callback: function(qc, cfg, res) {
+                if (reqObj.success) {
+                    var response = _formatVertxData(res, null, formatData05);
+                    reqObj.success(response);
+                }
+            }
+        });
+    }
+    
+    /**
+     * Gets stock list from vertx
+     * 
+     * @param {object} request
+     * 
+     */
+    function getStockList(request) {
+        var columns = stockutil.filterCols(request.f, request.skipMDColCheck);
+
+        if (columns.col05.length > 0) {
+            var reqObj = {
+                action: 'query',
+                coll: ['05'],
+                start: parseInt(request.p * request.c),
+                limit: parseInt(request.c),
+                column: columns.col05.concat(request.ef05 || []), // extra 05 columns
+                filter: [
+                    {field: fieldStkName, value: '', comparison: 'ne'}
+                ],
+                callback: function(qc, cfg, res) {
+                    var response = _formatVertxData(res, null, formatData05);
+                    request.success(response);
+
+                    var codeList = stockutil.getCodeList(res.data);
+                    queryFeed06(codeList, columns.col06);
+                    queryFeed17(codeList, columns.col17);
+                }
+            };
+            
+            if (request.filterWarrant) {
+                reqObj.filter.push(
+                        {
+                            'not': [
+                                {or: [
+                                        {field: fieldWarrantType, value: warrantCodes, comparison: 'in'},
+                                        {'and': [
+                                                {field: fieldWarrantType, value: 4999, comparison: 'gt'},
+                                                {field: fieldWarrantType, value: 10000, comparison: 'lt'}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                );
+            }
+
+            if (request.hasOwnProperty('list') && request.list != null) {
+                // if stock list is provided, just ignore exchange, sector, market
+                reqObj.filter.push({field: fieldStkCode, value: request.list, comparison: 'in'});
+            } else {
+                var excFilter = true;
+                if (request.secList == "9995") { // New listing
+                    reqObj.filter.push({field: fieldStatus, value: '.N(.)*', comparison: 'regex'});
+                } else if (request.secList == "9999") { // entitlement
+                            reqObj.filter.push({field: fieldStatus, value: '....[CX](.)*', comparison: 'regex'});
+                } else if (request.secList == "9998") {
+                            // suspended
+                            reqObj.filter.push({field: fieldStatus, value: '.S(.)*', comparison: 'regex'});
+                        } else {
+                    excFilter = false;
+                        }
+
+                if (excFilter) {
+                    // reset some filter since above sector list do not really exist
+                    request.secList = null;
+                    request.sec = null;
+                    }
+                }
+
+            if (request.hasOwnProperty('sorters') && request.sorters != null) {
+                reqObj.sort = request.sorters;
+            }
+
+            // Sends request
+            if (_isConnected()) {
+                // qcFeed.request(reqObj);
+                qcFeed.query(request.ex, request.mkt, request.secList, request.sec, reqObj);
+            }
+        } else if (columns.col06.length > 0 && request.list) {
+            queryFeed06(request.list, columns.col06);
+        } else if(columns.col17.length > 0 && request.list) {
+            queryFeed17(request.list, columns.col17);
+        }
+    }
+    
+    function _getWarrantList(request) { // not used for now
+        if (request.k) {
+            var params = {
+                '[F]': 'wrts(' + request.k + ')',
+                '[FIELD]': fieldStkCode
+            };
+
+            var reqObj = {
+                action: 'qc',
+                req: 'FSEARCH',
+                type: 'json',
+                params: params,
+                exch: request.ex,
+                callback: function(qc, cfg, res) {
+                    var resDt = res.data;
+
+                    if (typeof request.success === 'function' && resDt) {
+                        request.success(resDt);
+                    }
+                }
+            };
+
+            // sends request
+            if (_isConnected()) {
+                qcFeed.request(reqObj);
+            }
+
+        }
+    }
+    
+    function _getWarrantStocks(request) {
+
+        if (request.k) {
+            var columns = stockutil.filterCols(request.field, request.skipMDColCheck);
+            var stkParts = stockutil.getStockParts(request.k);
+            var andFilter = [
+                {field: fieldUnderlying, value: [request.k, stkParts.code], comparison: 'in'},
+                {field: fieldMarket, value: (request.mkt || conn.getMarketCode(exchangecode, '[All Stocks]') || 10), comparison: 'eq'}
+            ];
+
+            if (request.warrantType) {
+                andFilter.push({field: '119', value: request.warrantType, comparison: 'eq'});
+            }
+
+            var reqObj = {
+                action: 'query',
+                coll: '05',
+                start: parseInt(request.page * request.count),
+                limit: parseInt(request.count),
+                filter: [
+                    {
+                        "or": [
+                            {field: fieldStkCode, value: request.k, comparison: 'eq'},
+                            {
+                                "and": andFilter
+                            }
+                        ]
+                    }
+                ],
+                sort: [
+                    {'property': fieldUnderlying, 'direction': 'ASC'},
+                    {'property': fieldStkName, 'direction': 'ASC'}
+                ],
+                exch: stkParts.exch,
+                column: columns.col05.concat(request.ef05 || []), // extra 05 columns
+                callback: function(qc, cfg, res) {
+                    var response = _formatVertxData(res, null, formatData05);
+                    request.success(response);
+
+                    var codeList = stockutil.getCodeList(res.data);
+                    queryFeed06(codeList, columns.col06);
+                    queryFeed17(codeList, columns.col17);
+                }
+            };
+
+            if (_isConnected()) {
+                qcFeed.request(reqObj);
+            }
+        }
+
+    }
+    
+    function _getFullList(request) {
+        if (conn.isConnected()) {
+            var reqObj = {
+                action: 'query',
+                coll: ['05'],
+                limit: 999999,
+                column: [fieldStkCode, fieldStkName],
+                filter: [
+                    {field: fieldStkName, value: '', comparison: 'ne'}
+                ],
+                exch: request.exch,
+                callback: function(qc, cfg, res) {
+                    if (res.success && res.data) {
+                        var codeList = {};
+                        for (var i = 0; i < res.data.length; i++) {
+                            var codeDt = res.data[i];
+                            codeList[codeDt[fieldStkCode]] = codeDt[fieldStkName];
+                        }
+
+                        // adds to list collection
+                        fullList[request.exch] = codeList;
+                        if (request.success) {
+                            request.success(res);
+                        }
+                    }
+                }
+            };
+
+            qcFeed.request(reqObj);
+        }
+    }
+
+    /**
+     * 
+     * Gets stock info from vertx
+     * 
+     * @param {object} request
+     * 
+     */
+    function getStockInfo(request) {
+        var reqObj = {
+            action: 'query',
+            coll: ['05'],
+            column: request.f, // Required
+            filter: [
+                {field: fieldStkCode, value: request.k, comparison: 'eq'} // Required
+            ],
+            callback: function(qc, cfg, res) { // Required
+                var response = _formatVertxData(res, typeQuote, formatData05);
+                request.success(response);
+            }
+        };
+
+        if (request.hasOwnProperty('start'))
+            reqObj.start = request.start;
+
+        // Sends request
+        qcFeed.request(reqObj);
+    }
+    
+    function getStockInfo06(request){
+    	var reqObj = {
+            action: 'query',
+            coll: ['06'],
+            column: request.f, // Required
+            filter: [
+                {field: fieldStkCode, value: request.k, comparison: 'eq'} // Required
+            ],
+            callback: function(qc, cfg, res) { // Required
+//            	for (var i = 0; i < res.data.length; i++) {
+//                    var qd = _formatSingleVertxData({data: res.data[i]}, typeQuote, '666');
+//                    updater.updateQuote06(qd);
+//                }
+                var response = _formatSingleVertxData({data:res.data[0]}, typeQuote, '666');
+                request.success(response);
+            }
+        };
+
+    	if (request.hasOwnProperty('start'))
+    		reqObj.start = request.start;
+
+    	// Sends request
+    	qcFeed.request(reqObj);
+    }
+
+    /**
+     * Search for stock from vertx
+     * Note: this function runs internally recursively to search by stock name first then by stock code
+     * 
+     * @param {object} request
+     * 
+     */
+    function searchStock(request) {
+        if (!request.hasOwnProperty('count')) {
+            request.count = 10; // Default to 10
+        }
+        if (!request.hasOwnProperty('page')) {
+            request.page = 0;
+        }
+        if (!request.hasOwnProperty('start')) {
+            request.start = request.count * request.page;
+        }
+        if (!request.hasOwnProperty('searchBy')) {
+        	//if(global_Language != 'cn'){
+        		// Search by stock name
+        		request.searchBy = fieldStkName;
+//        	}else{
+//        		request.searchBy = fieldStkCode;
+//        	}
+        }
+        if (!request.hasOwnProperty('searchKey')) {
+        //	if(global_Language != 'cn'){
+        		request.searchKey = _formatVSearchKey(request.k);	
+//        	}else{
+//        		request.searchKey = request.k;	
+//        	}
+        }
+        if (request.ex == null) {
+            request.ex = [exchangecode];
+        }
+        
+        var columns = {};
+        
+        if (request.field05) {
+            columns['col05'] = request.field05;
+        } else {
+            columns = stockutil.filterCols(request.field);
+        }
+        
+        var sFilter = [{field: fieldStkName, value: '.+', comparison: 'regex'}]; // exclude invalid stock (with most empty data)
+        if (request.filterWarrant) {
+            sFilter.push(
+                    {
+                        'not': [
+                            {or: [
+                                    {field: fieldWarrantType, value: warrantCodes, comparison: 'in'},
+                                    {'and': [
+                                            {field: fieldWarrantType, value: 4999, comparison: 'gt'},
+                                            {field: fieldWarrantType, value: 10000, comparison: 'lt'}
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+            );
+        }
+            
+        var reqObj = {
+            action: 'query',
+            coll: ['05'],
+            start: parseInt(request.start),
+            limit: parseInt(request.count),
+            column: columns.col05,
+            filter: sFilter,
+            sort: [
+                {property: fieldStkCode, direction: 'ASC'}
+            ],
+            callback: function(qc, cfg, res) {
+                /*
+                if (request.searchBy === fieldStkName && res.data.length === 0) {
+                    // Search again by stock code
+                    request.searchBy = fieldStkCode;
+                    searchStock(request);
+                } else {
+                */
+               
+                    var response = _formatVertxData(res, null, formatData05);
+                    request.success(response);
+                    
+                    // add the first match to recent quote
+                    if (response && response.d && response.d.length > 0) {
+                        rememberRecent('sh', response.d[0][fieldStkCode]);
+                    }
+
+                    if (columns.col06) {
+                        var codeList = stockutil.getCodeList(res.data);
+                        queryFeed06(codeList, columns.col06);
+                    }
+                // }
+            }
+        };
+        
+        if (request.quickSearch && N2N_CONFIG.quickSearchExcludeBoards.length > 0) {
+            reqObj.filter.push({field: '151', value: N2N_CONFIG.quickSearchExcludeBoards, comparison: 'ni'}); // not in
+            request.mkt = null;
+        }
+        
+        //if(global_Language != 'cn'){
+	        if (!N2N_CONFIG.enableMSearch) {
+	            if (request.ex.length <= 1 && request.mkt) {
+	                reqObj.filterBefore = [
+	                    {field: request.searchBy, value: request.searchKey, comparison: 'regex'}
+	                ];
+	            } else {
+	                reqObj.filter.push({field: request.searchBy, value: request.searchKey, comparison: 'regex'});
+	            }
+	        } else {
+	            reqObj.filter.push({or: [
+	                    {field: fieldStkName, value: request.searchKey, comparison: 'regex'},
+	                    {field: fieldStkCode, value: request.searchKey, comparison: 'regex'}
+	                ]});
+	        }
+//        }else{
+//        	 reqObj.filter.push({or: [
+//	                {field: fieldStkName, value: request.searchKey},
+//	                {field: fieldStkCode, value: _formatVSearchKey(request.k), comparison: 'regex'}
+//            ]});
+//        }
+        
+        // Sends request
+        if (_isConnected()) {
+            // specific exchange in exch field instead of filter for better performance
+            qcFeed.query(request.ex, request.mkt, request.secList, null, reqObj);
+        }
+    }
+    
+    // search stock and return the first match
+    function _smartSearch(request) {
+        var reqObj = {
+            count: 1,
+            quickSearch: true,
+            k: request.k,
+            ex: request.ex,
+            field: request.field || [fieldStkCode, fieldStkName, fieldSbExchgCode]
+        };
+
+        if (request.success) {
+            reqObj.success = function(data) {
+                var dtObj = {};
+                if (data && data.d && data.c > 0) {
+                    dtObj = data.d[0];
+                }
+
+                request.success(dtObj);
+            };
+        }
+
+        searchStock(reqObj);
+    }
+
+    /**
+     * Gets transaction data from vertx
+     * 
+     * @param {object} request
+     * 
+     */
+    function getTransaction(request) {
+        var transCount = 100; // Default
+        var _end = parseInt(request.end);
+        var _total = parseInt(request.total);
+        var _begin = 0;
+        var _page = 0;
+        if (_end != -1) {
+            if (stockutil.isDelayStock(request.k)) {
+                _page = parseInt(request.p);
+                _begin = _page * transCount;
+                _end = _begin + (transCount - 1);
+            } else {
+                _begin = parseInt(request.begin);
+
+                switch (request.eventType) {
+                    case 'next':
+                        _begin = _begin - transCount;
+                        _end = _end - transCount;
+
+                        break;
+                    case 'prev':
+                        _begin = _begin + transCount;
+                        _end = _end + transCount;
+
+                        break;
+                    case 'last':
+                        _begin = 0;
+                        _end = transCount;
+
+                        break;
+                }
+
+                if (_end > _total) {
+                    _end = _total;
+                }
+                if (_end - _begin !== transCount) {
+                    _begin = _end - transCount;
+                }
+                if (_begin < 0) {
+                    _begin = 0;
+                }
+            }
+        } else {
+            _end = 1;
+        }
+
+        var reqObj = {
+            action: "qc",
+            req: 'TRANSACT',
+            type: 'json',
+            params: {}
+        };
+
+        if (request.hasOwnProperty('ex') && request.ex !== null) {
+            reqObj.exch = request.ex;
+        } else {
+            // if no exchange is provided just get it from stock code
+            reqObj.exch = stockutil.getExchange(request.k);
+        }
+
+        var params = new Array();
+        // MUST BE IN THIS ORDER //
+        params.push(request.k);
+        params.push(0);
+        params.push(0);
+        params.push(0);
+        params.push(_begin);
+        params.push(_end);
+        if (stockutil.isDelayStock(request.k)) {
+            params.push(15);
+        }
+        if (request.sort != null) {
+            params.push(request.sort);
+            // count
+            params.push(1);
+        }
+
+        reqObj['params']['[T]'] = params.join(',');
+        if (request.hasOwnProperty('success') && request.success !== null) {
+            reqObj.callback = function(qc, cfg, res) {
+                var response = {
+                    s: res.success,
+                    t: 'trans'
+                };
+
+                if (res.success) {
+                    var tCount = res.data.length;
+                    response.info = {};
+
+                    // formats transaction data
+                    var transactData = new Array();
+                    for (var i in res.data) {
+                        var tdata = res.data[i];
+
+                        if (i == 0) {
+                            // info
+                            var tempInfo = new Object();
+                            tempInfo[fieldStkCode] = tdata['0'];
+                            tempInfo[fieldTransNo] = tdata['1'];
+                            tempInfo[fieldPrev] = tdata['2'];
+                            tempInfo[fieldLacp] = tdata['3'];
+                            tempInfo[fieldLast] = tdata['4'];
+                            tempInfo[fieldVol] = tdata['5'];
+                            tempInfo[fieldOpen] = tdata['6'];
+                            tempInfo[fieldHigh] = tdata['7'];
+                            tempInfo[fieldLow] = tdata['8'];
+                            tempInfo[fieldTransDate] = tdata['9'];
+                            tempInfo[fieldTransTime] = tdata['10'];
+
+                            response.info = {
+                                beginNumber: _begin,
+                                endNumber: _end,
+                                info: tempInfo,
+                                totalCount: tCount - 1
+                            };
+                        } else {
+                            // data
+                            var tempObj = new Object();
+                            tempObj[fieldTransTime] = tdata['0'];
+                            tempObj[fieldTransAction] = tdata['1'];
+                            tempObj[fieldLast] = tdata['2'];
+                            tempObj[fieldUnit] = getLotUnit(tdata['3'], request.lotSize);
+                            tempObj[fieldTransNo] = tdata['5'];
+                            
+                            if(tdata['6']){
+                            	tempObj[fieldBuyType] = tdata['6'];
+                                tempObj[fieldBuyBroker] = tdata['7'];
+                                tempObj[fieldSellType] = tdata['8'];
+                                tempObj[fieldSellBroker] = tdata['9'];
+                                tempObj[fieldAmalgamateBroker] = tdata['10'];
+                            }else{
+                            	tempObj[fieldBuyType] = '-';
+                                tempObj[fieldBuyBroker] = '-';
+                                tempObj[fieldSellType] = '-';
+                                tempObj[fieldSellBroker] = '-';
+                                tempObj[fieldAmalgamateBroker] = '-';
+                            }
+                            
+                            
+                            transactData.push(tempObj);
+                        }
+                    }
+
+                    response.c = tCount;
+                    response.d = transactData;
+                } else {
+                    response.m = res.message;
+                }
+
+                request.success(response);
+            };
+        }
+
+        qcFeed.request(reqObj);
+    }
+
+    /**
+     * Gets transaction number of a stock (for delay)
+     * @param {object} request
+     */
+    function getTransactionNum(request) {
+        getTransaction({
+            k: request.k,
+            end: -1,
+            success: function(response) {
+                if (request.success != null) {
+                    request.success(response);
+                }
+            }
+        });
+    }
+
+    /**
+     * Gets stock historical data
+     * @param {object} request
+     */
+    function getHistoricalData(request) {
+        if (request.key) {
+            // use live feed for historical data
+            if (stockutil.isDelayStock(request.key)) {
+                request.key = stockutil.removeStockDelay(request.key);
+            }
+            if (request.count == null) {
+                request.count = 50; // default
+            } else {
+                request.count = parseInt(request.count);
+            }
+            if (request.period == null) {
+                request.period = 7; // default
+            } else {
+                request.period = parseInt(request.period);
+            }
+            // prepares param
+            var params = new Array();
+            params.push(request.key);
+            params.push(request.period);
+            params.push(0);
+            params.push(0);
+            params.push(request.count);
+            params.push(0); // fixed empty data issue with daily
+            params.push(0);
+
+            var reqObj = {
+                action: 'qc',
+                req: 'Chart',
+                type: 'json',
+                params: {},
+                exch: stockutil.getExchange(request.key),
+                callback: function(qc, cfg, res) {
+                    var response = {
+                        s: res.success
+                    };
+                    if (res.success) {
+                        if (res.data != null) {
+                            if (res.data.length > 0) {
+                                res.data.splice(0, 1);
+                            }
+                        } else {
+                            res.data = [];
+                        }
+                        response.d = res.data;
+                    } else {
+                        response.m = res.message;
+                    }
+
+                    if (request.success) {
+                        request.success(response);
+                    }
+                }
+            };
+            reqObj.params['[ReadData]'] = params.join(",");
+
+            // sends request
+            qcFeed.request(reqObj);
+        }
+    }
+
+    /**
+     * Gets business done data from vertx
+     * 
+     * @param {object} request
+     * 
+     */
+    function getBusinessDone(request) {
+        if (!request.hasOwnProperty('ex')) {
+            // gets exchange from stock code
+            request.ex = stockutil.getExchange(request.k);
+        }
+
+        var params = new Array();
+        params.push(0);
+        params.push(request.ex);
+        params.push(request.k);
+        params.push(10);
+        params.push(10);
+
+        var reqObj = {
+            action: "qc",
+            req: 'BusinessDone',
+            type: 'json',
+            params: {}
+        };
+
+        reqObj.params[params.join(",")] = '';
+        reqObj.exch = request.ex;
+        reqObj.callback = function(qc, cfg, res) {
+            var response = {
+                s: res.success,
+                t: 'e'
+            };
+
+            if (res.success) {
+                response.d = [];
+                for (var i in res.data) {
+                    var buss = res.data[i];
+                    
+                    if (buss['0'] == '[TOTAL]' || isNaN(buss['0'])) { // buss['0']=NaN suspected to be an exception from jqc
+                        break;
+                    }
+
+                    var tempBuss = new Object();
+                    for (var j = 0; j < 5; j++) {
+                        if (j > 0 && j < 4) { // buy vol, sell vol, total vol, value
+                            tempBuss[String(j + 1)] = getLotUnit(buss[String(j)], request.lotSize);
+                        } else {
+                            tempBuss[String(j + 1)] = buss[String(j)];
+                        }
+                    }
+                    // Sell Vol %
+                    tempBuss['6'] = stockutil.getSellRate(tempBuss['2'], tempBuss['4']);
+                    // Buy Vol %
+                    tempBuss['7'] = stockutil.getBuyRate(tempBuss['3'], tempBuss['4']);
+
+                    response.d.push(tempBuss);
+                }
+
+                response.c = response.d.length;
+                response.k = request.k;
+            } else {
+                response.m = res.message;
+            }
+            
+            request.success(response);
+        };
+
+        // Sends request
+        qcFeed.request(reqObj);
+    }
+
+    /**
+     * Gets stock news from vertx
+     * 
+     * @param {object} request
+     * 
+     */
+    function getStockNews(request) {
+        // check request params and parse if necessary
+        var recordCount = parseInt(request.r);
+        if (stockutil.isDelayStock(request.k)) {
+            request.k = stockutil.removeStockDelay(request.k);
+
+            var stkParts = stockutil.getStockParts(request.k);
+            if (stkParts.length > 1) {
+                request.k = stkParts.code;
+                request.ex = stkParts.exch;
+            }
+        }
+
+        if (!request.hasOwnProperty('ex')) {
+            // gets exchange from stock code
+            request.ex = stockutil.getExchange(request.k);
+        }
+
+        // prepares request data
+        var params = new Array();
+        params.push('');
+        params.push(request.k);
+        params.push('');
+        params.push('');
+        params.push('');
+        params.push('');
+
+        // creates request object
+        var reqObj = {
+            action: "qc",
+            req: 'News',
+            type: 'json',
+            exch: request.ex,
+            params: {},
+            callback: function(qc, cfg, res) {
+                var response = {
+                    s: res.success,
+                    t: 'n'
+                };
+
+                if (res.success) {
+                    response.d = new Array();
+                    for (var i in res.data) {
+                        var news = res.data[i];
+                        
+                        if (!jsutil.isEmpty(news[0])) {
+                            var newsData = new Object();
+                            
+                            newsData[fieldSbExchgCode] = news[0];
+                            newsData[fieldStkCode] = news[1];
+                            newsData[fieldTime] = news[4];
+                            newsData['100'] = news[6];
+                            newsData['101'] = news[3];
+                            
+                            response.d.push(newsData);
+                        }
+                    }
+
+                    response.c = response.d.length;
+                } else {
+                    response.m = res.message;
+                }
+
+                request.success(response);
+            }
+        };
+        reqObj.params[params.join(",")] = '';
+
+        // sends request
+        if (conn.isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+    
+        /**
+     * Gets foreign flows
+     * 
+     * @param {object} request
+     * 
+     */
+    function _getForeignFlows(request) {
+        if (stockutil.isDelayStock(request.k)) {
+            request.k = stockutil.removeStockDelay(request.k);
+        }
+
+        // prepares request
+        var params = new Array();
+        params.push(request.k);
+        params.push(request.tr);
+        params.push(request.pd);
+        params.push(request.sd);
+        params.push(request.ed);
+        params.push(request.fr);
+        params.push(request.to);
+
+        // creates request object
+        var reqObj = {
+            action: "qc",
+            req: 'ForeignFlow',
+            type: 'json',
+            exch: stockutil.getExchange(request.k),
+            params: {},
+            callback: function(qc, cfg, res) {
+                var response = _formatVertxData(res);
+                request.success(response);
+            }
+        };
+        reqObj.params["[GET]"] = params.join(",");
+
+        // sends request
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+    
+    function _getOrderPosition(request) {
+        if (stockutil.isDelayStock(request.k)) {
+            request.k = stockutil.removeStockDelay(request.k);
+        }
+
+        // prepares request
+        var params = new Array();
+        params.push(request.k);
+        params.push(request.on);
+        params.push(request.sn);
+        params.push(request.pi);
+        params.push(request.odt);
+
+        // creates request object
+        var reqObj = {
+            action: "qc",
+            req: 'GETORDERDEPTH',
+            type: 'json',
+            exch: stockutil.getExchange(request.k),
+            params: {},
+            callback: function(qc, cfg, res) {
+                var response = _formatVertxData(res);
+                request.success(response);
+            }
+        };
+        reqObj.params["[T]"] = params.join(",");
+
+        // sends request
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+    
+    /**
+     * Gets market indices data from vertx
+     * @param {object} request
+     */
+    function getIndices(request) {
+        if (request.field != null) {
+            request.field = [fieldStkName, fieldStkFName, fieldStkCode,
+                fieldSectorCode, fieldLacp, fieldOpen, fieldLast,
+                fieldTransNo, fieldPrev, fieldHigh, fieldLow
+            ];
+        }
+
+        var indiceFilter = new Array();
+        indiceFilter.push({field: fieldSbExchgCode, value: request.ex, comparison: 'eq'});
+        if (request.code != null) {
+            indiceFilter.push({field: fieldStkCode, value: request.code, comparison: 'eq'});
+        }
+
+        var reqObj = {
+            action: 'query',
+            coll: ['01'],
+            column: request.field,
+            filter: indiceFilter,
+            callback: function(qc, cfg, res) {
+                if (request.success != null) {
+                    var response = _formatVertxData(res);
+                    request.success(response);
+                }
+            }
+        };
+
+        // sends request
+        qcFeed.request(reqObj);
+    }
+
+    /**
+     * Gets market summary data from vertx
+     * @param {type} request
+     */
+    function getMarketSummary(request) {
+        var reqObj = {
+            action: 'query',
+            coll: ['02'],
+            filter: [
+                {field: fieldSectorName, value: 'TOTAL'},
+                {field: fieldSbExchgCode, value: request.ex, comparison: 'eq'}
+            ],
+            callback: function(qc, cfg, res) {
+                if (request.success != null) {
+                    var response = _formatVertxData(res, typeScoreBoard, formatData02);
+                    request.success(response);
+                }
+            }
+        };
+
+        // sends request
+        qcFeed.request(reqObj);
+    }
+
+    /**
+     * Gets scoreboard data from vertx
+     * 
+     * @param {object} request
+     */
+    function getScoreBoard(request) {
+        if (!request.field) {
+            request.field = [fieldSbId, fieldSbName, fieldSbBid, fieldSbTot, fieldSbEx, fieldSbUp, fieldSbDown, fieldSbUnchg, fieldSbUntrd, fieldSbVol, fieldSbVal];
+        }
+
+        var reqObj = {
+            action: 'query',
+            coll: ['02'],
+            column: request.field,
+            filter: [
+                {field: fieldSbEx, value: request.ex, comparison: 'eq'},
+                {field: fieldSbBid, value: request.id}
+                // {field: fieldSbVol, value: 0, comparison: 'ne'}
+            ],
+            callback: function(qc, cfg, res) {
+                if (request.success != null) {
+                    var response = _formatVertxData(res, typeScoreBoard, request.round ? formatData02 : null);
+                    request.success(response);
+                }
+            }
+        };
+
+        // sends request
+        qcFeed.request(reqObj);
+
+    }
+    
+    function _getExTime(request) {
+        if (_isConnected()) {
+            qcFeed.request({
+                action: 'query',
+                limit: 1,
+                coll: '09',
+                column: [fieldTransDate, fieldTime, fieldSbEx, fieldTPSts],
+                filter: [
+                    {field: fieldSbEx, value: request.ex, comparison: 'eq'},
+                    {field: fieldTime, value: 0, comparison: 'gt'}
+                ],
+                sort: [
+                    {property: fieldTransDate, direction: 'DESC'},
+                    {property: fieldTime, direction: 'DESC'}
+                ],
+                callback: function(qc, cfg, res) {
+                    if (request.success) {
+                        var response = _formatVertxData(res, 't');
+                        request.success(response);
+                    }
+                }
+            });
+        }
+    }
+
+    function getMDL(request) {
+
+        if (request.k) {
+            var reqObj = {
+                action: 'query',
+                coll: ['12'],
+                filter: [
+                    {field: fieldStkCode, value: request.k, comparison: 'eq'}
+                ],
+                "sort": [{"property": COL.MDL_LEVEL, "direction": "ASC"}], // ordered by level
+                callback: function(qc, cfg, res) {
+                    if (request.success) {
+                        request.success(res.data);
+                    }
+                }
+            };
+
+            if (request.l) {
+                reqObj.filter.push({"field": COL.MDL_LEVEL, "value": parseInt(request.l), "comparison": "lt"});
+            }
+
+            // sends request
+            qcFeed.request(reqObj);
+        }
+    }
+    
+    function _getBrokerQ(request) {
+        if (request.k) {
+            var reqObj = {
+                action: 'query',
+                coll: ['18'],
+                filter: [
+                    {field: fieldStkCode, value: request.k, comparison: 'eq'}
+                ],
+                // "sort": [],
+                exch: stockutil.getExchange(request.k),
+                callback: function(qc, cfg, res) {
+                    if (request.success) {
+                        request.success(res.data);
+                    }
+                }
+            };
+
+            // sends request
+            if (_isConnected()) {
+                qcFeed.request(reqObj);
+            }
+        }
+    }
+    
+    function _getBrokerQStocks(request) {
+        var params = {};
+
+        params = {
+            '[grp]': request.grp,
+            '[id]': request.code,
+            '[FIELD]': request.fields.join(',')
+        };
+
+        var reqObj = {
+            action: 'qc',
+            req: 'BROKERQSTK',
+            type: 'json',
+            params: params,
+            exch: request.ex,
+            callback: function(qc, cfg, res) {
+                var resDt = res.data;
+                
+                if (typeof request.success === 'function' && resDt) {
+                    var buyData = [];
+                    var sellData = [];
+
+                    for (var i = 0; i < resDt.length; i++) {
+                        var dt = resDt[i];
+
+                        if (dt['3']) {
+                            var rec = {};
+                            rec[fieldStkCode] = dt['0'] || '';
+                            rec[fieldStkName] = dt['5'] || '';
+                            rec['group'] = dt['1'] || '';
+                            rec['price'] = dt['2'] || '';
+
+                            if (dt['3'].indexOf('b') > -1) {
+                                rec['type'] = 'b';
+                                buyData.push(rec);
+                            } else if (dt['3'].indexOf('s') > -1) {
+                                rec['type'] = 's';
+                                sellData.push(rec);
+                            }
+                        }
+                    }
+                    
+                    request.success({
+                        'b': buyData,
+                        's': sellData
+                    });
+                }
+            }
+        };
+
+        // sends request
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+    
+    function getFundamentalInfo(request) {
+        var reqObj = {
+            action: 'query',
+            coll: ['17'],
+            column: request.f, // Required
+            filter: [
+                {field: fieldStkCode, value: request.k, comparison: 'eq'} // Required
+            ],
+            exch: stockutil.getExchange(request.k),
+            callback: function(qc, cfg, res) { // Required
+                if (request.success) {
+                    var response = _formatVertxData(res, typeQuote);
+                    request.success(response);
+                }
+            }
+        };
+
+        if (request.hasOwnProperty('start')) {
+            reqObj.start = request.start;
+        }
+
+        // Sends request
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+
+    }
+    
+    function getTrackerHistory(request) {
+        var reqObj = {
+            action: 'query',
+            exch: request.exch,
+            coll: ['07'],
+            sort: [
+                {"property": "tno", "direction": "DESC"}
+            ],
+            limit: request.limit,
+            callback: function(qc, cfg, response) { // Required
+                if (request.success) {
+                request.success(response);
+            }
+            }
+        };
+
+        // Sends request
+        if (_isConnected()) {
+        qcFeed.request(reqObj);
+    }
+    }
+    
+    function _getBrokerList(request) {
+        if (request.ex) {
+            var params = [];
+            // exchange
+            params.push(request.ex);
+            // mode
+            params.push('all');
+
+            var reqObj = {
+                action: 'qc',
+                req: 'Broker',
+                type: 'json',
+                params: {
+                    '[BHL]': params.join(',')
+                },
+                exch: request.ex,
+                callback: function(qc, cfg, res) {
+                    var resDt = res.data;
+
+                    if (typeof request.success === 'function' && resDt) {
+                        var data = [];
+
+                        for (var i = 0; i < resDt.length; i++) {
+                            var dtObj = resDt[i];
+                            var bkCodes = null;
+
+                            if (dtObj['4'] != null) {
+                                bkCodes = [];
+                                var bkArr = dtObj['4'].split('|');
+                                for (var b = 0; b < bkArr.length; b++) {
+                                    if (bkArr[b]) {
+                                        bkCodes.push(bkArr[b]);
+                                    }
+                                }
+                            }
+
+                            var bkDt = {
+                                'bkCode': dtObj[0],
+                                'bkName': dtObj[1]
+                            };
+                            if (bkCodes) {
+                                bkDt['codes'] = bkCodes;
+                            }
+
+                            data.push(bkDt);
+                        }
+
+                        request.success(data);
+                    }
+                }
+            };
+
+            if (_isConnected()) {
+                qcFeed.request(reqObj);
+            }
+        }
+
+    }
+    
+    function _getBrokerRanking(request) {
+        var params = [];
+        // exchange
+        params.push(request.ex);
+
+        var paramKey = '[BR]';
+        if (request.ex === 'JK') {
+            paramKey = '[BHI]';
+            params.push(0);
+        } else {
+            // mode
+            params.push(request.mode);
+        }
+        
+        if (request.fromDate) {
+            params.push('FromDate=' + request.fromDate);
+        }
+        if (request.toDate) {
+            params.push('ToDate=' + request.toDate);
+        }
+
+        var reqParam = {};
+        reqParam[paramKey] = params.join(',');
+
+        var reqObj = {
+            action: 'qc',
+            req: 'Broker',
+            type: 'json',
+            params: reqParam,
+            exch: request.ex,
+            callback: function(qc, cfg, res) {
+                var resDt = res.data;
+                if (typeof request.success === 'function' && resDt) {
+                    // mapping data fields
+                    var data = [];
+                    for (var i = 0; i < resDt.length; i++) {
+                        var dtObj = resDt[i];
+
+                        if (request.ex === 'JK') {
+                            var jkData = _formatJKBkData(dtObj);
+                            data.push(jkData);
+                            
+                        } else {
+                            var buyVal = jsutil.getRound(dtObj['3']);
+                            var sellVal = jsutil.getRound(dtObj['5']);
+                            var buyVol = buyVal ? jsutil.getRound(dtObj['2']) : 0;
+                            var sellVol = sellVal ? jsutil.getRound(dtObj['4']) : 0;
+                            var totalVal = buyVal + sellVal;
+                            var netVal = buyVal - sellVal;
+                            if (totalVal === 0) {
+                                netVal = 0;
+                            }
+
+                            data.push({
+                                'bkCode': dtObj['0'],
+                                'bkName': dtObj['1'],
+                                'buyVol': buyVol,
+                                'buyVal': buyVal,
+                                'sellVol': sellVol,
+                                'sellVal': sellVal,
+                                'noTran': jsutil.getRound(dtObj['6']),
+                                'mktWeight': jsutil.getFloat(dtObj['7'], '-', 2),
+                                'crossVal': jsutil.getRound(dtObj['8']),
+                                'blockVal': jsutil.getRound(dtObj['9']),
+                                'crossVol': jsutil.getRound(dtObj['10']),
+                                'blockVol': jsutil.getRound(dtObj['11']),
+                                'totalVal': totalVal,
+                                'netVal': netVal
+                            });
+                        }
+                    }
+                    
+                    request.success(data);
+                }
+            }
+        };
+
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+
+    function _getBrokerTransaction(request) {
+        var params = [];
+        // exchange
+        params.push(request.ex);
+        // broker
+        params.push(request.bk);
+        
+        var paramKey = '[BT]';
+        if (request.ex === 'JK') {
+            paramKey = '[BHD]';
+            params.push(0);
+        } else {
+            // mode
+            params.push(request.mode);
+        }
+        
+        if (request.type) {
+            params.push(request.type);
+        }
+        if (request.fromDate) {
+            params.push('FromDate=' + request.fromDate);
+        }
+        if (request.toDate) {
+            params.push('ToDate=' + request.toDate);
+        }
+
+        var reqParam = {};
+        reqParam[paramKey] = params.join(',');
+
+        var reqObj = {
+            action: 'qc',
+            req: 'Broker',
+            type: 'json',
+            params: reqParam,
+            exch: request.ex,
+            callback: function(qc, cfg, res) {
+                var resDt = res.data;
+                if (typeof request.success === 'function' && resDt) {
+                    // mapping data fields
+                    var data = [];
+                    for (var i = 0; i < resDt.length; i++) {
+                        var dtObj = resDt[i];
+
+                        if (request.ex === 'JK') {
+                            var jkData = _formatJKBkData(dtObj);
+                            // overwrite some data
+                            jkData['stkCode'] = dtObj['1'];
+                            jkData['secCode'] = jkData['bkCode'];
+                            data.push(jkData);
+                            
+                        } else {
+                            var buyVal = jsutil.getRound(dtObj['3']);
+                            var sellVal = jsutil.getRound(dtObj['5']);
+                            var buyVol = buyVal ? jsutil.getRound(dtObj['2']) : 0;
+                            var sellVol = sellVal ? jsutil.getRound(dtObj['4']) : 0;
+                            var buyAvg = 0;
+                            if (buyVol != 0 && buyVal != 0) {
+                                buyAvg = jsutil.getFloat(buyVal / buyVol, 0, 3);
+                            }
+                            var sellAvg = 0;
+                            if (sellVol != 0 && sellVal != 0) {
+                                sellAvg = jsutil.getFloat(sellVal / sellVol, 0, 3);
+                            }
+                            var totalVol = buyVol + sellVol;
+                            var totalVal = buyVal + sellVal;
+                            var netVol = buyVol - sellVol;
+                            var netSellVol = -netVol;
+                            var netVal = buyVal - sellVal;
+                            var netSellVal = -netVal;
+                            
+                            if (totalVal === 0) {
+                                totalVol = 0;
+                                netVol = 0;
+                                netSellVol = 0;
+                                netVal = 0;
+                                netSellVal = 0;
+                            }
+
+                            data.push({
+                                'stkCode': dtObj['0'],
+                                'secCode': dtObj['1'],
+                                'buyVol': buyVol,
+                                'buyVal': buyVal,
+                                'sellVol': sellVol,
+                                'sellVal': sellVal,
+                                'noTran': jsutil.getRound(dtObj['6']),
+                                'weightValPc': jsutil.getFloat(dtObj['7'], '-', 2),
+                                'mktVolPc': jsutil.getFloat(dtObj['8']),
+                                'mktValPc': jsutil.getFloat(dtObj['9']),
+                                'buyAvg': buyAvg,
+                                'sellAvg': sellAvg,
+                                'totalVol': totalVol,
+                                'totalVal': totalVal,
+                                'netBuyVol': netVol,
+                                'netSellVol': netSellVol,
+                                'netBuyVal': netVal,
+                                'netSellVal': netSellVal
+                            });
+                        }
+
+                    }
+                    
+                    request.success(data);
+                }
+            }
+        };
+
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+    }
+
+    function _getBrokerByStock(request) {
+
+        var params = [];
+        // exchange
+        params.push(request.ex);
+        // counter
+        params.push(request.stk);
+
+        var paramKey = '[BS]';
+        if (request.ex === 'JK') {
+            paramKey = '[BHSD]';
+            params.push(0);
+        } else {
+            // mode
+            params.push(request.mode);
+        }
+        
+        if (request.type) {
+            params.push(request.type);
+        }
+        if (request.fromDate) {
+            params.push('FromDate=' + request.fromDate);
+        }
+        if (request.toDate) {
+            params.push('ToDate=' + request.toDate);
+        }
+        
+        var paramObj = {};
+        paramObj[paramKey] = params.join(',');
+
+        var reqObj = {
+            action: 'qc',
+            req: 'Broker',
+            type: 'json',
+            params: paramObj,
+            exch: request.ex,
+            callback: function(qc, cfg, res) {
+                var resDt = res.data;
+
+                if (typeof request.success === 'function' && resDt) {
+                    // mapping data fields
+                    var data = [];
+                    for (var i = 0; i < resDt.length; i++) {
+                        var dtObj = resDt[i];
+
+                        if (request.ex === 'JK') {
+                            var jkData = _formatJKBkData(dtObj);
+                            data.push(jkData);
+                            
+                        } else {
+
+                            var buyVal = jsutil.getRound(dtObj['3']);
+                            var sellVal = jsutil.getRound(dtObj['5']);
+                            var buyVol = buyVal ? jsutil.getRound(dtObj['2']) : 0;
+                            var sellVol = sellVal ? jsutil.getRound(dtObj['4']) : 0;
+                            
+                            var buyAvg = 0;
+                            if (buyVol != 0 && buyVal != 0) {
+                                buyAvg = jsutil.getFloat(buyVal / buyVol, 0, 3);
+                            }
+                            var sellAvg = 0;
+                            if (sellVol != 0 && sellVal != 0) {
+                                sellAvg = jsutil.getFloat(sellVal / sellVol, 0, 3);
+                            }
+                            
+                            var totalVal = buyVal + sellVal;
+                            var netVal = buyVal - sellVal;
+
+                            if (totalVal === 0) {
+                                netVal = 0;
+                            }
+
+                            data.push({
+                                'bkCode': dtObj['0'],
+                                'bkName': dtObj['1'],
+                                'buyVol': buyVol,
+                                'buyVal': buyVal,
+                                'sellVol': sellVol,
+                                'sellVal': sellVal,
+                                'buyAvg': buyAvg,
+                                'sellAvg': sellAvg,
+                                'totalVal': totalVal,
+                                'noTran': jsutil.getRound(dtObj['6']),
+                                'weightValPc': jsutil.getFloat(dtObj['7'], '-', 2),
+                                'crossVal': jsutil.getRound(dtObj['8']),
+                                'blockVal': jsutil.getRound(dtObj['9']),
+                                'netVal': netVal
+                            });
+                        }
+
+                    }
+                    
+                    request.success(data);
+                }
+            }
+        };
+
+        if (_isConnected()) {
+            qcFeed.request(reqObj);
+        }
+
+    }
+    
+    function _formatJKBkData(dtObj) {
+        // domestic
+        var dBuyVal = jsutil.getRound(dtObj['10']);
+        var dSellVal = jsutil.getRound(dtObj['13']);
+        var dBuyVol = dBuyVal ? jsutil.getRound(dtObj['9']) : 0;
+        var dSellVol = dSellVal ? jsutil.getRound(dtObj['12']) : 0;
+        var dTotalVal = dBuyVal + dSellVal;
+        var dNetVal = dBuyVal - dSellVal;
+        var dNetVol = dBuyVol - dSellVol;
+        var dTotalVol = dBuyVol + dSellVol;
+        if (dTotalVal === 0) {
+            dNetVol = 0;
+        }
+        var dBuyFreq = jsutil.getRound(dtObj['11']);
+        var dSellFreq = jsutil.getRound(dtObj['14']);
+        // foreign
+        var fBuyVal = jsutil.getRound(dtObj['4']);
+        var fSellVal = jsutil.getRound(dtObj['7']);
+        var fBuyVol = fBuyVal ? jsutil.getRound(dtObj['3']) : 0;
+        var fSellVol = fSellVal ? jsutil.getRound(dtObj['6']) : 0;
+        var fTotalVal = fBuyVal + fSellVal;
+        var fNetVal = fBuyVal - fSellVal;
+        var fTotalVol = fBuyVol + fSellVol;
+        var fNetVol = fBuyVol - fSellVol;
+        if (fTotalVal === 0) {
+            fNetVol = 0;
+        }
+        var fBuyFreq = jsutil.getRound(dtObj['5']);
+        var fSellFreq = jsutil.getRound(dtObj['8']);
+        // total
+        var buyVal = dBuyVal + fBuyVal;
+        var sellVal = dSellVal + fSellVal;
+        var buyVol = dBuyVol + fBuyVol;
+        var sellVol = dSellVol + fSellVol;
+        var totalVal = buyVal + sellVal;
+        var netVal = buyVal - sellVal;
+        var totalVol = buyVol + sellVol;
+        var netVol = buyVol - sellVol;
+        if (totalVal === 0) {
+            netVal = 0;
+            netVol = 0;
+        }
+        var buyFreq = dBuyFreq + fBuyFreq;
+        var sellFreq = dSellFreq + fSellFreq;
+        var totalFreq = buyFreq + sellFreq;
+
+        return {
+            'bkCode': dtObj['2'],
+            'bkName': '',
+            'buyVol': buyVol,
+            'buyVal': buyVal,
+            'sellVol': sellVol,
+            'sellVal': sellVal,
+            'totalVal': totalVal,
+            'netVal': netVal,
+            'totalVol': totalVol,
+            'netVol': netVol,
+            'buyFreq': buyFreq,
+            'sellFreq': sellFreq,
+            'totalFreq': totalFreq,
+            'dBuyVol': dBuyVol,
+            'dBuyVal': dBuyVal,
+            'dSellVol': dSellVol,
+            'dSellVal': dSellVal,
+            'dTotalVal': dTotalVal,
+            'dNetVal': dNetVal,
+            'dTotalVol': dTotalVol,
+            'dNetVol': dNetVol,
+            'dBuyFreq': dBuyFreq,
+            'dSellFreq': dSellFreq,
+            'fBuyVol': fBuyVol,
+            'fBuyVal': fBuyVal,
+            'fSellVol': fSellVol,
+            'fSellVal': fSellVal,
+            'fTotalVal': fTotalVal,
+            'fNetVal': fNetVal,
+            'fTotalVol': fTotalVol,
+            'fNetVol': fNetVol,
+            'fBuyFreq': fBuyFreq,
+            'fSellFreq': fSellFreq
+        };
+    }
+    
+    function updateStkCodes() {
+        stkcodes = Storage.returnStockCode();
+    }
+
+    function updateFieldList() {
+        fieldlists = Storage.returnFieldId();
+        
+        if (quoteScreen && !quoteScreen.isCardView) {
+            var mmfieldlist = quoteScreen.getFieldList();
+
+            for (var ii = 0; ii < mmfieldlist.length; ii++) {
+                if (fieldlists.indexOf(mmfieldlist[ii]) == -1) {
+                    fieldlists.push(mmfieldlist[ii]);
+                }
+            }
+        }
+
+        if (marketDepthPanels != null) {
+            var totMD = marketDepthPanels.length;
+            for (var i = 0; i < totMD; i++) {
+                var mdpanel = marketDepthPanels[i];
+                var mdfieldlist = mdpanel.getFieldList();
+
+                for (var ii = 0; ii < mdfieldlist.length; ii++) {
+                    if (fieldlists.indexOf(mdfieldlist[ii]) == -1) {
+                        fieldlists.push(mdfieldlist[ii]);
+                    }
+                }
+            }
+        }
+
+        if (stkInfoPanels != null) {
+            for (var i = 0; i < stkInfoPanels.length; i++) {
+                var siPanel = stkInfoPanels[i];
+                var sifieldlist = siPanel.getFieldList();
+
+                for (var ii = 0; ii < sifieldlist.length; ii++) {
+                    if (fieldlists.indexOf(sifieldlist[ii]) == -1) {
+                        fieldlists.push(sifieldlist[ii]);
+                    }
+                }
+            }
+        }
+
+
+
+        if (activeWatchlistArr != null) {
+            for (var i = 0; i < activeWatchlistArr.length; i++) {
+                var wlpanel = activeWatchlistArr[i].wlpanel;
+
+                if (wlpanel) {
+                    var wlfieldlist = wlpanel.getFieldList();
+
+                    for (var ii = 0; ii < wlfieldlist.length; ii++) {
+                        if (fieldlists.indexOf(wlfieldlist[ii]) == -1) {
+                            fieldlists.push(wlfieldlist[ii]);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (recentQuotePanel) {
+            var wlfieldlist = recentQuotePanel.getFieldList();
+
+            for (var ii = 0; ii < wlfieldlist.length; ii++) {
+                if (fieldlists.indexOf(wlfieldlist[ii]) == -1) {
+                    fieldlists.push(wlfieldlist[ii]);
+                }
+            }
+        }
+                
+        if (orderStatusPanel != null) {
+            var osfieldlist = orderStatusPanel.getFieldList();
+
+            for (var ii = 0; ii < osfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(osfieldlist[ii]) == -1) {
+                    fieldlists.push(osfieldlist[ii]);
+                }
+            }
+        }
+
+        if (equityPrtfPanel != null) {
+            var epfieldlist = equityPrtfPanel.getFieldList();
+
+            for (var ii = 0; ii < epfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(epfieldlist[ii]) == -1) {
+                    fieldlists.push(epfieldlist[ii]);
+                }
+            }
+        }
+
+        if (equityManualPrtfPanel != null) {
+            var epfieldlist = equityManualPrtfPanel.getFieldList();
+
+            for (var ii = 0; ii < epfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(epfieldlist[ii]) == -1) {
+                    fieldlists.push(epfieldlist[ii]);
+                }
+            }
+        }
+
+        if (equityPrtfRealizedPanel != null) {
+            var epfieldlist = equityPrtfRealizedPanel.getFieldList();
+
+            for (var ii = 0; ii < epfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(epfieldlist[ii]) == -1) {
+                    fieldlists.push(epfieldlist[ii]);
+                }
+            }
+        }
+
+        if (orderPad != null) {
+            var tpfieldlist = orderPad.getFieldList();
+
+            for (var ii = 0; ii < tpfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(tpfieldlist[ii]) == -1) {
+                    fieldlists.push(tpfieldlist[ii]);
+                }
+            }
+        }
+
+        if (indicesPanel != null) {
+            var idcfieldlist = indicesPanel.getFieldList();
+
+            for (var ii = 0; ii < idcfieldlist.length; ii++) {
+                if (fieldlists.indexOf(idcfieldlist[ii]) == -1) {
+                    fieldlists.push(idcfieldlist[ii]);
+                }
+            }
+        }
+
+
+        if (trackerPanels != null) {
+            for (var i = 0; i < trackerPanels.length; i++) {
+                var trkfieldlist = trackerPanels[i].getFieldList();
+
+                for (var ii = 0; ii < trkfieldlist.length; ii++) {
+
+                    if (fieldlists.indexOf(trkfieldlist[ii]) == -1) {
+                        fieldlists.push(trkfieldlist[ii]);
+                    }
+                }
+            }
+        }
+
+
+        if (orderHistoryPanel != null) {
+            var ohfieldlist = orderHistoryPanel.getFieldList();
+
+            for (var ii = 0; ii < ohfieldlist.length; ii++) {
+
+                if (fieldlists.indexOf(ohfieldlist[ii]) == -1) {
+                    fieldlists.push(ohfieldlist[ii]);
+                }
+            }
+        }
+
+
+        if (analysisChartPanels != null) {
+
+            for (var i = 0; i < analysisChartPanels.length; i++) {
+                var ACfieldlist = analysisChartPanels[i].getFieldList();
+
+                for (var ii = 0; ii < ACfieldlist.length; ii++) {
+
+                    if (fieldlists.indexOf(ACfieldlist[ii]) == -1) {
+                        fieldlists.push(ACfieldlist[ii]);
+                    }
+                }
+            }
+        }
+    }
+
+    function initInfoData(dataObj) {
+        debugutil.debug('conn > initInfoData');
+
+        if (!isMobile) {
+            Ext.suspendLayouts();
+        }
+
+        if (indexCodes.length > 0) {
+            indexCodes = [];
+        }
+
+        var ex = feedLoginRet.ex;
+        var tempExObj = null;
+        var subObj = null;
+        if (arExMapping && arExMapping.scpt) {
+            subObj = arExMapping.scpt;
+        }
+        
+        if(dataObj.qcParams['[TP]']){
+        	var tempData = dataObj.qcParams['[TP]'][0].split('|');
+        	for(var i=0; i<tempData.length; i++){        		
+        		var tpCode = tempData[i].substring(0, tempData[i].indexOf('-')).trim();
+        		var tpName = tempData[i].substring(tempData[i].indexOf('-') + 1).trim();
+        		
+        		var tpObj = {};
+        		tpObj.code = tpCode;
+        		tpObj.name = tpName;
+        		global_TPMapping.push(tpObj);
+        	}
+        }
+
+        if (subObj != null) {
+            // get exchange name from subscription data
+            var subArr = subObj; //.subs;
+            var totSubs = subArr.length;
+            for (var i = 0; i < totSubs; i++) {
+                var sub = subArr[i];
+                var totEx = ex.length;
+
+                for (var j = 0; j < totEx; j++) {
+                    var exchg = ex[j];
+                    var code = exchg.ex;
+                    var name = '';
+                    //allow to view singapore exchange if LMS subscribe to SI/SG
+                    //production
+                    if (sub.ex == code || (sub.ex == 'SI' && code == 'SG')) {	// match with ATP
+
+                        //bypass
+                        //if ( sub.ex.indexOf(code)>=0 || (sub.ex == 'SI' && code == 'SG')) {	// match with ATP
+                        var isDuplicate = false;
+                        for (var ii = 0; ii < indexCodes.length; ii++) {
+                            if (code == (indexCodes[ ii ]).ex) {
+                                isDuplicate = true;
+                            }
+                            
+                            if(indexCodes[ii].ex == global_confDefaultViewEx){
+                            	tempExObj = indexCodes[ii];
+                            }
+                        }
+
+                        if (!isDuplicate) {
+                            if (code == 'SGi')
+                                continue;
+                            else
+                                name = getExchangeFullName(code);
+                        	
+                            //exchg.name = sub.exn + ' (' + sub.ex + ')';
+                        	exchg.name = name;
+                            if (canView(code)) {
+                                if (bypassMYAccChecking == 'FALSE') {
+                                    if ((authenret.atp.sct == 'M' || authenret.atp.sct == 'C') && code == 'MY')
+                                        if (!haveActiveAcc(code))
+                                            continue;
+                                    indexCodes.push(exchg);
+                                } else {
+                                    indexCodes.push(exchg);
+                                }
+                                this.colRDTooltip = languageFormat.getLanguage(30129, 'R = Real time <br/> D = Delayed > 15 minutes');
+                            }
+
+                        }
+                        break;
+                    }
+                }
+            }
+        } else {
+            // hardcoded name
+            var totEx = ex.length;
+            for (var i = 0; i < totEx; i++) {
+                exchg = ex[i];
+                var name = '';
+                var code = exchg.ex;
+                
+                if (code == 'SGi')
+                    continue;
+                else
+                    name = getExchangeFullName(code);
+                
+                exchg.name = name;
+
+                /*
+                 * authenret.atp.sct 
+                 * 
+                 * 	M : end user 
+                 *  D : dealer
+                 *  R : 
+                 * 
+                 * 
+                 * canView(code)  : check the user have permission to view exchange code
+                 * 
+                 * haveActiveAcc(code) : verify the user have account for the exchange code 
+                 */
+                if (canView(code)) {
+                    if (global_HaveATP.toLowerCase() == 'true') {
+                        if (bypassMYAccChecking == 'FALSE') {
+                            if (authenret.atp.sct == 'M' || authenret.atp.sct == 'C') {
+                                if (code == 'MY') {
+                                    if (!haveActiveAcc(code))
+                                        continue;
+                                    indexCodes.push(exchg);
+                                } else {
+                                    indexCodes.push(exchg);
+                                }
+
+                            } else {
+                                indexCodes.push(exchg);
+                            }
+                        } else {
+                            indexCodes.push(exchg);
+                        }
+                    } else {
+                        indexCodes.push(exchg);
+                    }
+                }
+            }
+        }
+        
+        // no need manual sort but backend have sort by country code
+        if (N2N_CONFIG.sortExchangeList) {
+
+            indexCodes.sort(jsutil.getArraySorter('name'));
+            // move default exchange to the first position
+            if (tempExObj) {
+                for (var i = 0; i < indexCodes.length; i++) {
+                    var exObj = indexCodes[i];
+                    if (exObj.name === tempExObj.name) {
+
+                        indexCodes.splice(i, 1);
+                        indexCodes.unshift(tempExObj);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        var exchangeMenu = new Array();
+        var exchCount = indexCodes.length;
+        var productMenu = [];
+        var productList = [];
+
+        if(N2N_CONFIG.exGroupingList.length > 0){
+        	var arrList = N2N_CONFIG.exGroupingList.split(';');
+        	for(var i=0; i<arrList.length; i++){
+        		var productObj = arrList[i].split('|')[0];
+        		var exList = arrList[i].split('|')[1];
+        		productList.push([productObj, exList]);
+        	}
+        	
+        	for(var i=0; i<productList.length; i++){	
+        		exchangeMenu.length = 0;
+        		for (var j = 0; j < exchCount; j++) {
+        			var exch = indexCodes[j];
+        			var _exchange = exch.ex;
+
+        			if(i == 0){
+        				global_ExchangeList.push({
+        					exchange: _exchange,
+        					exchangeName: exch.name
+        				});
+        			}
+
+        			var exList = productList[i][1].split(',');
+        			for(var k=0; k<exList.length; k++){
+        				var tempEx = exList[k];
+        				if(tempEx == _exchange){
+        					exchangeMenu.push({
+        						ex: _exchange,
+        						text: exch.name,
+        						cls: N2N_CONFIG.menuType == MENU_TYPE.TOOL ? 'toolbar-menu-item-medium' : 'x-menu-item-medium',
+        						handler: function(thisComp) {
+        							menuHandler.switchExchange(thisComp.ex);
+        						},
+        						listeners: {
+        							afterrender: function(thisSubMenu) {
+        								n2nLayoutManager.initDragMenu(thisSubMenu);
+        							}
+        						}
+        					});
+        				}
+        			}
+
+        		}
+
+        		var prodObj = productList[i][0].split(',');
+        		productMenu.push({
+        			text: languageFormat.getLanguage(prodObj[0], prodObj[1]),
+        			showSeparator: false,
+        			cls: N2N_CONFIG.menuType == MENU_TYPE.TOOL ? 'toolbar-menu-item-medium' : 'x-menu-item-medium',
+					menu: new Ext.menu.Menu({
+						items: exchangeMenu
+					}),
+					onClick: touchExpandSubmenu,
+					disabled: exchangeMenu.length == 0 ? true : false
+					
+        		});
+        	}
+        }else{
+        	for (var i = 0; i < exchCount; i++) {
+        		var exch = indexCodes[i];
+        		if(!exch) continue;
+
+        		var _exchange = exch.ex;
+
+        		global_ExchangeList.push({
+        			exchange: _exchange,
+        			exchangeName: exch.name
+        		});
+
+        		exchangeMenu.push({
+        			ex: _exchange,
+        			text: exch.name,
+        			cls: N2N_CONFIG.menuType == MENU_TYPE.TOOL ? 'toolbar-menu-item-medium' : 'x-menu-item-medium',
+        			handler: function(thisComp) {
+        				menuHandler.switchExchange(thisComp.ex);
+        			},
+        			listeners: {
+        				afterrender: function(thisSubMenu) {
+        					n2nLayoutManager.initDragMenu(thisSubMenu);
+        				}
+        			}
+        		});
+        	}
+        }
+        /*
+         if (outbound) {
+         disableMenuItems(exchangecode);
+         }*/
+
+        updateTopMenu();
+
+        if ((showExchangeHeader == "TRUE" && mainMenuBar) || (showExchangeHeader == "TRUE" && N2N_CONFIG.menuType == MENU_TYPE.TOOL)) { // default menu
+            var tbar = null;
+            var tbMenuExchgIdx = -1;
+
+            var menu = new Ext.menu.Menu({
+                //cls: 'x-menu-medium',
+                items: productMenu.length > 0 ? productMenu : exchangeMenu
+            });
+            
+            var menuExchg = {
+            	id: 'tbEx',
+                text: languageFormat.getLanguage(20301, 'Exchange'),
+                cls: N2N_CONFIG.menuType == MENU_TYPE.TOOL ? 'toolbar-menu-medium' : '',
+                iconCls: 'icon-menu-exchange',
+                hideOnClick: false,
+                menu: menu,
+                listeners: getMenuOverListeners() 
+            };
+
+            if (mainMenuBar) {
+                tbar = mainMenuBar;
+                var totExchg = tbar.items.length;
+                for (var i = 0; i < totExchg; i++) {
+                    if (mainMenuBar.items.items[i].id == 'tbEx') {
+                        tbMenuExchgIdx = i;
+                        break;
+                    }
+                }
+            } else {
+
+                var mainMenuToolBar = n2nLayoutManager.compRef.mainMenuBar.items;
+                for (var i = 0; i < mainMenuToolBar.length; i++) {
+                    if (mainMenuToolBar.items[i].id == 'menutoolbtn') {
+                        tbar = mainMenuToolBar.items[i].menu;
+                        break;
+                    }
+                }
+
+                var totExchg = tbar.items.length;
+                for (var i = 0; i < totExchg; i++) {
+                    if (tbar.items.items[i].id == 'tbEx') {
+                        tbMenuExchgIdx = i;
+                        break;
+                    }
+                }
+            }
+
+            tbar.remove('tbEx');
+            tbar.insert(tbMenuExchgIdx, menuExchg);
+        }
+
+        // Sector
+        feedFilterRet = dataObj.sector;
+        
+        if (!isMobile) {
+            Ext.resumeLayouts();
+        }
+        
+        infoInit = true;
+        
+        var codeList = n2nLayoutManager.lyConf.codeList;
+        
+        if (codeList.length > 0) {
+            _getSimpleStockList({
+                list: codeList,
+                col: [fieldStkCode, fieldStkName],
+                success: function(data) {
+                    if (data && data.d) {
+                        for (var i in data.d) {
+                            var dataObj = data.d[i];
+                            mappedList[dataObj[fieldStkCode]] = dataObj[fieldStkName];
+                        }
+                    }
+
+                    startApp();
+                }
+            });
+        } else {
+            startApp();
+        }
+        
+    }
+
+    function _getInfo() {
+        if (N2N_CONFIG.lDebug) {
+            t6 = new Date().getTime();
+        }
+
+        debugutil.debug('conn > _getInfo');
+        var _getContext = function(qc, cfg, res) {
+            
+            if (res.data) {
+                connectionRetry = vertxAutoRetry;
+                // keeps exchange info
+                exchangeInfo = res;
+                var infoObj = _formatVertxInfo(exchangeInfo, exchangecode);
+                feedLoginRet = infoObj.login;
+                loginStatus = statusHasLogin;
+
+                if (topPanelBar) {
+                    topPanelBar.load();
+                }
+
+                initInfoData(infoObj);
+            } else {
+                if (connectionRetry > 0) {
+                    debugutil.debug('Context info is not ready');
+                    setTimeout(_getInfo, 500);
+                    connectionRetry -= 1;
+                } else {
+                    conn.notifySession("{t: 'local', d: 'feeddown'}");
+                }
+            }
+        };
+        qcFeed.request({
+            action: 'context',
+            callback: _getContext
+        });
+    }
+
+    function _formatVSearchKey(key) {
+        // Escape
+        key = key.trim();
+        var txt = key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        return '(?i:^' + txt + '[\\s\\S]*)';
+    }
+
+    function _convertVSortKey(key) {
+        var vKey = key;
+        switch (key) {
+            case '38': // symbol
+                vKey = 'stkCode';
+                break;
+            case fieldStkCode:
+                vKey = 'stkNo';
+                break;
+        }
+
+        return vKey;
+    }
+
+    function _formatVertxInfo(info, exchCode) { // Temporarily used // TODO to be revised
+        var vertxInfo = null;
+        if (info.data != null && info.data.exchInfos != null) {
+            var ex = new Array();
+            var sec = new Array();
+            var bi = new Array();
+            var bl = new Array();
+            var exchInfos = info.data.exchInfos;
+            var qcParams = new Array();
+
+            for (var exch in exchInfos) {
+                // Exchange
+                ex.push({
+                    ex: exch,
+                    ix: exchInfos[exch]['indices'],
+                    name: ""
+                });
+
+                // Market
+                for (var market in exchInfos[exch]['marketInfos']) {
+                    sec.push({
+                        1: exchInfos[exch]['marketInfos'][market],
+                        2: '',
+                        3: '',
+                        4: '',
+                        ex: exch,
+                        sc: market
+                    });
+                    }
+                // Fixed: order in some browsers
+                sec.sort(jsutil.getArraySorter('sc'));
+
+                if (exch === exchCode) {
+                    // Sector
+                    for (var sector in exchInfos[exch]['sectorInfos']) {
+                        var bid = exchInfos[exch]['sectorParents'][sector];
+
+                        if (bid != "0") {
+                            bi.push({
+                                bid: bid,
+                                ex: exch,
+                                id: sector,
+                                n: exchInfos[exch]['sectorInfos'][sector]
+                            });
+                        } else {
+                            bl.push({
+                                ex: exch,
+                                id: sector,
+                                n: exchInfos[exch]['sectorInfos'][sector]
+                            });
+                        }
+                    }
+                }
+                
+                if(qcParams.length < 1){
+                	qcParams = exchInfos[exch]['qcParams'];
+                }
+            }
+            
+            // sorts to avoid inconsistency in some browsers
+            ex.sort(jsutil.getArraySorter('ex'));
+            bi.sort(jsutil.getArraySorter('id', parseInt));
+            bl.sort(jsutil.getArraySorter('id', parseInt));
+            
+            vertxInfo = {
+                login: {
+                    ex: ex,
+                    sec: sec, // markets
+                    s: info.success,
+                    t: 'g'
+                },
+                sector: {
+                    bi: bi, // individual sector
+                    bl: bl, // sector parent
+                    s: info.success,
+                    t: 'sec'
+                },
+                qcParams: qcParams
+            };
+        }
+        
+        return vertxInfo;
+    }
+    
+    function _getMarketList(exch) {
+        var markets = [];
+
+        if (exchangeInfo && exchangeInfo.data && exchangeInfo.data.exchInfos) {
+            var exchInfos = exchangeInfo.data.exchInfos;
+
+            if (exchInfos[exch] && exchInfos[exch]['marketInfos']) {
+                for (var mkt in exchInfos[exch]['marketInfos']) {
+                    markets.push({
+                        marketCode: mkt,
+                        marketName: exchInfos[exch]['marketInfos'][mkt],
+                        exch: exch
+                    });
+                }
+            }
+        }
+
+        return markets;
+    }
+
+    function _runSubscriptionTask() {
+        if (subscriptionTask != null) {
+            clearTimeout(subscriptionTask);
+            subscriptionTask = null;
+        }
+
+        subscriptionTask = setTimeout(function() {
+            subscribeFeed();
+            subscriptionTask = null;
+        }, 1000);
+    }
+    
+    function _subscribeAll() { // resubscribe all updates
+        if (_isConnected()) {
+            // Since feed and market depth subscriptions are on the same run, this is to make sure it run only once if both exists
+            var feedSubRun = false;
+            for (var ln in subColl) {
+                switch (ln) {
+                    case listen05:
+                    case listenNormalMD:
+                    case listenMultiMD:
+                        if (!feedSubRun) {
+                            Storage.refresh(); // in case stock list not updated when switching tab
+                            
+                            subscribeFeed(true);
+                            feedSubRun = true;
+                        }
+
+                        break;
+                    case listenWi:
+                        _subscribeWorldIndices(true);
+                        
+                        break;
+                    case listenMkt:
+                        subscribeMarket(true);
+
+                        break;
+                    case listenInd:
+                        subscribeIndices(indicesList, true);
+
+                        break;
+                    case listenTime:
+                        subscribeTime();
+
+                        break;
+                    case listenTran:
+                        subscribeTransaction();
+
+                        break;
+                    case listenFundamental:
+                        _subscribeFundamental(null, null, true);
+
+                        break;
+                    case listenStockInfo06:
+                    	_subscribeStockInfo06(null, null, true);
+                        break;
+                        
+                    case listen18:
+                    	_subscribe18(true);
+                        break;
+                }
+            }
+        }
+    }
+    
+    function _unsubscribeAll() { // unsubscribe all updates
+        if (_isConnected()) {
+            for (var ln in subColl) {
+                qcFeed.request({
+                    action: 'unregister',
+                    listenId: ln
+                });
+            }
+        }
+    }
+
+    return {
+        isConnected: _isConnected,
+        connect: function() {
+            connect();
+        },
+        disconnect: function() {
+            disconnect();
+        },
+        logout: function() {
+            logout();
+        },
+        requestLogout: function() {
+            requestLogout();
+        },
+        keepAlive: function(doRelogin) {
+            keepAlive(doRelogin);
+        },
+        notifySession: function(sessionObj) {
+            notifySession(sessionObj);
+        },
+        request: function(reqObj) {
+            request(reqObj);
+        },
+        subscribeFeed: function() {
+            _runSubscriptionTask();
+        },
+        forceSubscribeFeed: function() {
+            subscribeFeed(true);
+        },
+        subscribeStatus: function() {
+            subscribeStatus();
+        },
+        forceSubscribeStatus: function() {
+            subscribeStatus(true);
+        },
+        subscribeIndices: function(idCodeList, skipCheck) {
+            idCodeList = idCodeList || [];
+            if (skipCheck || idCodeList.join(',') !== indicesList.join(',')) {
+                indicesList = idCodeList;
+                if (idCodeList.length === 0 && !marketOverviewPanel && !topPanelBar) {
+                    unsubscribeIndices();
+                } else {
+                    subscribeIndices(idCodeList);
+                }
+            }
+        },
+        unsubscribeIndices: function() {
+            indicesList = [];
+            subscribeIndices();
+        },
+        subscribeMarket: function() {
+            if (topPanelBar || marketOverviewPanel) {
+                subscribeMarket();
+            } else {
+                unsubscribeMarket();
+            }
+        },
+        unsubscribeMarket: unsubscribeMarket,
+        subscribeTransaction: subscribeTransaction,
+        unsubscribeTransaction: unsubscribeTransaction,
+        subscribeWorldIndices: _subscribeWorldIndices,
+        unsubscribeWorldIndices: _unsubscribeWorldIndices,
+        subscribeFundamental: _subscribeFundamental,
+        unsubscribeFundamental: _unsubscribeFundamental,
+        subscribe18: _subscribe18,
+        unsubscribe18: _unsubscribe18,
+        subscribeStockInfo06: _subscribeStockInfo06,
+        unsubscribeStockInfo06: _unsubscribeStockInfo06,
+        setStreaming: function(status) {
+            streaming = status;
+
+            if (status) {
+                _subscribeAll();
+            } else {
+                _unsubscribeAll();
+            }
+
+        },
+        getSimpleStockList: function(request) {
+            _getSimpleStockList(request);
+        },
+        getStockList: function(request) {
+            getStockList(request);
+        },
+        getWarrantList: function(request) {
+            _getWarrantList(request);
+        },
+        getWarrantStocks: function(request) {
+            _getWarrantStocks(request);
+        },
+        getFullList: function(request) {
+            _getFullList(request);
+        },
+        getStockInfo: function(request) {
+            getStockInfo(request);
+        },
+        getStockInfo06: function(request) {
+            getStockInfo06(request);
+        },
+        searchStock: function(request) {
+            searchStock(request);
+        },
+        smartSearch: _smartSearch,
+        getTransaction: function(request) {
+            getTransaction(request);
+        },
+        getTransactionNum: function(request) {
+            getTransactionNum(request);
+        },
+        getHistoricalData: function(request) {
+            getHistoricalData(request);
+        },
+        getBusinessDone: function(request) {
+            getBusinessDone(request);
+        },
+        getStockNews: function(request) {
+            getStockNews(request);
+        },
+        getForeignFlows: function(request) {
+            _getForeignFlows(request);
+        },
+        getOrderPosition: function(request) {
+        	_getOrderPosition(request);
+        },
+        getIndices: function(request) {
+            getIndices(request);
+        },
+        getScoreBoard: function(request) {
+            getScoreBoard(request);
+        },
+        getMarketSummary: function(request) {
+            getMarketSummary(request);
+        },
+        updateStkCodes: function() {
+            updateStkCodes();
+        },
+        updateFieldList: function() {
+            updateFieldList();
+        },
+        getMDL: function(request) {
+            getMDL(request);
+        },
+        getBrokerQ: function(request) {
+            _getBrokerQ(request);
+        },
+        getBrokerQStocks: function(request) {
+            _getBrokerQStocks(request);
+        },
+        getFundamentalInfo: function(request){
+        	getFundamentalInfo(request);
+        },
+        getTrackerHistory: function(request){
+        	getTrackerHistory(request);
+        },
+        getExTime: function(request) {
+            _getExTime(request);
+        },
+        initializeSectors: function() {
+            var info = _formatVertxInfo(exchangeInfo, exchangecode);
+            if (info != null) {
+                feedFilterRet = info.sector;
+                quoteScreen.initializeFilter();
+            }
+        },
+        getMarketList: _getMarketList,
+        getMarketCode: function(exch, marketName) {
+            var mkt = exch + '_' + marketName;
+            if (marketCodes[mkt] != null) {
+                return marketCodes[mkt];
+            }
+
+            if (feedLoginRet && feedLoginRet.sec) {
+                for (var i = 0; i < feedLoginRet.sec.length; i++) {
+                    var secInfo = feedLoginRet.sec[i];
+                    if (secInfo.ex === exch && secInfo['1'] === marketName) {
+                        // cache market code
+                        marketCodes[mkt] = parseInt(secInfo.sc);
+
+                        return marketCodes[mkt];
+                    }
+                }
+            }
+
+            return null;
+        },
+        getServers: _getServers,
+        getBrokerList: _getBrokerList,
+        getBrokerRanking: _getBrokerRanking,
+        getBrokerTransaction: _getBrokerTransaction,
+        getBrokerByStock: _getBrokerByStock
+    };
+}();
+
+/**
+ * Formats vertx feed to be reusable with existing functions
+ * 
+ * @param {object} feed
+ * @param {string} tID
+ * @param {boolean} roundValue
+ * @returns {object}
+ */
+function _formatVertxData(feed, tID, formatFn) {
+    var returnObj = {};
+
+    if (feed) {
+        if (feed.success) {
+            returnObj.s = feed.success;
+
+            for (var _i in feed.data) {
+                var feedData = feed.data[_i];
+
+                if (typeof formatFn === 'function') {
+                    formatFn(feedData);
+                }
+
+            }
+
+            returnObj.c = feed.data.length; // Count/Number of records
+            returnObj.d = feed.data; // data
+        } else {
+            returnObj.m = feed.message; // message
+            returnObj.e = ''; // error?
+        }
+    }
+
+    if (tID) {
+        returnObj['t'] = tID;
+    }
+
+    return returnObj;
+}
+
+function _formatSingleVertxData(feed, tID, msgType, formatFn) {
+
+    if (typeof formatFn === 'function') {
+        formatFn(feed.data);
+    }
+
+    if (msgType) {
+        var formatData = new Object();
+        // append message type as prefix
+        for (var i in feed.data) {
+            if (i != fieldStkCode) {
+                formatData[msgType + i] = feed.data[i];
+            } else {
+                formatData[i] = feed.data[i];
+            }
+        }
+
+        feed.data = formatData;
+    }
+
+    var fd = {
+        s: true,
+        d: [feed.data],
+        c: 1
+    };
+
+    if (tID) {
+        fd['t'] = tID;
+    }
+
+    return fd;
+}
+
+function formatData05(data) {
+    if (data[fieldStkName]) {
+        data[fieldStkName] = htmlEncode(data[fieldStkName].trim());
+    }
+    if (data[fieldStkFName]) {
+        data[fieldStkFName] = htmlEncode(data[fieldStkFName].trim());
+    }
+    if (data[fieldVol]) {
+        data[fieldVol] = stockutil.removeDecimalString(data[fieldVol]);
+    }
+    if (data[fieldValue]) {
+        data[fieldValue] = stockutil.roundDecimalString(data[fieldValue]);
+    }
+    if (data[fieldTotTrade]) {
+        data[fieldTotTrade] = stockutil.removeDecimalString(data[fieldTotTrade]);
+    }
+    if (data[fieldTotBVol]) {
+        data[fieldTotBVol] = stockutil.removeDecimalString(data[fieldTotBVol]);
+    }
+    if (data[fieldTotSVol]) {
+        data[fieldTotSVol] = stockutil.removeDecimalString(data[fieldTotSVol]);
+    }
+    if (data[fieldBuyRate]) {
+        data[fieldBuyRate] = (data[fieldBuyRate] * 100).toFixed(2);
+    }
+
+    return data;
+}
+
+function formatData02(data) {
+    if (data[fieldSbTotalValue]) {
+        data[fieldSbTotalValue] = stockutil.roundDecimalString(data[fieldSbTotalValue]);
+    }
+    if (data[fieldSbTotalVol]) {
+        data[fieldSbTotalVol] = stockutil.removeDecimalString(data[fieldSbTotalVol]);
+    }
+    if (data[fieldSbTotalTrade]) {
+        data[fieldSbTotalTrade] = stockutil.removeDecimalString(data[fieldSbTotalTrade]);
+    }
+
+    return data;
+}
+
+/**
+ * Description <br/>
+ * 
+ * 		v1.3.34.45
+ * 		Reset checkIsAlive Timer
+ */
+function resetCheckAliveTimer() { //v1.3.34.45
+    isAliveTimer = 0;
+    if (topPanelBar != null) {
+        topPanelBar.setSignal("Online");
+    }
+}

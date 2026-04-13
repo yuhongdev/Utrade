@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIP Schedule</title>
+<link href="../fonts/icomoon/styles.css" rel="stylesheet" type="text/css">
+<link href="../css/bootstrap-5.3.6.min.css" rel="stylesheet" type="text/css"/>
+<link href="../css/elements.css" rel="stylesheet" type="text/css"/>
+<link href="../css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+<link href="../css/ca.css" rel="stylesheet" type="text/css"/>
+<link href="../css/sip.css" rel="stylesheet" type="text/css"/>
+<script src="../../js/jquery-3.6.0.js?v1"></script>
+    <script src="../js/jquery-ui.js?v1"></script>
+	<script src="../js/moment.js"></script>
+	<script src="../js/theme.js?v1"></script>
+	<script type="text/javascript" src="../../js/jquery.jcryption.min.js?v1"></script>
+	 <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js?v1"></script>
+	
+        <script type="text/javascript" src="../../ref/symbols.json"></script> 
+		<script type="text/javascript" src="../../ref/favStkList.json"></script> 
+		<script>
+		var table1 = $('#example').dataTable();
+		var j = 0;
+		$(document).ready(function() {
+		 $.getJSON('../../ref/symbols.json', function(data) {
+		 
+                $.each(data, function(i, f) {
+                i++;
+                var stkcode = JSON.stringify(f.symbol);
+          var tblRow = "<tr>" + "<td class=''>" + i + "</td>" +
+           "<td class='list'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'>" + f.company + "</a></td>" + "<td class='alignC'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'> "+ f.symbol + "</a></td>" + "</tr>"
+           $('#tbl_list tbody').append(tblRow);
+     });
+	 var table = $('#tbl_list').DataTable( {
+			"dom": '<"toolbar"f>rtpi' , /*"dom": '<"toolbar">frtip'*/
+			 "order": [[ 0, "asc" ]],
+			 "columnDefs": [{
+					 "targets": 1,
+					 "searchable":true,
+					 "orderable":true,
+					},
+					// no-sort columns
+					{	
+					"targets": 'no-sort',
+					"orderable": false,
+					} ,
+				],
+		   "oLanguage": { "sSearch": "" , "sSearchPlaceholder" : "Company Name / Symbol"},
+			"bPaginate": false,
+			"bLengthChange": false,
+			"bFilter": true,
+			"bSort": true,
+			"bInfo": false,
+			"aoColumns": [ {"bSearchable": false}/*stock*/, {"bSearchable": true}, {"bSearchable": true}],
+		} );
+	  });
+	  
+	$('#sector').change(function() {
+	$('#tbl_list').dataTable().fnDestroy();
+	  $('#tbl_list tbody').empty();
+		var option = $(this).find('option:selected').val();
+		switch (option) {
+      case "ALL":
+        getAllList();
+        break;
+      default:
+        getfavList();
+        break;
+		}
+    });	
+	
+	function getAllList(){
+	$('#tbl_list tbody').empty();
+	$.getJSON('../../ref/symbols.json', function(data) {
+		$.each(data, function(i, f) {
+		i++;
+		var stkcode = JSON.stringify(f.symbol);
+          var tblRow = "<tr>" + "<td class=''>" + i + "</td>" +
+           "<td class='list'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'>" + f.company + "</a></td>" + "<td class='alignC'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'> "+ f.symbol + "</a></td>" + "</tr>"
+           $('#tbl_list tbody').append(tblRow);
+		   
+		  
+     });
+	 
+	  var table = $('#tbl_list').DataTable( {
+			"dom": 'frtpi' , /*"dom": '<"toolbar">frtip'*/
+			 "order": [[ 0, "asc" ]],
+			 "columnDefs": [{
+					 "targets": 1,
+					 "searchable":true,
+					 "orderable":true,
+					},
+					// no-sort columns
+					{	
+					"targets": 'no-sort',
+					"orderable": false,
+					} ,
+				],
+		   "oLanguage": { "sSearch": "" , "sSearchPlaceholder" : "Company Name / Symbol"},
+			"bPaginate": false,
+			"bLengthChange": false,
+			"bFilter": true,
+			"bSort": true,
+			"bInfo": false,
+			"aoColumns": [ {"bSearchable": false}/*stock*/, {"bSearchable": true}, {"bSearchable": true}],
+		} );
+	 
+	});
+	}
+	
+	
+	function  getfavList(){
+	var option = $('#sector').find('option:selected').val();
+	 $('#tbl_list tbody').empty();
+	 $.getJSON('../../ref/favStkList.json', function(data) {
+		$.each(data, function(i, f) {
+		i++;
+		if(option == f.listName){
+		var stkcode = JSON.stringify(f.symbol);
+          var tblRow = "<tr>" + "<td class=''>" + i + "</td>" +
+           "<td class='list'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'>" + f.company + "</a></td>" + "<td class='alignC'><a href='#' onclick='javascript:return returnVal("+ stkcode +");'> "+ f.symbol + "</a></td>" + "</tr>"
+           $('#tbl_list tbody').append(tblRow);
+		}else{
+		}
+		  
+     });
+	 	
+	var table = $('#tbl_list').DataTable( {
+			"dom": '<"left">frtpi' , /*"dom": '<"toolbar">frtip'*/
+			 "order": [[ 0, "asc" ]],
+			 "columnDefs": [{
+					 "targets": 1,
+					 "searchable":true,
+					 "orderable":true,
+					},
+					// no-sort columns
+					{	
+					"targets": 'no-sort',
+					"orderable": false,
+					} ,
+				],
+		   "oLanguage": { "sSearch": "" , "sSearchPlaceholder" : "Company Name / Symbol"},
+			"bPaginate": false,
+			"bLengthChange": false,
+			"bFilter": true,
+			"bSort": true,
+			"bInfo": false,
+			"aoColumns": [ {"bSearchable": false}/*stock*/, {"bSearchable": true}, {"bSearchable": true}],
+		} );
+		
+	 });
+	}
+	$.getJSON('../../ref/favStkList.json', function(data) {
+		$.each(data, function(i, f) {
+		i++;
+		if($('#sector option[value="'+f.listName+'"]').length > 0){
+		
+		}else{
+		 $('#sector').append($('<option/>').val( f.listName ).text( f.listName ) );
+		}
+		
+	
+        }); 
+		  
+     });
+	 
+	
+   	
+	
+	} );
+	 function returnVal(stkcode1){
+		
+        var myVal = stkcode1;
+		console.log(myVal)
+       window.parent.postMessage(myVal, "https://web.utradeph.com/gcUTRADEPlus/web/html/sipadd.html");  
+		
+        
+
+        return false;
+
+    }
+
+	
+	</script>
+
+
+<style>
+#contents {padding:5px 5px;}
+#contents .form-act{height: 22px; margin-bottom:5px;}
+#contents input[type=text],select, textarea{height:22px; padding-left:5px; margin:2px 2px 2px 0;}
+#contents .search{background: url(../img/search2.png);background-repeat: no-repeat;background-position: right;}
+#contents .sort {margin:2px 2px 2px 0; }
+#contents .sort span{background:url(../img/sort_desc_off.gif) no-repeat right top; padding:3px 10px 0px 0px; height:21px; display:inline-block;}
+#contents .sort a{background:url(../img/sort_desc_off.gif) no-repeat;  padding:0px 0px 0px 20px; height:21px; display:inline-block;  color:#324261;}
+#contents .sort a.select{background:url(../img/sort_desc_on.gif) no-repeat;  padding:0px 0px 0px 20px; height:21px; display:inline-block; color:#fff;}
+#contents .sort a.select span{background:url(../img/sort_desc_on.gif) no-repeat right top; padding:3px 10px 0px 0px; height:21px; display:inline-block;}
+#contents .sort a.asc{background:url(../img/sort_asc.gif) no-repeat;  padding:0px 0px 0px 20px; height:21px; display:inline-block; color:#fff;}
+#contents .sort a.asc span{background:url(../img/sort_asc.gif) no-repeat right top; padding:3px 10px 0px 0px; height:21px; display:inline-block;}
+
+#contents .counter{ padding:1px 10px; margin:2px 2px 2px 0; color:#ccc;}
+#contents .results tr[visible='false'], .no-result{  display:none;}
+
+#contents.results tr[visible='true']{ display:table-row;}
+
+.dataTables_wrapper .dataTables_filter {
+float: right;
+text-align: left;
+}
+
+.dataTables_wrapper .dataTables_length {
+float: right;
+}
+
+</style>
+
+</head>
+
+<body >
+
+<div class="container max800" >
+<div id="contents">
+<form id="listForm" name="listForm">
+<div class="form-act">
+<div class="selectstock form-group-sm pull-left">
+<select id="sector" name="stocklist">
+    <option value="ALL">ALL</option>
+</select>
+</div>
+<!--
+<div class="form-group-sm pull-left">
+    <input type="text" class="search form-control" placeholder="Company Name/ Symbol">
+</div>-->
+<span class="counter pull-left"></span>
+</div>
+<table id="tbl_list" class="table table-condensed table-hover table-bordered results responsive">
+  <thead>
+    <tr>
+      <th class="col-md-2 col-xs-2">#</th>
+      <th class="col-md-7 col-xs-7">Company Name</th>
+      <th class="col-md-4 col-xs-4">Stock Symbol</th>
+
+    </tr>
+    <tr class="warning no-result">
+      <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+    </tr>
+  </thead>
+  <tbody>
+   <!-- <tr>
+      <td class=" ">1</td>
+      <td class="list"><a href="#company" onclick="cmDetail('29','146');return false;">2GO Group, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('29','146');return false;">2GO</a></td>
+      </tr>
+    <tr>
+      <td class=" ">2</td>
+      <td class="list"><a href="#company" onclick="cmDetail('626','563');return false;">8990 Holdings, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('626','563');return false;">HOUSE</a></td>
+      </tr>
+    <tr>
+      <td class=" ">3</td>
+      <td class="list"><a href="#company" onclick="cmDetail('13','234');return false;">A Brown Company, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('13','234');return false;">BRN</a></td>
+      </tr>
+    <tr>
+      <td class=" ">4</td>
+      <td class="list"><a href="#company" onclick="cmDetail('14','169');return false;">A. Soriano Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('14','169');return false;">ANS</a></td>
+      </tr>
+    <tr>
+      <td class=" ">5</td>
+      <td class="list"><a href="#company" onclick="cmDetail('114','123');return false;">ABS-CBN Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('114','123');return false;">ABS</a></td>
+      </tr>
+    <tr>
+      <td class=" ">6</td>
+      <td class="list"><a href="#company" onclick="cmDetail('15','259');return false;">ABS-CBN Holdings Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('15','259');return false;">ABSP</a></td>
+      </tr>
+    <tr>
+      <td class=" ">7</td>
+      <td class="list"><a href="#company" onclick="cmDetail('643','586');return false;">AG Finance, Incorporated</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('643','586');return false;">AGF</a></td>
+      </tr>
+    <tr>
+      <td class=" ">8</td>
+      <td class="list"><a href="#company" onclick="cmDetail('177','182');return false;">APC Group, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('177','182');return false;">APC</a></td>
+      </tr>
+    <tr>
+      <td class=" ">9</td>
+      <td class="list"><a href="#company" onclick="cmDetail('56','176');return false;">ATN Holdings, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('56','176');return false;">ATN</a></td>
+      </tr>
+    <tr>
+      <td class=" ">10</td>
+      <td class="list"><a href="#company" onclick="cmDetail('174','173');return false;">AbaCore Capital Holdings, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('174','173');return false;">ABA</a></td>
+      </tr>
+    <tr>
+      <td class=" ">11</td>
+      <td class="list"><a href="#company" onclick="cmDetail('16','183');return false;">Aboitiz Equity Ventures, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('16','183');return false;">AEV</a></td>
+      </tr>
+    <tr>
+      <td class=" ">12</td>
+      <td class="list"><a href="#company" onclick="cmDetail('609','532');return false;">Aboitiz Power Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('609','532');return false;">AP</a></td>
+      </tr>
+    <tr>
+      <td class=" ">13</td>
+      <td class="list"><a href="#company" onclick="cmDetail('33','321');return false;">Abra Mining and Industrial Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('33','321');return false;">AR</a></td>
+      </tr>
+    <tr>
+      <td class=" ">14</td>
+      <td class="list"><a href="#company" onclick="cmDetail('48','370');return false;">Acesite (Phils.) Hotel Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('48','370');return false;">ACE</a></td>
+      </tr>
+    <tr>
+      <td class=" ">15</td>
+      <td class="list"><a href="#company" onclick="cmDetail('619','547');return false;">AgriNurture, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('619','547');return false;">ANI</a></td>
+      </tr>
+    <tr>
+      <td class=" ">16</td>
+      <td class="list"><a href="#company" onclick="cmDetail('212','179');return false;">Alliance Global Group, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('212','179');return false;">AGI</a></td>
+      </tr>
+    <tr>
+      <td class=" ">17</td>
+      <td class="list"><a href="#company" onclick="cmDetail('602','524');return false;">Alliance Select Foods International, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('602','524');return false;">FOOD</a></td>
+      </tr>
+    <tr>
+      <td class=" ">18</td>
+      <td class="list"><a href="#company" onclick="cmDetail('51','348');return false;">Allied Banking Corporation</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('51','348');return false;">ABC</a></td>
+      </tr>
+    <tr>
+      <td class=" ">19</td>
+      <td class="list"><a href="#company" onclick="cmDetail('121','170');return false;">Alsons Consolidated Resources, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('121','170');return false;">ACR</a></td>
+      </tr>
+    <tr>
+      <td class=" ">20</td>
+      <td class="list"><a href="#company" onclick="cmDetail('612','536');return false;">Anchor Land Holdings, Inc.</a></td>
+      <td class="alignC"><a href="#company" onclick="cmDetail('612','536');return false;">ALHI</a></td>
+      </tr>
+
+      </tr>-->
+  </tbody>
+</table>
+</form>
+</div>
+</div>
+<!-- REST API -->
+	
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+<script>
+$(document).ready(function() {
+  $(".search").keyup(function () {
+    var searchTerm = $(".search").val();
+    var listItem = $('.results tbody').children('tr');
+    var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+    
+  $.extend($.expr[':'], {'containsi': function(elem, i, match, array){
+        return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+  });
+    
+  $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function(e){
+    $(this).attr('visible','false');
+  });
+
+  $(".results tbody tr:containsi('" + searchSplit + "')").each(function(e){
+    $(this).attr('visible','true');
+  });
+
+  var jobCount = $('.results tbody tr[visible="true"]').length;
+    $('.counter').text(jobCount + ' item');
+
+  if(jobCount == '0') {$('.no-result').show();}
+    else {$('.no-result').hide();}
+		  });
+		  
+});
+</script>
+
+	
+	   
+	<script>
+	</script>
+</body>
+</html>

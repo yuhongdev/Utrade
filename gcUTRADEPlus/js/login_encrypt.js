@@ -1,0 +1,626 @@
+function encryptValue() {
+	var v = "";
+	var test = "test";
+	var sLoginID = $("#frmLogin_userID").val();
+	var sPwd = $("#frmLogin_password").val();
+	var sActPath = $("#selDefPg").val();
+	var sMD = 1;
+	var isSec = 'Y';
+	var sActs = '';
+	var sFrom_Path = "/";
+	if(activation){
+		sActs = "ActivateReg";
+	}
+	v += sLoginID + "|";
+	v += sPwd + "|";
+	v += sActPath + "|";
+	v += sMD + "|";
+	v += isSec + "|";
+	v += sActs + "|";
+	v += sFrom_Path;
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value: "+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+function encryptValueChgPwd(){
+	var v = "";
+	var sOldPwd = $("#frmForceChgPwd_oldPwd").val();
+	var sNewPwd = $("#frmForceChgPwd_newPwd").val();
+	v += sOldPwd + "|" + sNewPwd;
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value:"+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+function encryptValueForgetPwd(){
+	var v = "";
+	// forgetPwd flag =1
+	var sEmailFlag = "0";
+	var sUserID = $("#frmForgetPwd_userID").val();
+	var sHint = $("#frmForgetPwd_pwdHint").prop("disabled",false).val();
+	$("#frmForgetPwd_pwdHint").prop("disabled",true);
+	var sHintAns = $("#frmForgetPwd_ansHint").val();
+	v = (sHint&&sHintAns)?(sUserID + "|" + sHint + "|" + sHintAns + "|1|" + sEmailFlag):sUserID+"|1";
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value:"+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+function encryptValueChgPin(){
+	var v = "";
+
+	var sOldPin = $("#frmForceChgPin_oldPin").val();
+	var sNewPin = $("#frmForceChgPin_newPin").val();
+	v += sOldPin + "|" + sNewPin;
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value:"+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+function encryptValueForgetPin(){
+	var v = "";
+	// forgetPin flag =2
+	var sEmailFlag = "0";
+	var sUserID = $("#frmForgetPin_userID").val();
+	var sHint = $("#frmForgetPin_pinHint").prop("disabled",false).val();
+	$("#frmForgetPin_pinHint").prop("disabled",true);
+	var sHintAns = $("#frmForgetPin_ansHint").val();
+	v = (sHint&&sHintAns)?(sUserID + "|" + sHint + "|" + sHintAns + "|2|" + sEmailFlag):sUserID+"|2";
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value:"+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+function encryptValueChgHint(){
+	var v = "", sHint, sHintAns, sLoginID;
+
+	sHint = $("#frmForceChgHint_hint").val();
+	if(sHint=="OTR"){
+		sHint = $("#frmForceChgHint_hintQuestion").val();
+	}
+	sHintAns = $("#frmForceChgHint_hintAnswer").val();
+	
+	v = sHint + "|" + sHintAns;
+	v += "|";
+	
+	$("#input").val(v);
+	console.log("Original value:"+v);
+	$("#submit").click();
+	$("#response").css("display","");
+}
+
+
+function beginEnc(){
+	var isLogin = $("#divLogin").css("display");
+	var isForceChgPwd = $("#divForceChgPwd").css("display");
+	var isForgetPwd = $("#divForgetPwd").css("display");
+	var isForceChgPin = $("#divForceChgPin").css("display");
+	var isForgetPin = $("#divForgetPin").css("display");
+	//var isForceChgHint = $("#divForceChgHint").css("display");
+	if(isLogin!="none"){
+		loginWEncryption();
+	}else if(isForceChgPwd!="none"){
+		chgPwdWEncryption();
+	}else if(isForgetPwd!="none"){
+		var sHint = $("#frmForgetPwd_pwdHint").val();
+		var sHintAns = $("#frmForgetPwd_ansHint").val();
+		(sHint&&sHintAns)?forgetPwdWEncryption():getHintWEncryption();
+	}else if(isForceChgPin!="none"){
+		chgPinWEncryption();
+	}else if(isForgetPin!="none"){
+		var sHint = $("#frmForgetPin_pinHint").val();
+		var sHintAns = $("#frmForgetPin_ansHint").val();
+		(sHint&&sHintAns)?forgetPinWEncryption():getHintWEncryption();
+	}/*else if(isForceChgHint!="none"){
+		chgHintWEncryption();
+	}*/
+}
+
+function encValWAES(){
+	var rv = $("#crypted").val();
+	var av="",login_public;
+	console.log("RSA Encrypted value: "+rv);
+	if($("#selTradingHall").val()=="tcplus_new" || $("#selTradingHall").val()=="tcplus_new_cn"){	
+		getKeyNew(function(output){login_public=output;});
+	}else{
+		getKey(function(output){login_public=output;});
+	}
+	if(login_public!=null){
+		public_key = login_public.key;
+		public_salt = login_public.salt;
+		public_iv = login_public.iv;
+		public_id = login_public.id;
+		console.log("Salt: "+public_salt);
+		console.log("IV: "+public_iv);
+		console.log("ID: "+public_id);
+		console.log("Encrypted Key: "+public_key);
+		var aesUtilDec = new AesUtil(256,100);
+		public_key = aesUtilDec.decrypt(public_salt,public_iv,"wms in n2n is great!",public_key);
+		console.log("Decrypted Key: "+public_key);
+		
+		var aesUtil = new AesUtil(256,100);
+		av = aesUtil.encrypt(public_salt,public_iv,public_key,rv);
+		console.log("AES Encrypted value: "+av);
+	}
+	return av;
+}
+
+function chgPwdWEncryption(){
+	var av="",cs="";
+	console.log("-- Force Change Password --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	chgPwd(av,cs);
+}
+
+function chgPwd_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		switch(response_status){
+			case "0":
+				alert("1710 ATP - Your password have been changed successfully");
+				var new_layout = 4;//logon div
+				var temp_status = login_status;
+				
+				if(login_status!=0){ // if force change
+					if(login_status==3||login_status==7){
+						new_layout = 5; //change pin div
+					}else if(login_status==5){
+						new_layout = 7; //change hint div
+					}
+					login_status = Number(login_status) ^ 1;
+					refreshFlag();
+				}
+				
+				if(action){
+					//location.reload();
+					chgLayout(0);
+				}else{
+					if(new_layout==4){
+						if(temp_status==0){
+							chgLayout(new_layout);
+						}else{
+							alert("Please login again to continue.");
+							logout();
+						}
+					}else{
+						chgLayout(new_layout);
+					}
+				}
+				break;
+			case "1":
+				alert("1704 ATP - Your new password should not be the same as old password");
+				break;
+			case "2":
+				alert("1706 ATP - Your password should be at least 6 characters");
+				break;
+			case "3":
+				alert("1707 ATP - Your password should have at least 1 alphabet and 1 numeric character");
+				break;
+			case "4":
+				alert("1708 ATP - Password contains illegal character");
+				break;
+			case "5":
+				alert("1711 ATP - Please retype your User ID");
+				break;
+			case "6":
+				alert("1713 ATP - Password same as one version before");
+				break;
+			case "7":
+				alert("1709 ATP - Your new password should contain both alpha and numeric characters");
+				break;
+			case "8":
+				alert(login_response.message);
+				if(checkSessionTimeOut(login_response.message)){
+					logout();
+				}
+				break;
+			default:
+				alert("Unknown exception occurred, please call CSR.");
+				logout();
+		}
+		$("#frmForceChgPwd_oldPwd").val("");
+		$("#frmForceChgPwd_newPwd").val("");
+		$("#frmForceChgPwd_confPwd").val("");
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function forgetPwdWEncryption(){
+	var av="",cs="";
+	console.log("-- Forget Password --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	forgetPwd(av,cs);
+}
+
+function forgetPwd_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		switch(response_status){
+			case "1":
+				alert("Your password has been sent to your e-mail account ["+login_response.message+"].");
+				//window.location = login_page_url;
+				chgLayout(1);
+				break;
+			case "2":
+				alert("Your email address does not exists in our database, please call CSR.");
+				break;
+			case "3":
+				alert("Password hint does not match.");
+				$("#frmForgetPwd_ansHint").val("").focus();
+				break;
+			default:
+				console.log(login_response.message);
+				alert("Unknown exception occurred, please call CSR.");
+		}
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function chgPinWEncryption(){
+	var av="",cs="";
+	console.log("-- Force Change PIN --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	chgPin(av,cs);
+}
+
+function chgPin_response(data){
+	var login_response = data;
+	console.log("Login object: "+login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Object: "+login_response);
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		switch(response_status){
+			case "0":
+				alert("1803 ATP - Your PIN have been changed successfully");
+				var new_layout = 4;//logon div
+				var temp_status = login_status;
+				
+				if(login_status!=0){ // if force change
+					if(login_status==6){
+						new_layout = 7; //change hintAns div
+					}
+					login_status = Number(login_status) ^ 2;
+					refreshFlag();
+				}
+				if(action){
+					//location.reload();
+					chgLayout(0);
+				}else{
+					if(new_layout==4){
+						if(temp_status==0){
+							chgLayout(new_layout);
+						}else{
+							alert("Please login again to continue.");
+							logout();
+						}
+					}else{
+						chgLayout(new_layout);
+					}			
+				}		
+				break;
+			default:
+				alert(login_response.message);
+				if(checkSessionTimeOut(login_response.message)){
+					logout();
+				}
+				break;
+		}
+		$("#frmForceChgPin_oldPin").val("");
+		$("#frmForceChgPin_newPin").val("");
+		$("#frmForceChgPin_confPin").val("");
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function forgetPinWEncryption(){
+	var av="",cs="";
+	console.log("-- Forget PIN --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	forgetPin(av,cs);
+}
+
+function forgetPin_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		switch(response_status){
+			case "1":
+				alert("Your PIN has been sent to your e-mail account ["+login_response.message+"].");
+				if(action){
+					//location.reload();
+					chgLayout(0);
+				}else{
+					//alert("Please login again to continue.");
+					//logout();
+					chgLayout(4);
+				}
+				break;
+			case "2":
+				alert("Your PIN does not exists in our database, please call CSR.");
+				break;
+			case "3":
+				alert("PIN hint does not match.");
+				$("#frmForgetPin_ansHint").val("").focus();
+				break;
+			default:
+				if(checkSessionTimeOut(login_response.message)){
+					alert(login_response.message);
+					logout();
+				}else{
+					console.log(login_response.message);
+					alert("Unknown exception occurred, please call CSR.");
+				}
+		}
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function getHintWEncryption(){
+	var av="",cs="";
+	console.log("-- Get Hint --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	getHint(av,cs);
+}
+
+function getHint_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		var isForgetPwd = ($("#divForgetPwd").css("display")!="none")?true:false;
+		var isForgetPin = ($("#divForgetPin").css("display")!="none")?true:false;
+		switch(response_status){
+			case "1":
+				if(isForgetPwd){
+					$("#frmForgetPwd_pwdHint").val(login_response.hint);
+					$("#frmForgetPwd_ansHint").prop("disabled",false).focus();
+					$("#frmForgetPwd_userID").prop("disabled",true);
+					$("#frmForgetPwd_btnGetHint").prop("disabled",true);
+				}else{
+					$("#frmForgetPin_pinHint").val(login_response.hint);
+					$("#frmForgetPin_ansHint").prop("disabled",false).focus();
+				}
+				break;
+			case "2":
+				alert("Your account not yet been activated, please call CSR.");
+				break;
+			case "3":
+				alert("Your login has been suspended, please call CSR.");
+				break;
+			case "4":
+				if(isForgetPwd){
+					alert("Hint is empty. Please confirm your User ID or contact CSR for assistant.");
+					$("#frmForgetPwd_userID").focus();
+				}else if(isForgetPin){
+					alert("Hint is empty. Please kindly contact CSR for assistant.");
+				}else{
+					alert("Some error occurs. Please kindly refresh the page and try again.")
+				}
+				break;
+			default:
+				if(checkSessionTimeOut(login_response.message)){
+					alert(login_response.message);
+					logout();
+				}else{
+					console.log(login_response.message);
+					alert("Please retype your User ID.");
+				}
+		}
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function chgHintWEncryption(){
+	var av="",cs="";
+	console.log("-- Force Change Hint --");			
+	av = encValWAES();
+	console.log("Value with encryption: "+av);
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	chgHint(av,cs);
+}
+
+function chgHint_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	m_nSubmitCount=0;
+	if(login_response){
+		console.log("Status: "+login_response.status);
+		console.log("Message: "+login_response.message);
+		var response_status = login_response.status;
+		switch(response_status){
+			case "1":
+				alert("Your Hint have been changed successfully");
+				if(login_status!=0){ // not force change
+					login_status = Number(login_status) ^ 4;
+					refreshFlag();
+				}
+				if(action){
+					//location.reload();
+					chgLayout(0);
+				}else{
+					//alert("Please login again to continue.");
+					//logout();
+					chgLayout(4);
+				}
+				break;
+			default:
+				if(checkSessionTimeOut(login_response.message)){
+					alert(login_response.message);
+					logout();
+				}else{
+					alert("Change Hint failed. Please try again.");
+				}
+				break;
+		}
+		$("#frmForceChgHint_hint").val("OTR");
+		$("#frmForceChgHint_hintQuestion").val("").css("display","");
+		$("#frmForceChgHint_hintAnswer").val("");
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}
+}
+
+function logout_response(data){
+	var logout_response = data;
+	console.log(logout_response);
+	$("#response").css("display","none");
+	if(logout_response){
+		window.location = login_page_url;
+	/**
+		if(logout_response.status=="0"){
+			top.location = "/";
+		}else{
+			window.location = login_page_url;
+		}
+	**/
+	}else{
+		//alert(logout_response.message);
+	}	
+}
+
+function loginWEncryption(){
+	var av="",cs="";
+	console.log("-- Login --");			
+	av = encValWAES();
+	cs = JSChecksum(av);
+	console.log("Checksum: "+cs);
+	if($("#selTradingHall").val()=="tcplus_new" || $("#selTradingHall").val()=="tcplus_new_cn"){
+		loginNew(av,cs);
+	} else {
+		login(av,cs);
+	}
+}
+
+function login_response(data){
+	var login_response = data;
+	console.log(login_response);
+	$("#response").css("display","none");
+	if(login_response){
+		login_status = login_response.status;
+		$("#frmLogin_password").val("");
+		$("#hfLoginID").val(login_response.loginID);
+		switch(login_status){
+			case "-1": //login failed
+				alert(login_response.message);
+				$("#frmLogin_password").focus();
+				break;
+			case "0": // login success
+				if(!activation&&!action){
+					var destination = $("#selTradingHall").val();
+					if(destination=="tclite"){
+						destination = trading_hall_url;
+					}else if(destination=="research"){
+						destination = research_url;
+					}else if(destination=="tcplus_basic"){
+						destination = trading_hall_plus_basic_url;
+					}else if(destination=="tcplus_new"){
+						destination = trading_hall_plus_new;
+					}else if(destination=="tcplus_new_cn"){
+						destination = trading_hall_plus_new_cn;
+					}else{
+						destination = trading_hall_plus_url;
+					}
+					
+					top.location = destination;
+					//top.location = ($("#selTradingHall").val()=="tclite")?trading_hall_url:trading_hall_plus_url;
+				}else{
+					chgLayout(4);
+				}
+				break;
+			case "1": //login success with force change pwd 
+			case "3": //login success with force change pwd + pin
+			case "5": //login success with force change pwd + hintAns
+			case "7": //login success with force change pwd + pin + hintAns
+				chgLayout(2);
+				break;
+			case "2": //login success with force change pin
+			case "6": //login success with force change pin + hintAns
+				chgLayout(5);
+				break;
+			case "4": // login success with force change hintAns
+				chgLayout(7);
+				break;
+			default:
+				console.log("Unknown status return. status="+login_status);
+		}
+	}else{
+		alert("Unknown error occured. Please contact administrator.");
+	}	
+}
+
+function checkSessionTimeOut(message){
+	return (message&&message.indexOf("1201 ATP")>-1)?true:false;
+}
+
+$(document).ready(function() {
+	$("#frmLoginEnc").jCryption(
+	{ 
+		getKeysURL:root_url+"key.jsp",
+		beforeEncryption : function() {
+			return true;
+		}
+	});
+});

@@ -1,0 +1,121 @@
+<html>
+<head>
+	<title>System Requirements</title>
+<script language="javascript" type="text/javascript" src='/gcCIMB/java/deployJava.js'></script> 
+<script type="text/javascript" language="javascript">
+<!--
+var agt=navigator.userAgent;
+
+function onLoad(){
+	if ((agt.indexOf("Win95")!=-1)||(agt.indexOf("Windows 95")!=-1) || (agt.indexOf("Win98")!=-1)||(agt.indexOf("Windows 98")!=-1))
+		document.getElementById("OS").innerHTML = "Your Operating System is not compatible with the latest JRE.Please upgrade";
+}
+
+function doAction(rd){
+	var choice;
+
+	if(!rd)
+		return false;
+
+	var radioLength = rd.length;
+	if(radioLength == 'undefined')
+		if(rd.checked)
+			choice =  rd.value;
+		else
+			return false;
+
+	for(var i = 0; i < rd.length; i++) {
+		if(rd[i].checked) {
+			choice =  rd[i].value;
+		}
+	}
+
+	if (choice == "JRE"){
+		if ((agt.indexOf("Win95")!=-1)||(agt.indexOf("Windows 95")!=-1) || (agt.indexOf("Win98")!=-1)||(agt.indexOf("Windows 98")!=-1)) {
+			document.getElementById("OS").innerHTML = "Your Operating System is not compatible with the latest JRE! Please upgrade to Windows XP or higher.";
+			return false;
+		}
+		/*
+		else if (java.lang.System.getProperty('os.version') == ''){
+			document.getElementById("OS").innerHTML = "Your Operating System is not compatible with the latest JRE! Please upgrade to Macintosh ? or higher.";
+			return false;
+		}
+		*/
+		else {
+			//deployJava.installJRE("1.6.0_06");
+			window.open('http://dl.asiaebroker.com/download/jre-6u6-windows-i586-p.exe','JRE');
+			return true;
+		}
+	}
+	else if (choice == "AWT"){
+		gotoAWT();
+		return true;
+	}
+	else if (choice == "QSEE"){
+		window.location.href = "/applet/qsee.jsp";
+		return true;
+	}
+}
+
+function gotoAWT()
+{
+	window.location.href = "/bin/stkRealTimeAWT.asp";
+/*
+	var parent_url;
+	var new_url;
+	parent_url = window.opener.location.href;
+	var s = parent_url.split('?');
+	if (s.length > 1)
+	{
+		var s2 = s[1];
+		if (s2.match('CN') || s2.match('cn'))
+			new_url = '/bin/stkRealTimeAWT.asp?lang=CN';
+		else
+			new_url = '/bin/stkRealTimeAWT.asp';
+	}
+	else
+		new_url = '/bin/stkRealTimeAWT.asp';
+
+	window.opener.location.href = new_url;
+	window.close();
+*/
+}
+-->
+</script>
+</head>
+
+<body>
+<form name="frm" action="">
+<table width="600" border="0" cellpadding="0" cellspacing="0">
+<tr><td bgcolor="#7c7c7c" style="text-align:justify;font-family:Tahoma, Arial, Helvetica, sans-serif;;font-size:11pt">
+<table width="600" border="0" cellpadding="3" cellspacing="1" style="text-align:justify;font-family:Tahoma, Arial, Helvetica, sans-serif;;font-size:11pt">
+<tr><td bgcolor="#7c7c7c">
+<b style="font-family:arial,verdana; font-weight:bold">Minimum Requirements for viewing this page (The New Trading Hall):
+</td></tr>
+<tr><td bgcolor="white">
+	<ul style="font-family:arial,verdana; font-weight:normal">
+		<li>Operating System: Windows XP or later </li>
+		<li>Application: Java Runtime Environment version 1.6 (JRE 1.6) or later</li>
+	</ul>
+</div>
+</td></tr>
+<tr><td bgcolor="#7c7c7c">
+<b style="font-family:arial,verdana; font-weight:bold">Choose one of the below options to continue:</b><br />
+</td></tr>
+<tr><td bgcolor="white" style="font-family:arial,verdana; font-weight:normal">
+<input type="radio" id="JRE" name="choice" value="JRE"/><label for="JRE"> Install the latest JRE</label><br />
+<input type="radio" id="QSEE" name="choice" value="QSEE" checked="CHECKED"/><label for="QSEE"> View the New Trading Hall (after installing the latest JRE)</label><br />
+
+</td></tr>
+<tr><td align="right" bgcolor="white" style="font-family:arial,verdana; font-weight:normal">
+<br>
+<input type="button" value="Continue" onclick="javascript:return doAction(document.forms['frm'].elements['choice']);" />
+<input type="button" value=" Cancel " onclick="javascript:window.location.href='/bin/home.asp';" /></p>
+<div id="OS" style="color:red">
+</div>
+</td></tr>
+</table>
+</td></tr></table>
+</form>
+</body>
+</html>

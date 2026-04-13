@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+<entry key="MENU_ABOUT_US">ABOUT US</entry>
+<entry key="MENU_PRO_SERV">PRODUCTS SERVICES</entry>
+<entry key="MENU_TRADING_HALL">TRADING HALL</entry>
+<entry key="MENU_RESEARCH">RESEARCH</entry>
+<entry key="MENU_FAQS">FAQs</entry>
+<entry key="LOG_ON_PAGE">LOG ON PAGE</entry>
+</properties>

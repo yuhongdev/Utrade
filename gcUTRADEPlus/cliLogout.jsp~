@@ -1,0 +1,24 @@
+<html>
+<head>
+<title></title>
+<style type=text/css>
+</style>
+</head>
+<body>
+<table cellpadding=0 cellspacing=0 border=0 width=100%>
+<tr>
+	<td>
+		&nbsp;
+	</td>
+</tr>
+<!--Content-->
+<tr>
+	<td style='font-size:12px;font-family:Arial;' align='center'>
+		You have been <b>logged out</b> successfully.<br/>
+		Please click <a href="/">here</a> if you are not redirected automatically.<br/>
+	</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

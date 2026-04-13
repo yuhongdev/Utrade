@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset='UTF-8'>
+<title>Unicapital - Mutual Fund</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="./js/jquery-3.6.0.js"></script>
+<script src="./js/jquery.jcryption.min.js"></script>
+<script src="./js/AesUtil.js"></script>
+<script src="./js/aes.js"></script>
+<script src="./js/pbkdf2.js"></script>
+<script src="./js/common_util.js"></script>
+<script src="./js/login_conf.js"></script>
+<script src="./js/login_main.js"></script>
+<script src="./js/bms_setting.js"></script>
+<script src="./js/validate/jquery.validate.js"></script>
+<script>
+<!--Check login status-->
+	$(document).ready(function() {
+		//chkSess();
+// 		console.log("Login Agent Value :" + login_agent);
+// 		if (login_agent != null) {
+// 			if (login_agent) {
+				var url = new URL(window.location.href);
+				var jsonObject = {};
+				jsonObject['fundCode'] = url.searchParams.get("code");
+				jsonObject['type'] = url.searchParams.get("type");
+				encDisplayPDF(jsonObject);
+// 			} else {
+// 				$('#summaryTbl').hide();
+// 				location.href = '../../web/html/noSession.html';
+// 			}
+//		}
+	});
+
+	function encDisplayPDF(jsonObject) {
+		var encryptedJSONStr;
+		var csReqParam;
+		var jsonData = JSON.stringify(jsonObject);
+		inputValue = jsonData;
+		if (ct != 0) {
+			encryptValue(function(output) {
+				outputValue = output
+			});
+		}
+		csReqParam = MD5CheckSum(outputValue);
+		displayPDFMutualFundInNewTab(outputValue, csReqParam);
+	}
+
+	function displayPDFMutualFundInNewTab(encryptedJSONStr, csParam) {
+		var ctReqParam = ct + "," + public_id;
+		$("#ae").val(ae);
+		$("#ct").val(ctReqParam);
+		$("#ev").val(encryptedJSONStr);
+		$("#cs").val(csParam.toString());
+		$("#frmViewPdf").attr("action", api_path + "viewMutualFund?");
+		$("#frmViewPdf").attr("method", "get");
+
+		$("#frmViewPdf_submit").click();
+	}
+</script>
+<body>
+	<form name="frmViewPdf" id="frmViewPdf" method="post">
+		<input id="ae" name="ae" type="hidden" value="0" />
+		<input id="ct" name="ct" type="hidden" value="0" />
+		<input id="s" name="s" type="hidden" value="" />
+		<input id="msg" name="msg" type="hidden" value="" />
+		<input id="ev" name="ev" type="hidden" value="" />
+		<input id="cs" name="cs" type="hidden" value="" />
+		<input id="frmViewPdf_submit" type="submit" style="display:none;" />
+	</form>
+</body>
+</head>
+</html>

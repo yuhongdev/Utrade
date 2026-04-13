@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8'>
+	<title>Unicapital - Statement of Account</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../js/jquery-3.6.0.js"></script>
+	
+	<script src="../js/pace.min.js"></script>
+	<link rel="stylesheet" href="../../style/pace.css">
+	
+	<script type="text/javascript" charset="utf-8" src="../js/bootstrap3.3.5.min.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script src="../js/jquery.jcryption.min.js"></script>
+	<script src="../js/AesUtil.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/pbkdf2.js"></script>
+	<script src="../js/organictabs.jquery.js"></script>
+	<script src="../js/jquery.tablify.min.js"></script>
+	
+	<link rel="stylesheet" href="../../style/normalize.css">
+	<link rel="stylesheet" href="../../style/bootstrap3.3.5.css">
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	
+	<script src="../js/common_util.js"></script>
+	<script src="../js/login_conf.js"></script>
+	<script src="../js/report_main.js"></script>
+	<script src="../js/report_conf.js"></script>
+	<script>
+		<!--Check login status-->
+		$(document).ready(function(){
+            chkSess();
+			console.log("Login Agent Value :" + login_agent);
+			if(login_agent!=null){
+				if(login_agent){
+					trdAccATP();
+				}else{
+					$('#summaryTbl').hide();
+					location.href='../../web/html/noSession.html';
+				}
+			}			
+		});
+	</script>
+	<!--[if !IE]><!-->
+	<style>
+
+		tr:nth-of-type(even) {
+		    background: #fff;
+		}
+		#page-wrap {
+			padding-top: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		/* Table Filtering */
+		table.clsSection thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		table.clsSection tr:nth-of-type(odd) { 	background: #fff;	}
+		table.clsSection tr { border: none;}		
+		table.clsSection td { 
+			/* Behave  like a "row" */
+			border: none;		 
+		}
+		/* 
+		Max width before this PARTICULAR table gets nasty
+		This query will take effect for any screen smaller than 700px
+		*/
+		@media only screen and (max-width: 760px), (min-device-width: 320px) and (max-device-width: 760px)  {
+			/* Force table to not be like tables anymore for responsive 1*/
+			table.responsive, table.responsive thead, table.responsive tbody, table.responsive th, table.responsive td, table.responsive tr { 
+				display: block; 
+			}
+			/* Hide table headers (but not display: none;, for responsive 1) */
+			table.responsive thead tr { 
+				position: absolute;
+				top: -9999px;
+				left: -9999px;
+			}
+			table.responsive tr { 
+				border: none;
+			}
+			table.responsive td { 
+				/* Behave  like a "row" */
+				border: none;
+				border-bottom: 1px solid #eee; 
+				position: relative;
+				padding-left: 50%; 
+				text-align:left !important;
+			}
+			table.responsive td:before { 
+				/* Now like a table header */
+				position: absolute;
+				/* Top/left values mimic padding */
+				top: 1px;
+				left: 4px;
+				width: 45%; 
+				padding-right: 10px; 
+				white-space: nowrap;
+			}
+		}
+		/* Smartphones (portrait and landscape) ----------- */
+		@media only screen and (min-device-width : 320px) and (max-device-width : 375px) {
+			body { 
+				padding: 0; 
+				margin: 0; 
+				width: 100%; 
+			}
+			select { 
+				max-width:80%;
+				min-width:140px;
+			}
+			#txtTrdAccSrch{max-width:55%;min-width:140px;}			
+		}
+		@media only screen and (min-device-width : 375px) and (max-device-width : 627px) {
+			body { 
+				padding: 0; 
+				margin: 0; 
+				width: 100%; 
+			}
+			select { 
+				max-width:86%;
+				min-width:140px;
+			}
+			#txtTrdAccSrch{max-width:55%;min-width:140px;}
+		}
+		/* iPads (portrait and landscape) ----------- */
+		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+			body { 
+				width: 100%; 
+			}
+		}
+	
+		/* PC ----------- */
+		@media only screen and (min-device-width: 769px) {
+			body { 
+				width: 100%; 
+			}
+			
+		}
+		
+	 	@media print {
+			@page {size: landscape; margin: 0.5cm}
+		}
+	</style>
+</head>
+<body bgcolor="#FFFFFF">
+	<div id="page-wrap">
+		<div class=" container">
+			<div class="row ">
+				<div class="col-xs-12 clsSectionHeader">
+					<div class="col-xs-12">&nbsp;Statement of Account</div>
+				</div>
+				<div class=" col-xs-offset-12 hidden-print"><img class=" visible-lg-inline visible-md-inline" onClick="Print_OnClick();" style="cursor:pointer" title="Print" src="../css/images/butPrint.gif" border="0" height="18" width="18"></div>
+			</div>
+			<div class="col-xs-12 container-fluid">
+				<div class="row">
+					<div class="col-xs-2" style="min-width:85px">Client's Name</div>
+					<div class="col">:</div>
+					<div>
+						<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-2 " style="min-width:85px">Account Number</div>
+					<div class="col">:</div>
+					<div class="col-xs-8"id="searchTxt">
+						<select style="" onChange="getPDFRpt('SOA')"  name="selTrdAcc" id="TrdAccSel"></select><!--<input onclick="getPDFRpt('SOA')" value="Show Report" name="btnGetRpt" id="btnGetRpt" type="button" />-->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p class="clear dotline"></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Annual Statement of Account</p>
+					<table id="tblPdfAnnualSOA">
+						<thead>
+							<tr>
+								<th width="50%">Report Date</th>
+								<th width="50%">Option</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!--<tr>
+								<td class="noDataMsg text-center" colspan="2"></td>
+							</tr>-->
+						</tbody>
+
+					</table>
+					<!--p class"noDataMsg" class="nofound"></p-->
+				</div>
+				<div class="col-xs-12">
+					<p class="clear dotline"></p>
+					<p>Monthly Statement of Account</p>
+					<table id="tblPdfRpt">
+					<!--table id="tblPdfRpt" style="max-width:600px"-->
+						<thead>
+							<tr>
+								<th width="50%">Report Date</th>
+								<th width="50%">Option</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!--<tr>
+								<td class="noDataMsg text-center"colspan="2"></td>
+							</tr>-->
+						</tbody>
+					</table>
+					<!--p class"noDataMsg" class="nofound"></p-->
+				</div>
+			</div>
+			<p class="clear"> </p>
+			<form id="frmSelEnc" name="frmSelEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="selSubmit" name="selSubmit" style="display:none;" />
+			</form>
+		</div>
+	</div>
+	<form name="frmDownloadPdf" id="frmDownloadPdf" method="post">
+		<input id="ae" name="ae" type="hidden" value="0" />
+		<input id="ct" name="ct" type="hidden" value="0" />
+		<input id="s" name="s" type="hidden" value="" />
+		<input id="msg" name="msg" type="hidden" value="" />
+		<input id="ev" name="ev" type="hidden" value="" />
+		<input id="cs" name="cs" type="hidden" value="" />
+		<input id="frmDownloadPdf_submit" type="submit" style="display:none;" />
+	</form>
+	<iframe id="iframePdf" name="iframePdf" src="" frameborder="0" style="height:0px"></iframe>
+
+	<script language="JavaScript">
+		function Print_OnClick(){
+			window.print();
+		}
+		
+		function openReport(){
+			getPDFRpt('SOA');
+		}
+		/**
+		function div_OnClick(value){
+			var sDiv, sTblNm, divVis;
+			var newVal = "show"
+			sDiv = value+"Exchg";
+			sTblNm = value+"summaryTbl";
+			divVis = $('#'+sDiv).css("display", "");
+			
+			if(divVis){
+				newVal="hide";
+			}
+			
+			if(newVal=="show"){
+				$('#'+sTblNm).css("display","");
+				$('#upDwnImg').attr("src", "../css/images/Icon_DropUp.gif");
+			}else{
+				$('#'+sTblNm).css("display","none");
+				$('#upDwnImg').attr("src", "../css/images/Icon_DropDown.gif");
+				newVal="show";
+			}
+			
+			console.log(newVal);
+			console.log(sTblNm);
+		}
+		**/
+		function downloadPDF(rptId, rptName){
+			var action;
+			if(checkIOS()){
+				action = "displayNewTab";
+			}else{
+				action = "download";
+			}
+			getPDFRptById(rptId, rptName, action);
+		}
+		function hideDiv(value){
+			$('#'+value+'summaryTbl').css("display", "none");
+			$('#'+value+'upDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+			$('#'+value+'aTag').attr("onclick", "showDiv('"+value+"')");
+		}
+		
+		function showDiv(value){
+			$('#'+value+'summaryTbl').css("display", "");
+			$('#'+value+'upDwnImg').attr("src", "../css/images/Icon_DropUp.gif");
+			$('#'+value+'aTag').attr("onclick", "hideDiv('"+value+"')");
+		}
+	</script>
+</body>
+</html>

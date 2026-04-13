@@ -1,0 +1,742 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Withdrawal Status</title>
+    <link href="../fonts/icomoon/styles.css" rel="stylesheet" type="text/css">
+    <link href="../css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap-5.3.6.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/elements.css" rel="stylesheet" type="text/css" />
+    <link href="../css/WD.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap-switch.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery-ui_v1.12.0.css" rel="stylesheet" type="text/css" />
+    <link href="../css/loading.css" rel="stylesheet" type="text/css" />
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../../js/jquery-3.6.0.js?v1"></script>
+    <script src="../js/jquery-ui.js?v1"></script>
+    <script src="../js/moment.js"></script>
+    <script src="../js/theme.js?v1"></script>
+    <!-- REST API -->
+    <script src="../js/AesUtil.js"></script>
+    <script src="../js/aes.js"></script>
+    <script src="../js/pbkdf2.js"></script>
+    <script type="text/javascript" src="../js/jquery.jcryption.min.js?v1"></script>
+    <script type="text/javascript" src="../js/common_util.js?v1"></script>
+    <script src="../js/wd_main.js"></script>
+    <script src="../js/wd_conf.js?v1"></script>
+    <script src="../js/login_conf.js"></script>
+    <!--import datepicker-->
+
+</head>
+
+<body oncontextmenu="return false">
+    <div class="container">
+        <!---tab-content - main-->
+        <div class="tab-content">
+            <div id="accOverview" class="tab-pane fade in active">
+                <div class="jumbotron center">
+                    <h3>Fund Overview</h3>
+                    <!--	<p class="lead">Please select an account for withdraw<br />-->
+                    <br />
+                    <p></p>
+                    <div class=" tbl_row_in3 amtFund2">
+                        <ul id="TrdAccSel">
+
+                        </ul>
+
+                        <p>&nbsp;</p>
+                        <div class="tbl_row_in3">
+                            <span><a class="btn btn-lg btn-success" data-toggle="tab" href="#WDrequest" onclick="getAcc();" role="button">Withdrawal Request </a></span>
+                            <span><a class="btn btn-lg btn-success" data-toggle="tab" href="#WDhistory" onclick="withdrawalHistoryReq();" role="button">Withdrawal History</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="WDrequest" class="tab-pane fade">
+                <div class="topbar">
+                    <div class="clsSectionHeader col-xs-12">&nbsp;Withdrawal Request &nbsp; </div>
+                </div>
+                <!---tab-content - child-->
+                <div class="tab-content">
+                    <!---Step1-->
+                    <div id="withdrawRequest-step1" class="well well-sm bgwhite tab-pane fade in active">
+                        <form id="withdrawRequest" class="form-inline">
+                            <h3 class="tit_h3">Select Account</h3>
+                            <div class="tbl_row_in big">
+                                <table id="tbl_wdRequest">
+                                    <colgroup>
+                                        <col style="width:30%" />
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+
+                                        <tr>
+                                            <th scope="row">Request Date</th>
+                                            <td id="requestDate"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Trading Account</th>
+                                            <td>
+                                                <div class="form-group-sm ">
+                                                    <div id="" class="input-group col-xs-12">
+                                                        <select class="form-control" id="selectAcc" name="selectAcc" onchange="getFund()">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Available Fund (PHP)</th>
+                                            <td>
+                                                <label><big id='fundAmount'></big></label>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h3 class="tit_h3">Withdrawal Amount</h3>
+                            <div class="tbl_row_in big">
+                                <table>
+                                    <colgroup>
+                                        <col style="width:30%" />
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+
+                                        <tr>
+                                            <th scope="row">Amount to withdraw (PHP)
+                                                <br/> <small>*min. PHP 500</small></th>
+                                            <td>
+                                                <div id="" class="input-group col-xs-12">
+
+                                                    <input type="text" min="0" step=".01" id="withdrawAmount" class="form-control" aria-label="Amount (to the nearest dollar) " autocomplete="off" />
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <!-- Button Area -->
+                            <div class="btnRArea">
+                                <div class="btn_r"><a class="btn btn-sm btn_gb3 btn_s1" id="submit1" onClick="return chkFund()" ;>Submit</a></div>
+                                <a data-toggle="tab" href="#withdrawRequest-step2" id='goNext' style="display:none"> Go </a>
+                                <div class="btn_r"> <a onClick="clear1();" class="btn btn-sm btn_gb3 btn_s1" name="">Clear</a></div>
+                                <div class="btn_l"> <a data-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </form>
+
+                    </div>
+                    <!--/Step1 ========-->
+
+                    <!---Step2: Review-->
+                    <div id="withdrawRequest-step2" class="well well-sm bgwhite tab-pane fade">
+                        <form id="withdrawalReq2" name="" action="" method="POST">
+
+                            <h3 class="tit_h3">Withdrawal Request</h3>
+                            <div class="tbl_row_in big">
+                                <table>
+                                    <colgroup>
+                                        <col style="width:30%" />
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                        <!--<tr>
+				  <th scope="row">Request number</th>
+				  <td><label id="requestNum2">WDAA8882</label></td>
+				</tr>-->
+                                        <tr>
+                                            <th scope="row">Request Date</th>
+                                            <td>
+                                                <label id="requestDate2">2018-01-23</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Trading Account</th>
+                                            <td>
+                                                <label id="selectAcc2">T000029619-001</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Withdraw Amount (PHP)</th>
+                                            <td>
+                                                <label id="withdrawAmount2">10,000.00</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p>&nbsp;</p>
+                                <div class="tbl_row_in pin gray">
+                                    <div class="form-inline form-group-sm center ">
+                                        <label for="PIN">Trading PIN:</label>
+                                        <input id="txtPIN" type="password" class=" form-control " onkeypress='return validateQty(event);' maxlength="6">
+                                        <input id="butSubmit" name="butSubmit" type="button" value="Submit" onClick="sendwithdrawalReq()" class="btn_gb3 btn_s1" data-toggle="tab">
+                                        <a data-toggle="tab" id="goStep3" href="#withdrawRequest-step3" style="display:none">go</a>
+                                    </div>
+                                </div>
+                                <!-- Button Area -->
+                                <div class="btnRArea">
+                                    <div class="btn_l"><a data-toggle="tab" href="#withdrawRequest-step1" id='goStep1' onclick="getAcc()" class="btn_gb3 btn_s1">Back</a></div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--/Step2 ========-->
+
+                    <!---Step:  Condirmatiom-->
+                    <div id="withdrawRequest-step3" class="well well-sm bgwhite tab-pane fade">
+                        <form name="" action="" method="POST">
+                            <h2 class="center red">Your withdrawal request has been submitted successfully</h2>
+                            <p></p>
+                            <div class=" table tbl_row_in big">
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12">
+                                        <table id="tbl_wdSuccess">
+                                            <colgroup>
+                                                <col style="width:30%">
+                                                    <col>
+                                            </colgroup>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Request number</th>
+                                                    <td>
+                                                        <label>WDAA8882</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Request Date</th>
+                                                    <td>
+                                                        <label>2018-01-23</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Trading Account</th>
+                                                    <td>
+                                                        <label>T000029619-001</label>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th scope="row">Withdraw Amount (PHP)</th>
+                                                    <td>
+                                                        <label>10,000.00</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Status </th>
+                                                    <td>
+                                                        <label>Pending for approval</label>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12"></div>
+                                    <p></p>
+                                </div>
+                            </div>
+                            <!-- Button Area -->
+                            <div class="btnRArea center">
+                                <input id="butSubmit" name="butSubmit" onclick="$('#goStep1').trigger('click');withdrawalHistoryReq();" type="button" value="Check Withdrawal Status" class="btn_ btn_gb3 btn_m2" data-toggle="tab" href="#WDhistory">
+                            </div>
+
+                            <p></p>
+
+                        </form>
+                    </div>
+                    <!--/Step3 ========-->
+
+                    <!---END tab-content - child-->
+                    <!--Note-->
+                    <div class="ls_note well-sm">
+                        <p class=" red"> Important Note:</p>
+                        <p>Requested withdrawals of your selling proceeds are subject to approval. Upon approval, withdrawal requests will be subjected to 3 business days processing. Checks from approved withdrawals (without Special Instructions) will be deposited directly to the Bank Settlement Account as indicated in the Online Trading Account Application Form, upon submission.
+                            <br />
+                            <br />
+                        </p>
+                        <p>If you have not been able to indicate a Bank Settlement Account in your forms and wish to do so, please email us at <a href="mailto:deposits@unicapital-inc.com">deposits@unicapital-inc.com</a>. Please note that we will be using checks from BDO or BPI. As such, checks of clients with accounts from different banks may be subjected to clearing.
+                            <br />
+                            <br />
+                        </p>
+                        <p>For Special Instructions (SI), kindly email us at <a href="mailto:deposits@unicapital-inc.com">deposits@unicapital-inc.com</a> with the subject: &quot;SI - Withdrawal Request for (your account code)&quot;. Your account code can be located at the top right corner of the page beside your name.
+                            <br />
+                            <br />
+                        </p>
+                        <p>Please take note that we will only be processing withdrawal requests above P500.00.</p>
+                    </div>
+                    <!--/Note-->
+                </div>
+            </div>
+            <div id="WDhistory" class="tab-pane fade">
+                <!-- Menu Button Start -->
+                <div class="topbar">
+                    <div class="clsSectionHeader col-xs-12">&nbsp;Withdrawal History &nbsp; </div>
+
+                    <!--<h3 class="tit_h3">Withdrawal Statuse</h3>-->
+                    <div class="tit f_left">
+                        You currently have total: <b class="em">
+			<label id="ttlAlrt"></label>
+			</b> Withdrawal.
+                        <a href="javascript:refresh();" class=" btn-flat white big" id="refresh">
+                            <div class="glyphicon glyphicon-refresh " aria-hidden="true"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="clear">
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>
+
+                <div class="tblact_top row" id="tblact">
+
+                    <div class="f_right">
+
+                        <a data-toggle="tab" href="#WDrequest" class=" btn-flat general btnBig" onclick="getAcc();" id="menu2">
+                            <div class="glyphicon glyphicon-plus " aria-hidden="true"></div>
+                            <span>  Withdrawal Request</span> </a>
+                    </div>
+                    <div class="opt_filter f_left">
+                        <div class="dropdown f_right">
+                            <button href="#modal-optFilter" role="button" class="btn" data-toggle="modal">
+                                <span class="icon-1x icon-filter4 white"></span>
+                                <span class="caret white"></span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WD Table Start -->
+                <div class="tbl_col" id="tbl_col_WD">
+                    <table id="tbl_WD" class="responsive">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1 col-sm-1 col-xs-1 center" scope="col">Request No</th>
+                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col"> Request Date</th>
+                                <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Account</th>
+                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Withdraw Date</th>
+                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Amount</th>
+                                <!-- <th class="col-md-3 col-sm-2 col-xs-2 center" scope="col">Receipt No</th>-->
+                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Status</th>
+                                <!--<th  class="col-md-3 col-sm-3 col-xs-3 no-sort" scope="col"></th>-->
+                            </tr>
+                        </thead>
+                        <tbody class="WDbody">
+
+                            <!--<tr id="alertRecord_36">
+			  <td>WDAA1113</td>
+			  <td>2016-09-09</td>
+			  <td>KN2N005-001</td>
+			  <td>2016-09-12</td>
+			  <td>7,000.00</td>
+			  <td>0000000585</td>
+			  <td><b>APPROVED</b></td>
+			  <td class="td-actbtn"><div class="printWD"><a href="#" class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-printWD" ><span class="glyphicon glyphicon-zoom-in " aria-hidden="true"></span></a></div></td>
+			</tr>-->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- WD Table End -->
+                <!-- Button Area -->
+                <div class="btnRArea">
+                    <div class="btn_l"> <a data-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
+                </div>
+                <p>&nbsp;</p>
+
+            </div>
+
+        </div>
+        <!---END tab-content - main-->
+
+        <!-- Modal printWD -->
+        <div class="modal modal-transparent fade" id="modal-printWD" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="" action="" method="POST">
+                            <h4 class="modal-title">Withdrawal Detais: </h4>
+                            <div class="tbl_row_in big">
+                                <table>
+                                    <colgroup>
+                                        <col style="width:30%">
+                                            <col>
+                                    </colgroup>
+                                    <tbody>
+
+                                        <tr>
+                                            <th scope="row">Receipt number</th>
+                                            <td>
+                                                <label id="receiptNo">5394634314</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Transaction Date</th>
+                                            <td>
+                                                <label="tranDate">2018-01-23 18:13:56</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Amount (PHP)</th>
+                                            <td>
+                                                <label id="amountPrint">10,000.00</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Trading Account</th>
+                                            <td>
+                                                <label id="accountPrint">001820479151 (BDO) (</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Status </th>
+                                            <td>
+                                                <label id="statusPrint">APPROVED</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                        <!--========-->
+
+                    </div>
+                    <!--modal-body END-->
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal deleteWD End -->
+        <!-- Modal optFilter -->
+        <div class="modal modal-transparent fade" id="modal-optFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <!--========-->
+
+                        <div class="well-sm">
+                            <form class="form-inline">
+                                <h3 class="tit_h3">Filter by</h3>
+                                <div class="tbl_row_in big">
+                                    <table>
+                                        <colgroup>
+                                            <col style="width:30%" />
+                                            <col />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Account</th>
+                                                <td>
+                                                    <div class="form-group-sm">
+                                                        <div id="" class="input-group col-xs-12">
+                                                            <select class="form-control" name="TrdAccSel1" id="TrdAccSel1">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Status</th>
+                                                <td>
+                                                    <div class="form-group-sm ">
+                                                        <div id="" class="input-group col-xs-12">
+                                                            <select class="form-control" name="" id="statusFilter">
+                                                                <option selected="selected" value="" class="">ALL</option>
+                                                                <option value="Approved">APPROVED</option>
+                                                                <option value="Pending">PENDING</option>
+                                                                <option value="Rejected">REJECTED</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Date
+                                                    <br/> <small>(*max last 90days)</small> </th>
+                                                <td>
+                                                    <div class="form-group-sm dropdown-submenu ">
+                                                        <div id="" class="input-group col-xs-12 ">
+                                                            <input id="optDate" type="text" class="form-control" name="daterange" value="04/01/2018 - 04/30/2018" />
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                                <!-- Button Area -->
+                                <div class="btnRArea">
+                                    <div class="btn_r"> <a href="javascript:void(0)" data-dismiss="modal" onClick="changeFilter();" class="btn_gb3 btn_s1" name="">Filter</a></div>
+                                </div>
+                                <div><span id="filterStatus" style='display:none'>ALL</span> <span id="filterAcc" style='display:none'>ALL</span><span id="startDate" style='display:none'></span><span id="lastDate" style='display:none'></span></div>
+                                <div class="clearfix"></div>
+                                <!-- Button Area -->
+                            </form>
+                        </div>
+
+                    </div>
+                    <!--modal-body END-->
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="../js/jquery-3.6.0.js?v1"></script>
+        <script src="../js/jquery-ui.js?v1"></script>
+        <script src="../js/moment.js"></script>
+        <script src="../js/theme.js?v1"></script>
+
+        <!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+        <!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="../js/bootstrap.min.js?v1"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+
+        <!-- REST API -->
+        <script type="text/javascript" src="../../js/jquery.jcryption.min.js?v1"></script>
+        <script type="text/javascript" src="../js/common_util.js?v1"></script>
+
+        <script type="text/javascript">
+            $(function() {
+                $("#datepicker").datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                }).datepicker('update', new Date());
+            });
+
+            $(function() {
+                $("#datepicker-edit").datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                }).datepicker('update', new Date());
+            });
+
+            function changeFilter() {
+                var $statusFilter = document.getElementById("statusFilter").value;
+                var a = $('#TrdAccSel1').val();
+                console.log(a + "+" + $statusFilter);
+                $("#filterAcc").html(a);
+                $("#filterStatus").html($statusFilter);
+                getwdHistory();
+            }
+
+            function convertDate() {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                    dd = '0' + dd
+                }
+                if (mm < 10) {
+                    mm = '0' + mm
+                }
+                last_date = dd + '-' + mm + '-' + yyyy;
+
+                $('#lastDate').html(last_date);
+
+            }
+        </script>
+
+        <script>
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        </script>
+
+        <script>
+            $("[data-toggle=popover]").each(function(i, obj) {
+                $(this).popover({
+                    html: true,
+                    content: function() {
+                        var id = $(this).attr('id')
+                        return $('#popover-content-' + id).html();
+                    }
+                });
+            });
+        </script>
+
+        <script language="JavaScript">
+            function toggle(source) {
+                checkboxes = document.getElementsByName('foo');
+                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                    checkboxes[i].checked = source.checked;
+                }
+            }
+
+            function clear1() {
+                document.getElementById("withdrawRequest").reset();
+            }
+
+            function validateQty(event) {
+                var key = window.event ? event.keyCode : event.which;
+
+                if (key == 8 || key == 46 || key == 37 || key == 39 || (key < 96 && key > 105)) {
+                    return true;
+                } else if (key < 48 || key > 57) {
+                    return false;
+                } else return true;
+            };
+
+            /*function validateQty(event) {
+    var key = window.event ? event.keyCode : event.which;
+
+	if (event.keyCode == 8 || event.keyCode == 46
+		|| event.keyCode == 37 || event.keyCode == 39 || (event.keyCode < 96 && event.keyCode > 105)) {
+		return true;
+	}
+	else if ( key < 48 || key > 57) {
+		return false;
+	}
+	else return true;
+	};*/
+
+            /*setTimeout(function(){
+    location = ''
+  	},300000)*/
+        </script>
+
+        <script language="JavaScript">
+            (function activateTabFromHash() {
+                if (location.hash) {
+                    var tabLink = document.querySelector('a[href="' + location.hash + '"]');
+                    if (!tabLink) {
+                        return false;
+                    }
+                    tabLink.click();
+                    if (location.hash) {
+                        setTimeout(function() {
+                            window.scrollTo(0, 0);
+                        }, 1);
+                    }
+                }
+            })();
+
+            $(function() {
+                $("#withdrawRequest").keypress(function(e) {
+                    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                        $('#submit1').click();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                $("#withdrawalReq2").keypress(function(e) {
+                    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                        $('#butSubmit').click();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+
+            });
+        </script>
+        <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function() {
+
+                $("#tbl_WD thead tr").removeAttr("style");
+
+                $('#withdrawAmount').keypress(function(e) {
+                    var character = String.fromCharCode(e.keyCode || e.which);
+                    var newValue = this.value + character;
+                    if (e.which === 32 || (isNaN(newValue) && e.which !== 8) || (hasDecimalPlace(newValue, 3) && e.which !== 8)) {
+                    //if (e.which === 8 || e.which === 32 || isNaN(newValue) || hasDecimalPlace(newValue, 3)) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                function hasDecimalPlace(value, x) {
+                    var pointIndex = value.indexOf('.');
+                    console.log(pointIndex);
+                    return pointIndex >= 0 && pointIndex < value.length - x;
+
+                }
+
+                chkSess();
+                console.log("Login Agent Value :" + login_agent);
+                if (login_agent != null) {
+                    if (login_agent) {
+                        getCashBalance();
+
+                    } else {
+                        $('.container').hide();
+                        alert("Please Login");
+
+                    }
+                }
+
+            });
+        </script>
+        <!-- Include Date Range Picker -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <script type="text/javascript">
+            function refresh1() {
+                window.location.reload();
+            }
+            $(function() {
+                $('input[name="daterange"]').daterangepicker({
+                    opens: 'left',
+
+                    showDropdowns: true,
+                    startDate: moment().add('day', -30),
+                    minDate: moment().add('day', -90),
+                    maxDate: moment(),
+
+                    locale: {
+                        format: 'DD/MMM/YYYY'
+                    },
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'Last 90 Days': [moment().subtract(90, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                }, function(start, end, label) {
+                    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                    $('#startDate').html(start.format('DD-MM-YYYY'));
+                    $('#lastDate').html(end.format('DD-MM-YYYY'));
+                });
+
+            });
+        </script>
+        <script>
+            $('#selectFund li').click(function() {
+                $('#selectFund li').removeClass('selected');
+                $(this).addClass('selected');
+            });
+        </script>
+</body>
+
+</html>

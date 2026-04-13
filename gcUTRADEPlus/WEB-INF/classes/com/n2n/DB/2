@@ -1,0 +1,50 @@
+<%@ include file='common.jsp'%>
+<html>
+<head>
+	<META content="-1" http-equiv="Expires">
+	<META content="no-cache" http-equiv="Pragma">
+	<META content="no-cache" http-equiv="Cache-Control">	
+	<link rel=stylesheet type=text/css href=<%=g_sStylePath%>/default.css>
+	<link rel=stylesheet type=text/css href="style/master.css">
+	<link rel=stylesheet type=text/css href="style/style-c.css">
+	<title>Registration Successful</title>	
+</head>
+<%	String sName = request.getParameter("name");
+	sName = sName != null ? sName : "";
+	String sEmail = request.getParameter("email");
+	sEmail = sEmail != null ? sEmail : "";
+	String sCategory = request.getParameter("category");
+	sCategory = sCategory != null ? sCategory : "";
+	String sClientType = request.getParameter("clientType");
+	sClientType = sClientType != null ? sClientType : "";
+%>
+
+<body>
+	<table border=0 bordercolor=red width=660 cellpadding=0 cellspacing=0>
+		<tr><td colspan=3 align=right><img src=<%=g_sImgPath%>/LineBlue.gif width='100%'></td></tr>
+		<tr><td colspan=3>&nbsp;</td></tr>
+		<tr>
+			<td colspan=3 class=clsAccOpenHeaderFont>	
+				Thank you for registering as a Guest of PSEOnline. <br>
+				Your registered User ID will allow you to access <a href = "http://www.pseonline.ph">www.pseonline.ph</a> for the next 14 days. <br><br>
+			</td>
+		</tr>
+		
+		<tr><td colspan=3 style='font-size:1mm'>&nbsp;</td></tr>
+		<tr><td colspan=3 style='font-size:1mm'><hr></td></tr>
+
+		<tr style='font-size:3mm'><td colspan=4>&nbsp;</td></tr>
+		<tr><td colspan=3 align=right><center><input type=button name=btnClose  onclick=Close_OnClick() language=javascript style="width:120px; CURSOR: hand" title="Close"  value=Close></center></td></tr>
+	</table>
+</body>
+</html>
+<script>
+function Close_OnClick()
+{
+	var parentWin = window.opener
+	if (parentWin != null)
+		parentWin.close();
+
+	window.close();
+}
+</script>

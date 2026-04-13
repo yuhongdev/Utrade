@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Equities Stock Portfolio Disclaimer</title>
+        <style type="text/css">
+            body {
+                font-family: arial,Helvetica,tahoma,verdana;
+                font-size: 9pt;
+                padding: 0px;
+                margin: 3px;
+            }
+
+            .header {
+                font-family: arial,Helvetica,tahoma,verdana;
+                font-size: 9pt;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+
+            .content {
+                font-family: arial,Helvetica,tahoma,verdana;
+                font-size: 9pt;
+                font-weight: lighter;
+            }
+
+            .important {
+                font-family: arial,Helvetica,tahoma,verdana;
+                font-size: 9pt;
+                font-weight: bold;
+                color: red;
+            }
+        </style>
+    </head>
+    <body style="background-color:#FFFFFF;">
+	<table align='center' border='0' width='600'>
+	<tr><td>
+	In order to gain access to your stock portfolio, you are required to read and understand the authorization statement below. <br><br><b><u>SALIENT TERMS AND CONDITIONS FOR HWANGDBS-E'INVEST ('THE SERVICE')</u></b><br><br>
+	</td></tr>
+	<tr><td style="text-align:justify;">The Client (whether application is made for Basic or Full version of HwangBS-E'Invest) hereby authorises the Company to disclose the stock balances to the Client for the purpose of viewing and facilitating the sale or purchase of securities transactions through HwangDBS-E'Invest by the Client. However, the stock balances shown may not reflect the current status, hence, it must not be regarded as a conclusive representative of the actual stock balances in the Client's CDS Account. The Client is <b><u>strongly advised to verify</u></b> the stock balances status with the Client's own records or the Dealer's Representative(s) or the Company to obtain confirmation on the accuracy on the stock balances in the Client's CDS account before placing any orders to sell. The Client agrees and further authorises the Company to disclose the stock balances to the Client's Dealer's Representative(s) for the purpose of facilitating the Client's sale or purchase of securities. The Client shall not hold the Company liable for any losses whatsoever in respect of such disclosure of the stock balances to the Client through HwangDBS-E'Invest, including but not limited to the use of or reliance on the stock balances information and execution of sale orders by the Client due to the inaccuracy of the stock balances provided via HwangDBS-E'Invest.</td></tr></table>
+    </body>
+</html>

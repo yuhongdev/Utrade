@@ -1,0 +1,91 @@
+.bluetabs{
+	font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #FFFFFF; text-decoration: none;
+}
+
+.bluetabs a{
+	font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #FFFFFF; text-decoration: none;
+}
+
+.bluetabs ul{
+	padding: 3px 0;
+	margin-left: 0;
+	margin-top: 1px;
+	margin-bottom: 0;
+	font: bold 12px Verdana;
+	list-style-type: none;
+	text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.bluetabs li{
+	font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; text-decoration: none;
+	display: inline;
+	margin: 0;
+}
+
+.bluetabs li a{
+	text-decoration: none;
+	padding: 3px 7px;
+	margin-right: 3px;
+	border: 1px solid #778;
+	font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; text-decoration: none;
+	color: #2d2b2b;
+}
+
+.bluetabs li a:visited{
+	font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; text-decoration: none;
+	color: #2d2b2b;
+}
+
+.bluetabs li a:hover{
+	text-decoration: underline;
+	color: #2d2b2b;
+}
+
+.bluetabs a:hover span{
+	display: none;	
+}
+
+.bluetabs li.selected{
+}
+
+.bluetabs li.selected a{ /*selected main tab style */
+	background-image: url(media/bluetabactive.gif); /*THEME CHANGE HERE*/
+	border-bottom-color: white;
+}
+
+.bluetabs li.selected a:hover{ /*selected main tab style */
+	text-decoration: none;
+}
+
+/* ######### Style for Drop Down Menu ######### */
+
+.dropmenudiv_b{
+	position:absolute;
+	top: 0;
+	font:normal 11px Arial;
+	color: #FFFFFF;
+	line-height:18px;
+	z-index:100;
+	background-color: #ED1823; 
+	width: 200px;
+	visibility: hidden;
+}
+
+.dropmenudiv_b a{
+	width: auto;
+	display: block;
+	text-indent: 5px;
+	border: 0 solid #918d8d; /*THEME CHANGE HERE*/	
+	padding: 2px 0;
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+* html .dropmenudiv_b a{ /*IE only hack*/
+	width: 100%;
+}
+
+.dropmenudiv_b a:hover{ /*THEME CHANGE HERE*/
+	/*background-color: #BC0E22; #edf3f3;*/
+	color: #FFFFFF;
+}

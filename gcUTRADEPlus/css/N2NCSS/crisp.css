@@ -1,0 +1,140 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 2, 2014, 1:39:44 PM
+    Author     : eatsopheakboth
+*/
+
+.main-menu a.x-btn{
+    background:transparent;
+    border: none;
+    padding:0px;
+    margin:0px;
+}
+.x-toolbar-docked-bottom a.x-btn,
+.x-toolbar-docked-top a.x-btn,
+.x-toolbar-docked-top .x-toolbar-separator,
+.x-toolbar-docked-bottom .x-toolbar-separator,
+.x-toolbar-docked-top .x-form-item{
+    margin: 2px !important;
+}
+.x-table-plain{
+    font-size: 12px;
+    line-height:none;
+}
+.x-form-cb-label-default,.x-form-cb-default{
+    margin-top:2px;
+}
+.x-autocontainer-form-item,
+.x-anchor-form-item, 
+.x-vbox-form-item, 
+.x-table-form-item{
+    margin-bottom: 2px;    
+}
+.x-form-item .x-form-trigger{
+    background-color: #f2f2f2;
+}
+.main-menu a.x-btn .x-btn-inner{
+    font-size: 12px;
+}
+.main-menu .x-btn-menu-active{
+    border-color: #c6c6c6 !important;
+    background-image: none !important;
+    background-color: #e1e1e1!important;
+}
+.main-menu .x-btn-over{
+    background:#f2f2f2 !important;
+}
+
+.main-menu .x-btn-inner-default-toolbar-medium{
+    padding:0 1px;
+}
+.x-grid-cell-inner{
+    line-height: 13px;
+}
+.x-column-header-inner{
+    padding: 4px 5px;
+    line-height: 10px;
+}
+.x-grid-cell-inner {
+
+}
+.x-column-header-checkbox .x-column-header-inner{
+    line-height:10px;
+    padding:0px;
+    padding-left:4px;
+}
+.x-column-header-text{
+    font-size:12px;
+}
+.x-toolbar-default{
+    padding: 2px 0px 2px 2px;
+}
+.x-btn-default-toolbar-small{
+    padding: 2px;
+}
+.x-btn-inner-default-toolbar-small{
+    font-size: 11px;
+}
+.x-tab-bar-default-bottom .x-tab-bar-body-default{
+    padding: 2px;
+}
+
+.x-tab-inner-default{
+    font-size: 11px;
+}
+.x-tab-bar-horizontal.x-tab-bar-body-default{
+    min-height: 24px;
+}
+.x-form-text-default{
+    font-size: 12px;
+    padding: 0px 3px;
+    min-height: 16px;
+
+}
+.x-form-item-label-default.x-form-item-label-top .x-form-item-label-inner{
+    padding-top: 2px;
+}
+.x-tab-bar-default-top .x-tab-bar-body-default{
+    padding: 2px;
+}
+.x-panel-header-default-framed-top{
+    padding: 2px;
+}
+.x-panel-header-default-framed-horizontal{
+    padding: 3px;
+    padding-left: 5px;
+}
+.x-panel-header-title-default-framed{
+    font-size: 12px;
+}
+.x-window-header-default-top{
+    padding: 4px;
+}
+.x-window-header-title-default,.x-panel-header-title-default{
+    font-size: 12px;
+}
+
+.x-panel-header-default-horizontal{
+    padding: 3px 9px;
+}
+
+.x-tab-default-top, .x-tab-default-bottom{
+    padding: 1px 5px;
+}
+.x-btn-text.x-btn-icon-top .x-btn-icon-el-default-toolbar-medium{
+    margin-bottom: 2px;
+}
+.x-btn-default-small{
+    padding:1px;
+}
+.x-tab-bar-bottom > .x-tab-bar-strip-default, 
+.x-tab-bar-top > .x-tab-bar-strip-default {
+    height:0px;
+}
+.x-tab-bar-horizontal>.x-tab-bar-body-default{
+    min-height: 24px;
+}

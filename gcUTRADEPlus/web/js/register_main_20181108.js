@@ -1,0 +1,668 @@
+//register
+function register(){
+	var category = getUrlParameter("category");
+	var type = getUrlParameter("type");
+	var jsonObject = {};
+	
+	jsonObject['ctgy'] = category;
+	jsonObject['clitype'] = type;
+
+	if(type=="M"){
+		jsonObject['ti'] = $("#frmRegister_title").val();
+		jsonObject['clinm'] = $("#frmRegister_cliName").val();
+		
+		if(category=="E"){
+			jsonObject['bhcc'] = $("#frmRegister_bhclicode").val();
+		}
+		if(category=="N"){
+			jsonObject['st'] = $("#frmRegister_state").val()==""?$("#frmRegister_othState").val():$("#frmRegister_state").val();
+			jsonObject['pc'] = $("#frmRegister_postcode").val();
+			jsonObject['ctry'] = $("#frmRegister_country").val();
+			jsonObject['ctz'] = $("#frmRegister_country").val();
+			jsonObject['dob'] = $("#frmRegister_dob").val();
+			jsonObject['add1'] = $("#frmRegister_add1").val();
+			jsonObject['add2'] = $("#frmRegister_add2").val();
+		}
+		if($("#frmRegister_country").val()=="MY"){
+			jsonObject['icn'] = $("#frmRegister_icNo").val();			
+		}else{
+			jsonObject['icn'] = $("#frmRegister_passport").val();
+		}
+		jsonObject['sx'] = $('input:radio[name=frmRegister_sex]:checked').val();
+		jsonObject['em'] = $("#frmRegister_email").val();
+		jsonObject['tpn'] = $("#frmRegister_telno1").val();
+		jsonObject['tpn1'] = $("#frmRegister_telno2").val();
+		jsonObject['mbl'] = $("#frmRegister_mobile1").val();
+		jsonObject['mbl1'] = $("#frmRegister_mobile2").val();
+	}
+	
+	if(type=="C"){
+		if(category=="E"){
+			jsonObject['bhcc'] = $("#frmRegister_bhclicode").val();
+		}
+		jsonObject['clinm'] = $("#frmRegister_companyName").val();
+		jsonObject['oicn'] = $("#frmRegister_companyRegNo").val();
+		jsonObject['dob'] = $("#frmRegister_dob").val();
+		jsonObject['add1'] = $("#frmRegister_add1").val();
+		jsonObject['add2'] = $("#frmRegister_add2").val();
+		jsonObject['trdPs'] = $("#frmRegister_tradePerson").val();
+		jsonObject['icn'] = $("#frmRegister_icNo2").val();
+		jsonObject['em'] = $("#frmRegister_email2").val();
+		jsonObject['tpn'] = $("#frmRegister_telno1").val();
+		jsonObject['tpn1'] = $("#frmRegister_telno2").val();
+		jsonObject['fxn'] = $("#frmRegister_fax1").val();		
+		jsonObject['fxn1 '] = $("#frmRegister_fax2").val();
+		jsonObject['st'] = $("#frmRegister_state").val()==""?$("#frmRegister_othState").val():$("#frmRegister_state").val();
+		jsonObject['pc'] = $("#frmRegister_postcode").val();
+		jsonObject['ctry'] = $("#frmRegister_country").val();
+		jsonObject['ctz'] = $("#frmRegister_country").val();
+	}
+	
+	jsonObject['lid'] = $("#frmRegister_userID").val();
+	jsonObject['pwd'] = $("#frmRegister_pwd").val();
+	jsonObject['pin'] = $("#frmRegister_pin").val();
+	jsonObject['ht'] = $("#frmRegister_hintType").val()=="OTR"?$("#frmRegister_hint").val():$("#frmRegister_hintType").val();
+	jsonObject['hta'] = $("#frmRegister_hintAns").val();
+	
+	console_log(JSON.stringify(jsonObject));
+	registerReq(jsonObject,registerResp);
+}
+function registerResp(data){
+	console_log("registerResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		alert("Thank you, your registration have been submitted. \
+				In a few minutes, you will receive a validation email detailing how you can validate your registration. \
+				Please follow the instruction within 3 days of receiving the email. \
+				If you do not validate your registration, you will not be able to access to the portal.");	
+		location.reload();
+	}else{
+		alert(data.msg);
+	}
+}
+
+//Register Game
+function registerGame(){
+	var category = getUrlParameter("category");
+	var type = getUrlParameter("type");
+	var memberCount = $('#frmRegister_memberCount').val();
+	var jsonObject = {};
+		
+	jsonObject['catt'] = type;
+	
+	jsonObject['mbc'] = $("#frmRegister_memberCount").val();
+	jsonObject['emlm'] = $("#frmRegister_emailMain").val();
+	jsonObject['clinm'] = $("#frmRegister_cliNameMain").val();
+	jsonObject['pwdm'] = $("#frmRegister_pwdMain").val();	
+	jsonObject['catm'] = "M"; //Member
+	jsonObject['tnm'] = $("#frmRegister_teamName").val();
+	jsonObject['itttm'] = $("#frmRegister_institutionMain").val();
+	jsonObject['add3'] = $("#frmRegister_add3").val();	
+	jsonObject['telnm'] = $("#frmRegister_telnoMain").val();
+	jsonObject['teln1m'] = $("#frmRegister_telno1Main").val();	
+	jsonObject['htm'] = $("#frmRegister_hintTypeMain").val()=="OTR"?$("#frmRegister_hintMain").val():$("#frmRegister_hintTypeMain").val();
+	jsonObject['htam'] = $("#frmRegister_hintAnsMain").val();
+	jsonObject['ctrym'] = $("#frmRegister_countryMain").val();
+	jsonObject['wtkm'] = $('input:radio[name=frmRegister_wayToKnowMain]:checked').val();
+	jsonObject['ijbm'] = $('input:radio[name=frmRegister_isJoinBeforeMain]:checked').val();
+	jsonObject['yroegm'] = $("#frmRegister_yearOfExpGradMain").val();
+
+	jsonObject['emls1'] = $("#frmRegister_emailSub1").val();
+	jsonObject['clins1'] = $("#frmRegister_cliNameSub1").val();
+	jsonObject['pwds1'] = $("#frmRegister_pwdSub1").val();
+	jsonObject['cats1'] = "R"; //Remote TERM
+	jsonObject['telns1'] = $("#frmRegister_telnoSub1").val();
+	jsonObject['teln1s1'] = $("#frmRegister_telno1Sub1").val();
+	jsonObject['hts1'] = $("#frmRegister_hintTypeSub1").val()=="OTR"?$("#frmRegister_hintSub1").val():$("#frmRegister_hintTypeSub1").val();
+	jsonObject['htas1'] = $("#frmRegister_hintAnsSub1").val();
+	jsonObject['yroegs1'] = $("#frmRegister_yearOfExpGradSub1").val();
+
+
+	if(memberCount == "3" || memberCount == "4"){
+		jsonObject['emls2'] = $("#frmRegister_emailSub2").val();
+		jsonObject['clins2'] = $("#frmRegister_cliNameSub2").val();
+		jsonObject['pwds2'] = $("#frmRegister_pwdSub2").val();
+		jsonObject['cats2'] = "R"; //Remote TERM
+		jsonObject['telns2'] = $("#frmRegister_telnoSub2").val();
+		jsonObject['teln1s2'] = $("#frmRegister_telno1Sub2").val();
+		jsonObject['hts2'] = $("#frmRegister_hintTypeSub2").val()=="OTR"?$("#frmRegister_hintSub2").val():$("#frmRegister_hintTypeSub2").val();
+		jsonObject['htas2'] = $("#frmRegister_hintAnsSub2").val();
+		jsonObject['yroegs2'] = $("#frmRegister_yearOfExpGradSub2").val();
+	}
+	
+	if(memberCount == "4"){
+		jsonObject['emls3'] = $("#frmRegister_emailSub3").val();
+		jsonObject['clins3'] = $("#frmRegister_cliNameSub3").val();
+		jsonObject['pwds3'] = $("#frmRegister_pwdSub3").val();
+		jsonObject['cats3'] = "R"; //Remote TERM
+		jsonObject['telns3'] = $("#frmRegister_telnoSub3").val();
+		jsonObject['teln1s3'] = $("#frmRegister_telno1Sub3").val();
+		jsonObject['hts3'] = $("#frmRegister_hintTypeSub3").val()=="OTR"?$("#frmRegister_hintSub3").val():$("#frmRegister_hintTypeSub3").val();
+		jsonObject['htas3'] = $("#frmRegister_hintAnsSub3").val();
+		jsonObject['yroegs3'] = $("#frmRegister_yearOfExpGradSub3").val();
+	}
+	
+	console_log(JSON.stringify(jsonObject,registerGameResp));
+	registerGameReq(jsonObject);
+}
+function registerGameResp(data){
+	console_log("registerGameResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		var memberCount = $('#frmRegister_memberCount').val();
+		var leaderEmail =$("#frmRegister_emailMain").val();
+		var member1Email =$("#frmRegister_emailSub1").val();
+		var member2Email =$("#frmRegister_emailSub2").val();
+		var member3Email =$("#frmRegister_emailSub3").val();
+		var msg = "";
+		msg = leaderEmail + "\n" + member1Email + "\n";
+		if(memberCount > 2){
+			msg += member2Email + "\n";
+		}
+
+		if(memberCount > 3){
+			msg += member3Email + "\n";
+		}
+		alert("Thank you "+$("#frmRegister_teamName").val()+". Your team registration has been submitted. In a few minutes, you will receive a registration confirmation email detailing your registration.\nThe email will be sent to \n"+msg);	
+		//location.reload();
+		top.location = "/";
+	}else{
+		alert(data.msg);
+	}
+}
+
+//Register Trial
+function registerTrial(){
+	
+	var category = "N";
+	var type = "M";
+	var jsonObject = {};
+	
+	jsonObject['ctgy'] = category;
+	jsonObject['clitype'] = type;
+
+	if(type=="M"){
+		jsonObject['ti'] = $("#frmRegister_title").val();
+		jsonObject['clinmf'] = $("#frmRegister_cliNameFirst").val();
+		jsonObject['clinmm'] = $("#frmRegister_cliNameMiddle").val();
+		jsonObject['clinml'] = $("#frmRegister_cliNameLast").val();
+		
+		if(category=="E"){
+			jsonObject['bhcc'] = $("#frmRegister_bhclicode").val();
+		}
+		if(category=="N"){
+			jsonObject['prov'] = $("#frmRegister_province").val();
+			jsonObject['ctry'] = $("#frmRegister_country").val();
+			jsonObject['ctz'] = $("#frmRegister_country").val();
+			jsonObject['dob'] = $("#frmRegister_dob").val();
+			jsonObject['add1'] = $("#frmRegister_add1").val();
+			jsonObject['add2'] = $("#frmRegister_add2").val();
+			jsonObject['aob'] = $("#frmRegister_accOthBroker").val();
+		}
+		
+		jsonObject['em'] = $("#frmRegister_email").val();
+		jsonObject['tpn'] = $("#frmRegister_telno1").val();
+		jsonObject['tpn1'] = $("#frmRegister_telno2").val();
+		jsonObject['mbl'] = $("#frmRegister_mobile1").val();
+		jsonObject['mbl1'] = $("#frmRegister_mobile2").val();
+	}
+	
+	if(type=="C"){
+		if(category=="E"){
+			jsonObject['bhcc'] = $("#frmRegister_bhclicode").val();
+		}
+		jsonObject['clinm'] = $("#frmRegister_companyName").val();
+		jsonObject['oicn'] = $("#frmRegister_companyRegNo").val();
+		jsonObject['dob'] = $("#frmRegister_dob").val();
+		jsonObject['add1'] = $("#frmRegister_add1").val();
+		jsonObject['add2'] = $("#frmRegister_add2").val();
+		jsonObject['trdPs'] = $("#frmRegister_tradePerson").val();
+		jsonObject['icn'] = $("#frmRegister_icNo2").val();
+		jsonObject['em'] = $("#frmRegister_email2").val();
+		jsonObject['tpn'] = $("#frmRegister_telno1").val();
+		jsonObject['tpn1'] = $("#frmRegister_telno2").val();
+		jsonObject['fxn'] = $("#frmRegister_fax1").val();		
+		jsonObject['fx1n'] = $("#frmRegister_fax2").val();
+		jsonObject['st'] = $("#frmRegister_state").val()==""?$("#frmRegister_othState").val():$("#frmRegister_state").val();
+		jsonObject['pc'] = $("#frmRegister_postcode").val();
+		jsonObject['ctry'] = $("#frmRegister_country").val();
+		jsonObject['ctz'] = $("#frmRegister_country").val();
+	}
+	
+	jsonObject['lid'] = $("#frmRegister_userID").val();
+	jsonObject['pwd'] = $("#frmRegister_pwd").val();
+	jsonObject['pin'] = $("#frmRegister_pin").val();
+	jsonObject['ht'] = $("#frmRegister_hintType").val()=="OTR"?$("#frmRegister_hint").val():$("#frmRegister_hintType").val();
+	jsonObject['hta'] = $("#frmRegister_hintAns").val();
+	
+	console_log(JSON.stringify(jsonObject));
+	registerTrialReq(jsonObject,registerTrialResp);
+}
+function registerTrialResp(data){
+	console_log("registerTrialResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		alert("Thank you, your registration have been submitted. \nIn a few minutes, you will receive a validation email detailing how you can validate your registration. \nPlease follow the instruction within 3 days of receiving the email. \nIf you do not validate your registration, you will not be able to access to the portal.");	
+		window.location = loginPage_url;
+	}else{
+		alert(data.msg);
+	}
+}
+
+//Register Trial
+function getTrialLogin(){
+	var type = getUrlParameter("type")==undefined?"":getUrlParameter("type");
+	if(type =="1"){
+		var jsonObject = {};		
+	
+		jsonObject['lid'] = $("#frmRegisterAcc_userID").val();
+		jsonObject['pwd'] = $("#frmRegisterAcc_pwd").val();
+		jsonObject['opt'] = 0;
+		
+		console_log(JSON.stringify(jsonObject));
+		getTrialLoginReq(jsonObject,getTrialLoginResp);
+
+	}else{
+		checkLoginID();		
+	}
+}
+function getTrialLoginResp(data){
+	console_log("getTrialLoginResp:"+JSON.stringify(data));	
+	if(data.s&&data.s=="200"){
+		var result = JSON.parse(data.ev);
+		var telNo = result.result1[0].Telno.split("-");
+		var mobileNo = result.result1[0].Mobile.split("-");
+
+		$("#frmRegister_cliNameFirst").val(result.result1[0].FirstName);
+		$("#frmRegister_cliNameMiddle").val(result.result1[0].MiddleName);
+		$("#frmRegister_cliNameLast").val(result.result1[0].LastName);
+		$("#frmRegister_dob").val(result.result1[0].DOB.substr(6,2) + "-" + result.result1[0].DOB.substr(4,2) + "-" +result.result1[0].DOB.substr(0,4));
+		$("#frmRegister_cli1Telno1").val(telNo[0]);
+		$("#frmRegister_cli1Telno2").val(telNo[1]);
+		$("#frmRegister_cli1Mobile1").val(mobileNo[0]);
+		$("#frmRegister_cli1Mobile2").val(mobileNo[1]);
+		$("#frmRegister_cli1Add1").val(result.result1[0].Add1);
+		$("#frmRegister_cli1Add2").val(result.result1[0].Add2);
+		$("#frmRegister_postcode").val(result.result1[0].Postcode);
+		$("#frmRegister_email").val(result.result1[0].email);
+		if(result.result1[0].sex == "M"){
+			$('#frmRegister_sexMale').attr("checked",true);
+		}else if(result.result1[0].sex == "F"){
+			$('#frmRegister_sexFemale').attr("checked",true);	
+		}
+
+		chgRegisterLayout(1);
+				
+	}else{
+		alert(data.msg);
+	}
+}
+
+function registerOpenAcc(){
+		
+	var jsonObject = {};
+	var jsonObjectPersonalInfo = {};
+	var jsonObjectPersonalInfo2 = {};
+	var jsonArrayPersonalInfo = [];
+	var type = getUrlParameter("type")==undefined?"":getUrlParameter("type");
+
+	var category = $("#frmRegister_joint").val();
+
+	jsonObject['ctgy'] = category;
+	jsonObject['clitype'] = type; //0=new client, 1= existing client
+	
+	//Login Account info
+	jsonObject['lid'] = $("#frmRegisterAcc_userID").val();
+	jsonObject['pwd'] = $("#frmRegisterAcc_pwd").val();
+	jsonObject['ht'] = $("#frmRegisterAcc_hintType").val()=="OTR"?$("#frmRegisterAcc_hint").val():$("#frmRegisterAcc_hintType").val();
+	jsonObject['hta'] = $("#frmRegisterAcc_hintAns").val();
+	jsonObject['pin'] = $("#frmRegister_pin").val();
+
+	//Personal Info 1
+	jsonObjectPersonalInfo['clinmf'] = $("#frmRegister_cliNameFirst").val();
+	jsonObjectPersonalInfo['clinmm'] = $("#frmRegister_cliNameMiddle").val();
+	jsonObjectPersonalInfo['clinml'] = $("#frmRegister_cliNameLast").val();
+	jsonObjectPersonalInfo['sx'] = $('input:radio[name=frmRegister_sex]:checked').val();
+	jsonObjectPersonalInfo['dob'] = $("#frmRegister_dob").val();
+	jsonObjectPersonalInfo['bp'] = $("#frmRegister_birthPlace").val();
+	jsonObjectPersonalInfo['cvs'] = $("#frmRegister_civilStatus").val();
+	jsonObjectPersonalInfo['ctz'] = $("#frmRegister_citizenship").val();
+	if($("#frmRegister_citizenship").val() == "F"){
+		jsonObjectPersonalInfo['id'] = $("#frmRegister_cli1ICType1").val()=="Other"?+$("#frmRegister_cli1ICOther").val():$("#frmRegister_cli1ICType1").val();
+		jsonObjectPersonalInfo['icn'] = $("#frmRegister_cli1ICValue1").val();
+		jsonObjectPersonalInfo['idvd'] = $("#frmRegister_idValid").val();
+	}else{
+		jsonObjectPersonalInfo['id'] =  $("#frmRegister_cli1IDType1").val();
+		jsonObjectPersonalInfo['idvd'] = $("#frmRegister_idValid").val();
+		jsonObjectPersonalInfo['nty'] = $("#frmRegister_nationality").val();
+		jsonObjectPersonalInfo['ppt'] = $("#frmRegister_passportNo").val();
+		jsonObjectPersonalInfo['acr'] = $("#frmRegister_acrNo").val();
+		jsonObjectPersonalInfo['issd'] = $("#frmRegister_dtIssued").val();
+		jsonObjectPersonalInfo['issp'] = $("#frmRegister_placeIssued").val();
+		jsonObjectPersonalInfo['vrn'] = $("#frmRegister_verificationNo").val();
+		jsonObjectPersonalInfo['vrdt'] = $("#frmRegister_verificationDt").val();
+		jsonObjectPersonalInfo['cusb'] = $("#frmRegister_custodianBnk").val();
+		jsonObjectPersonalInfo['rgn'] = $("#frmRegister_regName").val();
+		
+	}
+	
+	jsonObjectPersonalInfo['add1'] = $("#frmRegister_cli1Add1").val();
+	jsonObjectPersonalInfo['add2'] = $("#frmRegister_cli1Add2").val();
+	jsonObjectPersonalInfo['pc'] = $("#frmRegister_postcode").val();
+	jsonObjectPersonalInfo['tpn'] = $("#frmRegister_cli1Telno1").val();
+	jsonObjectPersonalInfo['tpn1'] = $("#frmRegister_cli1Telno2").val();
+	//jsonObjectPersonalInfo['ows'] = $("#frmRegister_ownership").val();
+	//jsonObjectPersonalInfo['owb'] = $("#frmRegister_ownershipAns").val();
+	//jsonObjectPersonalInfo['lgs'] = $("#frmRegister_lengthStay").val();
+	jsonObjectPersonalInfo['ocp'] = $("#frmRegister_occupation").val();
+	jsonObjectPersonalInfo['em'] = $("#frmRegister_email").val();
+	jsonObjectPersonalInfo['mbl'] = $("#frmRegister_cli1Mobile1").val();
+	jsonObjectPersonalInfo['mbl1'] = $("#frmRegister_cli1Mobile2").val();
+	jsonObjectPersonalInfo['fxn'] = $("#frmRegister_cli1Fax1").val();
+	jsonObjectPersonalInfo['fxn1'] = $("#frmRegister_cli1Fax2").val();
+	jsonObjectPersonalInfo['eps'] = $("#frmRegister_employmentStatus").val();
+	jsonObjectPersonalInfo['epnm'] = $("#frmRegister_employName").val();
+	jsonObjectPersonalInfo['epadd1'] = $("#frmRegister_cli1BusinessAdd1").val();
+	jsonObjectPersonalInfo['epadd2'] = $("#frmRegister_cli1BusinessAdd2").val();
+	jsonObjectPersonalInfo['eptpn'] = $("#frmRegister_cli1EmployTelno1").val();
+	jsonObjectPersonalInfo['eptpn1'] = $("#frmRegister_cli1EmployTelno2").val();
+	jsonObjectPersonalInfo['epyr'] = $("#frmRegister_yearsWithCompany").val();
+	jsonObjectPersonalInfo['eptp'] = $("#frmRegister_position").val();
+	
+
+	jsonArrayPersonalInfo.push(jsonObjectPersonalInfo);
+
+	if(category != "M"){
+		
+		//Personal Info 2
+		jsonObjectPersonalInfo2['clinmf'] = $("#frmRegister_cliNameFirst2").val();
+		jsonObjectPersonalInfo2['clinmm'] = $("#frmRegister_cliNameMiddle2").val();
+		jsonObjectPersonalInfo2['clinml'] = $("#frmRegister_cliNameLast2").val();
+		jsonObjectPersonalInfo2['sx'] = $('input:radio[name=frmRegister_sex2]:checked').val();
+		jsonObjectPersonalInfo2['dob'] = $("#frmRegister_dob2").val();
+		jsonObjectPersonalInfo2['bp'] = $("#frmRegister_birthPlace2").val();
+		jsonObjectPersonalInfo2['cvs'] = $("#frmRegister_civilStatus2").val();		
+		jsonObjectPersonalInfo2['spnm'] = $("#frmRegister_spouseName2").val();
+		jsonObjectPersonalInfo2['ctz'] = $("#frmRegister_citizenship2").val();
+
+		if($("#frmRegister_citizenship2").val() == "F"){
+			jsonObjectPersonalInfo2['id'] = $("#frmRegister_cli2ICType1").val()=="Other"?+$("#frmRegister_cli2ICOther").val():$("#frmRegister_cli2ICType1").val();
+			jsonObjectPersonalInfo2['icn'] = $("#frmRegister_cli2ICValue1").val();
+			jsonObjectPersonalInfo['idvd'] = $("#frmRegister_idValid2").val();
+
+		}else{
+			jsonObjectPersonalInfo2['id'] = $("#frmRegister_cli2IDType1").val();
+			jsonObjectPersonalInfo['idvd'] = $("#frmRegister_idValid2").val();
+			jsonObjectPersonalInfo['nty'] = $("#frmRegister_nationality2").val();
+			jsonObjectPersonalInfo['ppt'] = $("#frmRegister_passportNo2").val();
+			jsonObjectPersonalInfo['acr'] = $("#frmRegister_acrNo2").val();
+			jsonObjectPersonalInfo['issd'] = $("#frmRegister_dtIssued2").val();
+			jsonObjectPersonalInfo['issp'] = $("#frmRegister_placeIssued2").val();
+			jsonObjectPersonalInfo['vrn'] = $("#frmRegister_verificationNo2").val();
+			jsonObjectPersonalInfo['vrdt'] = $("#frmRegister_verificationDt2").val();
+			jsonObjectPersonalInfo['cusb'] = $("#frmRegister_custodianBnk2").val();
+			jsonObjectPersonalInfo['rgn'] = $("#frmRegister_regName2").val();
+			
+		}
+
+		
+		//jsonObjectPersonalInfo2['tin'] = $("#frmRegister_tin2").val();
+		jsonObjectPersonalInfo2['add1'] = $("#frmRegister_cli2Add1").val();
+		jsonObjectPersonalInfo2['add2'] = $("#frmRegister_cli2Add2").val();
+		jsonObjectPersonalInfo2['pc'] = $("#frmRegister_postcode2").val();
+		jsonObjectPersonalInfo2['tpn'] = $("#frmRegister_cli2Telno1").val();
+		jsonObjectPersonalInfo2['tpn1'] = $("#frmRegister_cli2Telno2").val();
+		//jsonObjectPersonalInfo2['ows'] = $("#frmRegister_ownership2").val();
+		//jsonObjectPersonalInfo2['owb'] = $("#frmRegister_ownershipAns2").val();
+		//jsonObjectPersonalInfo2['lgs'] = $("#frmRegister_lengthStay2").val();
+		jsonObjectPersonalInfo2['ocp'] = $("#frmRegister_occupation2").val();
+		jsonObjectPersonalInfo2['em'] = $("#frmRegister_email2").val();
+		jsonObjectPersonalInfo2['mbl'] = $("#frmRegister_cli2Mobile1").val();
+		jsonObjectPersonalInfo2['mbl1'] = $("#frmRegister_cli2Mobile2").val();
+		jsonObjectPersonalInfo2['fxn'] = $("#frmRegister_cli2Fax1").val();
+		jsonObjectPersonalInfo2['fxn1'] = $("#frmRegister_cli2Fax2").val();
+		jsonObjectPersonalInfo2['eps'] = $("#frmRegister_employmentStatus2").val();
+		jsonObjectPersonalInfo2['epnm'] = $("#frmRegister_employName2").val();
+		jsonObjectPersonalInfo2['epadd1'] = $("#frmRegister_cli2BusinessAdd1").val();
+		jsonObjectPersonalInfo2['epadd2'] = $("#frmRegister_cli2BusinessAdd2").val();
+		//jsonObjectPersonalInfo2['eppc'] = $("#frmRegister_employPostcode2").val();
+		jsonObjectPersonalInfo2['eptpn'] = $("#frmRegister_cli2EmployTelno1").val();
+		jsonObjectPersonalInfo2['eptpn1'] = $("#frmRegister_cli2EmployTelno2").val();
+		jsonObjectPersonalInfo2['epyr'] = $("#frmRegister_yearsWithCompany2").val();
+		jsonObjectPersonalInfo2['eptp'] = $("#frmRegister_position2").val();
+		jsonObjectPersonalInfo2['rfb'] = $("#frmRegister_refBy2").val();
+		jsonObjectPersonalInfo2['rf'] = $("#frmRegister_refByAns2").val();
+
+		jsonArrayPersonalInfo.push(jsonObjectPersonalInfo2);
+	}
+
+	//Investor Profile
+	var fundSrc = "";
+	$('input:checkbox[name=frmRegister_fundSrc]:checked').each(function(i){
+          fundSrc += $(this).val() + ",";
+     });
+	fundSrc = fundSrc.substring(0,fundSrc.length-1);
+	jsonObject['fds'] = fundSrc+$("#frmRegister_fundSrcOthers").val();
+	jsonObject['invo'] = $("#frmRegister_invObj").val();
+	//jsonObject['invhb'] = $('input:radio[name=frmRegister_invHandleBy]:checked').val();
+	//jsonObject['rgsb'] = $('input:radio[name=frmRegister_regStkBought]:checked').val();
+	jsonObject['anic'] = $("#frmRegister_annualIncome").val();
+	jsonObject['nw'] = $("#frmRegister_netWorth").val();
+	jsonObject['bk'] = $("#frmRegister_bank").val()=="Other"?+$("#frmRegister_bankName").val():$("#frmRegister_bank").val();
+	jsonObject['an'] = $("#frmRegister_accName").val();
+	jsonObject['ano'] = $("#frmRegister_accNo").val();
+	jsonObject['abr'] = $("#frmRegister_accBranch").val();
+	jsonObjectPersonalInfo['mrt'] = $("#frmRegister_marketRisk").val();
+	jsonObjectPersonalInfo['trdyrs'] = $("#frmRegister_trdYrs").val();
+	jsonObjectPersonalInfo['invexp'] = $("#frmRegister_invInstrument").val();
+	jsonObjectPersonalInfo['nwip'] = $("#frmRegister_netWorthInv").val();
+	jsonObjectPersonalInfo['ra'] = $("#frmRegister_retireAge").val();
+	jsonObjectPersonalInfo['iryrs'] = $("#frmRegister_invRedemption").val();
+	jsonObjectPersonalInfo['lrr'] = $("#frmRegister_ratio").val();
+	jsonObjectPersonalInfo['idrop'] = $("#frmRegister_invDrop").val();
+	jsonObjectPersonalInfo['mfts'] = $("#frmRegister_mfTotalScore").val();
+	jsonObject['bnoc'] = $("#frmRegister_beneficialOwnerCompany").val();
+	jsonObject['bnop'] = $("#frmRegister_beneficialOwnerPosition").val();
+	//jsonObject['aob'] = $("#frmRegister_accOthBrokerName").val();
+	//jsonObject['aobp'] = $("#frmRegister_accOthBrokerPerson").val();
+	jsonObjectPersonalInfo['bname'] = $("#frmRegister_beneficiaryName").val();
+	jsonObjectPersonalInfo['brel'] = $("#frmRegister_beneficiaryRel").val();
+	jsonObject['asob'] = $("#frmRegister_relOtherBrokerName").val();
+	jsonObject['asobp'] = $("#frmRegister_relOtherBrokerPerson").val();
+	jsonObject['dadd'] = $('input:radio[name=frmRegister_delivery]:checked').val();
+	jsonObjectPersonalInfo['rfb'] = $("#frmRegister_refBy").val();
+	jsonObjectPersonalInfo['rf'] = $("#frmRegister_refByAns").val();
+	jsonObjectPersonalInfo['annc'] = $("#frmRegister_annc").val()=="6"?+$("#frmRegister_anncByAns").val():$("#frmRegister_annc").val();
+
+	jsonObject['pi'] = jsonArrayPersonalInfo;
+
+
+	
+	console_log(JSON.stringify(jsonObject));
+	registerOpenAccReq(jsonObject,registerOpenAccResp);
+}
+
+function registerOpenAccResp(data){
+	console_log("registerOpenAccResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		alert("Thank you, your registration have been submitted. \nIn a few minutes, you will receive a validation email detailing how you can validate your registration. \nPlease follow the instruction within 3 days of receiving the email. \nIf you do not validate your registration, you will not be able to access to the portal.");	
+		//location.reload();
+		chgRegisterLayout(4);
+	}else{
+		alert(data.msg);
+	}
+}
+
+function registerCorpAcc(){
+	//var category = "N";
+	//var type = "C";
+	var jsonObject = {};
+	var jsonObjectPersonalInfo = {};
+	var jsonArrayPersonalInfo = [];
+	var type = getUrlParameter("type")==undefined?"":getUrlParameter("type");
+
+
+
+	var category = $("#frmRegister_category").val();
+
+	jsonObject['ctgy'] = category;  //N=new 
+	jsonObject['clitype'] = type; //C=company
+	
+	//Login Account info
+	jsonObject['lid'] = $("#frmRegisterAcc_userID").val();
+	jsonObject['pwd'] = $("#frmRegisterAcc_pwd").val();
+	jsonObject['pin'] = $("#frmRegister_pin").val();
+	jsonObject['ht'] = $("#frmRegisterAcc_hintType").val()=="OTR"?$("#frmRegisterAcc_hint").val():$("#frmRegisterAcc_hintType").val();
+	jsonObject['hta'] = $("#frmRegisterAcc_hintAns").val();
+	//jsonObject['ctz'] = $("#frmRegister_citizenship").val();
+
+	//Corporate Info 
+	jsonObjectPersonalInfo['clinmf'] = $("#frmRegister_companyName").val();
+	jsonObjectPersonalInfo['oicn'] = $("#frmRegister_companyRegNo").val();
+	jsonObjectPersonalInfo['tin'] = $("#frmRegister_tin").val();
+	jsonObjectPersonalInfo['ctry'] = $("#frmRegister_companyRegCountry").val();
+	jsonObjectPersonalInfo['drn'] = $("#frmRegister_dtiRegNo").val();
+	jsonObjectPersonalInfo['drd'] = $("#frmRegister_dtiRegDate").val();
+	jsonObjectPersonalInfo['tin'] = $("#frmRegister_tin").val();
+	jsonObjectPersonalInfo['nob'] = $("#frmRegisterAcc_natureOfBusiness").val();
+	jsonObjectPersonalInfo['bnation'] = $("#frmRegisterAcc_businessNationality").val();
+	jsonObjectPersonalInfo['fadd'] = $("#frmRegister_foreignAdd").val();
+	jsonObjectPersonalInfo['noy'] = $("#frmRegister_numOfYears").val();
+	jsonObjectPersonalInfo['mbl'] = $("#frmRegister_cli1Mobile1").val();
+	jsonObjectPersonalInfo['mbl1'] = $("#frmRegister_cli1Mobile2").val();
+	//jsonObjectPersonalInfo['aob'] = $("#frmRegister_accOthBrokerName").val();
+	jsonObjectPersonalInfo['add1'] = $("#frmRegister_cli1Add1").val();
+	jsonObjectPersonalInfo['add2'] = $("#frmRegister_cli1Add2").val();
+	jsonObjectPersonalInfo['em'] = $("#frmRegister_email").val();
+	jsonObjectPersonalInfo['nob'] = $("#frmRegisterAcc_natureOfBusiness").val();
+	jsonObjectPersonalInfo['tpn'] = $("#frmRegister_cli1Telno1").val();
+	jsonObjectPersonalInfo['tpn1'] = $("#frmRegister_cli1Telno2").val();
+	jsonObjectPersonalInfo['fxn'] = $("#frmRegister_cli1Fax1").val();
+	jsonObjectPersonalInfo['fxn1'] = $("#frmRegister_cli1Fax2").val();
+	jsonObjectPersonalInfo['srd'] = $("#frmRegister_dateOfIncorporation").val();
+	jsonObjectPersonalInfo['autOff1'] = $("#frmRegister_tradePerson1").val();
+	jsonObjectPersonalInfo['pAOff1'] = $("#frmRegister_tradePosition1").val();
+	jsonObjectPersonalInfo['autOff2'] = $("#frmRegister_tradePerson2").val();
+	jsonObjectPersonalInfo['pAOff2'] = $("#frmRegister_tradePosition2").val();
+
+	
+	
+
+	//Investor Profile
+	
+	jsonObjectPersonalInfo['ast'] = $("#frmRegister_assets").val();
+	jsonObject['nw'] = $("#frmRegister_netWorth").val();
+	jsonObject['anic'] = $("#frmRegister_annualIncome").val();
+	jsonObject['bk'] = $("#frmRegister_bank").val();
+	jsonObject['an'] = $("#frmRegister_accName").val();
+	jsonObject['ano'] = $("#frmRegister_accNo").val();
+	jsonObject['abr'] = $("#frmRegister_accBranch").val();
+	jsonObjectPersonalInfo['acs'] = 0;
+	jsonObjectPersonalInfo['mrt'] = $("#frmRegister_marketRisk").val();
+	jsonObjectPersonalInfo['trdyrs'] = $("#frmRegister_trdYrs").val();
+	jsonObjectPersonalInfo['invexp'] = $("#frmRegister_invInstrument").val();
+	jsonObjectPersonalInfo['nwip'] = $("#frmRegister_netWorthInv").val();
+	jsonObjectPersonalInfo['ra'] = $("#frmRegister_retireAge").val();
+	jsonObjectPersonalInfo['iryrs'] = $("#frmRegister_invRedemption").val();
+	jsonObjectPersonalInfo['lrr'] = $("#frmRegister_ratio").val();
+	jsonObjectPersonalInfo['idrop'] = $("#frmRegister_invDrop").val();
+	jsonObjectPersonalInfo['invo'] = $("#frmRegister_invObj").val();
+	jsonObjectPersonalInfo['mfts'] = $("#frmRegister_mfTotalScore").val();
+	if ($("#frmRegister_refBy").val()=="8") {
+	jsonObjectPersonalInfo['rfb'] = $("#frmRegister_refBy").val()+$("#frmRegister_refByAns").val();	
+	}else{
+		jsonObjectPersonalInfo['rfb'] = $("#frmRegister_refBy").val();
+	}
+	if ($("#frmRegister_annc").val()=="6") {
+	jsonObjectPersonalInfo['annc'] = $("#frmRegister_annc").val()+$("#frmRegister_anncByAns").val();	
+	}else{
+		jsonObjectPersonalInfo['annc'] = $("#frmRegister_annc").val();
+	}
+	//jsonObject['rfb'] = $("#frmRegister_refBy").val()=="8"?+$("#frmRegister_refByAns").val():$("#frmRegister_refBy").val();
+	//jsonObject['annc'] = $("#frmRegister_annc").val()=="6"?+$("#frmRegister_anncByAns").val():$("#frmRegister_annc").val();
+
+
+	jsonObject['pi'] = jsonArrayPersonalInfo;
+	jsonArrayPersonalInfo.push(jsonObjectPersonalInfo);
+	
+	
+	
+	console_log(JSON.stringify(jsonObject));
+	registerCorpAccReq(jsonObject,registerCorpAccResp);
+}
+
+
+function registerCorpAccResp(data){
+	console_log("registerCorpAccResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		alert("Thank you, your registration have been submitted. \nIn a few minutes, you will receive a validation email detailing how you can validate your registration. \nPlease follow the instruction within 3 days of receiving the email. \nIf you do not validate your registration, you will not be able to access to the portal.");	
+		//location.reload();
+		chgRegisterLayout(4);
+	}else{
+		alert(data.msg);
+	}
+}
+
+
+function checkLoginID(){
+
+	var type = getUrlParameter("type")==undefined?"":getUrlParameter("type");
+	
+	var jsonObject = {};		
+	if(type =="0")
+		jsonObject['lid'] = $("#frmRegisterAcc_userID").val();
+	else if (type == "")
+		jsonObject['lid'] = $("#frmRegister_userID").val();
+
+	jsonObject['pwd'] = "123"; //Not required but needed for bypass password mandatory checking
+	jsonObject['opt'] = 4;
+	
+	console_log(JSON.stringify(jsonObject));
+	getTrialLoginReq(jsonObject,checkLoginIDResp);
+
+	
+}
+function checkLoginIDResp(data){
+	console_log("checkLoginIDResp:"+JSON.stringify(data));	
+	var type = getUrlParameter("type")==undefined?"":getUrlParameter("type");
+	if(data.s&&data.s=="200"){
+		
+		
+		if(type ==""){
+			$('#frmRegister_userID').addClass("valid");
+			registerTrial();
+		}else{
+			$('#frmRegisterAcc_userID').addClass("valid");
+			chgRegisterLayout(1);
+
+		}
+
+				
+	}else{
+		if(type ==""){			
+			setTimeout(function(){
+				$('#frmRegister_userID').removeClass("valid").addClass("text-error helper-font-small");
+				$('#frmRegister_userID').next().html("Username has already been taken");
+				$('#frmRegister_userID').next().show();
+			}, 100);			
+		}else{
+			setTimeout(function(){
+				$('#frmRegisterAcc_userID').removeClass("valid").addClass("text-error helper-font-small");
+				$('#frmRegisterAcc_userID').next().html("Username has already been taken");
+				$('#frmRegisterAcc_userID').next().show();
+			}, 100);
+		}
+	}
+}
+
+		function validateQty(event) {
+   	 	var key = window.event ? event.keyCode : event.which;
+
+		if (event.keyCode == 8 || event.keyCode == 46
+		|| event.keyCode == 37 || event.keyCode == 39 || (event.keyCode < 96 && event.keyCode > 105)) {
+		return true;
+		}
+		else if ( key < 48 || key > 57) {
+		return false;
+		}
+		else return true;
+		};
+
+

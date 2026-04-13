@@ -1,0 +1,319 @@
+<%@include file="common.jsp"%>
+<%@ include file= "/util/sessionCheck.jsp"%>
+<%@ page import = "com.n2n.util.*"%>
+
+<%
+try {
+com.spp.util.security.Decrypt dec = new com.spp.util.security.Decrypt();
+String sUUID = request.getParameter("uuid")!=null?request.getParameter("uuid").toString().trim():"";
+if (sUUID.length()>0) {
+sUUID = dec.fetchDecode(sUUID);
+validSession = true;
+}
+
+if (!validSession) {
+	out.println("<script language='javascript'>");
+	out.println("	alert('Please login to access this page.');");
+	out.println("	parent.location.href='"+oN2NSession.getSetting("HTMLRootHome")+"'");
+	out.println("</script>");			 
+} else {
+/*** Paths ***/
+String errorMessage = session.getAttribute("errChgMsg")!=null?session.getAttribute("errChgMsg").toString().trim():"";
+String chgPwdIndicator = session.getAttribute("chgPwdIndicator")!=null?session.getAttribute("chgPwdIndicator").toString().trim():"";
+%>
+<link rel="stylesheet" type="text/css" href="<%=g_sStylePath%>/default.css"></link>
+<script language=JavaScript src="<%=g_sJSPath%>/N2NFunc.js"></script>
+<script language=JavaScript src="<%=g_sJSPath%>/jsutil.js"></script>
+<script type="text/javascript" src="<%=g_sJSPath%>/swfobject.js"></script> 
+
+<!--ATP Change Password-->
+<script language='javascript'>
+var m_nSubmitCount = new Number(0);
+function init() {
+//	lang('pwdreg_minchar', emoreg_minchar);
+}
+function getItem(objName) {
+	 if (navigator.appName.indexOf("Microsoft") != -1) {
+		 return window[objName];
+	 } else {
+		 return document[objName];
+	 }
+}
+function verifyPwdEntry(oField) {
+	var sOldPwd = oField[0];
+	var sNewPwd = oField[1];
+	var sNewCfmPwd = oField[2];
+
+	//make sure old and new PIN diff
+	if (sOldPwd.toLowerCase() == sNewPwd.toLowerCase()) {
+		alert("Your new password should not be the same as old password.");
+		return false;
+	}
+	
+	if(sNewPwd.length < 6) {
+        	alert("Password must be minimum 6 characters")
+	        return false;
+	}
+
+//	var iChars = "%^&*()+=-[]\\\';,./{}|\":<>?";
+//		for (var i = 0; i < document.frmChgPwd.txtNewPwd.value.length; i++) {
+//		        if (iChars.indexOf(document.frmChgPwd.txtNewPwd.value.charAt(i)) != -1) {
+//		                alert ("Only 0-9, A-Z, a-z and four special characters (!@#$) are allowed for password. ");
+//		                document.frmChgPwd.txtNewPwd.focus();
+//		                return false;
+//		        }
+//              }
+	
+	//make sure new and conf PIN match
+	if (sNewPwd.toLowerCase() != sNewCfmPwd.toLowerCase()) {
+		alert("New password does not match confirmation password");
+		return false;
+	}
+	
+	return true;
+}
+
+function checkRequiredFields(oField, vsLang) {
+	var fieldNames = new Array("Old Password", "New Password", "Confirm New Password");
+	var fieldCheck   = true;
+	var fieldsNeeded = "\nA value must be entered in the following field(s) :\n";
+
+	for(var nField=0; nField < fieldNames.length; ++nField) {
+		if (JStrim(oField[nField]) == "") {
+			fieldsNeeded += fieldNames[nField] + " .\n";
+			fieldCheck = false;
+		}
+	}
+
+	if (!fieldCheck) {
+		// SOME REQUIRED FIELDS ARE MISSING VALUES
+		if(JStrim(oField[0]) == "")             //if user id value is missing
+		{
+		 document.frmChgPwd.txtOldPwd.focus();  
+		}
+		else if(JStrim(oField[1]) == "")
+		{
+		 document.frmChgPwd.txtNewPwd.focus();
+		}
+		else if(JStrim(oField[2]) == "")
+		{
+		 document.frmChgPwd.txtNewCfmPwd.focus();
+		} 
+		alert(fieldsNeeded);
+	}
+	if (fieldCheck) 
+	{
+		return (verifyPwdEntry(oField));
+	}
+	return false;
+}
+
+function entryVerify(voFrm, vsLang) {
+	var oField = new Array("txtOldPwd", "txtNewPwd", "txtNewCfmPwd");
+	if (voFrm != null) {
+		for (var nField=0; nField < oField.length; ++nField) {
+			oField[nField] = voFrm.elements[oField[nField]].value;
+		}
+	}
+	if (checkRequiredFields(oField, vsLang)) {
+		return true;
+	}
+ 	return false;
+}
+
+function frmSubmit(voFrm, vsLang) {	
+	if (entryVerify(voFrm, vsLang)) {		
+		if (m_nSubmitCount ==0) {
+			<% session.setAttribute("FromURL","changePassword"); %>
+			<% session.setAttribute("loginid",sUUID); %>
+			voFrm.action="<%=g_sPath%>/loginATP?action=<%=oN2NSession.getSetting("ForceChgPwdActionString")%>&from_path=default";
+			voFrm.submit();
+			m_nSubmitCount++;
+			return true;
+		} else {
+			alert("Your request has been submitted. Please wait...");
+			return false;
+		}		
+	}
+	else {
+		return false;
+	}
+}
+function frmLogout(voFrm, vsLang) {
+	voFrm.action="<%=g_sPath%>/loginATP?action=<%=oN2NSession.getSetting("LogoutActionString")%>&from_path=applet";
+	voFrm.submit();
+}
+function btnCancel_onClick(voFrm,indicatorChgPwd) {
+	if (indicatorChgPwd == "success") {
+		window.close();
+	} else {
+		window.close();
+	}
+}
+function validatePass(voFrm) {
+    var emoreg_password = "Password";
+    var emoreg_password_str = "Password Strength";
+    var emoreg_password_short = "Too Short";
+    var emoreg_password_weak = "Weak";
+    var emoreg_password_fair = "Fair";
+    var emoreg_password_good = "Good";
+    var emoreg_password_strong = "Strong";
+    var emoreg_minchar = "Case sensitive. Min. 6 characters. <br>(Best to have a combination of lowercase, uppercase letters and numbers.)"
+    var emoreg_confirm_password = "Password (Confirm)";
+    var oldPass = voFrm.txtOldPwd.value;
+    var newPass = voFrm.txtNewPwd.value;
+
+    var status = validatePassword(newPass, oldPass);
+
+    var passStr = document.getElementById("passStr");
+    var weakPass = document.getElementById("weakPass");
+    var fairPass = document.getElementById("fairPass");
+    var goodPass = document.getElementById("goodPass");
+    var strongPass = document.getElementById("strongPass");
+
+    if(status == -1) {
+        passStr.innerHTML = emoreg_password_short;
+        passStr.style.color = "#C0C0C0";
+        weakPass.style.backgroundColor = "#D0D0D0";
+        fairPass.style.backgroundColor = "#D0D0D0";
+        goodPass.style.backgroundColor = "#D0D0D0";
+        strongPass.style.backgroundColor = "#D0D0D0";
+//        voFrm.submitChgPwd.disabled=true;        
+    } else if(status == 3) {
+        passStr.innerHTML = emoreg_password_weak;
+        passStr.style.color = "#C80000";
+        weakPass.style.backgroundColor = "#C80000";
+        fairPass.style.backgroundColor = "#D0D0D0";
+        goodPass.style.backgroundColor = "#D0D0D0";
+        strongPass.style.backgroundColor = "#D0D0D0";
+//        voFrm.submitChgPwd.disabled=true;          
+    } else if(status == 2) {
+        passStr.innerHTML = emoreg_password_fair;
+        passStr.style.color = "#FFCC33";
+        weakPass.style.backgroundColor = "#FFCC33";
+        fairPass.style.backgroundColor = "#FFCC33";
+        goodPass.style.backgroundColor = "#D0D0D0";
+        strongPass.style.backgroundColor = "#D0D0D0";
+//        voFrm.submitChgPwd.disabled=true;         
+    } else if(status == 1) {
+        passStr.innerHTML = emoreg_password_good;
+        passStr.style.color = "#6699CC";
+        weakPass.style.backgroundColor = "#6699CC";
+        fairPass.style.backgroundColor = "#6699CC";
+        goodPass.style.backgroundColor = "#6699CC";
+        strongPass.style.backgroundColor = "#D0D0D0";
+//        voFrm.submitChgPwd.disabled=true;          
+    } else {
+        passStr.innerHTML = emoreg_password_strong;
+        passStr.style.color = "#009900";
+        weakPass.style.backgroundColor = "#009900";
+        fairPass.style.backgroundColor = "#009900";
+        goodPass.style.backgroundColor = "#009900";
+        strongPass.style.backgroundColor = "#009900";
+//        voFrm.submitChgPwd.disabled=false;         
+    }
+}
+
+</script>
+
+<title>Change Password</title>
+
+
+<body style="MARGIN: 3px 0px 0px 5px;BACKGROUND:#FFFFFF">
+<script language=JavaScript src="<%=g_sJSPath%>/popupWindow.js"></script>
+<table border=0 cellPadding=0 cellSpacing=0 width=350 height='90%'>
+<tr><td>&nbsp;</td></tr>
+	<tr height=14><td><table border=0 cellpadding=0 cellspacing=0 width='100%' height=14>
+			<tr><td width='6%' class=clsSectionHeader>&nbsp;</td>
+				<td width='80%' class=clsSectionHeader>CHANGE PASSWORD</td>
+				<td width='14%' class=clsSectionHeader>&nbsp;</td></tr>
+		</table></td></tr>
+	<tr><td>
+		<table border=1 cellpadding=0 cellspacing=0 width='100%' height='100%'>
+			<tr><td>
+			<form id=frmChgPwd name=frmChgPwd method=post>
+				<table width='100%'>
+					<tr><td width='10%'>&nbsp;</td>
+						<td width='80%' class=style33 colspan=2>
+						<strong style='color:red'>PLEASE CHANGE YOUR PASSWORD USING THE EXISTING PASSWORD</strong><br> 
+						</td>
+						<td width='10%'>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td>
+						<td class=style33>User ID</td>
+						<td colspan=2><%=sUUID%></td>
+						<td>&nbsp;</td></tr>						
+					<tr><td>&nbsp;</td>
+						<td class=style33>Old Password</td>
+						<td colspan=2><input type=password id=txtOldPwd name=txtOldPwd value='' class=inputField maxlength=30 size=30 autocomplete="false"/><strong>*</strong></td>
+						<td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td>
+						<td class=style33>New Password</td>
+						<td style="padding:3px 0px" colspan=2><input type=password id=txtNewPwd name=txtNewPwd class=inputField maxlength=30 size=30 autocomplete="false" onkeyup="validatePass(getItem('frmChgPwd'));" <%=chgPwdIndicator.equals("success")?"disabled=true":""%>/><strong>*</strong></td>
+						<td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td>
+						<td class=style33>&nbsp;</td>
+						<td style="font-weight: bold">Password Strength:&nbsp;&nbsp;&nbsp;&nbsp;<span id="passStr"></span>
+	                        <table cellpadding="0" cellspacing="0" style="margin-top: 5px; margin-bottom: 5px;">
+	                            <tr>
+	                                <td id="weakPass" style="background-color: #D0D0D0; width: 50px; height: 2px;"></td>
+	                                <td id="fairPass" style="background-color: #D0D0D0; width: 50px; height: 2px;"></td>
+	                                <td id="goodPass" style="background-color: #D0D0D0; width: 50px; height: 2px;"></td>
+	                                <td id="strongPass" style="background-color: #D0D0D0; width: 50px; height: 2px;"></td>
+	                            </tr>
+	                        </table>
+                        </td>
+						<td>&nbsp;</td></tr>
+					<tr height=30><td>&nbsp;</td>
+						<td class=style33>&nbsp;</td>
+						<td class=style33 style="padding:3px 0px" id="pwdreg_minchar">Case sensitive. Min. 6 characters. <br>(Best to have a combination of lowercase, uppercase letters and numbers.</td>
+						</tr>
+					<tr height=30><td>&nbsp;</td>
+						<td class=style33>Confirm New Password</td>
+						<td colspan=2 style="padding:3px 0px"><input type=password id=txtNewCfmPwd name=txtNewCfmPwd class=inputField maxlength=30 size=30 autocomplete="false" <%=chgPwdIndicator.equals("success")?"disabled=true":""%>/></td>
+						</tr>
+					<tr><td>&nbsp;</td>
+						<td colspan=3><hr width='100%'></td>
+						</tr>
+					<tr height=50><td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><input type="button" name="submitChgPwd" value="SUBMIT" style="cursor: pointer;" <%=chgPwdIndicator.equals("success")?"disabled=true":""%> onclick="return frmSubmit(getItem('frmChgPwd'),'EN');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" name="Cancel" value="CLOSE" style="cursor: pointer;" <%=chgPwdIndicator.equals("success")?"disabled=true":""%> onclick="javascript:btnCancel_onClick(getItem('frmChgPwd'),'<%=chgPwdIndicator%>');"></td>
+						<td>&nbsp;</td></tr>
+					<%if (!errorMessage.equals("")) {%>
+					<tr><td>&nbsp;</td>
+						<td colspan=2><strong style='color:red'>
+						<% if (errorMessage.indexOf("1710")==0) { %>
+							1710 ATP - Password changed successfully
+						<% } else if (errorMessage.indexOf("1704")==0) { %>
+							1704 ATP - Your new password should not be the same as old password
+						<% } else if (errorMessage.indexOf("1706")==0) { %>
+							1706 ATP - Your password should be at least 6 characters
+						<% } else if (errorMessage.indexOf("1707")==0) { %>
+							1707 ATP - Your password should have at least 1 alphabet and 1 numeric character
+						<% } else if (errorMessage.indexOf("1708")==0) { %>
+							1708 ATP - Password contains illegal character
+						<% } else if (errorMessage.indexOf("1711")==0) { %>
+							1711 ATP - Please retype your User ID
+						<% } else if (errorMessage.indexOf("1713")==0) { %>
+							1713 ATP - Password same as one version before.
+						<% } else { %>
+							<%=errorMessage%>						
+						<% } %>
+						</strong></td>
+						<td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td>
+						<td colspan=2><span style='color:red'>click CLOSE button to continue.</span></td>
+						<td>&nbsp;</td></tr>
+					<%}%>						
+				</table></form>
+				</td></tr>
+		</table>
+	</td></tr>
+</table>
+</body>
+</html>
+<%
+}
+}catch (Exception ex) {
+	ex.printStackTrace();
+}
+%> 

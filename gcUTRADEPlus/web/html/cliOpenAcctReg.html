@@ -1,0 +1,2587 @@
+
+
+<!doctype html>
+<html>
+	<head>
+		<title>Registration page</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+
+	
+    	<link href="https://fonts.googleapis.com/css?family=Montserrat:600|Roboto+Slab" rel="stylesheet">
+
+		<link rel="stylesheet" href="../css/maroon/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/maroon/style.css" />	
+		
+		<link rel="stylesheet" href="../css/error-form.css" />
+		<link rel="stylesheet" href="../css/default.css" />
+		<link rel="stylesheet" href="../css/jquery-ui.css" />			
+		<link rel="stylesheet" href="../css/jquery-ui.theme.css" />	
+
+		<style>
+			td{
+				height:20px;
+				font-size:12px;
+			}
+			#tblAccInfo tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}
+			#tblPersonalInfo tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}
+			#tblAccount1 tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}
+			#tblAccount2 tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}
+			#tblInvestorProfile tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}
+			#frmRegister_ownershipAns, #tblAccount2, #frmRegister_ownershipAns2, #frmRegister_refByAns2, #frmRegister, #frmInvestorProfile,#frmUtradeAwareness, #frmRvPrnt, #div_otherID {
+				display:none;
+			}
+			#tr_nationality, #tr_passportNo, #tr_acrNo, #tr_dtIssued, #tr_placeIssued, #tr_verificationNo, #tr_verificationDt, #tr_custodianBnk, #tr_regName  {
+				display:none;
+			}
+			#tr_nationality2, #tr_passportNo2, #tr_acrNo2, #tr_dtIssued2, #tr_placeIssued2, #tr_verificationNo2, #tr_verificationDt2, #tr_custodianBnk2, #tr_regName2  {
+				display:none;
+			}
+			#div_nationality,#div_bankName, #div_passportNo, #div_acrNo, #div_dtIssued, #div_placeIssued, #div_verificationNo, #div_verificationDt, #div_custodianBnk, #div_regName  {
+				display:none;
+			}
+			#div_hint,#div_IDType2,#div_IDType1,#div_nationality2, #div_passportNo2, #div_acrNo2, #div_dtIssued2, #div_placeIssued2, #div_verificationNo2, #div_verificationDt2, #div_custodianBnk2, #div_regName2, #div_typeOfBusiness,#div_befOC, #div_befOP,  #div_relOBN, #div_relOBP, #div_befN1,#div_befN2,#div_befR1,#div_befR2,#div_typeOfBusiness2{
+				display:none;
+			}
+
+		</style>	
+	</head>
+	<body>
+		<div id="divRegister" name="divRegister">
+			<div class="container">
+				<ul class="form-steps">
+					<li class="form-step-item fin-step aosteps">1. Account Info</li>
+					<li class="form-step-item unfin-step aosteps">2. Personal Info</li>
+					<li class="form-step-item unfin-step aosteps">3. Investor Profile</li>
+					<li class="form-step-item unfin-step aosteps">4. UTrade Awareness</li>
+					<li class="form-step-item unfin-step aosteps">5. Review and Print</li>
+					<li class="form-step-item unfin-step aosteps">6. Send Documents</li>
+				</ul>
+
+				<form id="frmRegisterAcc" name="frmRegisterAcc" method="post" style="margin-top: 40px;">
+					<div id="divRegisterAcc" class="form-horizontal">
+
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Enter Account Information</h3>
+							
+								<p>Note: Printer is required for completing this application.</p>	
+							</div>
+						</div>
+
+						<div class="form-group hide-type1">
+							<label for="frmRegisterAcc_userID" class="col-sm-4 control-label">Username</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegisterAcc_userID" name="frmRegisterAcc_userID" />
+								<input type="hidden" id="frmRegisterAcc_userID_hidden" name="frmRegisterAcc_userID_hidden" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">(Max. 15 characters)</div>
+							</div>
+						</div>
+
+						<div class="form-group hide-type1">
+							<label for="frmRegisterAcc_pwd" class="col-sm-4 control-label">Password</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegisterAcc_pwd" name="frmRegisterAcc_pwd" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">(6-16 alphanumeric characters)</div>
+							</div>
+						</div>
+
+						<div class="form-group hide-type1">
+							<label for="frmRegisterAcc_confPwd" class="col-sm-4 control-label">Re-type Password</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegisterAcc_confPwd" name="frmRegisterAcc_confPwd" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">(6-16 alphanumeric characters)</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_pin" class="col-sm-4 control-label">Trading Pin</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegister_pin" name="frmRegister_pin" maxlength="6" onkeypress='return validateQty(event);'/>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">(6 digits)</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_confPin" class="col-sm-4 control-label">Re-type Pin</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegister_confPin" name="frmRegister_confPin" maxlength="6" onkeypress='return validateQty(event);'/>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">(6 digits)</div>
+							</div>
+						</div>
+
+						<div class="form-group hide-type1">
+							<label for="frmRegisterAcc_hintType" class="col-sm-4 control-label">Hint for Forgotten Password</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="frmRegisterAcc_hintType" name="frmRegisterAcc_hintType">
+										<option value="What is your Pet's Name?">What is your Pet's Name?</option>
+										<option value="What was the name of your first school?">What was the name of your first school?</option>
+										<option value="Who was your childhood hero?">Who was your childhood hero?</option>
+										<option value="What is your favorite pastime?">What is your favorite pastime?</option>
+										<option value="What is your all-time favorite sports team?">What is your all-time favorite sports team?</option>
+										<option value="What is your father's middle name?">What is your father's middle name?</option>
+										<option value="What was your high school mascot?">What was your high school mascot?</option>
+										<option value="What make was your first car or bike?">What make was your first car or bike?</option>
+										<option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+										<option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+										<option value="OTR">Others</option>
+								</select>
+							</div>
+							<div class="col-sm-4 hide-type1">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_hint" class="form-group hide-type1">
+							<label for="frmRegisterAcc_hint" class="col-sm-4 control-label">Question</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegisterAcc_hint" name="frmRegisterAcc_hint" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group hide-type1">
+							<label for="frmRegisterAcc_hintAns" class="col-sm-4 control-label">Answer to your hint</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegisterAcc_hintAns" name="frmRegisterAcc_hintAns" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+						
+						
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<footer class="form-action-wrap">
+									<div class="pull-right float-break-md">
+										<div class="form-inline">
+											<div class="btn-group" style="margin-right: 10px;">
+												<!--button type="button" class="btn btn-sm btn-primary signupbtna" onclick="window.location.href='/'">Back</button-->
+											</div>
+											<div class="btn-group">
+												<input class="btn btn-sm btn-primary" type="submit" value="Next" style="width:100px"/>
+											</div>
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+
+
+					</div>
+				</form>
+
+		
+
+				
+
+				<form id="frmRegister" class="form-horizontal" name="frmRegister" method="post" style="margin-top: 10px;">
+					
+					<div id="tblAccount1">
+
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Personal Information</h3>
+							
+								<p>Note: Printer is required for completing this application.</p>	
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_joint" class="col-sm-4 control-label">Joint Indicator</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_joint" name="frmRegister_joint">
+									<option value="M">No(Individual)</option>
+									<option value="J">JOINT OR</option>	
+									<option value="J">JOINT AND</option>
+									
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_category" class="col-sm-4 control-label">Account Type</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_category" name="frmRegister_category">
+									<option value="1">Cash</option>	
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameLast" class="col-sm-4 control-label">Last Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameLast" name="frmRegister_cliNameLast" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameFirst" class="col-sm-4 control-label">First Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameFirst" name="frmRegister_cliNameFirst" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameMiddle" class="col-sm-4 control-label">Middle Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameMiddle" name="frmRegister_cliNameMiddle" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_sexMale" class="col-sm-4 control-label">Gender</label>
+							<div class="col-sm-4 col-lg-3">
+								<label for="frmRegister_sexMale" class="radio-inline">
+									<input type="radio" id="frmRegister_sexMale" name="frmRegister_sex" value="M" />Male
+								</label>
+								<label for="frmRegister_sexFemale" class="radio-inline">
+									<input type="radio" id="frmRegister_sexFemale" name="frmRegister_sex" value="F" />Female
+								</label>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+
+						<div class="clearfix" style="margin-top: 40px;"></div>
+						<div class="form-group">
+							<label for="frmRegister_dob" class="col-sm-4 control-label">Date Of Birth</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_dob" name="frmRegister_dob" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_birthPlace" class="col-sm-4 control-label">Place of Birth</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_birthPlace" name="frmRegister_birthPlace" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_citizenship" class="col-sm-4 control-label">Residency</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_citizenship" name="frmRegister_citizenship">		
+									<option value='F'>Filipino</option>
+									<option value='R'>Foreigner</option>
+									<option value='NR'>Non-Resident Foreigner</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1ICType1" class="col-sm-4 control-label">ID Type</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_cli1ICType1" name="frmRegister_cli1ICType1">
+									<option value='TIN'>Tax ID Number</option>
+									<option value='PP'>Passport</option>
+									<option value='DRV'>Driver's  License</option>
+									<option value='SSS'>Social Security</option>
+									<option value='GSIS'>Gov.Service Insurance</option>
+									<option value='SEN'>Senior's</option>
+									<option value='VOT'>Voter's</option>
+									<option value='PHIC'>PhilHealth</option>
+									<option value='PRC'>Pro Regulation Commission</option>
+									<option value='SEA'>Seaman's Book</option>
+									<option value='OFW'>Overseas Filipino Worker</option>
+									<option value='OWWA'>Overseas Workers Welfare Assoc.</option>
+									<option value='POL'>Police Clearance</option>
+									<option value='NBI'>NBI Clearance</option>
+									<option value='POST'>Postal</option>
+									<option value='BRGY'>Barangay Certification</option>
+									<option value='NCWD'>National Council for the Welfare of Disabled   </option>
+									<option value='DSWD'>Dep. of Social Welfare & Development</option>
+									<option value='BIRTH'>Birth Certificate</option>
+									<option value='ACR'>Alien Certificate of Registration</option>
+									<option value='Other'>Other</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_otherID" class="form-group">
+							<label for="frmRegister_cli1ICOther" class="col-sm-4 control-label">Other ID</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cli1ICOther" name="frmRegister_cli1ICOther" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1ICValue1" class="col-sm-4 control-label">ID Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cli1ICValue1" name="frmRegister_cli1ICValue1" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_IDType1" class="form-group">
+							<label for="frmRegister_cli1IDType1" class="col-sm-4 control-label">ID Type</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_cli1IDType1" name="frmRegister_cli1IDType1">
+									<option value='PP'>Passport</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						<div id="div_passportNo" class="form-group">
+							<label for="frmRegister_passportNo" class="col-sm-4 control-label">ID Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_passportNo" name="frmRegister_passportNo" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+							<div class="form-group">
+							<label for="frmRegister_idValid" class="col-sm-4 control-label">ID Validity</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_idValid" name="frmRegister_idValid" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+
+						<div class="form-group">
+							<label for="frmRegister_civilStatus" class="col-sm-4 control-label">Civil Status</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_civilStatus" name="frmRegister_civilStatus">
+									<option value='SG'>Single</option>
+									<option value='MR'>Married</option>
+									<option value='SP'>Separated</option>
+									<option value='WD'>Widowed</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_spouseName" class="col-sm-4 control-label">Name of Spouse</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_spouseName" name="frmRegister_spouseName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+						
+
+						<div id="div_nationality" class="form-group">
+							<label for="frmRegister_nationality" class="col-sm-4 control-label">Nationality</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_nationality" name="frmRegister_nationality">
+									<option value="">Select your country</option>	
+									<option value="AF">AFGHANISTAN</option>
+									<option value="AX">ALAND ISLANDS</option>
+									<option value="AL">ALBANIA</option>
+									<option value="DZ">ALGERIA</option>
+									<option value="AS">AMERICAN SAMOA</option>
+									<option value="ADT">ANDOR</option>
+									<option value="AD">ANDORRA</option>
+									<option value="AI">ANGUILLA</option>
+									<option value="AQ">ANTARCTICA</option>
+									<option value="AG">ANTIGUA AND BARBUDA</option>
+									<option value="AR">ARGENTINA</option>
+									<option value="AM">ARMENIA</option>
+									<option value="AW">ARUBA</option>
+									<option value="AU">AUSTRALIA</option>
+									<option value="AT">AUSTRIA</option>
+									<option value="AZ">AZERBAIJAN</option>
+									<option value="BS">BAHAMAS</option>
+									<option value="BH">BAHRAIN</option>
+									<option value="BD">BANGLADESH</option>
+									<option value="BB">BARBADOS</option>
+									<option value="BY">BELARUS</option>
+									<option value="BE">BELGIUM</option>
+									<option value="BZ">BELIZE</option>
+									<option value="BJ">BENIN</option>
+									<option value="BM">BERMUDA</option>
+									<option value="BT">BHUTAN</option>
+									<option value="BO">BOLIVIA</option>
+									<option value="BQ">BONAIRE, SAINT EUSTAT & SABA</option>
+									<option value="BA">BOSNIA AND HERZEGOWINA</option>
+									<option value="BW">BOTSWANA</option>
+									<option value="BV">BOUVET ISLAND</option>
+									<option value="BR">BRAZIL</option>
+									<option value="IO">BRITISH INDIAN OCEAN TERRITORY</option>
+									<option value="VGI">BRITISH VIRGIN ISLANDS</option>
+									<option value="BN">BRUNEI DARUSSALAM</option>
+									<option value="BG">BULGARIA</option>
+									<option value="BF">BURKINA FASO</option>
+									<option value="BI">BURUNDI</option>
+									<option value="KH">CAMBODIA</option>
+									<option value="CM">CAMEROON</option>
+									<option value="CA">CANADA</option>
+									<option value="CV">CAPE VERDE</option>
+									<option value="KY">CAYMAN ISLANDS</option>
+									<option value="TD">CHAD</option>
+									<option value="CL">CHILE</option>
+									<option value="CN">CHINA</option>
+									<option value="CX">CHRISTMAS ISLAND</option>
+									<option value="CC">COCOS (KEELING) ISLANDS</option>
+									<option value="CO">COLOMBIA</option>
+									<option value="KM">COMOROS</option>
+									<option value="CG">CONGO</option>
+									<option value="CD">CONGO, DEMOCRATIC REPUBLIC</option>
+									<option value="CK">COOK ISLANDS</option>
+									<option value="CR">COSTA RICA</option>
+									<option value="CI">COTE D'IVOIRE</option>
+									<option value="HR">CROATIA</option>
+									<option value="CU">CUBA</option>
+									<option value="CW">CURACAO</option>
+									<option value="CY">CYPRUS</option>
+									<option value="CZ">CZECH REPUBLIC</option>
+									<option value="DK">DENMARK</option>
+									<option value="DJ">DJIBOUTI</option>
+									<option value="DM">DOMINICA</option>
+									<option value="DO">DOMINICAN REPUBLIC</option>
+									<option value="TP">EAST TIMOR</option>
+									<option value="EC">ECUADOR</option>
+									<option value="EG">EGYPT</option>
+									<option value="SV">EL SALVADOR</option>
+									<option value="GQ">EQUATORIAL GUINEA</option>
+									<option value="ER">ERITREA</option>
+									<option value="EE">ESTONIA</option>
+									<option value="ET">ETHIOPIA</option>
+									<option value="FK">FALKLAND ISLANDS (MALVINAS)</option>
+									<option value="FO">FAROE ISLANDS</option>
+									<option value="FJ">FIJI</option>
+									<option value="FI">FINLAND</option>
+									<option value="FR">FRANCE</option>
+									<option value="GF">FRENCH GUIANA</option>
+									<option value="PF">FRENCH POLYNESIA</option>
+									<option value="TF">FRENCH SOUTHERN TERRITORIES</option>
+									<option value="GA">GABON</option>
+									<option value="GM">GAMBIA</option>
+									<option value="GE">GEORGIA</option>
+									<option value="DE">GERMANY</option>
+									<option value="GH">GHANA</option>
+									<option value="GI">GIBRALTAR</option>
+									<option value="GR">GREECE</option>
+									<option value="GL">GREENLAND</option>
+									<option value="GD">GRENADA</option>
+									<option value="GP">GUADELOUPE</option>
+									<option value="GU">GUAM</option>
+									<option value="GT">GUATEMALA</option>
+									<option value="GG">GUERNSEY & ALDERNEY	CHANNEL ISLAND</option>
+									<option value="GN">GUINEA</option>
+									<option value="GW">GUINEA-BISSAU</option>
+									<option value="GY">GUYANA</option>
+									<option value="HT">HAITI</option>
+									<option value="HM">HEARD AND MC DONALD ISLANDS (HEARD)</option>
+									<option value="HMI">HEARD AND MC DONALD ISLANDS (MCDONALD)</option>
+									<option value="HN">HONDURAS</option>
+									<option value="HK">HONG KONG</option>
+									<option value="HU">HUNGARY</option>
+									<option value="IS">ICELAND</option>
+									<option value="IN">INDIA</option>
+									<option value="ID">INDONESIA</option>
+									<option value="IR">IRAN (ISLAMIC REPUBLIC OF)</option>
+									<option value="IQ">IRAQ</option>
+									<option value="IE">IRELAND</option>
+									<option value="IM">ISLE OF MAN</option>
+									<option value="IL">ISRAEL</option>
+									<option value="IT">ITALY</option>
+									<option value="JM">JAMAICA</option>
+									<option value="JP">JAPAN</option>
+									<option value="JE">JERSEY</option>
+									<option value="JO">JORDAN</option>
+									<option value="KZ">KAZAKHSTAN</option>
+									<option value="KE">KENYA</option>
+									<option value="KI">KIRIBATI</option>
+									<option value="KV">KOSOVO</option>
+									<option value="KW">KUWAIT</option>
+									<option value="KG">KYRGYZSTAN</option>
+									<option value="LA">LAOS</option>
+									<option value="LV">LATVIA</option>
+									<option value="LB">LEBANON</option>
+									<option value="LS">LESOTHO</option>
+									<option value="LR">LIBERIA</option>
+									<option value="LY">LIBYA</option>
+									<option value="LI">LIECHTENSTEIN</option>
+									<option value="LT">LITHUANIA</option>
+									<option value="LU">LUXEMBOURG</option>
+									<option value="MO">MACAU</option>
+									<option value="MK">MACEDONIA</option>
+									<option value="MG">MADAGASCAR</option>
+									<option value="MW">MALAWI</option>
+									<option value="MY">MALAYSIA</option>
+									<option value="MV">MALDIVES</option>
+									<option value="ML">MALI</option>
+									<option value="MT">MALTA</option>
+									<option value="MH">MARSHALL ISLANDS</option>
+									<option value="MQ">MARTINIQUE</option>
+									<option value="MR">MAURITANIA</option>
+									<option value="MU">MAURITIUS</option>
+									<option value="YT">MAYOTTE</option>
+									<option value="MX">MEXICO</option>
+									<option value="FM">MICRONESIA</option>
+									<option value="MD">MOLDOVA</option>
+									<option value="MC">MONACO</option>
+									<option value="MN">MONGOLIA</option>
+									<option value="CS">MONTENEGRO</option>
+									<option value="MS">MONTSERRAT</option>
+									<option value="MA">MOROCCO</option>
+									<option value="MZ">MOZAMBIQUE</option>
+									<option value="MM">MYANMAR</option>
+									<option value="NA">NAMIBIA</option>
+									<option value="NR">NAURU</option>
+									<option value="NP">NEPAL</option>
+									<option value="AN">NETHERLANDS ANTILLES</option>
+									<option value="NL">NETHERLANDS</option>
+									<option value="NC">NEW CALEDONIA</option>
+									<option value="NZ">NEW ZEALAND</option>
+									<option value="NI">NICARAGUA</option>
+									<option value="NG">NIGERIA</option>
+									<option value="NU">NIUE</option>
+									<option value="NF">NORFOLK ISLAND</option>
+									<option value="MP">NORTHERN MARIANA ISLANDS</option>
+									<option value="NO">NORWAY</option>
+									<option value="OM">OMAN</option>
+									<option value="PK">PAKISTAN</option>
+									<option value="PW">PALAU</option>
+									<option value="PW">PALESTINE</option>
+									<option value="PA">PANAMA</option>
+									<option value="PG">PAPUA NEW GUINEA</option>
+									<option value="PY">PARAGUAY</option>
+									<option value="PE">PERU</option>
+									<option value="PH" selected="selected">PHILIPPINES</option>
+									<option value="PN">PITCAIRN ISLAND</option>
+									<option value="PL">POLAND</option>
+									<option value="PT">PORTUGAL</option>
+									<option value="PR">PUERTO RICO</option>
+									<option value="QA">QATAR</option>
+									<option value="RE">REUNION</option>
+									<option value="RO">ROMANIA</option>
+									<option value="RU">RUSSIAN</option>
+									<option value="RW">RWANDA</option>
+									<option value="BL">SAINT BARTHELEMY</option>
+									<option value="SH">SAINT HELENA</option>
+									<option value="KN">SAINT KITTS AND NEVIS(KITTS)</option>
+									<option value="KN">SAINT KITTS AND NEVIS(NEVIS)</option>
+									<option value="LC">SAINT LUCIA</option>
+									<option value="MF">SAINT MARTIN</option>
+									<option value="PM">SAINT PIERRE & MIQUELON(MIQUELON)</option>
+									<option value="PMS">SAINT PIERRE & MIQUELON(SAINT PIERRE)</option>
+									<option value="VC">SAINT VINCENT AND THE GRENADINES</option>
+									<option value="WS">SAMOA</option>
+									<option value="SM">SAN MARINO</option>
+									<option value="ST">SAO TOME AND PRINCIPE</option>
+									<option value="SA">SAUDI ARABIA</option>
+									<option value="SN">SENEGAL</option>
+									<option value="SC">SEYCHELLES</option>
+									<option value="SL">SIERRA LEONE</option>
+									<option value="SG">SINGAPORE</option>
+									<option value="SG1">SINGAPORE</option>
+									<option value="SX">SINT MAARTEN</option>
+									<option value="SK">SLOVAKIA (Slovak Republic)</option>
+									<option value="SI">SLOVENIA</option>
+									<option value="SB">SOLOMON ISLANDS</option>
+									<option value="SO">SOMALIA</option>
+									<option value="ZA">SOUTH AFRICA</option>
+									<option value="GS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(GEORGIA)</option>
+									<option value="GSS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(SANDWICH)</option>
+									<option value="KR">SOUTH KOREA</option>
+									<option value="SS">SOUTH SUDAN</option>
+									<option value="ES">SPAIN</option>
+									<option value="LK">SRI LANKA</option>
+									<option value="SD">SUDAN</option>
+									<option value="SR">SURINAME</option>
+									<option value="SJ">SVALBARD AND JAN MAYEN</option>
+									<option value="SZ">SWAZILAND</option>
+									<option value="SE">SWEDEN</option>
+									<option value="CH">SWITZERLAND</option>
+									<option value="SY">SYRIAN</option>
+									<option value="TW">TAIWAN</option>
+									<option value="TJ">TAJIKISTAN</option>
+									<option value="TZ">TANZANIA</option>
+									<option value="TH">THAILAND</option>
+									<option value="TG">TOGO</option>
+									<option value="TK">TOKELAU</option>
+									<option value="TO">TONGA</option>
+									<option value="TT">TRINIDAD AND TOBAGO(TOBAGO)</option>
+									<option value="TTT">TRINIDAD AND TOBAGO(TRINIDAD)</option>
+									<option value="TN">TUNISIA</option>
+									<option value="TR">TURKEY</option>
+									<option value="TM">TURKMENISTAN</option>
+									<option value="TC">TURKS AND CAICOS ISLANDS</option>
+									<option value="TV">TUVALU</option>
+									<option value="UG">UGANDA</option>
+									<option value="UA">UKRAINE</option>
+									<option value="AE">UNITED ARAB EMIRATES</option>
+									<option value="GB">UNITED KINGDOM</option>
+									<option value="UM">UNITED STATES MINOR OUTLYING ISLANDS</option>
+									<option value="US">UNITED STATES OF AMERICA</option>
+									<option value="UY">URUGUAY</option>
+									<option value="UZ">UZBEKISTAN</option>
+									<option value="VU">VANUATU</option>
+									<option value="VE">VENEZUELA</option>
+									<option value="VN">VIETNAM</option>
+									<option value="VG">VIRGIN ISLANDS (UK)</option>
+									<option value="VI">VIRGIN ISLANDS (USA)</option>
+									<option value="WF">WALLIS AND FUTUNA ISLANDS</option>
+									<option value="EH">WESTERN SAHARA</option>
+									<option value="YE">YEMEN</option>
+									<option value="ZM">ZAMBIA</option>
+									<option value="ZE">ZIMBABWE</option>
+									<option value="ZW">ZIMBABWE</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+
+						<div id="div_acrNo" class="form-group">
+							<label for="frmRegister_acrNo" class="col-sm-4 control-label">ACR Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_acrNo" name="frmRegister_acrNo" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_dtIssued" class="form-group">
+							<label for="frmRegister_dtIssued" class="col-sm-4 control-label">Date Issued</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_dtIssued" name="frmRegister_dtIssued" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_placeIssued" class="form-group">
+							<label for="frmRegister_placeIssued" class="col-sm-4 control-label">Place Issued</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_placeIssued" name="frmRegister_placeIssued" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_verificationNo" class="form-group">
+							<label for="frmRegister_verificationNo" class="col-sm-4 control-label">Verification OR Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_verificationNo" name="frmRegister_verificationNo" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_verificationDt" class="form-group">
+							<label for="frmRegister_verificationDt" class="col-sm-4 control-label">Verification Date</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_verificationDt" name="frmRegister_verificationDt" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_custodianBnk" class="form-group">
+							<label for="frmRegister_custodianBnk" class="col-sm-4 control-label">Custodian Bank</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_custodianBnk" name="frmRegister_custodianBnk" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_regName" class="form-group">
+							<label for="frmRegister_regName" class="col-sm-4 control-label">Registration Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_regName" name="frmRegister_regName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_tin" class="col-sm-4 control-label">TIN</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_tin" name="frmRegister_tin" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+						<div class="form-group">
+							<label for="frmRegister_email" class="col-sm-4 control-label">Email</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_email" name="frmRegister_email" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1Add1" class="col-sm-4 control-label">Home Address</label>
+							<div class="col-sm-4 col-lg-3">
+								<div style="margin-bottom: 15px;">
+									<input class="form-control" type="text" id="frmRegister_cli1Add1" name="frmRegister_cli1Add1" placeholder="Address 1" />
+								</div>
+								<div>
+									<input class="form-control" type="text" id="frmRegister_cli1Add2" name="frmRegister_cli1Add2" placeholder="Address 2" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_postcode" class="col-sm-4 control-label">Zip Code</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_postcode" name="frmRegister_postcode" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1Telno1" class="col-sm-4 control-label">Phone No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli1Telno1" name="frmRegister_cli1Telno1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli1Telno2" name="frmRegister_cli1Telno2" onkeypress='return validateQty(event);'/>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_ownership" class="col-sm-4 control-label">Ownership</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_ownership" name="frmRegister_ownership">
+									<option value='R'>Rented</option>
+									<option value='O'>Owned</option>
+									<option value='L'>Living with Relatives</option>
+									<option value='M'>Owned-Mortgaged with</option>
+								</select>
+								<div class="clearfix" style="margin-top: 10px;"></div>
+								<input class="form-control" type="text" id="frmRegister_ownershipAns" name="frmRegister_ownershipAns" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_lengthStay" class="col-sm-4 control-label">Length of Stay</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_lengthStay" name="frmRegister_lengthStay" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+
+						<div class="form-group">
+							<label for="frmRegister_cli1Mobile1" class="col-sm-4 control-label">Mobile No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli1Mobile1" name="frmRegister_cli1Mobile1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli1Mobile2" name="frmRegister_cli1Mobile2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1Fax1" class="col-sm-4 control-label">Fax No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli1Fax1" name="frmRegister_cli1Fax1" style="min-width:50px" onkeypress='return validateQty(event);' /> 
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli1Fax2" name="frmRegister_cli1Fax2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_occupation" class="col-sm-4 control-label">Occupation</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_occupation" name="frmRegister_occupation">
+									<option value='ACC'>Accounting/Auditing</option>
+									<option value='ADM'>Administrative/Clerical</option>
+									<option value='ARC'>Architect/Interior Design</option>
+									<option value='ART'>Arts/Media Communications</option>
+									<option value='BIZ'>Businessman</option>
+									<option value='CS'>Customer Service</option>
+									<option value='DEN'>Dentist</option>
+									<option value='DOC'>Doctors</option>
+									<option value='EDU'>Education</option>
+									<option value='ENG'>Engineers/Construction</option>
+									<option value='FBR'>Food/Beverage/Restaurants</option>
+									<option value='FIN'>Finance</option>
+									<option value='GOV'>Government Officials</option>
+									<option value='HP'>Healthcare/Personal Care</option>
+									<option value='HR'>Human Resource</option>
+									<option value='IT'>Information Tech</option>
+									<option value='LAW'>Lawyers</option>
+									<option value='LOG'>Logistics/Supply Chain</option>
+									<option value='MAN'>Manufacturing</option>
+									<option value='NUR'>Nurse</option>
+									<option value='OFW'>Overseas Filipino Workers</option>
+									<option value='PHA'>Pharmacist</option>
+									<option value='PR'>Public Relations</option>
+									<option value='RE'>Real Estate Officer</option>
+									<option value='RTD'>Retired</option>
+									<option value='SB'>Stock Broker</option>
+									<option value='SC'>Social Services</option>
+									<option value='SCI'>Science/Technology</option>
+									<option value='SD'>Software Developer</option>
+									<option value='SEC'>Security/Armed Forces</option>
+									<option value='SM'>Sales/Marketing</option>
+									<option value='STU'>Student</option>
+									<option value='TOP'>Top Management</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_employmentStatus" class="col-sm-4 control-label">Employment Status</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_employmentStatus" name="frmRegister_employmentStatus">
+									<option value='1'>Employed</option>
+									<option value='2'>Self-Employed</option>
+									<option value='3'>Unemployed</option>
+									<option value='4'>Student</option>
+									<option value='5'>Retired</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_employName" class="col-sm-4 control-label">Name of Employer</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_employName" name="frmRegister_employName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1BusinessAdd1" class="col-sm-4 control-label">Business Address</label>
+							<div class="col-sm-4 col-lg-3">
+								<div>
+									<input class="form-control" type="text" id="frmRegister_cli1BusinessAdd1" name="frmRegister_cli1BusinessAdd1" />
+								</div>
+								<div style="margin-top: 10px;">
+									<input class="form-control" type="text" id="frmRegister_cli1BusinessAdd2" name="frmRegister_cli1BusinessAdd2" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli1EmployTelno1" class="col-sm-4 control-label">Phone No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli1EmployTelno1" name="frmRegister_cli1EmployTelno1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli1EmployTelno2" name="frmRegister_cli1EmployTelno2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_yearsWithCompany" class="col-sm-4 control-label">Years with Company</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_yearsWithCompany" name="frmRegister_yearsWithCompany" onkeypress='return validateQty(event);' />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_typeOfBusiness" class="form-group">
+							<label for="frmRegister_position" class="col-sm-4 control-label">Type of Business</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_position" name="frmRegister_position">
+										<option value='AGR '>Agriculture</option>
+										<option value='FISH '>Fishing</option>
+										<option value='MINE '>Mining</option>
+										<option value='MANU '>Manufacturing</option>
+										<option value='ENRG '>Electricity, Water, Gas</option>
+										<option value='CONS '>Construction</option>
+										<option value='TRD '>Wholesale & Retail Trade</option>
+										<option value='HOT '>Hotels & Restaurant</option>
+										<option value='TRNS '>Transportation, Storage, Communication</option>
+										<option value='FIN '>Financial</option>
+										<option value='REAL '>Real Estate</option>
+										<option value='EDU '>Private Education</option>
+										<option value='OTHER '>Other Business</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+						
+					</div>
+
+
+					<div id="tblAccount2">
+
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h4>Account 2 Information</h4>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameLast2" class="col-sm-4 control-label">Last Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameLast2" name="frmRegister_cliNameLast2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameFirst2" class="col-sm-4 control-label">First Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameFirst2" name="frmRegister_cliNameFirst2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameMiddle2" class="col-sm-4 control-label">Middle Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cliNameMiddle2" name="frmRegister_cliNameMiddle2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_sexMale2" class="col-sm-4 control-label">Gender</label>
+							<div class="col-sm-4 col-lg-3">
+								<label for="frmRegister_sexMale2" class="radio-inline">
+									<input type="radio" id="frmRegister_sexMale2" name="frmRegister_sex2" value="M" />Male
+								</label>
+								<label for="frmRegister_sexFemale2" class="radio-inline">
+									<input type="radio" id="frmRegister_sexFemale2" name="frmRegister_sex2" value="F" />Female
+								</label>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+
+						<div class="clearfix" style="margin-top: 40px;"></div>
+						<div class="form-group">
+							<label for="frmRegister_dob2" class="col-sm-4 control-label">Date Of Birth</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_dob2" name="frmRegister_dob2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_birthPlace2" class="col-sm-4 control-label">Place of Birth</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_birthPlace2" name="frmRegister_birthPlace2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_citizenship2" class="col-sm-4 control-label">Residency</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_citizenship2" name="frmRegister_citizenship2">		
+									<option value='F'>Filipino</option>
+									<option value='R'>Foreigner</option>
+									<option value='NR'>Non-Resident Foreigner</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2ICType1" class="col-sm-4 control-label">ID Type</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control id-dropdown" id="frmRegister_cli2ICType1" name="frmRegister_cli2ICType1">
+									<option value='TIN'>Tax ID Number</option>
+									<option value='PP'>Passport</option>
+									<option value='DRV'>Driver's  License</option>
+									<option value='SSS'>Social Security</option>
+									<option value='GSIS'>Gov.Service Insurance</option>
+									<option value='SEN'>Senior's</option>
+									<option value='VOT'>Voter's</option>
+									<option value='PHIC'>PhilHealth</option>
+									<option value='PRC'>Pro Regulation Commission</option>
+									<option value='SEA'>Seaman's Book</option>
+									<option value='OFW'>Overseas Filipino Worker</option>
+									<option value='OWWA'>Overseas Workers Welfare Assoc.</option>
+									<option value='POL'>Police Clearance</option>
+									<option value='NBI'>NBI Clearance</option>
+									<option value='POST'>Postal</option>
+									<option value='BRGY'>Barangay Certification</option>
+									<option value='NCWD'>National Council for the Welfare of Disabled</option>
+									<option value='DSWD'>Dep. of Social Welfare & Development</option>
+									<option value='BIRTH'>Birth Certificate</option>
+									<option value='ACR'>Alien Certificate of Registration</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_otherID" class="form-group">
+							<label for="frmRegister_cli2ICOther" class="col-sm-4 control-label">Other ID</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cli2ICOther" name="frmRegister_cli2ICOther" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2ICValue1" class="col-sm-4 control-label">ID Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_cli2ICValue1" name="frmRegister_cli2ICValue1" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_IDType1" class="form-group">
+							<label for="frmRegister_cli2IDType1" class="col-sm-4 control-label">ID Type</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_cli2IDType1" name="frmRegister_cli2IDType1">
+									<option value='PP'>Passport</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						<div id="div_passportNo" class="form-group">
+							<label for="frmRegister_passportNo2" class="col-sm-4 control-label">ID Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_passportNo2" name="frmRegister_passportNo2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="frmRegister_idValid2" class="col-sm-4 control-label">ID Validity</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_idValid2" name="frmRegister_idValid2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+
+						<div class="form-group">
+							<label for="frmRegister_civilStatus2" class="col-sm-4 control-label">Civil Status</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_civilStatus2" name="frmRegister_civilStatus2">
+									<option value='SG'>Single</option>
+									<option value='MR'>Married</option>
+									<option value='SP'>Separated</option>
+									<option value='WD'>Widowed</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_spouseName" class="col-sm-4 control-label">Name of Spouse</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_spouseName" name="frmRegister_spouseName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+						
+
+						<div id="div_nationality" class="form-group">
+							<label for="frmRegister_nationality2" class="col-sm-4 control-label">Nationality</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_nationality2" name="frmRegister_nationality2">
+									<option value="">Select your country</option>	
+									<option value="AF">AFGHANISTAN</option>
+									<option value="AX">ALAND ISLANDS</option>
+									<option value="AL">ALBANIA</option>
+									<option value="DZ">ALGERIA</option>
+									<option value="AS">AMERICAN SAMOA</option>
+									<option value="ADT">ANDOR</option>
+									<option value="AD">ANDORRA</option>
+									<option value="AI">ANGUILLA</option>
+									<option value="AQ">ANTARCTICA</option>
+									<option value="AG">ANTIGUA AND BARBUDA</option>
+									<option value="AR">ARGENTINA</option>
+									<option value="AM">ARMENIA</option>
+									<option value="AW">ARUBA</option>
+									<option value="AU">AUSTRALIA</option>
+									<option value="AT">AUSTRIA</option>
+									<option value="AZ">AZERBAIJAN</option>
+									<option value="BS">BAHAMAS</option>
+									<option value="BH">BAHRAIN</option>
+									<option value="BD">BANGLADESH</option>
+									<option value="BB">BARBADOS</option>
+									<option value="BY">BELARUS</option>
+									<option value="BE">BELGIUM</option>
+									<option value="BZ">BELIZE</option>
+									<option value="BJ">BENIN</option>
+									<option value="BM">BERMUDA</option>
+									<option value="BT">BHUTAN</option>
+									<option value="BO">BOLIVIA</option>
+									<option value="BQ">BONAIRE, SAINT EUSTAT & SABA</option>
+									<option value="BA">BOSNIA AND HERZEGOWINA</option>
+									<option value="BW">BOTSWANA</option>
+									<option value="BV">BOUVET ISLAND</option>
+									<option value="BR">BRAZIL</option>
+									<option value="IO">BRITISH INDIAN OCEAN TERRITORY</option>
+									<option value="VGI">BRITISH VIRGIN ISLANDS</option>
+									<option value="BN">BRUNEI DARUSSALAM</option>
+									<option value="BG">BULGARIA</option>
+									<option value="BF">BURKINA FASO</option>
+									<option value="BI">BURUNDI</option>
+									<option value="KH">CAMBODIA</option>
+									<option value="CM">CAMEROON</option>
+									<option value="CA">CANADA</option>
+									<option value="CV">CAPE VERDE</option>
+									<option value="KY">CAYMAN ISLANDS</option>
+									<option value="TD">CHAD</option>
+									<option value="CL">CHILE</option>
+									<option value="CN">CHINA</option>
+									<option value="CX">CHRISTMAS ISLAND</option>
+									<option value="CC">COCOS (KEELING) ISLANDS</option>
+									<option value="CO">COLOMBIA</option>
+									<option value="KM">COMOROS</option>
+									<option value="CG">CONGO</option>
+									<option value="CD">CONGO, DEMOCRATIC REPUBLIC</option>
+									<option value="CK">COOK ISLANDS</option>
+									<option value="CR">COSTA RICA</option>
+									<option value="CI">COTE D'IVOIRE</option>
+									<option value="HR">CROATIA</option>
+									<option value="CU">CUBA</option>
+									<option value="CW">CURACAO</option>
+									<option value="CY">CYPRUS</option>
+									<option value="CZ">CZECH REPUBLIC</option>
+									<option value="DK">DENMARK</option>
+									<option value="DJ">DJIBOUTI</option>
+									<option value="DM">DOMINICA</option>
+									<option value="DO">DOMINICAN REPUBLIC</option>
+									<option value="TP">EAST TIMOR</option>
+									<option value="EC">ECUADOR</option>
+									<option value="EG">EGYPT</option>
+									<option value="SV">EL SALVADOR</option>
+									<option value="GQ">EQUATORIAL GUINEA</option>
+									<option value="ER">ERITREA</option>
+									<option value="EE">ESTONIA</option>
+									<option value="ET">ETHIOPIA</option>
+									<option value="FK">FALKLAND ISLANDS (MALVINAS)</option>
+									<option value="FO">FAROE ISLANDS</option>
+									<option value="FJ">FIJI</option>
+									<option value="FI">FINLAND</option>
+									<option value="FR">FRANCE</option>
+									<option value="GF">FRENCH GUIANA</option>
+									<option value="PF">FRENCH POLYNESIA</option>
+									<option value="TF">FRENCH SOUTHERN TERRITORIES</option>
+									<option value="GA">GABON</option>
+									<option value="GM">GAMBIA</option>
+									<option value="GE">GEORGIA</option>
+									<option value="DE">GERMANY</option>
+									<option value="GH">GHANA</option>
+									<option value="GI">GIBRALTAR</option>
+									<option value="GR">GREECE</option>
+									<option value="GL">GREENLAND</option>
+									<option value="GD">GRENADA</option>
+									<option value="GP">GUADELOUPE</option>
+									<option value="GU">GUAM</option>
+									<option value="GT">GUATEMALA</option>
+									<option value="GG">GUERNSEY & ALDERNEY	CHANNEL ISLAND</option>
+									<option value="GN">GUINEA</option>
+									<option value="GW">GUINEA-BISSAU</option>
+									<option value="GY">GUYANA</option>
+									<option value="HT">HAITI</option>
+									<option value="HM">HEARD AND MC DONALD ISLANDS (HEARD)</option>
+									<option value="HMI">HEARD AND MC DONALD ISLANDS (MCDONALD)</option>
+									<option value="HN">HONDURAS</option>
+									<option value="HK">HONG KONG</option>
+									<option value="HU">HUNGARY</option>
+									<option value="IS">ICELAND</option>
+									<option value="IN">INDIA</option>
+									<option value="ID">INDONESIA</option>
+									<option value="IR">IRAN (ISLAMIC REPUBLIC OF)</option>
+									<option value="IQ">IRAQ</option>
+									<option value="IE">IRELAND</option>
+									<option value="IM">ISLE OF MAN</option>
+									<option value="IL">ISRAEL</option>
+									<option value="IT">ITALY</option>
+									<option value="JM">JAMAICA</option>
+									<option value="JP">JAPAN</option>
+									<option value="JE">JERSEY</option>
+									<option value="JO">JORDAN</option>
+									<option value="KZ">KAZAKHSTAN</option>
+									<option value="KE">KENYA</option>
+									<option value="KI">KIRIBATI</option>
+									<option value="KV">KOSOVO</option>
+									<option value="KW">KUWAIT</option>
+									<option value="KG">KYRGYZSTAN</option>
+									<option value="LA">LAOS</option>
+									<option value="LV">LATVIA</option>
+									<option value="LB">LEBANON</option>
+									<option value="LS">LESOTHO</option>
+									<option value="LR">LIBERIA</option>
+									<option value="LY">LIBYA</option>
+									<option value="LI">LIECHTENSTEIN</option>
+									<option value="LT">LITHUANIA</option>
+									<option value="LU">LUXEMBOURG</option>
+									<option value="MO">MACAU</option>
+									<option value="MK">MACEDONIA</option>
+									<option value="MG">MADAGASCAR</option>
+									<option value="MW">MALAWI</option>
+									<option value="MY">MALAYSIA</option>
+									<option value="MV">MALDIVES</option>
+									<option value="ML">MALI</option>
+									<option value="MT">MALTA</option>
+									<option value="MH">MARSHALL ISLANDS</option>
+									<option value="MQ">MARTINIQUE</option>
+									<option value="MR">MAURITANIA</option>
+									<option value="MU">MAURITIUS</option>
+									<option value="YT">MAYOTTE</option>
+									<option value="MX">MEXICO</option>
+									<option value="FM">MICRONESIA</option>
+									<option value="MD">MOLDOVA</option>
+									<option value="MC">MONACO</option>
+									<option value="MN">MONGOLIA</option>
+									<option value="CS">MONTENEGRO</option>
+									<option value="MS">MONTSERRAT</option>
+									<option value="MA">MOROCCO</option>
+									<option value="MZ">MOZAMBIQUE</option>
+									<option value="MM">MYANMAR</option>
+									<option value="NA">NAMIBIA</option>
+									<option value="NR">NAURU</option>
+									<option value="NP">NEPAL</option>
+									<option value="AN">NETHERLANDS ANTILLES</option>
+									<option value="NL">NETHERLANDS</option>
+									<option value="NC">NEW CALEDONIA</option>
+									<option value="NZ">NEW ZEALAND</option>
+									<option value="NI">NICARAGUA</option>
+									<option value="NG">NIGERIA</option>
+									<option value="NU">NIUE</option>
+									<option value="NF">NORFOLK ISLAND</option>
+									<option value="MP">NORTHERN MARIANA ISLANDS</option>
+									<option value="NO">NORWAY</option>
+									<option value="OM">OMAN</option>
+									<option value="PK">PAKISTAN</option>
+									<option value="PW">PALAU</option>
+									<option value="PW">PALESTINE</option>
+									<option value="PA">PANAMA</option>
+									<option value="PG">PAPUA NEW GUINEA</option>
+									<option value="PY">PARAGUAY</option>
+									<option value="PE">PERU</option>
+									<option value="PH" selected="selected">PHILIPPINES</option>
+									<option value="PN">PITCAIRN ISLAND</option>
+									<option value="PL">POLAND</option>
+									<option value="PT">PORTUGAL</option>
+									<option value="PR">PUERTO RICO</option>
+									<option value="QA">QATAR</option>
+									<option value="RE">REUNION</option>
+									<option value="RO">ROMANIA</option>
+									<option value="RU">RUSSIAN</option>
+									<option value="RW">RWANDA</option>
+									<option value="BL">SAINT BARTHELEMY</option>
+									<option value="SH">SAINT HELENA</option>
+									<option value="KN">SAINT KITTS AND NEVIS(KITTS)</option>
+									<option value="KN">SAINT KITTS AND NEVIS(NEVIS)</option>
+									<option value="LC">SAINT LUCIA</option>
+									<option value="MF">SAINT MARTIN</option>
+									<option value="PM">SAINT PIERRE & MIQUELON(MIQUELON)</option>
+									<option value="PMS">SAINT PIERRE & MIQUELON(SAINT PIERRE)</option>
+									<option value="VC">SAINT VINCENT AND THE GRENADINES</option>
+									<option value="WS">SAMOA</option>
+									<option value="SM">SAN MARINO</option>
+									<option value="ST">SAO TOME AND PRINCIPE</option>
+									<option value="SA">SAUDI ARABIA</option>
+									<option value="SN">SENEGAL</option>
+									<option value="SC">SEYCHELLES</option>
+									<option value="SL">SIERRA LEONE</option>
+									<option value="SG">SINGAPORE</option>
+									<option value="SG1">SINGAPORE</option>
+									<option value="SX">SINT MAARTEN</option>
+									<option value="SK">SLOVAKIA (Slovak Republic)</option>
+									<option value="SI">SLOVENIA</option>
+									<option value="SB">SOLOMON ISLANDS</option>
+									<option value="SO">SOMALIA</option>
+									<option value="ZA">SOUTH AFRICA</option>
+									<option value="GS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(GEORGIA)</option>
+									<option value="GSS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(SANDWICH)</option>
+									<option value="KR">SOUTH KOREA</option>
+									<option value="SS">SOUTH SUDAN</option>
+									<option value="ES">SPAIN</option>
+									<option value="LK">SRI LANKA</option>
+									<option value="SD">SUDAN</option>
+									<option value="SR">SURINAME</option>
+									<option value="SJ">SVALBARD AND JAN MAYEN</option>
+									<option value="SZ">SWAZILAND</option>
+									<option value="SE">SWEDEN</option>
+									<option value="CH">SWITZERLAND</option>
+									<option value="SY">SYRIAN</option>
+									<option value="TW">TAIWAN</option>
+									<option value="TJ">TAJIKISTAN</option>
+									<option value="TZ">TANZANIA</option>
+									<option value="TH">THAILAND</option>
+									<option value="TG">TOGO</option>
+									<option value="TK">TOKELAU</option>
+									<option value="TO">TONGA</option>
+									<option value="TT">TRINIDAD AND TOBAGO(TOBAGO)</option>
+									<option value="TTT">TRINIDAD AND TOBAGO(TRINIDAD)</option>
+									<option value="TN">TUNISIA</option>
+									<option value="TR">TURKEY</option>
+									<option value="TM">TURKMENISTAN</option>
+									<option value="TC">TURKS AND CAICOS ISLANDS</option>
+									<option value="TV">TUVALU</option>
+									<option value="UG">UGANDA</option>
+									<option value="UA">UKRAINE</option>
+									<option value="AE">UNITED ARAB EMIRATES</option>
+									<option value="GB">UNITED KINGDOM</option>
+									<option value="UM">UNITED STATES MINOR OUTLYING ISLANDS</option>
+									<option value="US">UNITED STATES OF AMERICA</option>
+									<option value="UY">URUGUAY</option>
+									<option value="UZ">UZBEKISTAN</option>
+									<option value="VU">VANUATU</option>
+									<option value="VE">VENEZUELA</option>
+									<option value="VN">VIETNAM</option>
+									<option value="VG">VIRGIN ISLANDS (UK)</option>
+									<option value="VI">VIRGIN ISLANDS (USA)</option>
+									<option value="WF">WALLIS AND FUTUNA ISLANDS</option>
+									<option value="EH">WESTERN SAHARA</option>
+									<option value="YE">YEMEN</option>
+									<option value="ZM">ZAMBIA</option>
+									<option value="ZE">ZIMBABWE</option>
+									<option value="ZW">ZIMBABWE</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+
+						<div id="div_acrNo" class="form-group">
+							<label for="frmRegister_acrNo2" class="col-sm-4 control-label">ACR Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_acrNo2" name="frmRegister_acrNo2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_dtIssued" class="form-group">
+							<label for="frmRegister_dtIssued2" class="col-sm-4 control-label">Date Issued</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_dtIssued2" name="frmRegister_dtIssued2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_placeIssued" class="form-group">
+							<label for="frmRegister_placeIssued2" class="col-sm-4 control-label">Place Issued</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_placeIssued2" name="frmRegister_placeIssued2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_verificationNo" class="form-group">
+							<label for="frmRegister_verificationNo2" class="col-sm-4 control-label">Verification OR Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_verificationNo2" name="frmRegister_verificationNo2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_verificationDt" class="form-group">
+							<label for="frmRegister_verificationDt2" class="col-sm-4 control-label">Verification Date</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_verificationDt2" name="frmRegister_verificationDt2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_custodianBnk" class="form-group">
+							<label for="frmRegister_custodianBnk2" class="col-sm-4 control-label">Custodian Bank</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_custodianBnk2" name="frmRegister_custodianBnk2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_regName" class="form-group">
+							<label for="frmRegister_regName2" class="col-sm-4 control-label">Registration Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_regName2" name="frmRegister_regName2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_tin" class="col-sm-4 control-label">TIN</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_tin" name="frmRegister_tin" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+						<div class="form-group">
+							<label for="frmRegister_email2" class="col-sm-4 control-label">Email</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_email2" name="frmRegister_email2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2Add1" class="col-sm-4 control-label">Home Address</label>
+							<div class="col-sm-4 col-lg-3">
+								<div style="margin-bottom: 15px;">
+									<input class="form-control" type="text" id="frmRegister_cli2Add1" name="frmRegister_cli2Add1" placeholder="Address 1" />
+								</div>
+								<div>
+									<input class="form-control" type="text" id="frmRegister_cli2Add2" name="frmRegister_cli2Add2" placeholder="Address 2" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_postcode2" class="col-sm-4 control-label">Zip Code</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_postcode2" name="frmRegister_postcode2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2Telno1" class="col-sm-4 control-label">Phone No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli2Telno1" name="frmRegister_cli2Telno1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli2Telno2" name="frmRegister_cli2Telno2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_ownership" class="col-sm-4 control-label">Ownership</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_ownership" name="frmRegister_ownership">
+									<option value='R'>Rented</option>
+									<option value='O'>Owned</option>
+									<option value='L'>Living with Relatives</option>
+									<option value='M'>Owned-Mortgaged with</option>
+								</select>
+								<div class="clearfix" style="margin-top: 10px;"></div>
+								<input class="form-control" type="text" id="frmRegister_ownershipAns" name="frmRegister_ownershipAns" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_lengthStay" class="col-sm-4 control-label">Length of Stay</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_lengthStay" name="frmRegister_lengthStay" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+
+						<div class="form-group">
+							<label for="frmRegister_cli2Mobile1" class="col-sm-4 control-label">Mobile No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli2Mobile1" name="frmRegister_cli2Mobile1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli2Mobile2" name="frmRegister_cli2Mobile2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2Fax1" class="col-sm-4 control-label">Fax No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli2Fax1" name="frmRegister_cli2Fax1" style="min-width:50px" onkeypress='return validateQty(event);' /> 
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli2Fax2" name="frmRegister_cli2Fax2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_occupation2" class="col-sm-4 control-label">Occupation</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_occupation2" name="frmRegister_occupation2">
+									<option value='ACC'>Accounting/Auditing</option>
+									<option value='ADM'>Administrative/Clerical</option>
+									<option value='ARC'>Architect/Interior Design</option>
+									<option value='ART'>Arts/Media Communications</option>
+									<option value='BIZ'>Businessman</option>
+									<option value='CS'>Customer Service</option>
+									<option value='DEN'>Dentist</option>
+									<option value='DOC'>Doctors</option>
+									<option value='EDU'>Education</option>
+									<option value='ENG'>Engineers/Construction</option>
+									<option value='FBR'>Food/Beverage/Restaurants</option>
+									<option value='FIN'>Finance</option>
+									<option value='GOV'>Government Officials</option>
+									<option value='HP'>Healthcare/Personal Care</option>
+									<option value='HR'>Human Resource</option>
+									<option value='IT'>Information Tech</option>
+									<option value='LAW'>Lawyers</option>
+									<option value='LOG'>Logistics/Supply Chain</option>
+									<option value='MAN'>Manufacturing</option>
+									<option value='NUR'>Nurse</option>
+									<option value='OFW'>Overseas Filipino Workers</option>
+									<option value='PHA'>Pharmacist</option>
+									<option value='PR'>Public Relations</option>
+									<option value='RE'>Real Estate Officer</option>
+									<option value='RTD'>Retired</option>
+									<option value='SB'>Stock Broker</option>
+									<option value='SC'>Social Services</option>
+									<option value='SCI'>Science/Technology</option>
+									<option value='SD'>Software Developer</option>
+									<option value='SEC'>Security/Armed Forces</option>
+									<option value='SM'>Sales/Marketing</option>
+									<option value='STU'>Student</option>
+									<option value='TOP'>Top Management</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_employmentStatus2" class="col-sm-4 control-label">Employment Status</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_employmentStatus2" name="frmRegister_employmentStatus2">
+									<option value='1'>Employed</option>
+									<option value='2'>Self-Employed</option>
+									<option value='3'>Unemployed</option>
+									<option value='4'>Student</option>
+									<option value='5'>Retired</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_employName2" class="col-sm-4 control-label">Name of Employer</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_employName2" name="frmRegister_employName2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2BusinessAdd1" class="col-sm-4 control-label">Business Address</label>
+							<div class="col-sm-4 col-lg-3">
+								<div>
+									<input class="form-control" type="text" id="frmRegister_cli2BusinessAdd1" name="frmRegister_cli2BusinessAdd1" />
+								</div>
+								<div>
+									<input class="form-control" type="text" id="frmRegister_cli2BusinessAdd2" name="frmRegister_cli2BusinessAdd2" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cli2EmployTelno1" class="col-sm-4 control-label">Phone No</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_cli2EmployTelno1" name="frmRegister_cli2EmployTelno1" style="min-width:50px" onkeypress='return validateQty(event);' />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_cli2EmployTelno2" name="frmRegister_cli2EmployTelno2" onkeypress='return validateQty(event);' />
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_yearsWithCompany2" class="col-sm-4 control-label">Years with Company</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_yearsWithCompany2" name="frmRegister_yearsWithCompany2" onkeypress='return validateQty(event);' />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_typeOfBusiness" class="form-group">
+							<label for="frmRegister_position2" class="col-sm-4 control-label">Type of Business</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_position2" name="frmRegister_position2">
+										<option value='AGR '>Agriculture</option>
+										<option value='FISH '>Fishing</option>
+										<option value='MINE '>Mining</option>
+										<option value='MANU '>Manufacturing</option>
+										<option value='ENRG '>Electricity, Water, Gas</option>
+										<option value='CONS '>Construction</option>
+										<option value='TRD '>Wholesale & Retail Trade</option>
+										<option value='HOT '>Hotels & Restaurant</option>
+										<option value='TRNS '>Transportation, Storage, Communication</option>
+										<option value='FIN '>Financial</option>
+										<option value='REAL '>Real Estate</option>
+										<option value='EDU '>Private Education</option>
+										<option value='OTHER '>Other Business</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+					</div>
+
+
+
+						
+
+
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<footer class="form-action-wrap">
+								<div class="pull-right float-break-md">
+									<div class="form-inline">
+										<div class="btn-group" style="margin-right: 10px;">
+											<input type="button" class="btn btn-sm btn-primary" value="Back" id="Back1" onclick="chgRegisterLayout(0);" />
+										</div>
+										<div class="btn-group">
+											<input class="btn btn-sm btn-primary" type="submit" value="Next" style="width:100px"/>
+										</div>
+									</div>
+								</div>
+							</footer>
+						</div>
+					</div>
+
+				</form>
+				
+				<form id="frmInvestorProfile" class="form-horizontal" name="frmInvestorProfile" method="post" style="margin-top: 10px;">
+				
+					<div id="tblInvestorProfile">
+						
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Investor Profile</h3>
+							
+								<p>Note: Printer is required for completing this application.</p>	
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_fundSrc1" class="col-sm-4 control-label">Fund Source</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc1" name="frmRegister_fundSrc" value="Salaries" />Salaries
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc2" name="frmRegister_fundSrc" value="Professional Fees" />Professional Fees
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc3" name="frmRegister_fundSrc" value="Rental" />Rental
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc4" name="frmRegister_fundSrc" value="Interest Income" />Interest Income
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc5" name="frmRegister_fundSrc" value="Pension" />Pension
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="checkbox" id="frmRegister_fundSrc6" name="frmRegister_fundSrc" value="Others " />Others 
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="tr_fundSrc1" style="display:none" class="form-group">
+							<label for="frmRegister_fundSrc1" class="col-sm-4 control-label">If Others, Please state:</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_fundSrcOthers" name="frmRegister_fundSrcOthers" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_bank" class="col-sm-4 control-label">Bank Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_bank" name="frmRegister_bank">
+									<option value='BDO'>BDO Unibank</option>
+									<option value='BPI'>Bank of PH Islands</option>
+									<option value='MBT'>Metrobank</option>
+									<option value='LAND'>LandBank of PH</option>
+									<option value='PNB'>PH National Bank</option>
+									<option value='DBP'>Dev Bank of PH</option>
+									<option value='CHIN'>China Bank</option>
+									<option value='RCBC'>Rizal Commercial Bank</option>
+									<option value='UNIO'>Unionbank</option>
+									<option value='Other'>Other Bank</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_bankName"  class="form-group">
+							<label for="frmRegister_bankName" class="col-sm-4 control-label">Other Bank Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_bankName" name="frmRegister_bankName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_accName" class="col-sm-4 control-label">Bank Account Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_accName" name="frmRegister_accName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_accBranch" class="col-sm-4 control-label">Bank Branch</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_accBranch" name="frmRegister_accBranch" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_accNo" class="col-sm-4 control-label">Bank Account Number</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_accNo" name="frmRegister_accNo" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_annualIncome" class="col-sm-4 control-label">Annual Income</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_annualIncome" name="frmRegister_annualIncome">	
+									<option value='< Php 500,000'>< Php 500,000</option>
+									<option value='< Php 1,000,000'>< Php 1,000,000</option>
+									<option value='< Php 5,000,000'>< Php 5,000,000</option>
+									<option value='< Php 10,000,000'>< Php 10,000,000</option>
+									<option value='> Php 10,000,000'>> Php 10,000,000</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_netWorth" class="col-sm-4 control-label">Net Financial Worth</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_netWorth" name="frmRegister_netWorth">
+									<option value='< Php 500,000'>< Php 500,000</option>
+									<option value='< Php 1,000,000'>< Php 1,000,000</option>
+									<option value='< Php 5,000,000'>< Php 5,000,000</option>
+									<option value='< Php 10,000,000'>< Php 10,000,000</option>
+									<option value='> Php 10,000,000'>> Php 10,000,000</option>							
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_marketRisk" class="col-sm-4 control-label">Market Risk Tolerance</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_marketRisk" name="frmRegister_marketRisk">
+									<option value='1'> None</option>
+									<option value='2'> Low</option>
+									<option value='3'> Moderate</option>
+									<option value='4'> High</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_trdYrs" class="col-sm-4 control-label">Trading Year Experience</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_trdYrs" name="frmRegister_trdYrs">
+									<option value='1'>No Experience</option>
+									<option value='1'> < 1 Year</option>
+									<option value='2'> 1-3 Years</option>
+									<option value='3'> 3-5 Years</option>
+									<option value='4'> 5 Years</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_invInstrument" class="col-sm-4 control-label">Investment Instrument Experience</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_invInstrument" name="frmRegister_invInstrument">
+									<option value='1'> Time Deposits & Money Market Funds</option>
+									<option value='2'> Peso Government or UITF Bonds</option>
+									<option value='3'> Dollar Government or Corporate Bonds</option>
+									<option value='4'> Stocks and Equity or Mutual Fund and Derivatives</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_netWorthInv" class="col-sm-4 control-label">Net Worth Investment Percentage</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_netWorthInv" name="frmRegister_netWorthInv">
+									<option value='1'> <25% </option>
+									<option value='2'> 25 to 50%</option>
+									<option value='3'> 50 to 75%</option>
+									<option value='4'> >75% </option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_retireAge" class="col-sm-4 control-label">Retirement Age</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_retireAge" name="frmRegister_retireAge">
+									<option value='1'> Now Retired</option>
+									<option value='2'> In 1 to 7 Years</option>
+									<option value='3'> In 7 to 15 Years</option>
+									<option value='4'> More than 15 Years</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_invRedemption" class="col-sm-4 control-label">Investment Redemption in Years</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_invRedemption" name="frmRegister_invRedemption">
+									<option value='1'> <1 Year</option>
+									<option value='2'> 1-3 Years</option>
+									<option value='3'> 3-5 Years</option>
+									<option value='4'> >5 Years</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_invObj" class="col-sm-4 control-label">Investment Objective</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_invObj" name="frmRegister_invObj">
+									<option value='1'> Speculation</option>
+									<option value='2'> Preservation</option>
+									<option value='3'> Long Term</option>
+									<option value='4'> Growth</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_ratio" class="col-sm-4 control-label">Loss/Return Ratio</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_ratio" name="frmRegister_ratio">
+									<option value='1'> Loss 0%/ Return 3%</option>
+									<option value='2'> Loss 5%/ Return 10%</option>
+									<option value='3'> Loss 10%/ Return 15%</option>
+									<option value='4'> Loss 20%/ Return 35%</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_invDrop" class="col-sm-4 control-label">Investment Drop</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_invDrop" name="frmRegister_invDrop">
+									<option value='1'> Redeem as Value Declines</option>
+									<option value='2'> Less Than 10%</option>
+									<option value='3'> 10% to 20%</option>
+									<option value='4'> 20% to 50%</option>						
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_invHandleBy1" class="col-sm-4 control-label">Investment to be Handled by</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_invHandleBy1" name="frmRegister_invHandleBy" value="C" />Customer
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_invHandleBy2" name="frmRegister_invHandleBy" value="A" />Utrade (Discretionary Account)
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_regStkBought1" class="col-sm-4 control-label">Registration of Stocks Bought</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_regStkBought1" name="frmRegister_regStkBought" value="C" />Customer
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_regStkBought2" name="frmRegister_regStkBought" value="A" />Utrade (Discretionary Account)
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+
+
+						<div class="form-group">
+							<label for="frmRegister_befOwnerY" class="col-sm-4 control-label">Are you the beneficial owner of more than 10%, or an Officer, or a Director of a PSE-listed Company?</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_befOwnerY" name="frmRegister_befOwner" value="Y" />Yes
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_befOwnerN" name="frmRegister_befOwner" value="N" />No
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_befOC" class="form-group">
+							<label for="frmRegister_beneficialOwnerCompany" class="col-sm-4 control-label">Beneficial Owner Company</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficialOwnerCompany" name="frmRegister_beneficialOwnerCompany" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_befOP" class="form-group">
+							<label for="frmRegister_beneficialOwnerPosition" class="col-sm-4 control-label">Beneficial Owner Position</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficialOwnerPosition" name="frmRegister_beneficialOwnerPosition" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="frmRegister_relOtherBrokerY" class="col-sm-4 control-label">Are you employed or an officer of another broker-dealer?</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_relOtherBrokerY" name="frmRegister_relOtherBroker" value="Y" />Yes
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_relOtherBrokerN" name="frmRegister_relOtherBroker" value="N" />No
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						<div id="div_relOBN" class="form-group">
+							<label for="frmRegister_relOtherBrokerName" class="col-sm-4 control-label">If yes, Name of broker</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_relOtherBrokerName" name="frmRegister_relOtherBrokerName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_relOBP" class="form-group">
+							<label for="frmRegister_relOtherBrokerPerson" class="col-sm-4 control-label">Contact Person</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_relOtherBrokerPerson" name="frmRegister_relOtherBrokerPerson" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
+							<label for="frmRegister_accOthBrokerName" class="col-sm-4 control-label">Broker Employed Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_accOthBrokerName" name="frmRegister_accOthBrokerName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_accOthBrokerPerson" class="col-sm-4 control-label">Broker Employed Contact</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_accOthBrokerPerson" name="frmRegister_accOthBrokerPerson" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>-->
+						<div class="form-group">
+							<label for="frmRegister_befPersonY" class="col-sm-4 control-label">Do you have any beneficiaries?</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_befPersonY" name="frmRegister_befPerson" value="Y" />Yes
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_befPersonN" name="frmRegister_befPerson" value="N" />No
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						
+						<div id="div_befN1"  class="form-group">
+							<label for="frmRegister_beneficiaryName" class="col-sm-4 control-label">Beneficiary Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficiaryName" name="frmRegister_beneficiaryName" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_befR1" class="form-group">
+							<label for="frmRegister_beneficiaryRel" class="col-sm-4 control-label">Beneficiary Relationship</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficiaryRel" name="frmRegister_beneficiaryRel" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_befN2"  class="form-group">
+							<label for="frmRegister_beneficiaryName2" class="col-sm-4 control-label">Beneficiary Name</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficiaryName2" name="frmRegister_beneficiaryName2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="div_befR2" class="form-group">
+							<label for="frmRegister_beneficiaryRel2" class="col-sm-4 control-label">Beneficiary Relationship</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_beneficiaryRel2" name="frmRegister_beneficiaryRel2" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						
+
+						
+						<!--
+						<div class="form-group">
+							<label for="frmRegister_delivery1" class="col-sm-4 control-label">I/We would like my/our confirmations/name certificates/other documents to be Delivered/Mailed to :</label>
+							<div class="col-sm-4 col-lg-3">
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_delivery1" name="frmRegister_delivery" value="H" />Home
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="frmRegister_delivery2" name="frmRegister_delivery" value="O" /><span id="frmRegister_deliveryO">Office / Business Address</span>
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						-->
+
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<footer class="form-action-wrap">
+									<div class="pull-right float-break-md">
+										<div class="form-inline">
+											<div class="btn-group" style="margin-right: 10px;">
+												<button type="button" class="btn btn-sm btn-primary signupbtna" id="Back2" onclick="chgRegisterLayout(1)">Back</button>
+											</div>
+											<div class="btn-group">
+												<input class="btn btn-sm btn-primary" type="submit" value="Next" style="width:100px"/>
+											</div>
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+
+
+
+					</div>
+
+
+				</form>
+
+
+
+				<form id="frmUtradeAwareness" class="form-horizontal" name="frmUtradeAwareness" method="post">
+					
+					<div id="tblUtradeAwareness">
+						
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>UTrade Awareness</h3>
+							
+								<p>Note: Printer is required for completing this application.</p>	
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_refBy" class="col-sm-4 control-label">Referred by</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_refBy" name="frmRegister_refBy">
+									<option value='1'>Facebook</option>
+									<option value='2'>Twitter</option>
+									<option value='3'>Viber</option>
+									<option value='4'>Instagram</option>
+									<option value='5'>Blogs</option>
+									<option value='6'>Events</option>
+									<option value='7'>From a Friend</option>
+									<option value='8'>Others</option>
+								</select>
+
+								<div id="tr_referByAns" style="display:none; margin-top: 10px;">
+									<input class="form-control" type="text" id="frmRegister_refByAns" name="frmRegister_refByAns" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_annc" class="col-sm-4 control-label">Announcement</label>
+							<div class="col-sm-4 col-lg-3">
+								<select class="form-control" id="frmRegister_annc" name="frmRegister_annc">
+									<option value='1'>Email Blast or Newsletter</option>
+									<option value='2'>SMS</option>
+									<option value='3'>Facebook</option>
+									<option value='4'>Twitter</option>
+									<option value='5'>Ads in other Websites</option>
+									<option value='6'>Others</option>
+								</select>
+								<div id="tr_anncByAns" style="display:none; margin-top: 10px;">
+									<input class="form-control" type="text" id="frmRegister_anncByAns" name="frmRegister_anncByAns" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div id="tr_mfTotalScore" style="display:none" class="form-group">
+							<label for="frmRegister_mfTotalScore" class="col-sm-4 control-label">MF Risk Profile Total Score</label>
+							<div class="col-sm-4 col-lg-3">
+								<input class="form-control" type="text" id="frmRegister_mfTotalScore" name="frmRegister_mfTotalScore" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<footer class="form-action-wrap">
+									<div class="pull-right float-break-md">
+										<div class="form-inline">
+											<div class="btn-group" style="margin-right: 10px;">
+												<button type="button" class="btn btn-sm btn-primary signupbtna" id="Back3" onclick="chgRegisterLayout(2)">Back</button>
+											</div>
+											<div class="btn-group">
+												<input class="btn btn-sm btn-primary" type="submit" value="next" style="width:100px"/>
+											</div>
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+						
+					</div>
+				</form>
+
+				<form id="frmRvPrnt" name="frmRvPrnt" method="post" target="_blank" action="../../../unicapPdfGenerator/reviewPrint_individual.jsp" >
+	            	<div class="row-fluid form-row">
+
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Review and Print</h3>
+								<p>Make sure to save and print the following documents</p>
+								<p>Note: Printer is required for completing this application.</p>	
+							</div>
+						</div>
+
+	                	<p class="text-center">
+	                		<a href="#" class="btn btn-sm btn-primary unclicked">PDF Specimen Signature card</a>
+	                	</p>
+						<p class="text-center">
+							<a href="#" class="btn btn-sm btn-primary signupbtna unclicked">PDF Agreement</a>
+						</p>
+	                  	<p class="text-center">
+							<a href="#" class="btn btn-sm btn-primary unclicked">PDF Data Consent</a>
+	                  	</p>
+	                  	<p class="text-center">
+							<a href="#" class="btn btn-sm btn-primary signupbtna unclicked">PDF Application Form</a>
+	                  	</p>
+
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<footer class="form-action-wrap">
+									<div class="pull-right float-break-md">
+										<div class="form-inline">
+											<div class="btn-group" style="margin-right: 10px;">
+												<button type="button" class="btn btn-sm btn-primary signupbtna" id="Back4" onclick="chgRegisterLayout(3)">Back</button>
+											</div>
+											<div class="btn-group">
+												<input type="submit" class="btn btn-sm btn-primary" id="submit-btn" value="Submit" style="width:100px"/>
+											</div>
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+	               </div>
+	            </form>
+				
+			</div>
+		</div>
+		
+		<script src="../js/jquery-3.7.1.min.js"></script>
+		<script src="../js/jquery.jcryption.min.js"></script>
+		<script src="../../js/crypto/crypto-js-4.2.0.min.js"></script>
+		<script src="../js/AesUtil.js"></script>
+		<!-- <script src="../js/aes.js"></script>
+		<script src="../js/pbkdf2.js"></script> -->				
+		<script src="../js/common_util.js"></script>
+
+		<script src="../js/register_conf.js"></script>
+		<script src="../js/register_main.js"></script>
+		<script src="../js/bms_setting.js"></script>
+		<script src="../js/validate/jquery.validate-1.22.0.min.js"></script>
+		<script src="../js/jquery-ui.js"></script>
+		<script src="../js/cliOpenAcctReg.js"></script>
+
+		<!--changes starts here-->
+		<script>
+			$(document).ready(function(){	
+				if (window.location.search.substr(1) == "type=1") {				
+						$(".hide-type1").hide();
+				}
+
+
+			//added change function to check if phone number or mobile number has been populated
+			//client 1
+				$('#frmRegister_cli1Mobile1').change(function() { 
+					$("span[for=frmRegister_cli1Telno1]").hide();
+				});
+
+				$('#frmRegister_cli1Mobile2').change(function() { 
+					$("span[for=frmRegister_cli1Telno2]").hide();
+				});
+
+				$('#frmRegister_cli1Telno1').change(function() { 
+					$("span[for=frmRegister_cli1Mobile1]").hide();
+				});
+
+				$('#frmRegister_cli1Telno2').change(function() { 
+					$("span[for=frmRegister_cli1Mobile2]").hide();
+				});
+
+			//client 2
+				$('#frmRegister_cli2Mobile1').change(function() { 
+					$("span[for=frmRegister_cli2Telno1]").hide();
+				});
+
+				$('#frmRegister_cli2Mobile2').change(function() { 
+					$("span[for=frmRegister_cli2Telno2]").hide();
+				});
+
+				$('#frmRegister_cli2Telno1').change(function() { 
+					$("span[for=frmRegister_cli2Mobile1]").hide();
+				});
+
+				$('#frmRegister_cli2Telno2').change(function() { 
+					$("span[for=frmRegister_cli2Mobile2]").hide();
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

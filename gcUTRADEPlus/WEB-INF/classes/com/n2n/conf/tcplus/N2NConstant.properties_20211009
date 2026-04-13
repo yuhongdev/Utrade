@@ -1,0 +1,1519 @@
+### Application Name ###
+constAppName=TCPlus
+constMbAppName=TCMobile
+# release version (Date + Time Stamp) - use to solve the cache issue
+constRelease=20201118
+
+# version + release date e.g. v1.2.12 (2011-11-08)
+constVersion=mf_8269 (2020-11-18)
+# Sponsor ID - AMFRASER|AMFUTURE|CIMBDMA|IF|HDBS|PSE (it determine the TCLite sponsor)
+confSponsorID=UTRADE
+
+
+# - have ATP or not - start
+confHaveATP=TRUE
+# - have ATP or not - end
+
+
+# - have active logger - start
+confHaveTcliteLogger=true
+# - have active logger - end
+
+
+
+# Header for prompt out message
+confPopUpHeader=UTrade
+
+# Enable / Disable on Balance Limit & Net Cash Limit label [EquityPortfolio / Order Status] - InterPac
+# [DEFAULT] : TRUE
+#confShowBalanceNetCashLimit=TRUE
+
+# [order status] - show date time format - start
+#  {default} -  Y-m-d H:i:s
+#confOrderStatusDateFormat=
+# [order status] - show date time format - end
+
+# [mutual fund order status] - show date time format - start
+#  {default} -  Y-m-d H:i:s
+#confMFOrderStatusDateFormat=
+# [mutual fund order status] - show date time format - end
+
+# config stock mf for Mutual Fund Portfolio
+confMfExchCode=PHMF
+
+# [tclite] - date / time format - start
+# {default} - d-m-Y
+# {default} - H:i:s
+#confDateFormat=
+#confTimeFormat=
+#confDateHidden=TRUE
+# [tclite] - date / time format - end
+
+#confWarrantSearch=TRUE
+
+#confBcumScum=TRUE
+
+confTrackerBrokerName=TRUE
+
+# Show SIP message [Require for AmFraser]
+# [DEFAULT] : FALSE
+#confShowSIPMsg=FALSE
+
+# Currencies show [TRUE] Default + QC + ATP & [FALSE] QC + ATP + Default - AmFraser need use [FALSE]
+# [DEFAULT] : FALSE
+#confShowDefaultCurrency=FALSE
+
+# Corporate Stock News [*X] alert user [TRUE - alert] & [FALSE - skip checking]
+# [DEFAULT] : FALSE
+confCorporateStockNewsAlert=TRUE
+confCorporateStockNewsUrl=https://web.utradeph.com/gcUTRADEPlus/news_trading.jsp|1200|620
+
+# Margin stic news url, comment or empty to disable ###
+confElasticNewsUrl=https://web.utradeph.com/gcUTRADEPlus/ext/rwPLC.jsp?t=6&ns=PH&nid=
+#confNikkeiNewsUrl=https://web.utradeph.com/gcUTRADEPlus/ext/rwPLC.jsp?t=6&ns=NAR&nid=
+
+#Margin info (Extra 3 columns  [1]Marginable [2]Margin Price [3]Margin Perc.)
+# [DEFAULT] : FALSE
+#confShowMargin=TRUE
+#confMarginURL=http://secure.itradecimb.com.my/gcCIMB/ref/mf_stkinfo.margin_<ExchangeCode>.ref
+
+# Determine is compress mode
+# [DEFAULT] : FALSE
+#confIsCompressQC=FALSE
+#confIsCompressATP=FALSE
+
+# get exchange time from u09
+# [DEFAULT] : FALSE
+# confIsJQCDateTIme=TRUE
+
+# For jQC [Java QC] need manually enable this feature
+# if using JQC=true, if delphi QC = false 
+# [DEFAULT] : TRUE
+# confIsJQC=TRUE
+
+# Timer Count Down (in second)
+# confShowTimer : false [default]  	: able timer for idle mode
+# confIdleTime	: 1800	[default]	: idle time
+# confCountDown	: 30	[default]	: count down logout 
+confShowTimer = TRUE
+confIdleTime = 1800
+confCountDown = 30
+
+#order pad - display Credit Limit or Buy Sell Limit
+#cl / [empty] = Credit Limit,  bs = Buy Sell Limit, mix = display limit by account type
+confDisplayTypeLimit=cl
+
+#print feed debug statement
+#6 - print feed raw and every fid data
+#0 - no debug print out [default]
+confFeedDebugLevel=6
+
+#JQC master key
+confMasterKey=vUpJYKw4QvGRMBmhATUxRwv4JrU9aDnwNEuangVyy6OuHxi2YiY=
+
+# feed socket delay time
+# [DEFAULT] : 500
+#confReadSocketDelay=500
+
+# determine the quote screen searching is sort by name or code first
+# NAME = sort by name first   /   CODE = sort by code first
+# [DEFAULT] : CODE
+#confQSSortingBy=CODE
+
+
+# [START] display tracker record
+# [default] : false
+# [default] : ''
+# [default] : 6
+# [default] : false
+confTrackerRecord=TRUE
+confTrackerRecordExchange=PH
+#confTrackerRecordTotalRecord=8
+confTrackerRecordDebug=false
+### whether to display code instead of symbol, default=false ###
+confTrackerRecordDisplayCode=true
+### tracker record for abacus, default=false ###
+confTrackerRecordV2=true
+# [END] display tracker record
+
+
+# set default theme color
+# theme color : grey , blue
+# background color : black , white 
+#confThemeColor=grey
+#confThemeBackgroundColor=black
+
+
+
+# [set quote screen setting]
+# confQuoteScreenRecord ---> display how many record
+# conFQuotePagingPanel ---> display paging bar position and the market radio button (temporary only PSE)
+# conFQuoteSizeFollowSetting ---> tclite design is hardcode or follow screen size
+# confMarketRefreshTime ---> set the market refresh time (very short time to refresh)
+# confQuoteScreenCrossSearch ---> allow cross exchange search stock 
+#
+# [DEFAULT] : 30 
+# [DEFAULT] : top     	e.g. top , bottom 
+# [DEFAULT] : false 
+# [DEFAULT] :  		 	e.g. KL|9:00-9:30;SI|9:00-9:30
+# [DEFAULT] : false
+confQuoteScreenRecord=10
+conFQuotePagingPanel=top
+conFQuoteSizeFollowSetting=false
+confMarketRefreshTime=KL|9:00-9.30;SI|9:00-9:30;HK|9:00-9:30;OD|9:00-9:30;ND|9:00-9:30;AD|9:00-9:30
+confQuoteScreenCrossSearch=false
+
+# [set mutual fund setting]
+# confMFundScreenRecord ---> display how many record
+# conFMFundSizeFollowSetting ---> tclite design is hardcode or follow screen size
+# confMarketRefreshTime ---> set the market refresh time (very short time to refresh)
+# confMFundScreenCrossSearch ---> allow cross exchange search stock
+# constMFundScreenSearchOptions---> search options 
+#
+# [DEFAULT] : 30 
+# [DEFAULT] : false 
+# [DEFAULT] :  		 	e.g. KL|09:00-09:30;SI|09:00-09:30 //time need to be in 2digit format(hh:mm) - shuwen 24/7/2014
+# [DEFAULT] : 1|1|1|0 (ThisExchangeOnly|AllExchanges|AllBoards|WarrantSearch) 1 - on, 0 - off
+confMFundScreenRecord=43
+conFMFundSizeFollowSetting=true
+confMFundMarketRefreshTime=
+#constQuoteScreenSearchOptions=1|1|1|0
+
+### quotescreen search sorting, default=stkCode ###
+confQsSearchSorter=stkNo
+
+### wildcard search, default=true ###
+### false is matching the beginning (backward compatibility)
+confWildcardSearch=false
+
+
+# v1.3.34.4 set max number of watchlist can be create and max of stock can be store in each watchlist
+confMaxWatchlistCreate=15
+confMaxStockInWatchlist=50
+
+# v1.3.34.45 Detect if no feed data come in for confCheckIsAliveTimer time, will display offline
+# [DEFAULT] : 60
+#confCheckIsAliveTimer=60
+
+# [START] Features List (to replace confUseBackWardv1) - Control TClite 1.1 Menu / Feature and latest version
+# If ShowV1GUI is True the following setting will ignore else will follow the following 
+# [DEFAULT] : BELOW VALUE IS THE DEFAULT
+#confShowV1GUI=FALSE
+
+#confFeaturesBuySell_Header=TRUE
+#confFeaturesWatchList_Header=TRUE
+#confFeaturesWatchList_View=TRUE
+#confFeaturesWatchList_Create=TRUE
+#confFeaturesWatchList_Rename=TRUE
+#confFeaturesWatchList_Delete=TRUE
+
+#confFeaturesStockInfo_Header=TRUE
+confFeaturesStockInfo_StockInfo=FALSE
+#confFeaturesStockInfo_MarketDepth=TRUE
+confFeaturesStockInfo_MarketDepthMatrix=TRUE
+#confFeaturesDepthMatrix_MaxRow=4
+#confFeaturesDepthMatrix_MaxCol=4
+#confFeaturesDepthMatrix_MinRow=2
+#confFeaturesDepthMatrix_MinCol=2
+###Mutual fund row and column for card view
+#confFeaturesMutualFund_MaxRow=4
+#confFeaturesMutualFund_MaxCol=4
+#confFeaturesMutualFund_MinRow=2
+#confFeaturesMutualFund_MinCol=2
+#confFeaturesStockInfo_Tracker=TRUE
+confTrackerInfoFid=status,indices,tboard,sector,isin,parvalue,lotsize,fluact,floor,ceiling,shissued,mktcap,frshare,frbuy,frsell,netfr,frlimit,frolimit,floatfree{prev,lacp,chgper,open,high,low,value,volume,vwap,buyrate,totalbuy,totalsell,buytrans,selltrans,totaltrans,52wkhigh,52wklow,52wkspread,,eps,peratio,nta
+### fid for mutual fund ###
+### available: fund_code,fund_name,curr,min_invest,min_add_invest,min_red_amt,min_hold_period,mgt_fee,early_red_fee{fund_type,phi,geo,legal_base,fund_size,fund_issuer,navps,start_date
+confTrackerInfoMfFid=fund_code,fund_name,curr,fund_type,fund_size,fund_issuer,navps,start_date{risk_rate,min_invest,min_add_invest,min_red_amt,min_hold_period,mgt_fee,early_red_fee
+confFeaturesStockInfo_TrackerBusinessDone=TRUE
+confFeaturesStockInfo_Tracker3Pies=TRUE
+confFeaturesHistoricalData=true
+confFeaturesHistoricalData_Periodicity=true
+confFeaturesHistoricalData_Load=true
+#confFeaturesStockInfo_EquitiesTracker=FALSE
+
+#confFeaturesChart_Header=TRUE
+#confFeaturesChart_IntradayChart=TRUE
+#confFeaturesChart_AnalysisChart=TRUE
+confFeaturesChart_AnalysisChartAsFlash=TRUE
+#confNewWindow_Analysis=FALSE
+
+#confFeaturesNews_Header=TRUE
+confFeaturesNews_Announcements=FALSE
+confFeaturesNews_StockNews=FALSE
+### new news menu ###
+confNews2_Url=https://web.utradeph.com/gcUTRADEPlus/ext/rwPLC.jsp?t=6&nid=
+#confNews2_Menu=20121{20137|fn:menuHandler.openNews('PH')
+confNews2_Menu=20121{10024|fn:menuHandler.openNews(),UTrade Research|fn:menuHandler.openNews('UTRADE'),20139|fn:menuHandler.pseEdge()
+confFeaturesFund_Header=false
+confFeaturesNews_FundamentalCPIQ=FALSE
+#confFeaturesNews_FundamentalThomsonReuters=TRUE
+confFeaturesNews_FundamentalScreenerCPIQ=FALSE
+#confFeaturesNews_FundamentalScreenerThomsonReuters=TRUE
+#confFeatures_WarrantsInfo=TRUE
+#confNewWindow_News=FALSE
+#constFundamentalExchg=KL
+
+#[START] News Search Popup
+#[DEFAULT]:FALSE
+#constNewsSearchPopup=TRUE
+#[END] News Search Popup
+
+#confFeaturesMarket_Header=TRUE
+#confFeaturesMarket_Summary=TRUE
+#confFeaturesMarket_Indices=TRUE
+#confFeaturesMarket_ScoreBoard=TRUE
+#confFeaturesMarket_SummaryGraph=TRUE
+#confFeaturesMarket_Streamer=TRUE
+
+### enable save filter setting, default=false
+confStreamerPreference=true
+
+	### world indices, default=false ###
+	#confWorldIndices=true
+
+#confFeaturesOrderBook_Header=TRUE
+	#confFeaturesOrderBook_OrderStatus=TRUE
+        #confFeaturesOrderBook_MFOrderStatus=TRUE
+	#confFeaturesOrderBook_OrderHistory=TRUE
+	#confFeaturesOrderBook_OrderLog=TRUE
+	#confFeaturesOrderBook_OrderDetails=TRUE
+	# for PSE only
+	#confFeaturesForeignFlows=TRUE
+	#confFeaturesBrokerInfo=true
+	confFeaturesOrderBook_OrderPosition=TRUE
+	#set to false as per Ratha August 29, 2019
+        #set to true as per Ratha September 12, 2019
+	confFeaturesOrderBook_MFOrderHistory=TRUE
+
+	confFeaturesWebReport_Header=TRUE
+	confFeaturesWebReport_ClientSummary=TRUE
+	confFeaturesWebReport_MonthlyStatement=TRUE
+	confFeaturesWebReport_MarginAccountSummary=TRUE
+	confFeaturesWebReport_TraderDepositReport=TRUE
+	confFeaturesWebReport_TradeBeyondReport=TRUE
+	#confFeaturesWebReport_MarginAccountSummary=FALSE
+	#confFeaturesWebReport_TraderDepositReport=FALSE
+	#confFeaturesWebReport_TradeBeyondReport=FALSE
+	#confFeaturesWebReport_eContract=FALSE
+	#confFeaturesWebReport_AISBeStatement=FALSE
+	#confFeaturesWebReport_MarginPortFolioValuation=FALSE
+	#confFeaturesWebReport_TransactionMovement=FALSE
+	#confFeaturesWebReport_StockBalance=FALSE
+	#confFeaturesWebReport_ClientTransactionStatement=FALSE
+	#confNewWindow_Report=FALSE
+
+	confFeaturesAnalysis_Header=TRUE
+	#confFeaturesAnalysis_Dividend=TRUE
+	#confFeaturesAnalysis_Warrants=TRUE
+	#confFeaturesAnalysis_BMFutures=FALSE
+	### Menu Analysis > Foreign Flow, default=false ###
+	confFeaturesAnalysis_ForeignFlow=true
+	### Menu Analysis > Broker Info, default=false ###
+	confFeaturesAnalysis_BrokerInfo=true
+	constBrokerInfoInterval=900000	
+	#confFeaturesSetting_Header=TRUE
+	confFeaturesSetting_StockAlert=FALSE
+	confFeaturesSetting_AddStockAlert=FALSE
+	#confFeaturesSetting_PriceAlert=true
+	confFeaturesSetting_PersonalizationTheme=FALSE
+
+	#confFeaturesPortFolio_Header=TRUE
+
+	#confFeaturesPortFolio_DerivativePortFolio=TRUE
+	#confFeaturesPortFolio_DerivativePortFolioDetail=TRUE
+
+        #confFeaturesPortFolio_FundPortFolio=TRUE
+	#confFeaturesPortFolio_MyPortFolio=TRUE
+	confFeaturesPortFolio_ManualPortFolio=FALSE
+	#confFeaturesPortFolio_RealizedGainLoss=TRUE
+
+	confPortfolioTitle=Equities Portfolio|Custom Portfolio
+	confFeaturesPortFolio_Detail=FALSE
+	#confFeaturesPortFolio_Detail_Add=TRUE
+	confFeaturesPortFolio_Detail_Update=TRUE
+	#confFeaturesPortFolio_Detail_Delete=TRUE
+
+	confFeaturesManualPortFolio_Detail=TRUE
+	confFeaturesManualPortFolio_Detail_Add=TRUE
+	confFeaturesManualPortFolio_Detail_Update=TRUE
+	confFeaturesManualPortFolio_Detail_Delete=TRUE
+
+	confMigratedPortfolio_Header=FALSE
+	confMigratedPortfolio_PortFolioDetail=FALSE
+	confMigratedPortfolio_PortFolioRealized=FALSE
+
+	#confOtherTool_Header=TRUE
+	#confOtherTool_StockFilter=TRUE
+	#confOtherTool_ExchangeRate=FALSE
+
+	#confFeaturesExchange_Header=FALSE
+
+	#confFeaturesEmoChat_Header=FALSE
+
+	confFeaturesCalculator_Header=TRUE
+	confCalculatorPopUp=FALSE
+	#confCalculatorURL=https://web.utradeph.com/gcCIMB/anlySmfCalcNB.jsp
+	confCalculatorBreakeven=FALSE
+	confCalculatorPEREPS=false
+	confFeaturesUnit_Header=FALSE
+	confCalculatorLabel=Calculator
+	### trade calculator, default=false ###
+	confTradeCalculator=true
+	### trade calculator setting ###
+	confTradeCalDefSettings=comm=0.25{sccp=0.01{adval=0.005{vat=12{tax=0.6{mincom=150{mincom1=20{mincom2=135
+	### extra fields for trade calculator, default=[empty]###
+	confTradeCalExtraField=buyamount,sellamount,profitper
+
+	# [START] Default Display
+	# [VALUE] unit/lot
+	# [DEFAULT] : unit
+	#confDefaultDisplay=
+	# [END] Default Display
+
+	confColumnSetting_Header=TRUE
+	#confSortByTop_Header=TRUE
+	#confSortBySector_Header=TRUE
+	#confSortByMarket_Header=TRUE
+	confLogoutButton=TRUE
+
+	#confFeatureFullScreen=TRUE
+	#confNewWindow_Other=FALSE
+
+	#confAllowCookie=TRUE 
+	# [END] Features List
+
+
+	# [START] Feed Sector filter
+	confShowSector=TRUE
+	#confShowSectorButton=TRUE
+	# [END] Feed Sector filter
+
+	# [START] Single Click Mode
+	confSingleClickMode=TRUE
+	# [END] Single Click Mode
+
+	# [START] Show Export CSV File Button in Quote Screen
+	## For OSK only
+	# [DEFAULT] : FALSE
+	#confShowQuoteScreenExportCSV=FALSE
+	# [END] Show Export CSV File Button in Quote Screen
+
+	# [START] Right-click Auto cancel. Auto submit cancel order for client when it is enabled.
+	# [DEFAULT] : FALSE
+	#confAutoCancel=FALSE
+	# [END] Right-click Auto cancel. Auto submit cancel order for client when it is enabled.
+
+	# [START] Language Menu Header
+	# [DEFAULT] : FALSE
+	#confShowLanguageMenu=TRUE
+	# [END] Language Menu Header
+
+	# [START] Language Menu Options
+	# [DEFAULT] : En
+	constLanguageOptions=en,cn,jp,vn
+	# [END] Language Menu Options
+
+	# [START] ATP Keep Alive Interval
+	constATPKeepAliveInterval=0.12
+	# [END] ATP Keep Alive Interval
+
+	# [START] Show Trx Fees
+	# [DEFAULT] : 0 - Hide, 1 - Show with Label Msg, 2 - Show Calculation
+	confShowTrxFees=2
+	# [END] Show Trx Fees
+
+	# [START] Trx Fees Label
+	# [DEFAULT] : To Be Advised
+	#constTrxFeesLabel=To Be Advised
+	# [END] Trx Fees Label
+
+	# [START] Trx Fees Formula
+	# [NOTE] : Sample formula format from ATP. To be removed when ATP is ready. 
+	#constTrxFeeFormula=[TrxFeeFormula]=KL,Amount,<OrdQty>*<OrdPrice>\n[TrxFeeFormula]=KL,Commission,{Amount}*0.007,Min=12\n[TrxFeeFormula]=KL,StampDuty,{Amount}/1000,RoundUp=1,Min=1,Max=200\n[TrxFeeFormula]=KL,ClearingFee,{Amount}*0.0004,Max=500\n[TrxFeeFormula]=KL,BuyTrxFee,{Commission}+{StampDuty}+{ClearingFee}\n[TrxFeeFormula]=KL,SellTrxFee,{BuyTrxFee}\n[TrxFeeFormula]=PH,Amount,<OrdQty>*<OrdPrice>\n[TrxFeeFormula]=PH,Commission,{Amount}*0.0025,Min=20\n[TrxFeeFormula]=PH,PSEFee,{Amount}*0.000056\n[TrxFeeFormula]=PH,SCCPFee,{Amount}*0.0001\n[TrxFeeFormula]=PH,SECFee,{Amount}*0.00005\n[TrxFeeFormula]=PH,VAT,{Amount}*0.12\n[TrxFeeFormula]=PH,BuyTrxFee,{Commission}+{PSEFee}+{SCCPFee}+{SECFee}+{VAT}\n[TrxFeeFormula]=PH,SalesTax,{Amount}*0.005\n[TrxFeeFormula]=PH,SellTrxFee,{BuyTrxFee}+{SalesTax}\n[TrxFeeFormula]=SI,Amount,<OrdQty>*<OrdPrice>*<ExchRate>\n[TrxFeeFormula]=SI,Commission,{Amount}*0.0025,Min=18\n[TrxFeeFormula]=SI,SGXFee,{Amount}*0.000075\n[TrxFeeFormula]=SI,ClearingFee,{Amount}*0.0004,Max=600\n[TrxFeeFormula]=SI,TotCommFee,{Commission}+{ClearingFee}+{SGXFee}\n[TrxFeeFormula]=SI,GST,{TotCommFee}*0.07\n[TrxFeeFormula]=SI,BuyTrxFee,{Commission}+{SGXFee}+{ClearingFee}+{GST}\n[TrxFeeFormula]=SI,SellTrxFee,{BuyTrxFee}\n
+	# [END] Trx Fees Formula
+
+	# [START] Show IPO
+	# [DEFAULT] : TRUE
+	#confShowIPO=TRUE
+	# [END] Show IPO
+
+	# [START] Show Order Status Refresh Label
+	# [DEFAULT] : FALSE
+	#confShowOrderStatusLabel=FALSE
+	# [END] Show Order Status Refresh Label
+
+        # [START] Show Mutual Fund Order Status Refresh Label
+        # [DEFAULT] : FALSE
+        #confShowMFOrderStatusLabel=FALSE
+        # [END] Show Mutual Fund  Order Status Refresh Label
+
+	# [START] Show Payment Code
+	# [DEFAULT] : FALSE
+	confShowPaymentCode=FALSE
+	# [END] Show Payment Code
+
+	#confEnableOrdPadDD=TRUE
+
+	# blank / empty means show all else specific will only show those specific. ',' as delimeter w/o '
+	# IPS request to show '10' only
+	# [DEFAULT] : ""
+	confShowFilterSector=10,17,19,18,15
+	# [END] Feed Sector filter
+
+	# [START] Quote Screen & Watchlist columns 
+	# [DEFAULT] : TRUE
+	#confColQW_LACP=TRUE
+	#confColQW_TOP=TRUE
+	# [END] Quote Screen & Watchlist columns 
+
+	# [START] Trade Board Restriction [TRUE - allow to trade, FALSE - not allow to trade]
+	# [B - BuyIn Board Lot, I - BuyIn Odd Lot, O - Normal Odd Lot, D - Off Market]
+	# [DEFAULT] : BELOW IS THE DEFAULT VALUE
+	#confTradeBoardRestriction_B=FALSE
+	#confTradeBoardRestriction_D=FALSE
+	#confTradeBoardRestriction_I=FALSE
+	#confTradeBoardRestriction_O=TRUE
+
+	# [START]Exchange Mapping
+	#confExchangeMapping=FALSE
+	# [END]Exchange Mapping
+
+	# [START]Rotating Logo
+	# [DEFAULT] FALSE
+	#constRotatingLogo=FALSE
+	# [END]Rotating Logo
+
+	# Message to display
+	confTradeBoardRestrictionB_Msg=Online trading is not available for BuyingIn transactions.
+	confTradeBoardRestrictionD_Msg=Online trading is not available for Off Market transactions.
+	confTradeBoardRestrictionI_Msg=Online trading is not available for BuyingIn transactions.
+	confTradeBoardRestrictionO_Msg=Online trading is not available for Odd Lot transactions.
+	# [END] Trade Board Restriction / Ban / Not allow
+
+
+
+	# [START] Order Pad - StopLimit, MinQty, DisclosedQty, Sett.Curr and Payment
+	# [NOT USING! ALREADY HIDE IN MAIN.JSP]
+	#confForceDisable_StopLimit=TRUE
+	#confForceDisable_MinQty=TRUE
+	#confForceDisable_DisclosedQty=TRUE
+	#confForceDisable_SettCurr=TRUE
+	#confForceDisable_Payment=TRUE
+	#
+	#		
+	#	if the list is empty, mean it will follow atp setting	
+	#	else it will follow this setting to set up order pad setting
+	#	
+	#		1 : true (enable)   0 : false (disable)
+	#
+	#	use the symbol ";" to split the exchange code setting, e.g :
+	#
+	#	KL:1;SI:0;HK:1;   -- >  KL enable to show, SI disable to show, HK enable to show			
+	#
+	#	format :
+	#				StopLimit | MinQty | DisclosedQty | Sett.Curr | Payment
+	#	
+	#	e.g. : 
+	#
+	#			KL:0 | SI:1;HK:0; | | |
+	#		
+	# [DEFAULT] : ||||
+	#confOrderPadSetting_AFFIN		= |||MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;|MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;
+	#confOrderPadSetting_AIBB 		= ||||
+	#confOrderPadSetting_AMSEC		= |||MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;|MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;
+	#confOrderPadSetting_AMFRASER 	= ||||
+	#confOrderPadSetting_AMFUTURE 	= ||||
+	#confOrderPadSetting_APEX		= ||||
+	confOrderPadSetting_UTRADE 	= ||||
+	#confOrderPadSetting_HDBS 		= ||||
+	#confOrderPadSetting_HDCAP 		= ||||
+	#confOrderPadSetting_IF 		= ||||
+	#confOrderPadSetting_INTERPAC	= ||||
+	#confOrderPadSetting_KAF		= ||||
+	#confOrderPadSetting_KIBB		= ||||
+	#confOrderPadSetting_MAYBANKDRVT = ||||
+	#confOrderPadSetting_MNA			= |||MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;|MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;
+	#confOrderPadSetting_N2N 		= ||||
+	#confOrderPadSetting_N2NDEMO		= |||MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;|MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;
+	#confOrderPadSetting_PMSEC		= ||||
+	#confOrderPadSetting_SJSEC		= ||||
+	#confOrderPadSetting_TA	 		= |||MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;|MY:0;KL:0;SI:0;A:0;N:0;HK:0;O:0;
+	#confOrderPadSetting_PSE	 		= ||||
+	# [END] Order Pad - StopLimit, MinQty, DisclosedQty, Sett.Curr and Payment
+
+
+	# [START] Order Pad - Show Default Value //v1.3.32.3
+	#
+	#      when client click buy or sell stock, combo box will display price or not
+	#
+	#confShowPrice=TRUE
+	# [END] Order Pad - Show Default Value
+
+
+	# [START] Order Pad - payment type setting
+	#
+	# 	[ currency ] | [ disable payment ] ; [ currency ] | [ disable payment ]
+	#   [ currency ] | [ disable payment ],[ disable payment ],[ disable payment ]
+	#
+	#	e.g. MYR|MCTA
+	#	
+	sOrderPadPaymentSetting=MYR|MCTA,FCA
+	# [END] Order Pad - payment type setting
+
+
+
+	# [START] Order Pad - order pad unit trading
+	# 	e.g.  KL,SG,SI,PH
+	#
+	confOrderPadUnitsTrading=SG,PH
+	# [END] Order Pad - order pad unit trading
+
+
+	# Order Log App ID tooltips 
+	# default: <b><u> Application Name </u></b> <br/> LP = TCLite <br/>  TW = TCWeb <br/> LM = TCLite Mobile <br/> TC = TCPro
+	constOrdLogToolTip=<b><u> Application Name </u></b> <br/> LP = i*tradeCIMB <br/>  TW = TCWeb <br/> LM = TCLite Mobile <br/> TC = TCPro
+
+
+
+
+
+	# [START] top bar Summary Market - only for derivatives
+	#
+	#	example : 
+	#				MY:020000000.KL|SI:020000000.KL
+	#
+	# [DEFAULT] : ""
+	#confDerivativesMarket_AFFIN		= 
+	#confDerivativesMarket_AIBB 		= 
+	#confDerivativesMarket_AMSEC		= 
+	#confDerivativesMarket_AMFRASER 	= 
+	#confDerivativesMarket_AMFUTURE 	= 
+	#confDerivativesMarket_APEX		= 
+	confDerivativesMarket_UTRADE 	= MY:020000000.KL
+	#confDerivativesMarket_HDBS 		= 
+	#confDerivativesMarket_HDCAP 	=
+	#confDerivativesMarket_IF 		=
+	#confDerivativesMarket_INTERPAC	= 
+	#confDerivativesMarket_KAF		=
+	#confDerivativesMarket_KIBB		= 
+	#confDerivativesMarket_MAYBANKDRVT = 
+	#confDerivativesMarket_MNA		= 
+	#confDerivativesMarket_N2N 		= 
+	#confDerivativesMarket_N2NDEMO	= 
+	#confDerivativesMarket_PMSEC		=
+	#confDerivativesMarket_SJSEC		= 
+	#confDerivativesMarket_TA	 	=
+	#confDerivativesMarket_PSE	 	=
+
+	# [END] top bar Summary Market - only for derivatives
+
+
+	constQcAck=Welcome to the QCServer
+	constUserParam=[UserParams]
+	constKeepAlive=[AliveTimeOut]
+	constTimeSync=[TimeSync]
+	constSector=[Sector]
+	constSession=[Session]
+	constLot=[UnitOrLot]
+	constExDate=[ExDate]
+	constExchgInfo=ExchangeInfo
+	constReqAck=HTTP/1.1 200 OK
+	constReqAck401=HTTP/1.1 401
+	constContentLength=Content-Length:
+	constIndices=[Indices]
+
+	# set up tracker "time and sales record"
+	constTransCount=100
+	constStartTag=[]
+	constEndTag=[END]
+	constSymbolTag=[SYMBOL]
+	constTotalTag=[TOTAL]
+	constSummaryTag=[SUMMARY]
+	constInsertTag=[INSERT]
+	constBreaker=[CBREAKER]
+	constInvalidClient=401 Invalid Client
+
+	# [START] Deployment Pack - for Integration with WMS [TRUE will auto append ../ else FALSE will not do anything]
+	# DEFAULT : TRUE
+	confWMSServer=TRUE
+	# [END] Deployment Pack - for Integration with WMS [TRUE will auto append ../ else FALSE will not do anything]
+
+	# [START] Control of Logout URL
+	# DEFAULT : FALSE
+	confLogoutDeviceDetection=FALSE
+	confLogoutURLLite=../loginATPPush?action=logout&frmpath=lite&frm=rt
+	confLogoutURLOthers=../loginATPPush?action=logout&frmpath=lite&frm=rt
+	# [END] Control of Logout URL
+
+	# [START] Fundamental URL
+	constFundamentalCapitalIQ=FCS
+	constFundamentalCapitalIQType=4
+	constFundamentalCapitalIQScreenerType=5
+	constFundamentalThomsonReuters=TRKD
+	constFundamentalThomsonReutersType=1
+	constFundamentalThomsonReutersScreenerType=2
+	constFundamentalURL=https://web.utradeph.com/gcUTRADEPlus/ext/rwPLC.jsp
+	constFundamentalScreenerURL=https://web.utradeph.com/gcUTRADEPlus/ext/rwPLC.jsp
+	# [END] Fundamental URL
+
+	# [START] Warrants Info URL
+	constWarrantsInfoUrl=http://warrants.osk188.com/warrants-detailed-page-sw
+	# [END] Warrants Info URL
+	# [START] Flash Chart [Tele-Trader] URL
+	constAnalysisChartFlashURL=https://web.utradeph.com/gcUTRADEPlus/ext/rwMDL.jsp
+
+	# [START] Stock Chart X
+	# comment or leave empty to disable, no protocol will auto detect
+	confStockChartURL=https://web.utradeph.com/gcUTRADEPlus/ext/rwMDL.jsp
+	confEmbeddedStockChartURL=https://web.utradeph.com/gcUTRADEPlus/ext/rwMDL.jsp?view=m
+	#[END] Stock Chart X
+
+	# [START] Web Report URL
+	#constWebReportClientSummaryURL=Client Summary|clientSumm|userReport_clientReport|images/icons/ClientSummary.png|https://web.utradeph.com/gcUTRADEPlus/web/html/ClientSummReport.html?
+	constWebReportMonthlyStatementURL=Monthly Statement|mthlyStatemnt|userReport_mthlyStatement|images/icons/MonthlyStatement.png|https://web.utradeph.com/gcUTRADEPlus/web/html/rptMthStmt.html?
+	constWebReportMarginAccountSummaryURL=Margin Account Summary|marginAccSumm|userReport_marginAccSumm|images/icons/MarginAccSummary_24.png|https://web.utradeph.com/gcUTRADEPlus/web/html/rptInv.html?
+	#constWebReportTraderDepositReportURL=Trader Deposit Report|traderDepositReport|userReport_traderDepositReport|images/icons/TraderDepositReport_24.png|https://web.utradeph.com/gcUTRADEPlus/web/html/TraderDepositReport.html?
+	#constWebReportTradeBeyondReportURL=TradeBeyond Report|traderBeyondReport|userReport_traderBeyondReport|images/icons/TraderBeyond_24.png|https://web.utradeph.com/gcUTRADEPlus/web/html/TradeBeyondReport.html?
+	#constWebReporteContractURL=eContract|eContract|userReport_eContract|images/icons/eContract_24.png|https://web.utradeph.com/gcUTRADEPlus/rptBOSTrxDone.jsp?lang=en&exchg=KL
+	#constWebReportAISBeStatementURL=AISB eStatement|aISBeStatement|userReport_AISBeStatement|images/icons/AISB_eStatement_24.png|https://web.utradeph.com/gcUTRADEPlus/rptEStmt.jsp?lang=en&exchg=KL
+	#constWebReportMarginPortFolioValuationURL=Margin Portfolio Valuation|marginPrfVal|userReport_MarginPortFolioValuation|images/icons/MarginPortfolioVal_24.png|https://web.utradeph.com/gcUTRADEPlus/rptMarginPrtfVal.jsp?
+	#constWebReportTransactionMovementURL=Transaction Movement|transactionMovement|userReport_TransactionMovement|images/icons/TransactionMvmt_24.png|
+	#constWebReportStockBalanceURL=Stock Balance|stockBalance|userReport_stockbalance|images/icons/StkBalc_24.png|
+	#constWebClientTransactionStatementURL=Client Transaction Statement|clientTranStatement|userReport_ClientTransactionStatement|images/icons/StkBalc_24.png|http://www.taonline.com.my/gcTA/rptMthStmt.jsp?lang=en&exchg=KL
+	# [END] Web Report URL
+
+	# [START] Analysis URL
+	confAnalysisDividendURL=https://plc.asiaebroker.com/gcNSS/web/html/dividend.html
+	confAnalysisWarrantsURL=https://plc.asiaebroker.com/gcNSS/web/html/warrant.html
+	confAnalysisBMFuturesURL=http://webcharts.nextview.com/ta/nvs_quotes.php
+	# [END] Analysis URL
+
+	# [START] Stock Info URL
+	confSettingStockAlertURL=https://sans.asiaebroker.com/SANS/BH/EntryBH_UAT.jsp
+	confSettingAddStockAlertURL=https://sans.asiaebroker.com/SANS/BH/EntryBH_UAT.jsp
+	#confSettingStockAlertURL=https://web.utradeph.com/gcUTRADEPlus/cliStkAlert.jsp
+	#confSettingAddStockAlertURL=https://web.utradeph.com/gcUTRADEPlus/cliStkAlert.jsp
+	#confSettingSMSStockAlertURL=https://web.utradeph.com/gcUTRADEPlus/srvs/Auth/getAuthPass
+	# [END] Stock Info URL
+
+	# [START] other tool URL
+	confOtherToolStockFilterURL=https://plc.asiaebroker.com/gcPLC/app/screener/?SourceCode=FCS&SponsorCode=5
+	confOtherToolExchangeRateURL=
+	confOtherToolStockScreenerURL=https://web.utradeph.com/gcAABCUS/apps/newsTRKDScn.jsp
+	# [END] other tool URL
+
+	# [START] other tool URL
+	confMigratedPortfolio_PortFolioDetailURL=http://dev.itradecimb.com/gcCIMB/rptCliPrtfDtl.jsp
+	confMigratedPortfolio_PortFolioRealizedURL=http://dev.itradecimb.com/gcCIMB/rptCliPrtfGainLoss.jsp
+	# [END] other tool URL
+
+	# [START] Equities Tracker URL - currently use by APEX
+	#confEquitiesTrackerURL=http://apex.asiaebroker.com/gcAPEX/newsKLSETracker.jsp
+	# [END] Equities Tracker URL - currently use by APEX
+
+	# [START] PSE Stock News URL - only for PSE
+	#confPSEStockNewsUrl=http://news.psetradex.ph/ebcNews/PH/PSEStkNews.jsp
+	# [END] PSE Stock News URL - only for PSE
+
+	### find share news, default=empty ###
+	confFindShareUrl=https://web.utradeph.com/gcUTRADEPlus/web/findShareNews.jsp
+
+	# [START] PSE Edge URL
+	confPSEEdgeUrl=http://qchist.asiaebroker.com/ebcNews/pse_fundamental.jsp
+	# [END] PSE Edge URL
+
+	# [START] PSE Board Lot Table URL
+	confPSEBoardLotTableUrl=https://web.utradeph.com/gcUTRADEPlus/web/html/BoardLot.html
+	# [END] PSE Board Lot Table URL
+
+	# ------- is use LMS -------
+	confIsLMS=true
+	LMSSubAuthen=http://nopl-ph.asiaebroker.com/lms/websub/authen?identifier=<LoginID>&sponsor=<SponsorID>&prod=Trader%20Connect%20Lite
+		# ------- is use LMS -------
+		constLMSDataStart=--_BeginData_
+		constLMSDataEnd=--_EndData_
+		#constLMSPackageStart=--_BeginPackage_
+		#constLMSPackageEnd=--_EndPackage_
+		constLMSServiceStart=--_BeginAllService_
+		constLMSServiceEnd=--_EndAllService_
+		constLMSCartStart=--_BeginCart_
+		constLMSCartEnd=--_EndCart_
+		constLMSFeaturesStart=--_BeginFeatures_
+		constLMSFeaturesEnd=--_EndFeatures_
+
+
+		constNewsHeaderURL=http://news-ph.asiaebroker.com/ref/generalnews_<Exchange>.txt
+		constNewsDtlURLFormat=https://news-ph.asiaebroker.com/ebcNews/index.jsp?&id=<NewsKey><NewsLanguage>
+		constNewsBegin=--_BeginData_
+		constNewsEnd=--_EndData_
+		constNewsCountBegin=--_BeginCount_
+		constNewsCountEnd=--_EndCount_
+
+		constSponsor=Sponsor
+
+		constID=CustomerID
+		constAuthenSts=AuthenSts
+		constAuthenDesc=AuthenDesc
+		constAuthenMsg=AuthenMsg
+		constActivateSts=ActivateSts
+		constSponsorID=SponsorID
+		constSponsorName=SponsorName
+		constProductTotal=ProductTotal
+		constProductCode=ProductCode
+		constProductDescription=ProductDesc
+		constProductExchange=ProductExchg
+		constSubscriptionSts=SubscriptionSts
+		constSubcriptionExpiryDate=SubscriptionExpiryDate
+		constSubscriptionExpiryDays=SubscriptionExpiryDays
+		constBrokerCode=BrokerCode
+		constBrokerCountryCode=BrokerCountry
+		constBrokerHost=BrokerHost
+		constBrokerPort=BrokerPort
+		constBrokerName=BrokerName
+		constBrokerTrdMode=BrokerTrdMode
+		constBrokerWatchListHost=BrokerWLHost
+		constBrokerGetWatchListAPI=BrokerGetWLAPI
+		constBrokerAddToWatchListAPI=BrokerAddWLAPI
+		constBrokerCreateWatchListAPI=BrokerCreWLAPI
+		constBrokerRenameWatchListAPI=BrokerRenameWLAPI
+		constBrokerDeleteWatchListAPI=BrokerDelWLAPI
+		constBrokerRemoveWatchListAPI=BrokerRemWLAPI
+		constBrokerBuySellAPI=BrokerBuySellAPI
+		constBrokerAccountAPI=BrokerAccAPI
+		constBrokerCancelReviseAPI=BrokerCanRevAPI
+		constBrokerLoginAPI=BrokerLoginAPI
+		constBrokerInitializationAPI=BrokerInitAPI
+		constBrokerOrderStatusAPI=BrokerOrdStsAPI
+		constBrokerPortfolioAPI=BrokerPrtfAPI
+		constBrokerChangePINAPI=BrokerChgPINAPI
+		constBrokerChangePasswordAPI=BrokerChgPwdAPI
+		constBrokerConnectAPI=BrokerConnectAPI
+		constBrokerAliveAPI=BrokerAliveAPI
+		constBrokerCreditLimitAPI=BrokerCreditLimitAPI
+		constBrokerLogoutAPI=BrokerLogoutAPI
+		constBrokerPrtfSubDtlAPI=BrokerPrtfSubDtlAPI
+		constBrokerPrtfDtlAPI=BrokerPrtfDtlAPI
+		constBrokerPrtfSummAPI=BrokerPrtfSummAPI
+		constWatchList=Watchlist
+
+		constChangePasswordSts=ChgPwdSts
+		constChangePasswordMsg=ChgPwdMsg
+
+		constGetWatchListKey=Stock
+		constWLSuccess=Success
+
+		constStartChart=--_BeginURL_
+		constEndChart=--_EndURL_
+
+		funcQuoteSuccess=main.connectionManager.updateQuote
+		funcQuoteSuccess06=main.connectionManager.updateQuote06
+		funcQuoteSuccess12=main.connectionManager.updateQuote12
+		funcTransactPushSuccess=main.connectionManager.updateTransactPush
+		funcSystemSuccess=main.connectionManager.updateTime
+		funcScoreBoardSuccess=main.connectionManager.updateSummary
+		funcIndexSuccess=main.connectionManager.updateSummary
+		funcIndicesListSuccess=main.connectionManager.updateUnknown
+		funcSessionEnd=main.connectionManager.updateUnknown
+		funcTransactionSuccess=main.connectionManager.updateTransact
+		funcTransactionSummarySuccess=main.connectionManager.updateTransactSumm
+		funcNewsSuccess=main.connectionManager.updateUnknown
+		funcBusinessDoneSuccess=main.connectionManager.updateUnknown
+		funcHistoricalDataSuccess=main.connectionManager.updateUnknown
+		funcSession=main.connectionManager.notifySession
+		funcIdle=main.connectionManager.notifyIdle
+		funcReconnect=main.connectionManager.reConnectLogin
+
+
+		iMSLServerPort=8080
+
+
+
+		#logSystemCfgFilePath=D:/WorkSpace/tclite/src/main/java/com/n2n/tclite/debug/logback.xml
+		logSystemCfgFilePath=C:/logback.xml
+
+
+
+		#confKeepAlive=450
+		#confMaxKeepAlive=3600
+		#confMaxKeepAlive=900
+
+
+
+
+
+		# default view exchange - start
+			confDefaultViewExchange=PH
+		# default view exchange - end
+
+
+		confViewExchange_N2N=
+                confViewExchange_UTRADE=PH,PHMF
+		confViewExchange_AMFRASER=SG
+		confViewExchange_AMFUTURE=MY
+		confViewExchange_IF=MY
+		confViewExchange_HDBS=KL
+		confViewExchange_TA=KL
+		confViewExchange_AIBB=KL
+		confViewExchange_HDCAP=JK
+		confViewExchange_INTERPAC=KL
+		confViewExchange_KIBB=KL
+		confViewExchange_MNA=KL
+		confViewExchange_PSE=PH
+
+
+		# [Used only when showV1GUI is true]
+		# exchange code which the user can trade. This will enable the trade button
+		# [DEFAULT] : ""
+		#confTradeExchange_N2N=
+		confTradeExchange_UTRADE=A,HK,O,N,SG,JK,BK,KL,MY
+		#confTradeExchange_AMFRASER=
+		#confTradeExchange_AMFUTURE=
+		#confTradeExchange_IF=
+		#confTradeExchange_HDBS=
+		#confTradeExchange_TA=
+		#confTradeExchange_AIBB=
+		#confTradeExchange_HDCAP=
+		#confTradeExchange_INTERPAC=
+		#confTradeExchange_KIBB=
+		#confTradeExchange_MNA=
+		#confTradeExchange_PSE=
+		# [Used only when showV1GUI is true]
+
+
+
+
+
+
+
+
+		# TRUE - share session with TCWeb | FALSE - standalone [must put capital letter]
+		# Default is FALSE, currently only HDBS is TRUE
+		#portFolioDisclaimerSessionShare=FALSE
+
+		# Disclaimer button
+		# (1) OK
+		# (2) AGREED/NOT
+		# [DEFAULT] : ""
+		#portFolioDisclaimerFileSetting_N2N=
+		#portFolioDisclaimerFileSetting_UTRADE=D:/Tomcat7.0/webapps/gcUTRADEPlus/WEB-INF/N2NPOC_disclaimer.txt|OK|690|415
+		portFolioDisclaimerFileSetting_AMFRASER=/AMFASER_disclaimer.txt|AGREED/NOT|650|580
+		#portFolioDisclaimerFileSetting_AMFUTURE=
+		#portFolioDisclaimerFileSetting_IF=
+		#portFolioDisclaimerFileSetting_HDBS=/HDBS_disclaimer.txt|OK|700|350
+		#portFolioDisclaimerFileSetting_TA=
+		#portFolioDisclaimerFileSetting_AIBB=
+		#portFolioDisclaimerFileSetting_HDCAP=
+		#portFolioDisclaimerFileSetting_INTERPAC=/INTERPAC_disclaimer.txt|ACCEPT/DECLINE|650|500
+		#portFolioDisclaimerFileSetting_KIBB=
+		#portFolioDisclaimerFileSetting_MNA=
+		#portFolioDisclaimerFileSetting_PSE=
+
+
+
+
+
+
+
+
+		#  --------  for subscription 50 level market depth  ---------
+		# [DEFAULT] : false
+		#confEnableBeaconSubsChecking_N2N=false
+		confEnableBeaconSubsChecking_UTRADE=false
+		confEnableBeaconSubsChecking_AMFRASER=true
+		#confEnableBeaconSubsChecking_AMFUTURE=false
+		#confEnableBeaconSubsChecking_IF=false
+		#confEnableBeaconSubsChecking_HDBS=false
+		#confEnableBeaconSubsChecking_TA=false
+		#confEnableBeaconSubsChecking_AIBB=false
+		#confEnableBeaconSubsChecking_HDCAP=false
+		#confEnableBeaconSubsChecking_INTERPAC=false
+		#confEnableBeaconSubsChecking_KIBB=false
+		#confEnableBeaconSubsChecking_MNA=false
+		#confEnableBeaconSubsChecking_PSE=false
+
+
+		#  -------   for LMS sponser id    --------
+		# [DEFAULT] : ""
+		#confSponsorLMSMapping_N2N=
+		confSponsorLMSMapping_UTRADE=602
+		#confSponsorLMSMapping_AMFRASER=
+		#confSponsorLMSMapping_AMFUTURE=
+		#confSponsorLMSMapping_IF=
+		#confSponsorLMSMapping_HDBS=
+		#confSponsorLMSMapping_TA=
+		#confSponsorLMSMapping_AIBB=
+		#confSponsorLMSMapping_HDCAP=
+		#confSponsorLMSMapping_INTERPAC=
+		#confSponsorLMSMapping_KIBB=
+		#confSponsorLMSMapping_MNA=
+		#confSponsorLMSMapping_PSE=
+
+
+	#  ---------   for Fundamental News   --------
+	# [DEFAULT] : ""
+	#confFundamentalSponsorMapping_N2N=
+	confFundamentalSponsorMapping_UTRADE=602
+	#confFundamentalSponsorMapping_AMFRASER=
+	#confFundamentalSponsorMapping_AMFUTURE=
+	#confFundamentalSponsorMapping_IF=
+	#confFundamentalSponsorMapping_HDBS=
+	#confFundamentalSponsorMapping_TA=
+	#confFundamentalSponsorMapping_AIBB=
+	#confFundamentalSponsorMapping_HDCAP=
+	#confFundamentalSponsorMapping_INTERPAC=
+	#confFundamentalSponsorMapping_KIBB=
+	#confFundamentalSponsorMapping_MNA=
+	#confFundamentalSponsorMapping_PSE=
+
+
+
+
+	# Required Columns
+	#
+	#  ** follow the screen column mapping , e.g :
+	#			01~06~20		
+	#
+	# --- quote screen --- 
+	confMarketMoverReqCol=
+	# --- watch list --- 
+	confWatchlistReqCol=
+	# --- order book --- 
+	confOrderStatusReqCol
+        # ---mutual fund order book --- 
+        confMFOrderStatusReqCol=
+	# --- order history --- 
+	confOrderHisReqCol=
+	# --- port folio --- 
+	confPortfolioReqCol=
+	# --- realized gain / lose --- 
+	confPortfolioRealReqCol=
+
+	# ------Default column width----- v1.3.30.9 / v1.3.33.27 Add default for watchlist, market depth, order history, portfolio and realize GL
+	confColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|30|31|32|33|34|60|35|43|44|45|46|47|48|49|50|51|52|53|54|br
+	confColumnWidthKL=60|90|48|48|53|48|48|48|80|48|48|80|48|30|45|48|55|82|55|35|40|55|60|48|30|40|85|50|55|48|48|80|85|76|60|60|60|65|60|65|65|45|75|60|85|50
+	confColumnWidthMY=60|125|65|65|65|65|65|65|45|65|65|45|65|30|50|50|35|50|45|35|40|55|60|65|30|40|75|50|55|65|65|85|85|72|60|60|60|65|60|65|65|60|75|60|85|50
+	confColumnWidthHK=50|125|60|60|60|60|60|60|80|60|60|80|60|30|50|45|55|80|45|35|40|50|60|60|30|40|85|50|55|60|60|85|85|72|60|60|60|65|60|65|65|60|75|60|85|50
+	confColumnWidthSI=50|120|55|55|55|55|55|55|60|55|55|60|55|30|58|53|65|80|55|35|40|55|60|55|30|40|80|50|55|55|55|85|85|72|60|60|60|65|60|65|65|60|75|60|85|50
+	confColumnWidthOther=57|137|67|67|60|67|67|67|80|67|67|98|67|67|64|64|53|98|98|55|35|40|50|67|67|30|98|80|80|55|60|60|85|72|60|60|60|65|60|65|65|60|75|60|85|85
+
+	confMDColumnId=level|bidtrd|bidcum|bidqty|bidprice|askprice|askqty|askcum|asktrd
+	confMDColumnWidthKL=30|35|60|60|50|50|60|60|35
+	confMDColumnWidthMY=30|35|45|45|60|60|45|45|35
+	confMDColumnWidthHK=30|35|50|50|60|60|50|50|35
+	confMDColumnWidthOther=30|35|60|60|60|60|60|60|35
+
+	confWLColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|30|31|32|33|34|60|35|43|44|45|46|47|48|49|50|51|52|53|54|br
+	confWLColumnWidth=60|90|60|60|60|60|60|60|80|60|60|80|60|30|45|45|55|80|55|35|40|50|60|60|30|40|80|50|55|60|60|85|85|72|60|60|60|65|60|65|65|45|75|60|85|50
+
+	confOSColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|35|34|36|37|38|39
+	confOSColumnWidth=65|157|60|110|60|72|50|50|50|50|60|60|60|60|90|100|70|60|125|60|55|40|60|60|70|80|200|170|55|100|50|60|60|125|60|50|60|60|70
+
+	confPFColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28
+	confPFColumnWidth=90|65|65|65|75|85|60|65|65|60|60|60|60|60|57|50|58|53|65|65|50|40|65|65|60|60|85|65
+
+        confFPColumnId=01|02|03|04|11|05|06|07|12|13|08|09|10
+        confFPColumnWidth=90|85|75|75|75|85|95|80|80|80|75|85|80
+
+	confRGLColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14
+	confRGLColumnWidth=75|90|85|85|64|64|64|85|64|90|64|50|40|50
+
+        confMFColumnId=01|02|03|04|05|06|07|08|09|10|11|12|13|14
+        confMFColumnWidth=90|140|100|60|100|80|100|100|80|80|80|80|80|100
+
+	# ----------Default Column Setting (Which Column is show) Refer columnmapping.js-------------------------------
+	confFeedAllColumn=33~34~42~11~12~10~09~14~35~15~16~03~01~32~41~40~26~55~57~58~59~56~07~06~13~31~08~17~21~04~05~25~60~20~02~23~24~22~19~30~18
+	confFeedDefaultColumn=01~02~13~09~10~11~12~18~15~16~03~07~08
+
+	confWLAllColumn=33~34~42~11~12~10~09~14~35~15~16~03~01~32~41~40~26~55~57~58~59~56~07~06~13~31~08~17~21~04~05~25~60~20~02~23~24~22~19~30~18
+	confWLDefaultColumn=01~02~13~09~10~11~12~18~15~16~03~07~08
+
+	confOSAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~27~28~29~30~31~32~33~34~35~40~42
+	confOSDefaultColumn=05~11~03~04~07~13~12~14~15~27~08~09~01~02
+
+	confFOSAllColumn=01~02~03~04~05~06~07~09~10~11~12~14~16~19~21~22~23~26~27~28~29~31~32~33~35~38~39~42
+	confFOSDefaultColumn=05~11~03~07~32~42~21~27
+	
+	confOHAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~31~34~29~40
+	confOHDefaultColumn=05~11~03~04~07~13~12~14~15~27~08~09~01~02
+	
+	confFOHAllColumn=01~02~03~04~05~06~07~09~10~11~12~14~15~16~19~21~22~26~27~28~29~31~33~35~38~39~42
+	confFOHDefaultColumn=05~11~03~07~42~15~21~27
+
+	confPFAllColumn=01~02~03~04~05~06~07~08~09~12~13~14~15~16~17~18~19~20~21~22~23~24~25~26~27~28
+	confPFDefaultColumn=05~01~02~06~07~08~19~20
+
+        confFPAllColumn=01~02~03~04~10~05~06~07~08~09~11~12
+		confFPDefaultColumn=01~02~12~04~05~06~07~08
+
+	confRGLAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14
+	confRGLDefaultColumn=01~02~03~05~08~09~10~11
+
+	confMDAllColumn=01~02~03~04~05~06~07~08~09
+	confMDDefaultColumn=01~02~04~05~06~07~09
+
+	confMFAllColumn=01~02~03~04~08~18~20~07~05~17~06~09~10~11~12~13~14~15~16
+	confMFDefaultColumn=01~02~04~18~07~03~05~09~10~11
+
+	confMDSettingButton=TRUE
+	#constExtjsChart=TRUE
+
+	# [START] UI Setting
+	#Theme|Unit/Lot|News|Report|Dynamic Limit|Font Size|Font Type|Font Color|Alternative  1 is NO. 0 is OFF
+	confUISetting=TRUE
+	confUISettingItem=1|1|1|0|0|1|1|1|1
+	### font settings for abacus (replaced with these) ###
+	confFontSetting=ft_ubuntu{12,fcl_up~008341~39be15_down~ee1412~f54f4f_unchg~1b2934~ffffff_yel~8e9005~a3791e,alter_0
+	confFontTypeItem=Ubuntu,ubuntu|Helvetica,Helvetica|Tahoma,tahoma|Verdana,verdana|Arial,arial|Light,source_sans_prolight|Semi-Bold,source_sans_prosemibold|Bold,source_sans_probold
+	### Min and Max for Font Size ###
+	#confMinFontSize=10
+	confMaxFontSize=26
+	confNumberYellowColumn=true
+	confAutoWidthFontSize=true
+
+	# Layout setting, default TRUE
+	confLayoutSetting = TRUE
+	confLayoutSettingItems=2~3
+	confSaveLayout=true
+	### Default layout ###
+	#confMainLayout=2~t=2,0{w=1{mt=qs==0=0{am=qs
+	#confTbMainLayout=2~t=2,0{w=1{mt=qs==0=0{am=qs
+	confMainLayoutDR=2~t=2,0{w=1{mt=qs==0=0{mt2=gn==0=0{am=qs
+	### advanced layout, default=true ###
+	confSplitScreen=true
+	confConfigScreen=true
+	# Ticker setting, default FALSE
+	confTickerSetting = FALSE
+
+	# Vertx feed server, no need to add protocol (http or https) REQUIRE
+	#confVertxFeed = feed-ph.utradeonlineph.com,ndgfv1.mytrade.com.ph
+	#confGuestVertxFeed = feed-ph.utradeonlineph.com,ndgfv1.mytrade.com.ph
+        confVertxFeed = feed-ph.utradeph.com,feed2-ph.utradeph.com
+        confGuestVertxFeed = feed-ph.utradeph.com,feed2-ph.utradeph.com
+
+	# Alternative vertx feed server
+	# confVertxFeed = 
+	# Auto connect interval, default to 5000 ms = 5s, 0 or comment to disable
+	confAutoConnInterval = 3000
+	# Auto connect rety, default to 3 times
+	confAutoConnRetry = 2
+	### Mobile Configuration ###
+	confMbFeedAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~26~27~28~29~30~31~32~35~60~61~br~43~44~45~46~47~48~49~50~51~52~53~54~33~34
+	confMbFeedDefaultColumn=01~02~03~07~08~09~10~11~12~13~15~18~24~22
+
+	confMbWLAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~26~27~28~29~30~31~32~35~60~43~44~45~46~47~48~49~50~51~52~53~54~33~34
+	confMbWLDefaultColumn=01~02~03~07~08~09~10~11~12~13~14~15~18~24
+
+	confMbOSAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~26~27~28~29~30~31~32~33~34~35~38~39~40
+	#confMbOSDefaultColumn=01~02~04~05~07~08~09~11~12~13~14~15~16~23~35
+	confMbOSDefaultColumn=04~12~13~11~01
+
+	confMbFOSAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~14~16~17~18~19~20~21~22~23~24~25~26~27~28~29~30~32~33~34~35
+	confMbFOSDefaultColumn=01~02~04~05~07~08~09~11~12~14~16~23
+	
+	confMbFOHAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~14~16~17~18~19~20~21~22~24~25~26~27~28~29~30~33~34~35
+	confMbFOHDefaultColumn=01~02~04~05~07~08~09~11~12~14~16
+	
+	confMbPFAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16~17~18~19~20~21~22~23~24~25~26~27~28
+	confMbPFDefaultColumn=01~14~02~03~04~06~07~08~19
+
+        confMbFPAllColumn=01~02~03~04~05~06~07~12~08~09~10~11
+        confMbFPDefaultColumn=01~02~03~04~10~11~05~06~07~12~08~09
+
+	confMbRGLAllColumn=01~02~03~04~05~06~07~08~09~10~11~12~13~14~15~16
+	confMbRGLDefaultColumn=01~02~03~04~05~06~07~08~09~10~11
+
+	# Debug configuration #
+	# front end debug, default to false
+	#confFrontDebug = TRUE
+
+	### switch view, default = TRUE ###
+	confSwitchView = TRUE
+	# to use view URL, default=false #
+	confUseViewURL=true
+	confMobileViewURL=web.utradeph.com/gcUTRADEPlus/tcplus/main.jsp?view=mobile
+	confDesktopViewURL=web.utradeph.com/gcUTRADEPlus/tcplus/index.jsp
+
+	### Check MY Trading account, default=FALSE ###
+	confBypassMYAccChecking=TRUE
+
+	### mobile logout ###
+	confMbLogoutURLLite=../loginATPPush?action=logout&frmpath=mobile&frm=rt
+
+	confDerivativeWLSort=TRUE
+
+	### FEATURES ###
+	confFeaturesMarketSummary_PieChart=true
+
+	#Decimal Places Control
+	#[RG/L AggrBuyPrice]|[ RG/L AggrSellPrice]|[ RG/L Brokerage]|[ RG/L Realized G/L]|[ RG/L Realized G/L%]|[Prtf Avg Buy Price]|[ Prtf Avg Sell Price]|[ Prtf Unrealized G/L]|[ Prtf Unrealized G/L%]
+	confPortfolioFieldMeta=rgl aggrbuyprice|rgl aggrsellprice|rgl brokerage|rgl realizedgl|rgl realizedglprc|prtf avgbuyprice|prtf avgsellprice|prtf unrealizedgl|prtf unrealizedglprc|prtf matchprice
+	confDecimalCtrl=5|5|3|3|3|5|5|3|3|4
+
+	### MENUS ###
+	# menu demo, default=false#
+	confMenuDemo=false
+	# demo URL, empty will disable menu #
+	confDemoURL=http://theedge.asiaebroker.com/gcEdgeV/web/demo/Demo.html
+
+	confMenuProfile=false
+	confProfileChangePasswordURL=http://web.utradeph.com/gcUTRADEPlus/cliChgPwd.jsp?secure=Y
+	confProfileChangePinURL=http://web.utradeph.com/gcUTRADEPlus/cliChgPIN.jsp?secure=Y
+	confProfileForgotPinURL=http://web.utradeph.com/gcUTRADEPlus/cliForgetPIN.jsp?secure=Y
+
+	### Portal position to add item, default=empty or negative to append to last ###
+	#confPortalAddItemPosition=
+	### Portal columns config, default=3 ###
+	#confPortalColumns=3
+	### Use portal full column, default=true ###
+	#confPortalFullColumn=true
+### Portal initial items ###
+#confPortalInitItems=quote~depth~order
+### Quotescreen, applicable for portal only, leave empty for auto ###
+#confQsDefaultHeight=300
+### Quotescreen, allow resize, default=true ###
+#confQsResizable=true
+### Use edit button, applicable for quotescreen and watchlist ###
+	confUseEditButton=true
+
+### power-by image, default=false ###
+#confPowerBy=false
+
+### open interactive chart button, default=true ###
+confInteractiveChartButton=false
+
+### BTS2 MDL, default=false ###
+confBTS2MDLSetting=true
+#confMDL_UTRADE=5
+#confBTS2MDLSettingData=--_BeginFeatures_\r\nMD-KL-05|AQ==|\r\nMD-KL-10|=|\r\nMD-KL-20|=|\r\n--_EndFeatures_\r\n
+
+confOrderPadBasic=true
+
+confFontSizeButton=false
+
+### menu type, default=0 ###
+confMenuType=1
+
+confTabMinWidth=500
+
+#-----------------Dynamic Orderpad column settings---------------------------------------------------------------------
+##size|price|qty|type|validity|dsqty|stoplimit|minqty|settcurr|payment|trigger|direction
+###confOrdPadColWidth=300|0.25|0.2|0.25|0.25|0.2|0.2|0.2|0.25|0.25|0.25|0.25,450|0.15|0.17|0.2|0.2|0.17|0.17|0.17|0.15|0.15|0.2|0.15,800|0.2|0.2|0.2|0.2|0.2|0.2|0.2|0.2|0.2|0.2|0.2
+
+### SP CapIQ for mobile ###
+confMbFeaturesNews_SPCapIQ=true
+confMbFeaturesNews_SPCapIQ_Synopsis=true
+confMbFeaturesNews_SPCapIQ_ComInfo=true
+confMbFeaturesNews_SPCapIQ_Announcement=true
+confMbFeaturesNews_SPCapIQ_KeyPersons=true
+confMbFeaturesNews_SPCapIQ_ShareSum=true
+confMbFeaturesNews_SPCapIQ_FiReports=true
+confMbFundamentalURL=https://plc.asiaebroker.com/gcPLC/stkCompInfom.jsp
+confMbFundamentalFiRepURL=https://plc.asiaebroker.com/gcPLC/stkFincInfom.jsp
+
+### Use minified js/css, default=false ###
+#confMinify=true
+### Use sencha cmd, default=false ###
+confSenchaCmd=true
+
+confOrdPadColWidth=300|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25,450|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25,800|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25|0.25
+
+### autoround on qty, value ###
+confAutoQtyRound=true
+
+### turn on/off order book amalgamation, default=false ###
+confOrdBookAmal=true
+### default amalgamation status, default=true(on) ###
+confOrdBookAmalStatus=false
+
+### default vToken ###
+confDefVToken=n2n
+
+confFeaturesNews_Archive=false
+
+# [START] Order Status pull interval
+# [DEFAULT] : 20000
+constOrderStsInterval=5000
+# [END]  Order Status pull interval
+
+# [START] OrderBook set decimal places
+# [DEFAULT] : as per ATP, else ordprice|stoplimit|avgprice
+confSetOrderBookDP=4|4|5
+# [END] OrderBook set decimal places
+
+# [START] Dealer/Remisier search account
+# [DEFAULT] : FALSE
+confDRSearchAcc=TRUE
+# [END] Dealer/Remisier search account
+
+### allow mobile view or not, default=false ###
+#confMobileView=true
+
+### active subscription, default=false ###
+confActiveSubscription=true
+
+### advanced layout, default=false ###
+confSplitScreen=true
+confConfigScreen=true
+
+### trading setting, default=false ###
+confTradeSetting=true
+### default trading account, default=false ###
+confDefaultTradingAccountFeature=true
+### trading account order, default=false ###
+confTradeAccountOrder=true
+
+### grid column move, default=false ###
+confGridColMove=true
+### grid column hide, default=false ###
+confGridColHide=true
+
+#confCFDMenu=true
+
+# [START] RSS
+# [DEFAULT] : FALSE
+#confRSSIndicator=TRUE
+# [END] RSS
+
+### cookie key (to manage local settings, eg. column width) ###
+confCookieKey=v3
+
+### Other menus, default=21405 (Services) ###
+confOtherMenuName=21405
+
+#confOtherMenu1=eRights|https://web.utradeph.com/gcUTRADEPlus/web/eRights/ERights.html
+confOtherMenu2=SIP|https://web.utradeph.com/gcUTRADEPlus/web/html/sipsta.html|1017|464
+confOtherMenu3=Withdrawal|https://web.utradeph.com/gcUTRADEPlus/web/html/withdrawal.html|1017|464
+confOtherMenu4=33501|https://web.utradeph.com/gcUTRADEPlus/web/html/RiskProfile.html|770|670
+#confOtherMenu2=21401{21402|gcUTRADEPlus/web/html/eSettlement.html, 21403|gcUTRADEPlus/web/html/stlPayStatus.html, 21404|gcUTRADEPlus/web/html/Client Deposit Report.html
+#confOtherMenu3=21407{21408|fn:parent.popupWin('chgPwd'), 21409|fn:parent.popupWin('chgPin'), 21410|fn:parent.popupWin('forgetPin'), 21413|gcUTRADEPlus/acctInformation.jsp
+#confOtherMenu4=21415;ob{21416|gcUTRADEPlus/viewSubscriptions.jsp, 21417|gcUTRADEPlus/currentSubscription.jsp, 21418|gcUTRADEPlus/web/html/caSubscription.html|810|470, 21419|gcUTRADEPlus/web/html/caSubscpStatus.html|785|400
+#confOtherMenu5=
+#confOtherMenu6=
+
+### settlement menu, default=false ###
+confSettlement=TRUE
+constWebMenuESettlementURL=eSettlement|esettlement|userReport_esettlement|images/white/ssettlement.png|https://web.utradeph.com/gcUTRADEPlus/web/html/eSettlement.html?
+constWebMenuESettlementStatusURL=eSettlement Status|esettlementsts|userReport_esettlementsts|images/white/ssettlement.png|https://web.utradeph.com/gcUTRADEPlus/web/html/stlPayStatus.html?
+constWebMenuEDepositURL=eDeposit|edeposit|userReport_edeposit|images/white/ssettlement.png|https://web.utradeph.com/gcUTRADEPlus/web/html/Client%20Deposit%20Report.html?
+### sync screen items ###
+confSyncItems=qs,wl,rq,os,oh,dp,ep,rp,md,tr,si,ic,an,hd,sn,wi,td,ms,ff,bki,fc,enews,bq,bks,mf
+### sync siblings (child to child), default=false ###
+confSyncSibling=true
+
+# [START] Enable MSearch for normal search
+# [DEFAULT] : false
+confEnableMSearch=true
+# [END] Enable MSearch for normal search
+
+# [START] Enable New Mobile Fundamental
+# [DEFAULT] : false
+confNewMobileFundamental=true
+# [END] Enable Enable New Mobile Fundamental
+
+### Show message box at the center of mouse, default=false ###
+confMsgBoxCenter=true
+
+### dockable orderpad, default=false ###
+confDockableOrderpad=true
+
+### sort exchange list, default=false ###
+confSortExchangeList=true
+
+### Enable exchange grouping, default='' ###
+#constExGroupingList=20338,Equities/CFD-DMA|KL,KLL,A,O,N,BK,HK,JK,SG,HC,HN,PH;20339,Derivatives|MY;20340,Forex|FX,WIDX;20341,SBL|MT,ENG
+
+### order round qty, default=false ###
+confOrderRoundQty=true
+### order qty max length, default=9 ###
+confOrderQtyMaxLength=15
+
+### auto width button, default=true ###
+#confAutoWidthButton=false
+### autofit columns to screen, default=true ###
+#confFitToScreen=true
+### default user value for fit to screen, default=true ###
+### this is regardless fit to screen button shown or not, the fit screen feature should take effect accordingly
+confFitToScreenDefVal=false
+### flex col settings, fid,fid;flex|fid,fid;flex|fid,fid;flex|fid,fid;flex, default='' ###
+constFlexCol=58,78,101,102,41;2.7|54;2.3|104,RD,News;1.5
+
+#confGuestEx=KLD,SID,HKD,AD,ND,OD,BKD,JKD
+confGuestEx=KLD,HKD,JKD,AD
+
+# [START] Enable Toast Message
+# [DEFAULT] : true
+confEnableToast=true
+# [END] Enable Toast Message
+
+### auto width button, default=false ###
+confEnableHotKeysMapping=true
+### numerical order(1-12): buy,sell,analysis,intraday,mkt depth,tracker,streamer,elastic,factset,orderbook,portfolio,settings ###
+constDefaultHotKeysMapping=1,2,3,6,5,4,7,8,9,10,11,12
+
+### Mouse wheel scrolling to increase/decrease price/qty, default=true ###
+#confEnablePriceQtyScroll=false
+### allows user to control qty steps, default=false ###
+#confEnableUserPrefQtyStep=true
+### The amount to be increased/decreased in qty for each scroll, default=1 ###
+#constQtyScrollStep=100
+
+### components search count, default=10 ###
+constSearchCount=20
+
+#Confirmation for order charges, default = false
+confOrderChargesConfirmation=true
+
+### Mobile layout
+confMbLayout=w{am=qs==0=0
+
+### layout preference ###
+confLayoutPreference=active_lp=1{mnl_d=2{rem_d=1{ope_d=0
+
+### enable layout profile, default=true ###
+confEnableLayoutProfile=true
+### available layout profiles with their default layouts (to support multiple saving layouts, eg. 1...6)
+confLayoutProfiles=1=E,2=Q,3=B,4=D,5=C
+
+### layout options (for tab-popup)
+constLayoutOptions=A,B,C,D,E,G,H,I,M,N,P,Q
+
+### layout templates
+confLayoutA=w=A{mt=qs==0=0
+confLayoutB=w=B{mt=qs==0=0{mt2=an=0.5=0=0
+confLayoutC=w=C{mt=qs==0=0{mt3=dm=0.5=0=0
+confLayoutD=w=D{mt=qs==0=0{mt2=bki=0.5=0=0{mt3=md=0.5=0=0{mt4=gn=0.5=0=0
+confLayoutE=w=E{mt=qs==0=0{mt2=td=0.6=0=0{mt4=md[os[od[ep=0.5=0=0
+confLayoutF=w=F{mt=qs==0=0{mt2=md=0.33=0=0{mt3=ic=0.5=0=0{mt4=os=0.5=0=0{mt5=tr=0.33=0=0{mt6=mo=0.5=0=0
+confLayoutG=w=G{mt=qs==0=0{mt2=tr=0.33=0=0{mt5=mo=0.33=0=0
+confLayoutH=w=H{mt=qs==0=0{mt2=tr=0.33=0=0{mt5=ic=0.33=0=0{mt6=md=0.5=0=0
+confLayoutI=w=I{mt=qs==0=0{mt2=md=0.33=0=0{mt4=ic=0.5=0=0{mt5=tr=0.33=0=0{mt6=os=0.5=0=0
+confLayoutJ=w=J{mt=qs==0=0{mt2=ic=0.25=0=0{mt3=ep=0.5=0=0{mt4=in=0.5=0=0{mt5=tr=0.25=0=0{mt6=md=0.5=0=0{mt7=os=0.25=0=0{mt8=hd=0.33=0=0
+confLayoutK=w=K{mt=qs==0=0{mt2=os=0.25=0=0{mt4=ic=0.5=0=0{mt5=sb=0.25=0=0{mt6=mo=0.5=0=0{mt7=in=0.25=0=0
+confLayoutL=w=L{mt=ic==0=0{mt2=qs=0.25=0=0{mt3=hd=0.5=0=0{mt5=ep=0.25=0=0{mt7=tr=0.25=0=0{mt8=os=0.33=0=0
+confLayoutM=w=M{mt=qs==0=0{mt2=tr=0.25=0=0{mt5=ic=0.25=0=0{mt7=ep=0.25=0=0
+
+confLayoutN=w=N{mt=qs==0=0{mt7=md=0.3=0=0{mt8=ic=0.33=0=0{mt9=os=0.33=0=0
+confLayoutO=w=O{mt=qs==0=0{mt7=mo=0.25=0=0{mt8=in=0.33=0=0{mt10=md=0.33=0=0{mt11=tr=0.25=0=0{mt12=ic=0.25=0=0{mt13=ep=0.25=0=0
+confLayoutP=w=P{mt=qs==0=0{mt3=ep=0.5=0=0{mt10=os=0.33=0=0
+confLayoutQ=w=Q{mt=td==1=0{mt10=qs=0.8=0=0{mt11=md=0.21=0=0{mt12=tr=0.35=0=0
+confLayoutR=w=R{mt=td==1=0{mt10=qs=0.7=0=0{mt11=tr=0.5=0=0
+confLayoutZ=w=Z{mt===0=0{mt2==0.25=0=0{mt3==0.5=0=0{mt4==0.5=0=0{mt5==0.25=0=0{mt6==0.5=0=0{mt7==0.25=0=0{mt8==0.33=0=0{mt10==0.33=0=0{mt11==0.25=0=0{mt12==0.25=0=0{mt13==0.25=0=0
+
+confThemePath=themes/unicap/
+
+### market summary font color, default=empty ###
+confSumFontColor=up=#39be15{down=#f54f4f{unchg=#fff
+
+### broker info: limit the amount of previous days that a user can view for start date
+#confPrevDayLimit=30
+
+### whether to include trx fee in unrealised portfolio g/l calculcation, default=false ###
+confPrtfTrxFee=true
+
+## enable auto select first selection for combobox , default=false
+confSearchAutoSelect=true
+
+### search auto match stock code, default=false ###
+confSearchAutoMatchCode=true
+
+### Market summary bar: Display Trading phase status, default=false ###
+confMktSumDisplayTPStatus=true
+
+### watchlist : enable to display searchbox for add stock, default=false
+confWatchListAddStock=true
+
+### watchlist default sorting, default=38 (or 38,ASC); empty=follow the list ###
+confWlDefSort=33
+
+confOrderPadTradeOnEnter=true
+
+### show sub sector, default=true ###
+confSubSector=false
+
+### Enable market foreign value in top summary bar and market summary , default=false
+confDisplayMktFrVal=true
+
+### orderpad: number of millisecond before allow duplicate order, default = 3000
+### set 0 to disable checking
+confPreventDuplicateDuration=0
+
+### config to show or hide setting for prevent duplicate setting. default = true
+### false to hide and true to shows
+confDuplicateOrderSetting=false
+
+### show mutual fund, default=false ###
+confMutualFund=true
+
+### mutual fund filter option, format: a|b|c
+confMFFundIssuer=All|Ayala Life Fixed Income Mutual Fund|ATR Asset Management|First Metro Asset Management Inc|Philam Asset Management Inc|Philequity Management Inc|SunLife Asset Management Company Inc
+confMFFundType=All|Money Market|Bonds to Balanced|Balanced|Equities Index|Equities & Dollar Denominated
+confMFRiskRating=All|1|2|3|4|5
+confMFCurrency=All|PHP|USD|EUR
+### mutual fund filter default value
+confMFFundIssuerDefault=All
+confMFFundTypeDefault=All
+confMFRiskRatingDefault=All
+confMFCurrencyDefault=All
+### mutual fund recommendation filter, type arrange in ascending order (from left to right)
+confMFRecommendFundType=Money Market|Bonds to Balanced|Balanced|Equities Index|Equities & Dollar Denominated
+
+### mutual fund exchange code, default=PHMF ###
+#confMfExchCode=PHMF
+
+### mutual fund questionnaire url, default= ###
+confMfQuestionURL=https://web.utradeph.com/gcUTRADEPlus/web/html/RiskProfile.html
+
+### mutual fund orderpad amount scroll step, default=10
+confMfAmtScrollStep=10
+### mutual fund orderpad quantity scroll step, default=10
+confMfQtyScrollStep=10
+
+### mutual fund fund sheet, default = ###
+confMfFundSheet=https://web.utradeph.com/gcUTRADEPlus/web/tcplusFactSheet.html
+### mutual fund prospects, default = ###
+confMfProspects=https://web.utradeph.com/gcUTRADEPlus/web/tcplusFactSheet.html
+
+confForcingMD=PH-1-20
+
+confRQAllColumn=33~34~42~11~12~10~09~14~35~15~16~03~01~32~41~40~26~55~57~58~59~56~07~06~13~31~08~17~21~04~05~25~60~20~02~23~24~22~19~30~18
+
+confRQDefaultColumn=01~02~13~09~10~11~12~18~15~16~03~07~08
+
+### mf show/hide summary bar for mf orderbook, default=true (shown) ###
+confMfOrderbookSumBar=false
+### mf show/hide summary bar for mf portfolio, default=true (shown) ###
+confMfPortfolioSumBar=false
+
+
+
+#tcplus reconnect
+### Number of rounds trying to reconnect, default=-1 (unlimited) ###
+confKeepReconnecting=-1
+### Use app message, default=true ###
+confUseAppMsg=true
+### Whether to cache and resume Vertx requests during disconnection time, default=true ###
+#confVertxResumeOfflineRequest=false
+### Whether to show message when trying to request during disconnection time, default=true ###
+#confVertxOfflineShowMsg=false
+
+### keepalive interval, default=10000 (10s) ###
+confKeepAliveInterval=20000
+### keepalive max, default=20, -1=unlimited ###
+confKeepAliveMax=20
+### keepalive timeout, default=5000 ###
+confKeepAliveTimeout=5000
+### ATP reconnection attempts interval, default=1000 ###
+confATPReconnectionInterval=3000
+### ATP reconnection max attempts before giving up (kickout), default=5, -1 ###
+confATPReconectionMaxAttempts=2
+
+
+
+
+
+
+
+
+
+

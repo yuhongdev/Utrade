@@ -1,0 +1,212 @@
+<configuration debug="true">
+	<property scope="context" name="LogPath" value="/home/tomcat/logs/gcUTRADEPlus"/>
+	<property scope="context" name="REPORT_LOG" value="/home/tomcat/logs/gcUTRADEPlus/reportController/"/>
+	<property scope="context" name="LOGIN_LOG" value="/home/tomcat/logs/gcUTRADEPlus/loginController/"/>
+    	<property scope="context" name="REGISTER_LOG" value="/home/tomcat/logs/gcUTRADEPlus/registerController/"/>
+    	<property scope="context" name="HOME_LOG" value="/home/tomcat/logs/gcUTRADEPlus/homeController/"/>
+    	<property scope="context" name="COMMON_LOG" value="/home/tomcat/logs/gcUTRADEPlus/commonUtil/"/>
+    	<property scope="context" name="MARKETSUMMARY_LOG" value="/home/tomcat/logs/gcUTRADEPlus/marketSummary/"/>
+    	<property scope="context" name="PDFREPORT_LOG" value="/home/tomcat/logs/gcUTRADEPlus/pdfReportController/"/>
+	<property scope="context" name="SIP_LOG" value="/home/tomcat/logs/gcUTRADEPlus/SIPController/"/>
+	<property scope="context" name="AUTHENTICATE_LOG" value="/home/tomcat/logs/gcUTRADEPlus/cliAuthenticateController/"/>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder><pattern>%d{HH:mm:ss.SSS} %level - %msg%n</pattern></encoder>
+	</appender>
+	<appender name="TCPLUS_LOG" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<Key>userid</Key>
+			<DefaultValue>_unknown_</DefaultValue>
+		</discriminator>
+		<sift>
+			<appender name="FILE-${userid}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<File>${LogPath}/tcplus_log/${userid}/${userid}.log</File>
+				<Append>true</Append>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<!-- daily rollover -->
+					<fileNamePattern>${LogPath}/tcplus_log/${userid}/%d{yyyy-MM-dd}_${userid}.zip</fileNamePattern>
+					<!-- keep 30 days' worth of history -->
+					<maxHistory>30</maxHistory>
+				</rollingPolicy>
+				<encoder><Pattern>%d{HH:mm:ss.SSS} %level - %msg%n</Pattern></encoder>
+			</appender>
+		</sift>
+	</appender>
+
+         <appender name="REPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${REPORT_LOG}/debug.log</file>
+			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+					<Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</Pattern>
+			</encoder>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<!-- rollover daily -->
+					<fileNamePattern>${REPORT_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.log
+					</fileNamePattern>
+					<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+							<maxFileSize>250MB</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+	</appender>
+	<appender name="LOGIN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${LOGIN_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${LOGIN_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+        <appender name="REGISTER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${REGISTER_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${REGISTER_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+        <appender name="HOME" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${HOME_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${HOME_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+        <appender name="COMMON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${COMMON_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${COMMON_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+        <appender name="MARKETSUMMARY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${MARKETSUMMARY_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${MARKETSUMMARY_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+	<appender name="PDFREPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${PDFREPORT_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${PDFREPORT_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+	<appender name="SIP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${SIP_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${SIP_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+
+	<appender name="AUTHENLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${AUTHENTICATE_LOG}/debug.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                        <Pattern>
+                                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+                        </Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                        <!-- rollover daily -->
+                        <fileNamePattern>${AUTHENTICATE_LOG}/archived/debug.%d{yyyy-MM-dd}.%i.zip
+                        </fileNamePattern>
+                        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                                <maxFileSize>250MB</maxFileSize>
+                        </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+	<logger name="com.n2n.tcplus.debug.N2NLogUtil" level="debug">
+		<appender-ref ref="TCPLUS_LOG"/>
+	</logger>
+        <logger name="com.n2n.rest.ReportController" level="debug">
+                <appender-ref ref="REPORT"/>
+        </logger>
+	<logger name="com.n2n.rest.LoginController" level="debug">
+             <appender-ref ref="LOGIN"/>
+    	</logger>
+    	<logger name="com.n2n.rest.RegisterController" level="debug">
+             <appender-ref ref="REGISTER"/>
+    	</logger>
+    	<logger name="com.n2n.rest.HomeController" level="debug">
+             <appender-ref ref="HOME"/>
+    	</logger>
+    	<logger name="com.n2n.util.CommonUtil" level="debug">
+             <appender-ref ref="COMMON"/>
+    	</logger>
+    	<logger name="com.n2n.rest.MarketSummaryController" level="debug">
+             <appender-ref ref="MARKETSUMMARY"/>
+    	</logger>
+	<logger name="com.n2n.rest.PDFReportController" level="debug">
+             <appender-ref ref="PDFREPORT"/>
+        </logger>
+	<logger name="com.n2n.rest.SIPController" level="debug">
+             <appender-ref ref="SIP"/>
+        </logger>
+	<logger name="com.n2n.rest.CliAuthenticateController" level="debug">
+             <appender-ref ref="AUTHENLOG"/>
+        </logger>
+
+	<root level="off"></root>
+</configuration>

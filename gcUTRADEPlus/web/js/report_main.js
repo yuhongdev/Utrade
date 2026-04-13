@@ -1,0 +1,4580 @@
+var filterAccType = "";
+var callATP = false;
+var message, status, action;
+var g_sDefBHCode, g_bExcess=false, g_dContractTotal = 0.0, g_dExcessDebitInterest= 0, g_dAvailAmt = 0.0, g_dOSAmtTotal= 0.0, g_dInterestTotal=0.0,g_sBHName; //ESettlement global variable
+var eStmtStsHisVal="";
+var iBHCode = "";
+var login_agent = false;
+var isSOA = false;
+
+function chkSess(){
+	var jsonObject = {};
+	console_log("chkSess:"+JSON.stringify(jsonObject));
+	chkSessReq(jsonObject);
+}
+
+function chkSessResp(data){
+	console_log("chkSessResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		console_log("chkSessResp:"+data.ev);
+		var logon = JSON.parse(data.ev);
+		if(logon.s=="true"){
+			login_agent = true;
+		}
+	}
+}
+
+function tradeAccInfo(searchParam, accountTypeP){
+	var jsonObject = {};
+	var accTypeP = "";
+	var searchP = "";
+	if(searchParam != ""){
+		searchP = searchParam;
+	}
+	if(accountTypeP != ""){
+		accTypeP = accountTypeP;
+		filterAccType = accountTypeP;
+	}
+	jsonObject['accType'] = accTypeP;
+	jsonObject['search'] = searchP;
+	
+	reqtradeAccInfo(jsonObject);
+}
+
+function tradeAccInfo_response(data){
+	console.log("Displaying Acc Select Box");
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		var trdgAccD = JSON.parse(data.ev);
+		$('#LoginID').html(trdgAccD.Loginid);
+		$('#CliName').html(trdgAccD.CliName);
+		$('.CliName').html(trdgAccD.CliName);
+		
+		$('#TrdAccSel').empty();
+		var category = trdgAccD.Category;
+		if(isSearchAuthorize(category)){
+			searchDisplay("off");
+			if($("#txtTrdAccSrch").length==0){
+				$("#TrdAccSel").parent().append("<input id='txtTrdAccSrch' name='txtTrdAccSrch' style='display:none' autocomplete='off' /> ");
+				$("#txtTrdAccSrch").keyup(function(event){
+					if(event.which==13){
+						event.preventDefault();
+						tradeBeyondSearchAccount();
+					}
+				});
+			}
+			if($("#butTrdAccSrch").length==0){
+				$("#TrdAccSel").parent().append("<button id='butTrdAccSrch' name='butTrdAccSrch' class='btn btn-default' type='submit' value='Search'><i class='userFindicon'></i></button>");
+				$("#butTrdAccSrch").click(function(){
+					if($("#txtTrdAccSrch").css("display")=="none"){
+						searchDisplay("on");
+					}else if($("#TrdAccSel").css("display")=="none"){
+						tradeBeyondSearchAccount();
+					}
+				});
+			}
+		}
+		
+		var bhCliInfoD = trdgAccD.BhCliInfo;
+		if(bhCliInfoD.length > 0){
+			if(bhCliInfoD.length > 0){
+				for (var i=0;i<bhCliInfoD.length;i++){
+					var $option=$('<option />');
+					var eSett,eDep;
+					if(bhCliInfoD[i].eSettlement != null){
+						eSett = bhCliInfoD[i].eSettlement;
+						eDep = bhCliInfoD[i].eDeposit;
+					}
+					else{
+						eSett = "";
+						eDep = "";
+					}
+					
+					iBHCode = bhCliInfoD[i].bhCode;
+					$option.attr('value', bhCliInfoD[i].branchCode+"|"+bhCliInfoD[i].bhCliCode+"|"+bhCliInfoD[i].accType+"|"+bhCliInfoD[i].rmsCode+"|"+eSett+"|"+eDep);
+					accTypeSelName=mapAccType(bhCliInfoD[i].accType);
+					$option.text(accTypeSelName+" (" + bhCliInfoD[i].bhCliCode+"-"+bhCliInfoD[i].branchCode+") "+bhCliInfoD[i].cliName);
+					
+					var searchtextbx = $("#txtTrdAccSrch");
+					if(!searchtextbx.length==0){
+						var searchText = $("#txtTrdAccSrch");
+						if(!searchText==0){
+							var search = $("#txtTrdAccSrch").val();
+							if(search != ""){
+								var cliInfoDataTxt = bhCliInfoD[i].bhCliCode;
+								if ( cliInfoDataTxt.toLowerCase() == search.toLowerCase()){
+									$option.attr('selected', true);
+								}
+							}
+						}
+					}
+					$('#TrdAccSel').append($option);
+				}
+				
+				$('#TrdAccSel').on('change', function(){
+					openReport();
+				});
+				
+				openReport();
+			}
+		}
+		else{
+			console.log("No Trading Account Record Found");
+			$('#tblTDHdr').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+			hideTable();
+		}
+		
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function trdAccATP(searchParam, accountTypeP){
+	console.log("Calling Trading Account from ATP");
+	var jsonObject = {};
+	var accTypeP = "";
+	var searchP = "";
+	callATP = true;
+	if(searchParam != null){
+		var paramLength = searchParam.length;
+		console.log("Search Trading Account Param length: "+paramLength);
+		if(paramLength < 3){
+			alert("Please insert at least 3 characters");
+		}else{
+			searchP = searchParam;
+		}
+		
+	}
+	if(accountTypeP != ""){
+		accTypeP = accountTypeP;
+		filterAccType = accountTypeP;
+	}
+	jsonObject['accType'] = accTypeP;
+	jsonObject['search'] = searchP;
+	jsonObject['exchCode'] = 'PHP';
+	
+	reqTrdAccATP(jsonObject);
+}
+
+function tradeBeyondSearchAccount(){
+	$('#tblTDHdr').css("display","none");
+	var search;
+	var accTypeP;
+	if(filterAccType != ""){
+		accTypeP = filterAccType;
+	}
+	search = $("#txtTrdAccSrch").val();
+	if(search!=null&&search.length>0){
+		if(callATP){
+			trdAccATP(search,accTypeP);
+			console.log(callATP);
+			console.log("ATP");
+			console.log(search);
+		}
+		else{
+			tradeAccInfo(search,accTypeP);
+		}
+		
+	}else{
+		searchDisplay("off");
+	}
+}
+
+function tradeBeyondEncryptValue(){
+	$('#tblTDHdr').css("display","none");
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var jsonObject = {};
+	jsonObject['BHBranch'] = splitValue[0];
+	jsonObject['BHCliCode'] = splitValue[1];
+	jsonObject['AccType'] = splitValue[2];
+	
+	/*jsonObject['BHBranch'] = '001';
+	jsonObject['BHCliCode'] = 'MM1059';
+	jsonObject['AccType'] = 'M';*/
+	
+	tradeBydReq(jsonObject);
+}
+
+function getTradeBeyondReport_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating Trade Beyond Report Data..");
+		var trdBydD = JSON.parse(data.ev);
+		var trdBydArry = trdBydD.ObjectList;
+		if (trdBydArry != null){
+			$('#LastUpd').html(trdBydArry[0].lastUpd);
+			$('#RegDate').html(trdBydArry[0].regDate);
+			$('#TurnOver').html(trdBydArry[0].turnOver);
+			$('#Rate').html(trdBydArry[0].rate);
+			$('#tblTDHdr').css("display","");
+			$('#noDataMsg').hide();
+		}
+		else{
+			console.log("There is no record found");
+			$('#tblTDHdr').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function marginAccEncryptValue(){
+	$('#tblTotal').css("display","none");
+	$('#accInfoTbl').css("display","none");
+	$('#collateralTbl').css("display","none");
+	$('#positionInfoTbl').css("display","none");
+	$('#topupInfoTbl').css("display","none");
+	$('#topupInfoTbl').css("display","none");
+	
+	var jsonObject = {};
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	
+	console.log(jsonObject);
+	
+	reqMarginAccRpt(jsonObject);
+}
+
+function getMarginAccSummRpt_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating The Margin Account Summary Data...");
+		var mgnAccD = JSON.parse(data.ev);
+		var mgnAccArry = mgnAccD.ObjectList;
+		if (mgnAccArry != null){
+			$('#tradingLimit').html(mgnAccArry[0].tradingLimit);
+			$('#lastRolloverDate').html(mgnAccArry[0].lastRolloverDate);
+			$('#creditlimit').html(mgnAccArry[0].creditLimit);
+			$('#appMargin').html(mgnAccArry[0].appMargin);
+			$('#FixedDeposit').html(mgnAccArry[0].fixedDeposit);
+			$('#SecurityValue').html(mgnAccArry[0].securityValue);
+			$('#outstandingBalance').html(mgnAccArry[0].outstandingBalance);
+			$('#currMargin').html(mgnAccArry[0].currMargin);
+			$('#accStatus').html(mgnAccArry[0].accStatus);
+			$('#Cash').html(mgnAccArry[0].cash);
+			$('#acceptableSecurites').html(mgnAccArry[0].acceptableSecurites);
+			$('#forceSell').html(mgnAccArry[0].forceSell);
+			
+			$('#tblTotal').css("display","");
+			$('#accInfoTbl').css("display","");
+			$('#collateralTbl').css("display","");
+			$('#positionInfoTbl').css("display","");
+			$('#topupInfoTbl').css("display","");
+			$('#topupInfoTbl').css("display","");
+			
+			$('#noDataMsg').hide();
+		}
+		else{
+			console.log("There is no record found");
+			$('#tblTotal').css("display","none");
+			$('#accInfoTbl').css("display","none");
+			$('#collateralTbl').css("display","none");
+			$('#positionInfoTbl').css("display","none");
+			$('#topupInfoTbl').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function AccInfoEncryptValue(){
+	$('#KLExchg').css("display","none");
+	$('#SIExchg').css("display","none");
+	$('#HKExchg').css("display","none");
+	$('#NExchg').css("display","none");
+	$('#AXExchg').css("display","none");
+	$('#JKExchg').css("display","none");
+	$('#KLsummaryTbody').empty();
+	$('#SIsummaryTbody').empty();
+	$('#HKsummaryTbody').empty();
+	$('#NsummaryTbody').empty();
+	$('#AXsummaryTbody').empty();
+	$('#JKsummaryTbody').empty();
+	$('#OthersummaryTbody').empty();
+	
+	$('#tabbed').css("display","none");
+	var exchgCode = $("#selExchCode").val();
+	var currCode = $("#selCurrCode").val();
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	
+	var jsonObject = {};
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	jsonObject['sExchCode'] = "PH";
+	jsonObject['sCurrCode'] = "PHP";
+	
+        console.log("jsonObject passed to Backend : "+JSON.stringify(jsonObject));
+	reqCliSummRpt(jsonObject);
+}
+
+function getClientSumm_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	$('#tabbed').css("display","none");
+	$('#OthersummaryTbl').css("display","");
+	
+	if(sttus == "200"){
+		console.log("Generating The Client Summary Report Data...");
+		console.log(data);
+                var cliSummD = JSON.parse(data.ev);
+		var objListArry = cliSummD.ObjectList;
+		var cliSummArry = objListArry[0].SummInfo;
+		if(cliSummArry != null){
+			for (var i=0;i<cliSummArry.length;i++){
+				var OSPDueFr, OSPNotDueFr, OSPOverdueFr, OSCLFr, OSDNFr, OSIntFr, OSSTo, OSCGTo, OSCNTo, NetBalFr, NetBalTo, exchg, TotTrust;
+				exchg = cliSummArry[i].ExChange;
+				if(cliSummArry[i].TotalTrust!=null&&cliSummArry[i].TotalTrust!="0.0000"){				
+					TotTrust = cliSummArry[i].TotalTrust;
+				}else{
+					TotTrust= "-";
+				}
+
+				if(cliSummArry[i].ContractDue!=null&&cliSummArry[i].ContractDue!="0.0000"){
+					OSPDueFr = cliSummArry[i].ContractDue;
+				}
+				else{
+					OSPDueFr= "-";
+				}
+				
+				if(cliSummArry[i].ContractNotDue!=null&&cliSummArry[i].ContractNotDue!="0.0000"){
+					OSPNotDueFr = cliSummArry[i].ContractNotDue;
+				}
+				else{
+					OSPNotDueFr= "-";
+				}
+				
+				if(cliSummArry[i].ContractOverdue!=null&&cliSummArry[i].ContractOverdue!="0.0000"){
+					OSPOverdueFr = cliSummArry[i].ContractOverdue;
+				}
+				else{
+					OSPOverdueFr= "-";
+				}
+				
+				if(cliSummArry[i].ContraLoss!=null&&cliSummArry[i].ContraLoss!="0.0000"){
+					OSCLFr = cliSummArry[i].ContraLoss;
+				}
+				else{
+					OSCLFr= "-";
+				}
+				
+				if(cliSummArry[i].DebitNotes!=null&&cliSummArry[i].DebitNotes!="0.0000"){
+					OSDNFr = cliSummArry[i].DebitNotes;
+				}
+				else{
+					OSDNFr= "-";
+				}
+				
+				if(cliSummArry[i].InterestOwing!=null&&cliSummArry[i].InterestOwing!="0.0000"){
+					OSIntFr = cliSummArry[i].InterestOwing;
+				}
+				else{
+					OSIntFr= "-";
+				}
+				
+				if(cliSummArry[i].SalesContract!=null&&cliSummArry[i].SalesContract!="0.0000"){
+					OSSTo = cliSummArry[i].SalesContract;
+				}
+				else{
+					OSSTo= "-";
+				}
+				
+				if(cliSummArry[i].ContraProfit!=null&&cliSummArry[i].ContraProfit!="0.0000"){
+					OSCGTo = cliSummArry[i].ContraProfit;
+				}
+				else{
+					OSCGTo= "-";
+				}
+				
+				if(cliSummArry[i].CreditNotes!=null&&cliSummArry[i].CreditNotes!="0.0000"){
+					OSCNTo = cliSummArry[i].CreditNotes;
+				}
+				else{
+					OSCNTo= "-";
+				}
+				
+				if(cliSummArry[i].NetBalFr!="0.0000"){
+					NetBalFr = cliSummArry[i].NetBalFr;
+					NetBalTo = "-";	
+				}
+				else{
+					NetBalTo = cliSummArry[i].NetBalTo;
+					NetBalFr = "-";	
+				}
+				
+				rptCliPosSmyRow(OSPDueFr, OSPNotDueFr, OSPOverdueFr, OSCLFr, OSDNFr, OSIntFr, OSSTo, OSCGTo, OSCNTo, NetBalFr, NetBalTo, exchg, TotTrust);
+			}
+		}
+		else{
+			console.log("There is no record found");
+		}
+		
+		var typeArr = [];
+		if('#contract'!=null){
+			console.log("Have Value");
+			$('#contract').empty();
+			$('#trust').empty();
+			$('#other').empty();
+			typeArr=[];
+		}
+		else{
+			console.log("Empty Value");
+		}
+		
+		var tblTransDate,tblDueDate,tblRefNo,tblStkName,tblPrice,tblQty,tblAmount,tblCurr,tblExchg,tblMyrEquiv,tblMyrInt, tblDb;
+		//cliSummDtlArry
+		var cliSummDtlArry = objListArry[0].DetailedInfo;
+		if(cliSummDtlArry.length > 0){
+			for (var i=0;i<cliSummDtlArry.length;i++){
+				var infoDatalngth = cliSummDtlArry.length;
+				console.log("infoDatalngth length :"+infoDatalngth);
+				var tblDoc = cliSummDtlArry[i].DocType;
+				console.log("tblDoc Value :" + tblDoc);
+				var tblDocNew;
+				
+				if (tblDoc=="P" || tblDoc=="S" ){
+					tblDocNew="contract"
+				}
+				else if (tblDoc=="T"){
+					tblDocNew="T"
+				}
+				else{
+					tblDocNew="C"
+				}
+				
+				if(typeArr.indexOf(tblDocNew)==-1){
+					createTable(tblDocNew);//Method to create table
+					typeArr.push(tblDocNew);
+				}
+				
+				tblTransDate = cliSummDtlArry[i].TransDate;
+				tblDueDate = cliSummDtlArry[i].DueDate;
+				tblRefNo = cliSummDtlArry[i].RefNo;
+				tblStkName = cliSummDtlArry[i].StockName;
+				tblPrice = cliSummDtlArry[i].Price;
+				tblQty = cliSummDtlArry[i].Qty;
+				tblAmount = cliSummDtlArry[i].Amount;
+				tblCurr = cliSummDtlArry[i].Curr;
+				tblExchg = cliSummDtlArry[i].Exchg;
+				tblMyrEquiv = cliSummDtlArry[i].MyrEquiv;
+				tblMyrInt = cliSummDtlArry[i].MyrAccInt;
+
+				tblDb = cliSummDtlArry[i].Db;
+				if(tblDb == "D"){
+					tblAmount = "(" + tblAmount + ")";
+					tblMyrEquiv = "(" + tblMyrEquiv + ")";
+				}
+				
+				createRow(tblDocNew, tblTransDate, tblDueDate, tblRefNo, tblStkName, tblPrice, tblQty,tblAmount,tblCurr,tblExchg,tblMyrEquiv,tblMyrInt, tblDoc, getRowClass(i));
+			}
+			console.log(typeArr);
+			$('#tabbed').css("display","");
+			$('#noDataMsg').hide();
+		}
+		else{
+			console.log("There is no record found");
+			$('#tabbed').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function rptCliPosSmyRow(OSPDueFr, OSPNotDueFr, OSPOverdueFr, OSCLFr, OSDNFr, OSIntFr, OSSTo, OSCGTo, OSCNTo, NetBalFr, NetBalTo, exchg, TotTrust){
+	var tblRow, tblRow2, tblRow3, tblRow4, tblRow5, tblRow6, tblRow7, tblRow8, tblRow9, tblRow10;
+	
+	tblRow = "<tr>";
+	tblRow += "<td>O/S Purchase Contract Due</td>";
+	tblRow += "<td>"+OSPDueFr +"</td>";
+	tblRow += "<td>&nbsp;</td>";
+	tblRow += "</tr>";
+	
+	tblRow2 = "<tr>";
+	tblRow2 += "<td>O/S Purchase Contract Not Due</td>";
+	tblRow2 += "<td>"+OSPNotDueFr +"</td>";
+	tblRow2 += "<td>&nbsp;</td>";
+	tblRow2 += "</tr>";
+	
+	tblRow3 = "<tr>";
+	tblRow3 += "<td>O/S Purchase Contract Overdue</td>";
+	tblRow3 += "<td>"+OSPOverdueFr +"</td>";
+	tblRow3 += "<td>&nbsp;</td>";
+	tblRow3 += "</tr>";
+	
+	tblRow4 = "<tr>";
+	tblRow4 += "<td> O/S Contra Loss</td>";
+	tblRow4 += "<td>"+OSCLFr +"</td>";
+	tblRow4 += "<td>&nbsp;</td>";
+	tblRow4 += "</tr>";
+	
+	tblRow5 = "<tr>";
+	tblRow5 += "<td>O/S Debit Notes</td>";
+	tblRow5 += "<td>"+OSDNFr +"</td>";
+	tblRow5 += "<td>&nbsp;</td>";
+	tblRow5 += "</tr>";
+	
+	tblRow6 = "<tr>";
+	tblRow6 += "<td>Starting Cash Balance</td>";
+	tblRow6 += "<td>&nbsp;</td>";
+	tblRow6 += "<td>"+TotTrust +"</td>";
+	tblRow6 += "</tr>";
+	
+	tblRow7 = "<tr>";
+	tblRow7 += "<td>O/S Sales Contract</td>";
+	tblRow7 += "<td>&nbsp;</td>";
+	tblRow7 += "<td>"+OSSTo +"</td>";
+	tblRow7 += "</tr>";
+	
+	tblRow8 = "<tr>";
+	tblRow8 += "<td>O/S Contra Profit</td>";
+	tblRow8 += "<td>&nbsp;</td>";
+	tblRow8 += "<td>"+OSCGTo +"</td>";
+	tblRow8 += "</tr>";
+	
+	tblRow9 = "<tr>";
+	tblRow9 += "<td>O/S Credit Notes</td>";
+	tblRow9 += "<td>&nbsp;</td>";
+	tblRow9 += "<td>"+OSCNTo +"</td>";
+	tblRow9 += "</tr>";
+	
+	tblRow10 = "<tr class='tblFooter' height='16'>";
+	tblRow10 += "<td>Ending Cash Balance</td>";
+	tblRow10 += "<td>"+NetBalFr+"</td>";
+	tblRow10 += "<td>"+NetBalTo+"</td>";
+	tblRow10 += "</tr>";
+	
+	$('#OthersummaryTbl').append(tblRow6);
+	$('#OthersummaryTbl').append(tblRow);
+	$('#OthersummaryTbl').append(tblRow2);
+	$('#OthersummaryTbl').append(tblRow3);
+	$('#OthersummaryTbl').append(tblRow4);
+	$('#OthersummaryTbl').append(tblRow5);	
+	$('#OthersummaryTbl').append(tblRow7);
+	$('#OthersummaryTbl').append(tblRow8);
+	$('#OthersummaryTbl').append(tblRow9);
+	$('#OthersummaryTbl').append(tblRow10);
+	$('#OthersummaryTbody > tr > td:nth-of-type(2)').css("text-align","right");
+	$('#OthersummaryTbody > tr > td:nth-of-type(3)').css("text-align","right");
+	$('#OtherExchg').css("display","");
+	$('#OthersummaryTbl').css("display","");
+
+}
+
+function createTable(tblDocNew){
+	var rowHeader = "", rowCategory="";
+	
+	rowHeader += "<thead>";
+	rowHeader += "<tr>";
+	rowHeader += "<td class='tblHeader2' colspan=3 style='background-color:#FFFFFF'></td>";
+	rowHeader += "<th class='tblHeader3' colspan=5><div align='center'>Traded</th>";
+	rowHeader += "<td class='tblHeader2' colspan=3 style='background-color:#FFFFFF'></td>";
+	
+	rowHeader += "<tr class='tblHeader'>";
+	rowHeader += "<th width='50px'>Trans Date</th>";
+	//rowHeader += "<th>Due Date</th>";
+	rowHeader += "<th align='center' width='150px'>Ref No</th>";
+	rowHeader += "<th align='center' width='150px'>Stock Name</th>";
+	rowHeader += "<th style='text-align:center' width='81px'>Price</th>";
+	rowHeader += "<th width='51px'>Qty</th>";
+	rowHeader += "<th width='81px' style='text-align:center'>Amount</th>";
+	rowHeader += "<th width='37px'>Curr</th>";
+	rowHeader += "<th width='49px'>Exchg</th>";
+	rowHeader += "<th width='128px' style='text-align:center'>PHP Equivalent</th>";
+	rowHeader += "<th width='128px'style='text-align:center'>PHP Acc Int/ LPC</th>";
+	rowHeader += "<th width='20px'>&nbsp;</th>";
+	rowHeader += "</tr>";
+	rowHeader += "<thead>";
+	
+	
+
+	rowHeader += "</tr>";
+	
+	if (tblDocNew=="contract"){
+		$("#contract").append($("<table class='responsive' cellspacing='0' id='responsive_contract'></table>"));
+		$("#responsive_"+tblDocNew).append(rowHeader);	
+		console.log(tblDocNew);
+	}
+	else if (tblDocNew=="T"){
+		$("#trust").append($("<table class='responsive' cellspacing='0' id='responsive_"+tblDocNew+"'></table>"));
+		$("#responsive_"+tblDocNew).append(rowHeader);	
+		console.log(tblDocNew);
+	}
+	else {
+		$("#other").append($("<table class='responsive' cellspacing='0' id='responsive_"+tblDocNew+"'></table>"));
+		$("#responsive_"+tblDocNew).append(rowHeader);	
+		console.log(tblDocNew);
+	}
+	
+}
+
+function createRow(tblDocNew, tblTransDate, tblDueDate, tblRefNo, tblStkName, tblPrice, tblQty, tblAmount, tblCurr, tblExchg, tblMyrEquiv, tblMyrInt, tblDoc,cls){
+	var tblRow;
+	var stkName;
+        var dueDatee;
+	
+	if(tblStkName == ""){
+		stkName = "&nbsp;";
+	}
+	else{
+		stkName = tblStkName;
+	}
+	
+        if(tblDueDate == ""){
+		dueDatee = "&nbsp;";
+	}
+	else{
+		dueDatee = tblDueDate;
+	}
+
+	tblRow = "<tr class='tblRow "+cls+"'>";
+	tblRow += "<td>"+tblTransDate+"</td>";
+	//tblRow += "<td>"+dueDatee+"</td>";
+	tblRow += "<td>"+tblRefNo+"</td>";
+	tblRow += "<td>"+stkName+"</td>";
+	tblRow += "<td style='text-align:right'>"+tblPrice+"</td>";
+	tblRow += "<td>"+tblQty+"</td>";
+	tblRow += "<td style='text-align:right'>"+tblAmount+"</td>";
+	tblRow += "<td>"+tblCurr+"</td>";
+	tblRow += "<td>"+tblExchg+"</td>";
+	tblRow += "<td style='text-align:right'>"+tblMyrEquiv+"</td>";
+	tblRow += "<td style='text-align:right'>"+tblMyrInt+"</td>";
+	if(tblDoc == "C"){
+		//tblRow += "<td><a onclick='rptContraDtl(\""+tblRefNo+"\")'>Contract</a></td>";
+		tblRow += "<td><a href='#' class='glyphicon glyphicon-search ' data-toggle='modal' data-target='#modalContraDtlHdr' onclick='rptContraDtl(\""+tblRefNo+"\")'></a></td>";
+		
+	}
+	else{
+		tblRow += "<td>&nbsp;</td>";
+	}
+	
+	tblRow += "</tr>";
+	$("#responsive_"+tblDocNew).append(tblRow);
+}
+
+function rptContraDtl(contractNum){
+	rptContraDtlEncVal(contractNum);
+	
+}
+
+function rptContraDtlEncVal(contractNum){
+	var jsonObject = {};
+	jsonObject['ContractNumber'] = contractNum;
+	
+	reqRptContraDtl(jsonObject);
+}
+
+function getrptContraDtl_response(data){
+	console.log(data);
+	$('#tblContraDtlHdrTbody').empty();
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating The Contra Dtl Data...");
+		var contraDtl = JSON.parse(data.ev);
+		var objListArry = contraDtl.ObjectList;
+		if(objListArry.length > 0){
+			for(var i =0;i<objListArry.length;i++){
+				createTblContraDtl(objListArry[i], i);
+			}
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function createTblContraDtl(data,row){
+	var tblRow;
+	
+	tblRow = "<tr>";
+	tblRow += "<td>"+ data.contraNo +"</td>";
+	tblRow += "<td>"+ data.docDate +"</td>";
+	tblRow += "<td>"+ data.contractNo +"</td>";
+	tblRow += "<td>"+ data.qty +"</td>";
+	tblRow += "<td>"+ data.stkPrice +"</td>";
+	tblRow += "<td>"+ data.interest +"</td>";
+	tblRow += "<td>"+ data.debit +"</td>";
+	tblRow += "<td>"+ data.credit +"</td>";
+	tblRow += "</tr>";
+	
+	$('#tblContraDtlHdr').append(tblRow);
+}
+
+function traderDepositEncryptValue(){
+	var jsonObject = {};
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	
+	reqTrderDepRpt(jsonObject);
+}
+
+function getTraderDepositRpt_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating The Trader Deposit Report Data...");
+		var trdDepD = JSON.parse(data.ev);
+		var objListArry = trdDepD.ObjectList;
+		if (objListArry[0].AccSummDate!= null){
+			$('#AccSummDate').html(objListArry[0].AccSummDate);
+			$('#TraderDepositAccount').html(objListArry[0].DepositAcc);
+			$('#moneyMultiplierAccount').html(objListArry[0].MoneyMultAcc);
+			$('#StartDate').html(objListArry[0].StartDate);
+			$('#MaturityDate').html(objListArry[0].MaturityDate);
+			$('#totaldepositAmount').html(objListArry[0].TotalDepositAmt);
+			$('#entitledTradingVolume').html(objListArry[0].EntitledTradVol);
+			$('#utilisedTradingVolume').html(objListArry[0].UtilisedTradVol);
+			$('#remainingTradingVolume').html(objListArry[0].RemainingTradVol);
+			
+			var typeArr = [];
+			if('#tblDtlInfo'!=null){
+				console.log("Have Value");
+				$('#tblDtlInfo').empty();
+			}
+			else{
+				console.log("Empty Value");
+			}
+			$('#tblTDHdr').css("display","");
+			var detailedInfoD = objListArry[0].DetailedInfo;
+			if(detailedInfoD != null){
+				createTraderDepTable();
+				var dt, transCode, transRef, currCode, amt, entTradVol, utilTradVol, wDRAmt; 
+			
+				for(var i=0;i<detailedInfoD.length;i++){
+					dt = detailedInfoD[i].Date;
+					transCode = detailedInfoD[i].TransCode;
+					transRef = detailedInfoD[i].TransRef;
+					currCode = detailedInfoD[i].CurrCode;
+					amt = detailedInfoD[i].Amount;
+					entTradVol = detailedInfoD[i].EntTradVol;
+					utilTradVol = detailedInfoD[i].UtilTradVol;
+					wDRAmt = detailedInfoD[i].WdrAmt;
+					
+					traderDepositRow(dt, transCode, transRef, currCode, amt, entTradVol, utilTradVol, wDRAmt, getRowClass(i));
+				}
+				$('#tblDtl').css("display","");
+				$('#noDataMsg').hide();
+			}
+		}
+		else{
+			console.log("There is no record found");
+			$('#tblTDHdr').css("display","none");
+			$('#tblDtl').css("display","none");
+			$('#tblTDHdr').hide();
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function createTraderDepTable(){
+	var rowHeader = "", rowCategory="";
+	
+	rowHeader += "<thead>";
+	rowHeader += "<tr>";
+	rowHeader += "<th>Date</th>";
+	rowHeader += "<th>Trx Code</th>";
+	rowHeader += "<th>Transaction Reference</th>";
+	rowHeader += "<th>Currency Code</th>";
+	rowHeader += "<th>Amount</th>";
+	rowHeader += "<th>Entitled Trading Volume</th>";
+	rowHeader += "<th>Cumulative Utilised Trading Volume</th>";
+	rowHeader += "<th>WDR Amount That Affects UTV</th>";
+	rowHeader += "</tr>";
+	rowHeader += "<thead>";
+	rowHeader += "</tr>";
+	
+	$("#tblDtl").append($("<table class='responsive' cellspacing='0' id='tblDtlInfo'></table>"));
+	$("#tblDtlInfo").append(rowHeader);	
+}
+
+function traderDepositRow(dt, transCode, transRef, currCode, amt, entTradVol, utilTradVol, wDRAmt, cls){
+	var tblRow;
+	
+	tblRow = "<tr class='tblRow "+cls+"'>";
+	tblRow += "<td>"+dt+"</td>";
+	tblRow += "<td>"+transCode+"</td>";
+	tblRow += "<td>"+transRef+"</td>";
+	tblRow += "<td>"+currCode+"</td>";
+	tblRow += "<td>"+amt+"</td>";
+	tblRow += "<td>"+entTradVol+"</td>";
+	tblRow += "<td>"+utilTradVol+"</td>";
+	tblRow += "<td>"+wDRAmt+"</td>";
+	tblRow += "</tr>";
+	$("#tblDtlInfo").append(tblRow);
+}
+
+function getMonthlySummMth(){
+	var jsonObject = {};
+	
+	reqMthSummMth(jsonObject);
+}
+
+function getMonthlySummMth_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	if(sttus == "200"){
+		console.log("Generating The Monthly Summary Report Month");
+		var mthD = JSON.parse(data.ev);
+		var objListArry = mthD.ObjectList;
+		$('#selDateMth').empty();
+		if(objListArry[0].mthDisplay != null){
+			for (var i=0;i<objListArry.length;i++){
+				var $option=$('<option />');
+				$option.attr('value', objListArry[i].mthValue);	
+				$option.text(objListArry[i].mthDisplay);
+				$('#selDateMth').append($option);
+			}
+			$('#selDateMth').on('change', function(){
+				monthlySummEncryptValue();
+			})
+			monthlySummEncryptValue();
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function monthlySummEncryptValue(){
+	$('#Data').css("display","none");
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var $selDateMth = $('#selDateMth');
+	var selDateMth=$selDateMth.find(':selected').attr('value');
+	
+	var jsonObject = {};
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	jsonObject['sMonth'] = selDateMth;
+	jsonObject['sGrpID'] = '';
+	
+	$("#ClientCode").html(splitValue[1]);
+	$("#BranchCode").html(splitValue[0]);
+	$("#Remisier").html(splitValue[3]);
+	
+	reqMonthlySumm(jsonObject); 
+}
+
+function getMonthlySumm_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	var typeArr = [];
+	
+	if('#MarginTbl'!=null){
+		$('#MarginTbl').empty();
+		typeArr=[];
+	}
+	
+	if('#NonMarginTbl'!=null){
+		$('#NonMarginTbl').empty();
+		typeArr=[];
+	}
+	
+	if(sttus == "200"){
+		console.log("Generating Monthly Summary Report");
+		var $accDetail = $('#TrdAccSel');
+		var valaccType=$accDetail.find(':selected').attr('value');
+		var splitValue = valaccType.split("|");
+		var accType = splitValue[2];
+		
+		if (accType == "M"){
+			var mthlySummRptD = JSON.parse(data.ev);
+			var objListArry = mthlySummRptD.ObjectList;
+			var sTrxDateTbl, sCurrCatTbl, sAmtDbtTbl, sAmtCrdtTbl, sRefNoTbl, sParticularsTbl, sQtyTbl, sApplyTypeTbl, appliedToTbl, settCurrTbl, dSubTotTbl, footerDbt, footerCrdt, sPSTbl, sStkNameTbl, dPriceTbl, sApplyTrxTbl, sChequeBankTbl, sApplyTrxLengthTbl, appToCol2, appToCol3, sTempAppTrxTbl, sPayInBankTbl;
+			var statementDt;
+			var dTotal=0;
+			
+			if(objListArry.length > 0){
+				$('#Remisier').html(objListArry[0].Remisier);
+				for(var j=0;j<objListArry.length;j++){
+					var dtlArryD = objListArry[j].DetailedInfo;
+					for(var i=0;i<dtlArryD.length;i++){
+						statementDt = objListArry[j].StmtDate;
+						$("#accountstmtDate").empty();
+						$("#accountstmtDate").append(statementDt);
+						
+						sTrxDateTbl = dtlArryD[i].TrxDate;
+						sCurrCatTbl = dtlArryD[i].Category;
+						sAmtDbtTbl = dtlArryD[i].Debit;
+						sAmtCrdtTbl = dtlArryD[i].Credit;
+						
+						if(sCurrCatTbl == "BF"){
+							dSubTotTbl = objListArry[j].SubTotal;
+						}
+						
+						if(sCurrCatTbl == "BL"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sParticularsTbl = dtlArryD[i].Particulars;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							appliedToTbl = dtlArryD[i].AppliedTo;
+							settCurrTbl = dtlArryD[i].SettCurr;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "CA"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sPSTbl = dtlArryD[i].Ps;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							appliedToTbl = dtlArryD[i].AppliedTo;
+							settCurrTbl = dtlArryD[i].SettCurr;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (sPSTbl == "J"){
+								sParticularsTbl = dtlArryD[i].Particulars;
+							}
+							else{
+								sParticularsTbl = dtlArryD[i].Counter;
+							}
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "CN"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sStkNameTbl = dtlArryD[i].Counter;
+							dPriceTbl = dtlArryD[i].TradedPrice;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							sApplyTrxTbl = dtlArryD[i].ApplyTrx;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "CNS"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sStkNameTbl = dtlArryD[i].Counter;
+							dPriceTbl = dtlArryD[i].TradedPrice;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							sApplyTrxTbl = dtlArryD[i].ApplyTrx;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "PY"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sChequeBankTbl = dtlArryD[i].ChequeBank;
+							sStkNameTbl = dtlArryD[i].Counter;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							sApplyTrxLengthTbl = dtlArryD[i].ApplyTrxLength;
+							sTempAppTrxTbl = dtlArryD[i].TempAppTrx;
+							sApplyTrxTbl = dtlArryD[i].ApplyTrx;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if(sApplyTrxLengthTbl != 11){
+								appToCol2 = sTempAppTrxTbl;
+								appToCol3 = "";
+							}
+							else{
+								appToCol2 = sApplyTrxTbl;
+								appToCol3 = sTempAppTrxTbl;
+							}
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "RC"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sPayInBankTbl = dtlArryD[i].PayInBank;
+							sStkNameTbl = dtlArryD[i].Counter;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							sApplyTrxLengthTbl = dtlArryD[i].ApplyTrxLength;
+							sTempAppTrxTbl = dtlArryD[i].TempAppTrx;
+							sApplyTrxTbl = dtlArryD[i].ApplyTrx;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if(sApplyTrxLengthTbl != 11){
+								appToCol2 = sTempAppTrxTbl;
+								appToCol3 = "";
+							}
+							else {
+								appToCol2 = sApplyTrxTbl;
+								appToCol3 = sTempAppTrxTbl;
+							}
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						
+						}
+						
+						if(sCurrCatTbl == "TR"){
+							sAmtCrdtTbl = dtlArryD[i].MyrEquiv;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(sCurrCatTbl == "JN"){
+							sRefNoTbl = dtlArryD[i].RefNum;
+							sStkNameTbl = dtlArryD[i].Counter;
+							sQtyTbl = dtlArryD[i].Qty;
+							sApplyTypeTbl = dtlArryD[i].ApplyType;
+							sApplyTrxTbl = dtlArryD[i].ApplyTrx;
+							dSubTotTbl = objListArry[j].SubTotal;
+							
+							if (dSubTotTbl >= 0){
+								footerDbt = dSubTotTbl;
+								footerCrdt = "";
+							}
+							else{
+								footerDbt = "";
+								footerCrdt = dSubTotTbl;
+							}
+						}
+						
+						if(typeArr.indexOf(sCurrCatTbl)==-1){
+							createMarginTable(sCurrCatTbl,j,typeArr.length);
+							typeArr.push(sCurrCatTbl);
+						}
+						
+						createMgnRow(sTrxDateTbl, sCurrCatTbl, sAmtDbtTbl, sAmtCrdtTbl, sRefNoTbl, sParticularsTbl, sQtyTbl, sApplyTypeTbl, appliedToTbl, settCurrTbl, footerDbt, footerCrdt, sStkNameTbl, dPriceTbl, sApplyTrxTbl, sChequeBankTbl, appToCol2, appToCol3, sPayInBankTbl, getRowClass(i));
+						
+						if(i== (dtlArryD.length-1)){
+							createMarginCatFooter(sCurrCatTbl,Math.abs(dSubTotTbl).formatMoney(2));
+							if(!isNaN(dSubTotTbl))
+								dTotal += dSubTotTbl;
+						}		
+					
+					}
+					
+					if(j== (objListArry.length-1)){
+						createMarginFooter(Math.abs(dTotal.toFixed(2)), data);
+					}
+				}
+				$('#Data').css("display","");
+				$('#accStmt').css("display","");
+				$('#summaryData').css("display","");
+				$('#noDataMsg').hide();
+			}
+			else{
+				console.log("There is no record found");
+				$('#Data').css("display","none");
+				$('#noDataMsg').text("There is no record found");
+				$('#noDataMsg').show();
+			}
+		}
+		else{
+			//Go to line 2289 from report_encrypt.js
+			var mthlySummRptD = JSON.parse(data.ev);
+			var objListArry = mthlySummRptD.ObjectList;
+			var sTrxDateNM, iCurrCatNM,sCurrCat,sCurrCatNM, sAmtMYRNM, sRefNoNM, sStkNameNM, sTrdCurrCodeNM,dPriceNM, sQtyNM, appliedToNM, settCurrNM, amtInTradeCurrNM, dSubTotTblNM, sApplyTrxNM, sChequeBankNM, sPayInBankNM;
+			var statementDtNM;
+			var dTotal=0;
+			
+			if(objListArry.length > 0){
+				$('#Remisier').html(objListArry[0].Remisier);
+				for(var j=0;j<objListArry.length;j++){
+					var dtlArryD = objListArry[j].DetailedInfo;
+					for(var i=0;i<dtlArryD.length;i++){
+						statementDtNM = objListArry[0].StmtDate;
+						$("#accountstmtDate").empty();
+						$("#accountstmtDate").append(statementDtNM);
+						
+						sTrxDateNM = dtlArryD[i].TrxDate;
+						iCurrCatNM = dtlArryD[i].ICategory;
+						switch(iCurrCatNM){
+							case 1:
+								sCurrCatNM = "BF";
+								break;
+							case 2:
+								sCurrCatNM = "BL";
+								break;
+							case 3:
+								sCurrCatNM = "CA";
+								break;
+							case 4:
+								sCurrCatNM = "CN";
+								break;
+							case 5:
+								sCurrCatNM = "CNS";
+								break;
+							case 6:
+								sCurrCatNM = "PY";
+								break;
+							case 7:
+								sCurrCatNM = "RC";
+								break;
+							case 8:
+								sCurrCatNM = "TR";
+								break;
+							case 9:
+								sCurrCatNM = "JN";
+								break;
+						}
+						sCurrCat = dtlArryD[i].Category;
+						sAmtMYRNM = dtlArryD[i].MyrEquiv;
+						
+						if(sCurrCatNM == "BF"){
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "BL"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							appliedToNM = dtlArryD[i].AppliedTo;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "CA"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							appliedToNM = dtlArryD[i].AppliedTo;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "CN"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							sApplyTrxNM = dtlArryD[i].ApplyTrx;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "CNS"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							sApplyTrxNM = dtlArryD[i].ApplyTrx;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "PY"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sChequeBankNM = dtlArryD[i].ChequeBank;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							sApplyTrxNM = dtlArryD[i].ApplyTrx;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "RC"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sPayInBankNM = dtlArryD[i].PayInBank;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "TR"){
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if (sCurrCatNM == "JN"){
+							sRefNoNM = dtlArryD[i].RefNum;
+							sStkNameNM = dtlArryD[i].Counter;
+							sTrdCurrCodeNM = dtlArryD[i].TradedCurr;
+							dPriceNM = dtlArryD[i].TradedPrice;
+							sQtyNM = dtlArryD[i].Qty;
+							sApplyTrxNM = dtlArryD[i].ApplyTrx;
+							settCurrNM = dtlArryD[i].SettCurr;
+							amtInTradeCurrNM = dtlArryD[i].AmtTradedCurr;
+							dSubTotTblNM = objListArry[j].SubTotal;
+						}
+						
+						if(typeArr.indexOf(sCurrCatNM)==-1){						
+							createNonMarginTable(sCurrCatNM,j,typeArr.length);
+							typeArr.push(sCurrCatNM);
+						}
+						
+						createNonMgnRow(sCurrCat,iCurrCatNM,sTrxDateNM, sCurrCatNM, sAmtMYRNM, sRefNoNM, sStkNameNM, sTrdCurrCodeNM, dPriceNM, sQtyNM, appliedToNM, settCurrNM, amtInTradeCurrNM, dSubTotTblNM, sApplyTrxNM, sChequeBankNM, sPayInBankNM, getRowClass(i));
+						if(i== (dtlArryD.length-1)){
+							createNonMarginCatFooter(sCurrCatNM,dSubTotTblNM);
+							if(!isNaN(dSubTotTblNM))
+								dTotal += dSubTotTblNM;
+								//alert(dTotal);
+						}	
+					}
+					
+					if(j== (objListArry.length-1)){
+						var sTotal ="";
+						var sGrandTotSide="";
+						if(dTotal < 0){
+							sTotal = Math.abs(dTotal.toFixed(2)) + "CR"
+							sGrandTotSide = "TO";
+						}else{
+							sTotal = dTotal.toFixed(2);
+							sGrandTotSide = "FROM";
+						}
+						createNonMarginFooter(sGrandTotSide,sTotal, data);
+					}
+				}
+				
+				$('#Data').css("display","");
+				$('#accStmt').css("display","");
+				$('#summaryData').css("display","");
+				$('#noDataMsg').hide();
+			}
+			else{
+				$('#Data').css("display","none");
+				$('#noDataMsg').text("There is no record found");
+				$('#noDataMsg').show();
+			}
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function createMarginTable(sCurrCatTbl,row,count){
+	var rowHeader = "", rowCategory="", colGrp="", title;
+	var typeArr = [];
+	//rowHeader += "<thead>";
+	if(row == 0){
+		rowHeader += "<tr height='50'>";
+		rowHeader += "<th id='dateMgn'>DATE</th>";
+		rowHeader += "<th id='trxMgn'>TRX</th>";
+		rowHeader += "<th id='refNoMgn' style='min-width:120px'>REF NO</th>";
+		rowHeader += "<th id='counterMgn'>COUNTER</th>";
+		rowHeader += "<th id='priceMgn'>PRICE</th>";
+		rowHeader += "<th id='quantityMgn'>QUANTITY</th>";
+		//rowHeader += "<th colspan='3'>APPLIED TO</th>";
+		rowHeader += "<th id='appToMgn'>APPLIED TO</th>";
+		rowHeader += "<th id='debit'>DEBIT</th>";
+		rowHeader += "<th id='creditMgn'>CREDIT</th>";
+		rowHeader += "</tr>";
+		//rowHeader += "<thead>";
+		rowHeader += "</tr>";
+	}
+	
+	if(sCurrCatTbl== "BF")
+		title = count + ". BALANCE BROUGHT FORWARD";
+	else if(sCurrCatTbl== "BL")
+		title = count + ". BILLING & OTHERS";
+	else if(sCurrCatTbl== "CN")
+		title = count + ". PURCHASES";
+	else if(sCurrCatTbl== "CNS")
+		title = count + ". SALES";
+	else if(sCurrCatTbl== "PY")
+		title = count + ". PAYMENTS TO YOU";
+	else if(sCurrCatTbl== "RC")
+		title = count + ". RECEIPTS FROM YOU";
+	else if(sCurrCatTbl== "CA")
+		title = count + ". CONTRAS & SETOFFS";
+	else if(sCurrCatTbl== "TR")
+		title = count + ". INTEREST FOR TRUST";
+	
+	if(typeArr.indexOf(sCurrCatTbl)==-1){
+		rowHeader += "<tr height='20'>";
+		rowHeader += "<td height='30' colspan='9'><div class='row'><strong>"+title+"</strong></div>";
+		rowHeader += "<div class='row lineTotal red'> </div></td>";
+		rowHeader += "</tr>";
+		typeArr.push(sCurrCatTbl);
+	}
+	
+	if(row == 0){
+		$("#MarginTbl").append($("<table class='tblRptBosMthSubHdrMgn' cellspacing='0' id='tblRptBosMthSubHdrMgn'></table>"));
+		$("#tblRptBosMthSubHdrMgn").append("<tbody class='non-border'>");
+	}	
+	$("#tblRptBosMthSubHdrMgn").append(colGrp);
+	$("#tblRptBosMthSubHdrMgn").append(rowHeader);	
+
+}
+
+function createMgnRow(sTrxDateTbl, sCurrCatTbl, sAmtDbtTbl, sAmtCrdtTbl, sRefNoTbl, sParticularsTbl, sQtyTbl, sApplyTypeTbl, appliedToTbl, settCurrTbl, footerDbt, footerCrdt, sStkNameTbl, dPriceTbl, sApplyTrxTbl, sChequeBankTbl, appToCol2, appToCol3, sPayInBankTbl, cls){
+	var tblRow;
+	var colDate, colTrx, colRefNo, colCounter, colPrice, colQuantity, colAppliedTo1, colAppliedTo2, colAppliedTo3, colDebit, colCredit;
+	
+	sAmtDbtTbl = sAmtDbtTbl ==null?"":sAmtDbtTbl;
+	sAmtCrdtTbl = sAmtCrdtTbl ==null?"":sAmtCrdtTbl;
+	
+	if(sCurrCatTbl == "BF"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = "";
+		colCounter = "";
+		colPrice = "";
+		colQuantity = "";
+		colAppliedTo1 = "";
+		colAppliedTo2 = "";
+		colAppliedTo3 = "";
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	else if(sCurrCatTbl == "BL"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl;
+		colCounter = sParticularsTbl;
+		colPrice = "";
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = appliedToTbl;
+		colAppliedTo3 = settCurrTbl;
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	else if(sCurrCatTbl == "CA"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl;
+		colCounter = sParticularsTbl;
+		colPrice = "";
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = appliedToTbl;
+		colAppliedTo3 = settCurrTbl;
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else if(sCurrCatTbl == "CN"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl;
+		colCounter = sStkNameTbl;
+		colPrice = dPriceTbl;
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = sApplyTrxTbl;
+		colAppliedTo3 = "";
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else if(sCurrCatTbl == "CNS"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl;
+		colCounter = sStkNameTbl;
+		colPrice = dPriceTbl;
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = sApplyTrxTbl;
+		colAppliedTo3 = "";
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else if(sCurrCatTbl == "PY"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl+sChequeBankTbl;
+		colCounter = sStkNameTbl;
+		colPrice = "";
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = appToCol2;
+		colAppliedTo3 = appToCol3;
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else if(sCurrCatTbl == "RC"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl+sPayInBankTbl;
+		colCounter = sStkNameTbl;
+		colPrice = "";
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = sApplyTypeTbl;
+		colAppliedTo2 = appToCol2;
+		colAppliedTo3 = appToCol3;
+		colDebit = sAmtDbtTbl;
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else if(sCurrCatTbl == "TR"){
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = "";
+		colCounter = "";
+		colPrice = "";
+		colQuantity = "";
+		colAppliedTo1 = "";
+		colAppliedTo2 = "";
+		colAppliedTo3 = "";
+		colDebit = "";
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	else {
+		colDate = sTrxDateTbl;
+		colTrx = sCurrCatTbl;
+		colRefNo = sRefNoTbl;
+		colCounter = sStkNameTbl;
+		colPrice = "";
+		colQuantity = sQtyTbl;
+		colAppliedTo1 = "";
+		colAppliedTo2 = "";
+		colAppliedTo3 = "";
+		colDebit = "";
+		colCredit = sAmtCrdtTbl;
+	}
+	
+	tblRow = "<tr class='tblRow "+cls+"'>";
+	tblRow += "<td>"+colDate+"</td>";
+	tblRow += "<td>"+colTrx+"</td>";
+	tblRow += "<td>"+colRefNo+"<a href='#' class=' visible-sm visible-xs pull-right glyphicon small glyphicon-search ' data-toggle='modal' data-target='#transDetailsMgn' onclick='newpopupMgn(\""+colDate+"\",\""+ colTrx+"\",\""+colRefNo+"\",\""+colCounter+"\",\""+colPrice+"\",\""+colQuantity+"\",\""+colAppliedTo1+"\",\""+colAppliedTo2+"\",\""+colDebit+"\",\""+colCredit+"\");'></a></td>";
+	tblRow += "<td>"+colCounter+"</td>";
+	tblRow += "<td>"+colPrice+"</td>";
+	tblRow += "<td>"+colQuantity+"</td>";
+	tblRow += "<td>"+colAppliedTo1+colAppliedTo2+"</td>";
+	//tblRow += "<td>"+colAppliedTo2+"</td>";
+	//tblRow += "<td>"+colAppliedTo3+"</td>";
+	tblRow += "<td>"+colDebit+"</td>";
+	tblRow += "<td>"+colCredit+"</td>";
+	tblRow += "</tr>";
+	$("#tblRptBosMthSubHdrMgn").append(tblRow);
+}
+
+function newpopup(colDate, colTrx, colRefNo, colCounter, colTrdedCurr, colTrdedPrice, colTrdedQuantity, colAppliedTo, colSettCurr, colAmountInTrdedCurr, colMyrEquiv){	
+	$('#popRefNum').html(colRefNo);
+	$('#popDt').html(colDate);
+	$('#popTrx').html(colTrx);
+	
+	if(colCounter == ""){
+		$('#popCounter').html("-");
+	}
+	else{
+		$('#popCounter').html(colCounter);
+	}
+	
+	if(colTrdedCurr == ""){
+		$('#popTradedCurr').html("-");
+	}
+	else{
+		$('#popTradedCurr').html(colTrdedCurr);
+	}
+	
+	if(colTrdedPrice == ""){
+		$('#popTrdedPrc').html("-");
+	}
+	else{
+		$('#popTrdedPrc').html(colTrdedPrice);
+	}
+	
+	if(colTrdedQuantity == ""){
+		$('#popTrdedQty').html("-");
+	}
+	else{
+		$('#popTrdedQty').html(colTrdedQuantity);
+	}
+	
+	if(colAppliedTo == ""){
+		$('#popAppTo').html("-");
+	}
+	else{
+		$('#popAppTo').html(colAppliedTo);
+	}
+	
+	if(colSettCurr == ""){
+		$('#popSettCurr').html("-");
+	}
+	else{
+		$('#popSettCurr').html(colSettCurr);
+	}
+	
+	if(colAmountInTrdedCurr == ""){
+		$('#popAmtTrdedCurr').html("-");
+	}
+	else{
+		$('#popAmtTrdedCurr').html(colAmountInTrdedCurr);
+	}
+	
+	$('#popMyrEquiv').html(colMyrEquiv);
+}
+
+function newpopupMgn(colDate, colTrx, colRefNo, colCounter, colPrice, colQuantity, colAppliedTo1, colAppliedTo2, colDebit, colCredit){
+	$('#popRefNumMgn').html(colRefNo);
+	$('#popDtMgn').html(colDate);
+	$('#popTrxMgn').html(colTrx);
+	
+	if(colCounter == ""){
+		$('#popCounterMgn').html("-");
+	}
+	else{
+		$('#popCounterMgn').html(colCounter);
+	}
+	
+	if(colPrice == ""){
+		$('#popPriceMgn').html("-");
+	}
+	else{
+		$('#popPriceMgn').html(colPrice);
+	}
+	
+	if(colQuantity == ""){
+		$('#popQtyMgn').html("-");
+	}
+	else{
+		$('#popQtyMgn').html(colQuantity);
+	}
+	
+	if(colAppliedTo1 =="" && colAppliedTo2 == ""){
+		$('#popAppToMgn').html("-");
+	}
+	else{
+		$('#popAppToMgn').html(colAppliedTo1+colAppliedTo2);
+	}
+	
+	if(colDebit == ""){
+		$('#popDbtMgn').html("-");
+	}
+	else{
+		$('#popDbtMgn').html(colDebit);
+	}
+	
+	if(colCredit == ""){
+		$('#popCrdtMgn').html("-");
+	}
+	else{
+		$('#popCrdtMgn').html(colCredit);
+	}
+}
+
+function createMarginCatFooter(sCurrCatTbl,dSubTot){
+	var title,tblRow;
+	if(sCurrCatTbl== "BF")
+		return;
+	else if(sCurrCatTbl== "BL")
+		title = "TOTAL BILLINGS";
+	else if(sCurrCatTbl== "CN")
+		title =  "TOTAL PURCHASES";
+	else if(sCurrCatTbl== "CNS")
+		title =  "TOTAL SALES";
+	else if(sCurrCatTbl== "PY")
+		title =  "TOTAL PAYMENTS";
+	else if(sCurrCatTbl== "RC")
+		title = "TOTAL RECEIPTS";
+	
+	tblRow = "<tr>";
+	tblRow += "<td colspan='9'><div class='row lineTotal'>";
+	tblRow += "<div class='col-xs-9' ><b>"+title+"</b></div>";
+	tblRow += "<div class='col-xs-offset-9' align='right'><strong>"+dSubTot+"</strong></div>";
+	tblRow += "</div>";
+	tblRow += "<div class='row lineTotal'> </div></td>";
+	tblRow += "</tr>";
+	
+	$("#tblRptBosMthSubHdrMgn").append(tblRow);
+}
+
+function createMarginFooter(dTotal, data){
+	var tblRow, totalFooter, dSubTotTbl;
+	var mthlySummRptD = JSON.parse(data.ev);
+	var infoData = mthlySummRptD.ObjectList;
+	
+	for(var j=0;j<infoData.length;j++){	
+		for(var i=0;i<infoData[0].DetailedInfo.length;i++){
+			dSubTotTbl = infoData[j].SubTotal;
+			
+			if(dSubTotTbl >= 0){
+				totalFooter = "FROM";
+			}
+			else{
+				totalFooter = "TO";
+			}
+		}
+	}	
+	$("#MarginTbl").append($("<table cellspacing='0' id='tblRptBosMthFooter'></table>"));
+	
+	tblRow += "<tbody class='non-border'>";
+	tblRow += "<tr>";
+	tblRow += "<td colspan='9'>";
+	tblRow += "<div class='row tblFooter'>";
+	tblRow += "<div class='col-xs-9' ><strong> BALANCE (EXCLUDE CURRENT MONTH INTEREST) DUE "+totalFooter+" YOU AS AT ";
+	tblRow += "<label>"+$('#accountstmtDate').html()+"</label>";
+	tblRow += "</strong></div>";
+	tblRow += "<div class='col-xs-offset-9' style='padding-right:10px'>";
+	tblRow += "<div align='right'><strong>"+dTotal+"</strong></div>";
+	tblRow += "</div>";
+	tblRow += "</div>";
+	tblRow += "</td>";
+	tblRow += "</tr>";
+	
+	$('#tblRptBosMthFooter').append(tblRow);
+}
+
+function createNonMarginTable(sCurrCatNM,row,count){
+	var rowHeader = "", rowCategory="", colGrp="",title="";
+	var typeArr = [];
+	//rowHeader += "<thead>";
+	if(row == 0){
+		rowHeader += "<tr height='50'>";
+		rowHeader += "<th id='date'>DATE</th>";
+		rowHeader += "<th id='trx'>TRX</th>";
+		rowHeader += "<th id='ref'  style='min-width:130px' >REF NO</th>";
+		rowHeader += "<th id='counter'>COUNTER</th>";
+		rowHeader += "<th id='trdcurr'>TRADED CURR</th>";
+		rowHeader += "<th id='trdprice'>TRADED PRICE</th>";
+		rowHeader += "<th id='trdqty'>TRADED QUANTITY</th>";
+		rowHeader += "<th id='applied'>APPLIED TO</th>";
+		rowHeader += "<th id='settcurr'>SETT CURR</th>";
+		rowHeader += "<th id='trdamt'>AMOUNT IN TRADED CURR</th>";
+		rowHeader += "<th id='myrequiv'>**MYR EQUIV</th>";
+		rowHeader += "</tr>";
+		//rowHeader += "<thead>";
+		rowHeader += "</tr>";
+	}
+	
+	if(sCurrCatNM== "BF")
+		title = count + ". BALANCE BROUGHT FORWARD";
+	else if(sCurrCatNM== "BL")
+		title = count + ". BILLING & OTHERS";
+	else if(sCurrCatNM== "CN")
+		title = count + ". PURCHASES";
+	else if(sCurrCatNM== "CNS")
+		title = count + ". SALES";
+	else if(sCurrCatNM== "PY")
+		title = count + ". PAYMENTS TO YOU";
+	else if(sCurrCatNM== "RC")
+		title = count + ". RECEIPTS FROM YOU";
+	else if(sCurrCatNM== "CA")
+		title = count + ". CONTRAS & SETOFFS";
+	else if(sCurrCatNM== "TR")
+		title = count + ". INTEREST FOR TRUST";
+	else if(sCurrCatNM== "JN")
+		title = count + ".  JOURNALS";
+	
+	if(typeArr.indexOf(sCurrCatNM)==-1){
+		rowHeader += "<tr height='20'>";
+		rowHeader += "<td height='30' colspan='11'><div class='row'><strong>"+title+"</strong></div>";
+		rowHeader += "<div class='row lineTotal red'> </div></td>";
+		rowHeader += "</tr>";
+	
+	}
+	
+	$("#NonMarginTbl").append($("<table class='tblRptBosMthSubHdrNM' cellspacing='0' id='tblRptBosMthSubHdrNM' name='tblRptBosMthSubHdrNM'></table>"));
+	$("#tblRptBosMthSubHdrNM").append(colGrp);
+	$("#tblRptBosMthSubHdrNM").append("<tbody class='non-border'>");
+	$("#tblRptBosMthSubHdrNM").append(rowHeader);
+	
+//tblRptBosMthSubHdrNM	
+}
+
+function createNonMgnRow(sCurrCat,iCurrCatNM,sTrxDateNM, sCurrCatNM, sAmtMYRNM, sRefNoNM, sStkNameNM, sTrdCurrCodeNM, dPriceNM, sQtyNM, appliedToNM, settCurrNM, amtInTradeCurrNM, dSubTotTblNM, sApplyTrxNM, sChequeBankNM, sPayInBankNM, cls){
+	var tblRow;
+	var colDate, colTrx, colRefNo, colCounter, colTrdedCurr, colTrdedPrice, colTrdedQuantity, colAppliedTo, colSettCurr, colAmountInTrdedCurr, colMyrEquiv;
+
+	if (sCurrCatNM == "BF"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = "";
+		colCounter = "";
+		colTrdedCurr = "";
+		colTrdedPrice = "";
+		colTrdedQuantity = "";
+		colAppliedTo = "";
+		colSettCurr = "";
+		colAmountInTrdedCurr = "";
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "BL"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = appliedToNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "CA"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = appliedToNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "CN"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = sApplyTrxNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "CNS"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = sApplyTrxNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "PY"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM + sChequeBankNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = sApplyTrxNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "RC"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM + sPayInBankNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = "";
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else if(sCurrCatNM == "TR"){
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = "";
+		colCounter = "";
+		colTrdedCurr = "";
+		colTrdedPrice = "";
+		colTrdedQuantity = "";
+		colAppliedTo = "";
+		colSettCurr = "";
+		colAmountInTrdedCurr = "";
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	else{
+		colDate = sTrxDateNM;
+		colTrx = sCurrCat;
+		colRefNo = sRefNoNM;
+		colCounter = sStkNameNM;
+		colTrdedCurr = sTrdCurrCodeNM;
+		colTrdedPrice = dPriceNM;
+		colTrdedQuantity = sQtyNM;
+		colAppliedTo = sApplyTrxNM;
+		colSettCurr = settCurrNM;
+		colAmountInTrdedCurr = amtInTradeCurrNM;
+		colMyrEquiv = sAmtMYRNM;
+	}
+	
+	tblRow += "<tr>";
+	tblRow += "<td>"+colDate+"</td>";
+	tblRow += "<td>"+colTrx+"</td>";
+	tblRow += "<td>"+colRefNo+"<a href='#' class=' visible-sm visible-xs pull-right glyphicon small glyphicon-search ' data-toggle='modal' data-target='#transDetails' onclick='newpopup(\""+colDate+"\",\""+ colTrx+"\",\""+colRefNo+"\",\""+colCounter+"\",\""+colTrdedCurr+"\",\""+colTrdedPrice+"\",\""+colTrdedQuantity+"\",\""+colAppliedTo+"\",\""+colSettCurr+"\",\""+colAmountInTrdedCurr+"\",\""+colMyrEquiv+"\");'></a></td>";
+	tblRow += "<td>"+colCounter+"</td>";
+	tblRow += "<td>"+colTrdedCurr+"</td>";
+	tblRow += "<td>"+colTrdedPrice+"</td>";
+	tblRow += "<td>"+colTrdedQuantity+"</td>";
+	tblRow += "<td>"+colAppliedTo+"</td>";
+	tblRow += "<td>"+colSettCurr+"</td>";
+	tblRow += "<td>"+colAmountInTrdedCurr+"</td>";
+	tblRow += "<td>"+colMyrEquiv+"</td>";
+	tblRow += "</tr>";
+	
+	$("#tblRptBosMthSubHdrNM").append(tblRow);
+}
+
+function createNonMarginCatFooter(sCurrCatTbl,dSubTot){
+	var title,tblRow;
+	if(sCurrCatTbl== "BF")
+		return;
+	else if(sCurrCatTbl== "BL")
+		title = "TOTAL BILLINGS";
+	else if(sCurrCatTbl== "CN")
+		title =  "TOTAL PURCHASES";
+	else if(sCurrCatTbl== "CNS")
+		title =  "TOTAL SALES";
+	else if(sCurrCatTbl== "PY")
+		title =  "TOTAL PAYMENTS";
+	else if(sCurrCatTbl== "RC")
+		title = "TOTAL RECEIPTS";
+	else if(sCurrCatTbl== "CA")
+		title = "NET TOTAL (FINANCE CHARGES)";
+	else if(sCurrCatTbl== "TR")
+		title = "TOTAL INTEREST";
+	else if(sCurrCatTbl== "JN")
+		title = "TOTAL JOURNALS";
+	
+	var ttl="";
+	
+	if(dSubTot < 0){
+		ttl = Math.abs(dSubTot).formatMoney(2) + "CR";
+	}
+	else {
+		ttl = Math.abs(dSubTot).formatMoney(2);
+	}
+	tblRow = "<tr>";
+	tblRow += "<td colspan='11'><div class='row lineTotal'>";
+	tblRow += "<div class='col-xs-9' ><b>"+title+"</b></div>";
+	tblRow += "<div class='col-xs-offset-9' align='right'><strong>"+ttl+"</strong></div>";
+	tblRow += "</div>";
+	tblRow += "<div class='row lineTotal'> </div></td>";
+	tblRow += "</tr>";
+	
+	$("#tblRptBosMthSubHdrNM").append(tblRow);
+}
+
+function createNonMarginFooter(sGrandTotSide,dTotal, data){
+	var tblRow, totalFooter, dSubTotTbl;
+	var mthlySummNMD = JSON.parse(data.ev);
+	var infoData = mthlySummNMD.ObjectList;
+	for(var j=0;j<infoData.length;j++){	
+		for(var i=0;i<infoData[0].DetailedInfo.length;i++){
+			dSubTotTbl = infoData[j].SubTotal;
+			
+			if(dSubTotTbl >= 0){
+				totalFooter = "FROM";
+			}
+			else{
+				totalFooter = "TO";
+			}
+		}
+	}
+	
+	$("#NonMarginTbl").append($("<table cellspacing='0' id='tblRptBosMthFooter'></table>"));
+	
+	tblRow += "<tbody class='non-border'>";
+	tblRow += "<tr>";
+	tblRow += "<td colspan='11'>";
+	tblRow += "<div class='row tblFooter'>";
+	tblRow += "<div class='col-xs-9' ><strong> BALANCE (EXCLUDE CURRENT MONTH INTEREST) DUE "+sGrandTotSide+" YOU AS AT ";
+	tblRow += "<label>"+$('#accountstmtDate').html()+"</label>";
+	tblRow += "</strong></div>";
+	tblRow += "<div class='col-xs-offset-9' style='padding-right:10px'>";
+	tblRow += "<div align='right'><strong>"+dTotal+"</strong></div>";
+	tblRow += "</div>";
+	tblRow += "</div>";
+	tblRow += "</td>";
+	tblRow += "</tr>";
+	
+	$('#tblRptBosMthFooter').append(tblRow);
+}
+
+function eDepEncryptValue(){
+	var dateFr = $("#frmDt").val();
+	var dateTo = $("#toDt").val();
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var jsonObject = {};
+	jsonObject['BHBranch'] = splitValue[0];
+	jsonObject['BHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	jsonObject['sDateFr'] = dateFr;
+	jsonObject['sDateTo'] = dateTo;
+	
+	reqEDep(jsonObject);
+}
+
+function getEDep_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating E Deposit Data...");
+		if('#tblDtl'!=null){
+			console.log("tblDtl Have Value");
+			$('#tblDtl').empty();
+		}
+		else{
+			console.log("Empty Value");
+		}
+		
+		var tblRefNum, tblDtTm, tblBank, tblAmt, tblStatus;
+		var eDepD = JSON.parse(data.ev);
+		var objListArry = eDepD.ObjectList;
+		if(objListArry.length > 0){
+			createEDepTable();
+			for(var i=0;i<objListArry.length;i++){
+				tblRefNum = objListArry[i].RefNo;
+				tblDtTm = objListArry[i].DateTm;
+				tblBank = objListArry[i].Bank;
+				tblAmt = objListArry[i].Amt;
+				tblStatus = objListArry[i].Status;
+				
+				createEDepRow(tblRefNum, tblDtTm, tblBank, tblAmt, tblStatus, getRowClass(i));
+			}
+			$('#tblDtl').css("display","");
+			$('#noDataMsg').hide();
+		}
+		else{
+			console.log("There is no record found");
+			$('#tblDtl').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createEDepTable(){
+	var rowHeader = "", rowCategory="";
+	rowHeader += "<thead>";
+	rowHeader += "<tr>";
+	rowHeader += "<th>Ref No.</th>";
+	rowHeader += "<th>Date / Time</th>";
+	rowHeader += "<th>Bank</th>";
+	rowHeader += "<th>Amount</th>";
+	rowHeader += "<th>Status</th>";
+	rowHeader += "</tr>";
+	rowHeader += "<thead>";
+	rowHeader += "</tr>";
+	
+	$("#tblDtl").append($("<table class='responsive' cellspacing='0' id='divBOSPrtf'></table>"));
+	$("#divBOSPrtf").append(rowHeader);	
+}
+
+function createEDepRow(tblRefNum, tblDtTm, tblBank, tblAmt, tblStatus, cls){
+	var tblRow, mapStatus;
+	
+	if(tblStatus=="A"){
+		mapStatus = "Pending";
+	}
+	else if(tblStatus=="B"){
+		mapStatus = "Paid";
+	}
+	else if(tblStatus=="C"){
+		mapStatus = "Rejected";
+	}
+	
+	tblRow = "<tr class='tblRow "+cls+"'>";
+	tblRow += "<td>"+tblRefNum+"</td>";
+	tblRow += "<td>"+tblDtTm+"</td>";
+	tblRow += "<td>"+mapBank(tblBank)+"</td>";
+	tblRow += "<td>"+tblAmt+"</td>";
+	tblRow += "<td>"+mapStatus+"</td>";
+	tblRow += "</tr>";
+	$("#divBOSPrtf").append(tblRow);
+}
+
+function onlineCash(){
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var eDepositVal = splitValue[5];
+	if (eDepositVal != ""){
+		location.href=root_url+'web/html/OnlineCashDeposit.html';
+	}
+	else{
+		alert("This account is not allowed to perform edeposit avia i*Trade@CIMB. Please log on to www.cimbclicks.com.my to perform cash deposit to your account. Please contact i*Trade@CIMB Call Centre at 03-2261 0888 or email to itrade@cimb.com for any enquiries.");
+	}
+}
+
+function fundTransfer(){
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var eDepositVal = splitValue[5];
+	var cliCode = splitValue[1];
+	var rbVal = $("input[name='radBank']:checked").val();
+	var rbValMap = mapBank(rbVal);
+	var amtVal = $("#Amount").val();
+	var centVal = $("#Cent").val();
+	var totalVal;
+	
+	if('#tradAcc'!=null){
+		$('#tradAcc').empty();
+		$('#tradAcc').append(cliCode);
+	}
+	else{
+		$('#tradAcc').append(cliCode);
+	}
+	if (eDepositVal != ""){
+		if(rbVal != null){
+			if('#onlineTfrBnk'!= null){
+				$('#onlineTfrBnk').empty();
+				$('#onlineTfrBnk').append(rbValMap);
+			}
+			else{
+				$('#onlineTfrBnk').append(rbValMap);
+			}
+			
+			if(amtVal != "" && centVal != "" ){
+				totalVal = (amtVal+"."+centVal);
+				if('#DpstAmt'!= null){
+					$('#DpstAmt').empty();
+					$('#DpstAmt').append(totalVal);
+				}
+				else{
+					$('#DpstAmt').append(totalVal);
+				}
+				
+				$("#cd_step1").hide();
+				$("#cashDeposit").hide();
+				$("#cd_step2").show();
+				$("#fundTransfer").show();
+				$("#cd_step3").hide();
+				$("#confirmation").hide();
+			}
+			else{
+				alert("Please enter a valid banking amount!");
+			}
+		}
+		else {
+			alert("Please select a paying bank");
+		}
+	}
+	else{
+		alert("This account is not allowed to perform edeposit avia i*Trade@CIMB. Please log on to www.cimbclicks.com.my to perform cash deposit to your account. Please contact i*Trade@CIMB Call Centre at 03-2261 0888 or email to itrade@cimb.com for any enquiries.");
+	}
+	return totalVal,rbVal;
+}
+
+function back(){
+	$("#cd_step1").show();
+	$("#cashDeposit").show();
+	$("#cd_step2").hide();
+	$("#fundTransfer").hide();
+	$("#cd_step3").hide();
+	$("#confirmation").hide();
+}
+
+function submitConfirm(){
+	var sPin = $('#txtPIN').val();
+	if (sPin.length != 6){
+		alert("PIN entered is not valid!\nPIN must be 6 digits in length.");	
+	}
+	else{
+		cashDepEncryptValue();	
+	}	
+}
+
+function cashDepEncryptValue(){
+	var trdPin = $("#txtPIN").val();
+	var amtVal = $("#Amount").val();
+	var centVal = $("#Cent").val();
+	var totalVal = (amtVal+"."+centVal);
+	var bankSrc = $("input[name='radBank']:checked").val();
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var cliCode = splitValue[1];
+	var jsonObject = {};
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sTrdPin'] = trdPin;
+	jsonObject['sAmt'] = totalVal;
+	jsonObject['sBankSrc'] = bankSrc;
+	
+	if (bankSrc != null){
+		reqCashDep(jsonObject);
+	}
+	else{
+		console.log("No bank Data selected");
+	}
+}
+
+function getCashDep_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	var status;
+	if(sttus == "200"){
+		console.log("Generating Online Cash Deposit Data..");
+		var cashDepD = JSON.parse(data.ev);
+		var objListArry = cashDepD.ObjectList;
+		console.log(objListArry);
+		var $accDetail = $('#TrdAccSel');
+		var valaccType=$accDetail.find(':selected').attr('value');
+		var splitValue = valaccType.split("|");
+		var cliCode = splitValue[1];
+		var bhBranchBnk = splitValue[0];
+		var rbVal = $("input[name='radBank']:checked").val();
+		var rbValMap = mapBank(rbVal);
+		var amtVal = $("#Amount").val();
+		var centVal = $("#Cent").val();
+		var totalVal = (amtVal+"."+centVal);
+		var bankPayeeID, refNumb, respondURL, requestURL,timeDate,dateForm, bankRefNum, payTypeform,cliNameBnkForm;
+		if(objListArry.length > 0){
+			status = sttus;
+			bankPayeeID = objListArry[0].bankPayeeID;
+			refNumb = objListArry[0].refNo;
+			respondURL = objListArry[0].bankUrlRespURL;
+			requestURL = objListArry[0].bankUrlReqURL;
+			timeDate = objListArry[0].trxDateTime;
+			dateForm = timeDate.substr(0,10);
+			bankRefNum = objListArry[0].bankRefNo;
+			payTypeform = objListArry[0].payType;
+			cliNameBnkForm = $('#CliName').val();
+			$('#referNum').html(objListArry[0].refNo);
+			$('#tradingAcc').html(cliCode);
+			$('#dateTime').html(objListArry[0].trxDateTime);
+			$('#status').append(status);
+			
+			if('#onlineTransfer'!= null){
+				$('#onlineTransfer').empty();
+				$('#onlineTransfer').append(rbValMap);
+			}
+			else{
+				$('#onlineTransfer').append(rbValMap);
+			}
+			
+			if('#depositAmount'!= null){
+				$('#depositAmount').empty();
+				$('#depositAmount').append(totalVal);
+			}
+			else{
+				$('#depositAmount').append(totalVal);
+			}
+			
+			$("#cd_step1").hide();
+			$("#cashDeposit").hide();
+			$("#cd_step2").hide();
+			$("#fundTransfer").hide();
+			$("#cd_step3").show();
+			$("#confirmation").show();
+			
+			bankFrm(rbVal, bankPayeeID, bhBranchBnk, cliCode, refNumb, totalVal, respondURL, requestURL, dateForm, bankRefNum, payTypeform, cliNameBnkForm);
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+		$("#cd_step1").hide();
+		$("#cashDeposit").hide();
+		$("#cd_step2").show();
+		$("#fundTransfer").show();
+		$("#cd_step3").hide();
+		$("#confirmation").hide();
+	}	
+}
+
+function eSettEncryptValue(){
+	var v="";
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');	
+	var splitValue = valaccType.split("|");
+	var jsonObject = {};
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sAccType'] = splitValue[2];
+	
+	$('#lastUpdate').html($.datepicker.formatDate("dd/mm/yy", new Date()));
+
+	var yesterday = new Date();
+	yesterday.setDate(yesterday.getDate() - 1);
+	$('#OutstandingDate').html($.datepicker.formatDate("dd/mm/yy", yesterday));
+	
+	v += valaccType;
+	console.log("Selected Acc Info "+v);
+	
+	$("#tblOSDbtLine > tbody").remove();
+	reqESettRpt(jsonObject);
+	//$("#crypted").attr("onchange","eSettbeginEnc()");
+	//$("#input").val(JSON.stringify(jsonObject));
+	//$("#selSubmit").click();
+
+}
+
+function getESett_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		console.log("Generating ESettlement Report Data..");
+		var eSettD = JSON.parse(data.ev);
+		var obListArry = eSettD.ObjectList;
+		console.log(eSettD);
+		console.log(obListArry);
+		if(obListArry.length > 0){
+			$('.SetoffOutstanding').html(obListArry[0].credAvalble);
+			$('.SetoffOutstanding').data("bStop",obListArry[0].bStop);
+			$('#T1DueDate').html(obListArry[0].dateT1);
+			$('#T2DueDate').html(obListArry[0].dateT2);
+			$('#T3DueDate').html(obListArry[0].dateT3);
+			$('#T3Amount').html(obListArry[0].dbtAmtT3);
+			$('#T2Amount').html(obListArry[0].dbtAmtT2);
+			$('#T1Amount').html(obListArry[0].dbtAmtT1);
+			
+			$('#PurchaseDebit').html(obListArry[0].purchaseDbt);
+			$('#NetContraLoss').html(obListArry[0].netCtraLoss);
+			$('#MiscellaneousDebit').html(obListArry[0].miscDebit);
+			$('#DebitInterest').html(obListArry[0].debitInt);
+			$('#OverduePurchases').html(obListArry[0].overdueAmt);
+			$('.TotalOutstandingAmt').html(obListArry[0].totOSAmt);
+			
+			$('#PendingPayment').html(obListArry[0].pendingPymt);
+			$('#SuccessfulPayment').html(obListArry[0].successPymt);
+			$('#TotalSettlementAmount').html(obListArry[0].settAmt);	
+
+			for(var i=0; i < obListArry[0].detailedInfo.length; i++){
+				var updDate= obListArry[0].detailedInfo[i].updDate;
+				$('#lastUpdate').html(updDate);
+			}
+			
+			if(obListArry[0].detailedInfo.length > 0){
+				for(var i=0; i < obListArry[0].detailedInfo.length; i++){
+					createESettRow(obListArry[0].detailedInfo[i],i);
+				}
+			}
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function createESettRow(data,i){
+	var tblRow;
+	var category = data.recordNum;
+	var disabled = false;
+	var size;
+	var id;
+	
+	if(category != "TOther"){
+		if((data.quantyBalLot == 0 &&  data.lotSize != -1) || category == "T4"){
+			disabled = true;
+		}
+	}else{
+		if(parseFloat(data.amtBal) == 0){
+			disabled = true;
+		}
+	}
+	
+	g_sDefBHCode = data.defBHCode;
+	if(data.defBHCode == "065" || data.defBHCode == "086" || data.defBHCode == "028"){
+		size = 3;
+	}else{
+		size = 4;
+	}
+	
+	if(category == "T4"){
+		id = "T4_"+i;
+		tblRow = createESettCatRow(category,data,id, "T4", i, disabled,size);
+		//$('#tblForceSold').append(tblRow);
+		//$('.rowT4').show();
+	}else if(category == "T3"){
+		id = "T3_"+i;
+		tblRow = createESettCatRow(category,data, id, "T3", i, disabled,size);
+		//$('#tblT3').append(tblRow);
+		//$('.rowT3').show();
+	}else if(category == "T2"){
+		id = "T2_"+i;
+		tblRow = createESettCatRow(category,data, id, "T2", i, disabled,size);
+		//$('#tblT2').append(tblRow);
+		//$('.rowT2').show();
+	}else if(category == "T1"){
+		id = "T1_"+i;
+		tblRow = createESettCatRow(category,data,id, "T1", i, disabled,size);
+		//$('#tblT1').append(tblRow);
+		//$('.rowT1').show();
+	}else if(category == "T0"){
+		id = "T0_"+i;
+		tblRow = createESettCatRow(category,data,id, "T0", i, disabled,size);
+		//$('#tblT0').append(tblRow);
+		//$('.rowT0').show();
+	}else{
+		size = 8;
+		id = "Other_"+i;
+		tblRow = createESettCatRow("Other",data,id, "Other", i, disabled,size);
+		//$('#tblTOther').append(tblRow);
+		//$('.rowTOther').show();
+	}
+	$('#tblOSDbtLine').append(tblRow);
+	$('#tr'+id).data("esett",data);
+}
+
+function createESettCatRow(cat,data,id,clas,i, disabled,size){
+	var tblRow;
+	var link;
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var qtyDisabled = false;
+	var clasDesc;
+	var clasDesc2;
+	
+	if(data.lotSize == 1 || data.defBHCode == "076"){
+		qtyDisabled = true;
+	}
+	
+	if(cat == "T4" || data.quantyBalLot < 0){
+		qtyDisabled = true;	
+	}
+	
+	if(data.catFirstRow){
+		
+		if(clas == "Other"){
+			clasDesc = "contra & misc.";
+			clasDesc2 = "";
+		}else if (clas == "T4"){
+			clasDesc2 = "T4+";
+		}else{
+			clasDesc = clas;
+			clasDesc2 = clas;
+		}
+		tblRow = "<tr width=100% class=rowTitle>";
+		//tblRow += "<td colspan=''>"+clasDesc2+"</td>";
+		if(data.forcedSold){
+			tblRow += "<td colspan='11'>"+clasDesc2+"&nbsp; &nbsp;<input id='chkBox"+ clas +"'  name='chkBox"+ clas +"' onclick=chkBoxAll_onClick('"+ clas +"',this.checked)  type='checkbox' disabled=true>&nbsp;To be forced sold today</td>";
+		}else if(cat == "T4" ){
+			tblRow += "<td colspan='11'>"+clasDesc2+"&nbsp; &nbsp;<input id='chkBox"+ clas +"'  name='chkBox"+ clas +"' onclick=chkBoxAll_onClick('"+ clas +"',this.checked)  type='checkbox' disabled=true>&nbsp;</td>";
+		}else{
+			tblRow += "<td colspan='11'>"+clasDesc2+"&nbsp; &nbsp;<input id='chkBox"+ clas +"'  name='chkBox"+ clas +"' onclick=chkBoxAll_onClick('"+ clas +"',this.checked)  type='checkbox' disabled=true>&nbsp;Click here to pay all "+clasDesc+" </td>";
+		}
+		
+		tblRow +="</tr>";
+		
+		
+	}else{
+		if(!disabled){
+			$("#chkBox" + clas).attr("disabled", disabled);
+		}
+	}
+	link = "../../stlMultiPayment.jsp?ContractNo=" +data.docNo + "&Acc=" + splitValue[1] + "-" + splitValue[0];
+	if(i%2 == 0){
+		tblRow += "<tr id=tr"+id+" name=tr"+id+" width=100% class=clsRepRowEven>"
+	}else{
+		tblRow += "<tr id=tr"+id+" name=tr"+id+" width=100% class=clsRepRowOdd>"
+	}
+	tblRow += "<td><input id='chk"+ id +"' onClick='ESettRecalcTotal()'  name='chk"+ id +"' type='checkbox' class='chkCat "+clas+"'";
+	if(disabled){
+		tblRow += " disabled";
+	}
+	tblRow += "></td>";
+	tblRow +="<td>"+data.docDate+"</td>";
+	tblRow +="<td>"+data.dueDate+"</td>";
+	tblRow +="<td><a data-toggle='modal' data-target='#modalPrevPymt' onClick='stlMultiPaymentEncrypt(\""+data.docNo+"\",\""+splitValue[1]+"\",\""+splitValue[0]+"\")'><u>"+data.docNo+"</u></a></td>";
+	tblRow +="<td>"+data.stkShtName+"</td>";
+	tblRow +="<td>"+data.price+"</td>";	
+	tblRow +="<td>"+data.purcQty+"</td>";	
+	if(cat != "Other"){
+		tblRow +="<td>";
+		if(data.lotSize != -1){
+			tblRow += "<input maxlength='"+ data.quantyBalLot.toString().length +"' style='width:30;font-size:100%;font-family:Verdana' id='txtQty"+ id +"' name='txtQty"+ id +"' class='osQty textbox "+ clas +"' size='"+ size +"' title='"+ data.quantyBalLot +"' value='"+ data.quantyBalLot +"' ";
+			if(qtyDisabled){
+				tblRow += " disabled>";
+			}else{
+				tblRow += "onchange='ESettTxtQty_OnChange(this)'>";
+			}
+			tblRow += data.osQty;
+		}
+		tblRow +="</td>";
+		tblRow +="<td>"+data.intAmountDisp+"</td>";
+		tblRow +="<td>"+data.osAmountDisp+"</td>";	
+		if(data.osAmountDisp == data.payable || data.payable == "0.00"){
+			tblRow +="<td class='payable'>"+data.payable+"</td>";
+		}else{
+			tblRow +="<td><input style='text-align:right' name='txtAmt"+ id +"' id='txtAmt"+ id +"'  class='payable textbox "+ clas +"' size='8' value='"+  data.payable+"' title='"+ data.payable +"' MaxAmt='"+ data.payable +"' onchange='ESettTxtAmt_OnChange(this.value, this)'></td>";			
+		}
+	}else{
+		tblRow +="<td>"+data.osQty+"</td>";	
+		tblRow +="<td>"+data.intAmountDisp+"</td>";	
+		tblRow +="<td>"+data.osAmountDisp+"</td>";	
+		if(data.totalLot == parseFloat(data.osAmount)){
+			tblRow +="<td><input disabled=true style='text-align:right' name='txtAmt"+ id +"' id='txtAmt"+ id +"'  class='payable textbox "+ clas +"' size='"+ size+"' value='"+  data.payable+"' title='"+ data.payable +"' MaxAmt='"+ data.payable +"' onchange='ESettTxtAmt_OnChange(this.value, this)'></td>";			
+		}else{
+			if (data.totalLot >= parseFloat(data.intAmount)){
+				tblRow +="<td><input style='text-align:right' name='txtAmt"+ id +"' id='txtAmt"+ id +"'  class='payable textbox "+ clas +"' size='"+ size+"' value='"+  data.payable+"' title='"+ data.amtBal +"' MaxAmt='"+ data.amtBal +"' onchange='ESettTxtAmt_OnChange(this.value, this)'></td>";	
+			}else{
+				tblRow +="<td><input style='text-align:right' name='txtAmt"+ id +"' id='txtAmt"+ id +"'  class='payable textbox "+ clas +"' size='"+ size+"' value='"+  data.payable+"' title='"+ data.payable +"' MaxAmt='"+ data.payable +"' onchange='ESettTxtAmt_OnChange(this.value, this)'></td>";
+			}
+		}
+	}
+	tblRow += "</tr>";
+	return tblRow;
+}
+
+function chkBoxAll_onClick(id,checked){	
+
+	//$("."+id).prop('checked',checked);
+	$("."+id).each(function() {		
+		if(!($(this).is(":disabled"))){
+			$(this).prop('checked',checked);
+		}
+	});
+	ESettRecalcTotal();
+}
+
+function ESettRecalcTotal(){
+	var totPay = 0;
+	$('.chkCat').each(function() {		
+		if($(this).is(":checked")){
+			var $row = $(this).closest("tr");
+			if($row.find('.payable').get(0).tagName == "INPUT" ){
+			totPay += parseFloat(JSstripChar($row.find('.payable').val(),","));
+			//alert($(this).attr("type"));
+			}else{
+			totPay += parseFloat(JSstripChar($row.find('.payable').html(),","));
+			}			
+		}
+	});
+	totPay = FormatNumber(totPay, 2, true, false, true);
+	$('#Pay').html(totPay.toString());
+}
+
+function stlMultiPaymentEncrypt(contractNo, cliCode, branch){
+	var jsonObject = {};
+	jsonObject['ContractNo'] = contractNo;
+	jsonObject['BHCliCode'] = cliCode;
+	jsonObject['BHBranch'] = branch;
+	
+	reqStlMultiPmt(jsonObject);
+}
+
+function getStlMultiPayment_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	if(sttus == "200"){
+		console.log("Generating ESettlement Multi Payment..");
+		$('#tblPaymentTbody').empty();
+		var eStlMPD = JSON.parse(data.ev);
+		var objListArry = eStlMPD.ObjectList;
+		var objListArry2 = eStlMPD.ObjectList2;
+		var refNoCol, quantityCol, amountCol, statusCol;
+		
+		if (objListArry.length > 0){
+			for(var i=0;i<objListArry.length;i++){
+				$('#refNoSpan').html(objListArry[i].DocNo);
+				$('#stkSpan').html(objListArry[i].Stock);
+				$('#trxDtSpan').html(objListArry[i].DocDate);
+				$('#dueDtSpan').html(objListArry[i].DueDt);
+				$('#unitPrcSpan').html(objListArry[i].Price);
+				$('#qtySpan').html(objListArry[i].Qty);
+				$('#amtSpan').html(objListArry[i].Total);
+				$('#interestSpan').html(objListArry[i].Interest);
+			}
+		}
+		
+		if (objListArry2.length > 0){
+			for(var i=0;i<objListArry2.length;i++){
+				refNoCol= objListArry2[i].RefNo;
+				quantityCol= objListArry2[i].Qty;
+				amountCol= objListArry2[i].Amt;
+				statusCol= objListArry2[i].Sts;
+				
+				stlMultiPaymentRow(refNoCol, quantityCol, amountCol, statusCol);
+			}
+		}
+		else{
+			$('#noDataMsgtblPayment').html("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function stlMultiPaymentRow(refNoCol, quantityCol, amountCol, statusCol){
+	var tblRow;
+	tblRow = "<tr width='100%'>";
+	tblRow += "<td>"+ refNoCol +"</td>";
+	tblRow += "<td>"+ quantityCol +"</td>";
+	tblRow += "<td>"+ amountCol +"</td>";
+	tblRow += "<td>"+ statusCol +"</td>";
+	tblRow += "</tr>";
+	$('#tblPayment').append(tblRow);	
+}
+
+function ESettTxtQty_OnChange(voValue){
+	var dBrkrgAmt, dStampAmt, dClearFeeAmt, dMiscAmt, dPrice, dAmt, dIntAmt;
+	var nQtyBalLot, nQtyOrigLot, nLotSize, nQtyCurrLot, bOK=true;
+	var nQtyBal, nQtyCurr, nQtyOrig;
+	var $row = $(voValue).closest("tr");
+	var data =  $row.data("esett");
+	
+	nQtyBalLot = data.quantyBalLot;
+	nQtyCurrLot = parseInt(voValue.value);
+	
+	/*Convert all lot into qty*/
+	nLotSize = parseInt(data.lotSize);
+	nQtyCurr = parseFloat(voValue.value) * nLotSize;
+	nQtyBal = parseFloat(nQtyBalLot) * nLotSize;
+	
+	if (isNaN(nQtyCurrLot) || (nQtyCurrLot != voValue.value)){
+		alert("Please enter a valid integer quantity.");
+		voValue.value = nQtyBalLot;
+		nQtyCurr = nQtyBal;
+		bOK = false
+	}else if (nQtyCurr> nQtyBal){
+		if (nLotSize < 100) {
+			voValue.title = "Maximum number of unit is " + nQtyBal + ".";
+			alert("Maximum number of unit is " + nQtyBal + ".");
+		} else{
+			voValue.title = "Maximum number of lot is " + nQtyBalLot + ".";
+			alert("Maximum number of lot is " + nQtyBalLot + ".");
+		}
+		voValue.value = nQtyBalLot;
+		nQtyCurr = nQtyBal;
+		voValue.focus();
+		bOK = false
+	}else if (nQtyCurrLot < 1){
+		if (nLotSize < 100){
+			voValue.title = "You must pay for at least 1 unit."
+			alert("You must pay for at least 1 unit.");
+		}else{
+			voValue.title = "You must pay for at least 1 lot."
+			alert("You must pay for at least 1 lot.");
+		}
+		voValue.value = nQtyBalLot;
+		nQtyCurr = nQtyBal;
+		voValue.focus();
+		bOK = false
+	}
+	
+	voValue.title = nQtyBalLot;
+	dBrkrgAmt = parseFloat(data.brkrgAmt);
+	dStampAmt = parseFloat(data.stampAmount);
+	dClearFeeAmt = parseFloat(data.clearFee);
+	dMiscAmt = parseFloat(data.miscAmount);
+	
+	dPrice = parseFloat(data.price);
+	dIntAmt = parseFloat(data.intAmount * (nQtyCurr / nQtyBal));
+	nQtyOrig = parseInt(data.qtyOrigLot);
+	
+	dBrkrgAmt = dBrkrgAmt * (nQtyCurr / nQtyBal);
+	var dAmtOS = parseFloat(JSstripChar(data.osAmount, ","));
+	dAmt = dAmtOS * (nQtyCurrLot / nQtyBalLot);
+	
+	dAmt = Math.round(dAmt * 100) / 100;
+	
+	if (dAmt> dAmtOS) dAmt = dAmtOS;
+	var sAmt = FormatNumber(dAmt, 2, true, false, true);
+	$row.find('.payable').html(sAmt.toString());
+	ESettRecalcTotal();
+	
+	return bOK;
+}
+
+function ESettTxtAmt_OnChange(vdCurrAmt, voValue){
+	var dMaxAmt, sAmt;
+	var bOK=true;
+	
+	sAmt = vdCurrAmt;
+	dMaxAmt = parseFloat(JSstripChar(voValue.getAttribute("MaxAmt"), ","))
+	vdCurrAmt = parseFloat(JSstripChar(vdCurrAmt, ","))
+	if (isNaN(vdCurrAmt)){
+		alert("Please enter a valid amount.");
+		voValue.value = FormatNumber(dMaxAmt, 2, true, false, true);
+		bOK = false
+	}else if (vdCurrAmt != JSstripChar(sAmt, ",")){
+		alert("Please enter a valid amount.");
+		voValue.value = FormatNumber(dMaxAmt, 2, true, false, true);
+		bOK = false
+	}
+	if (vdCurrAmt> dMaxAmt){
+		voValue.title = "Maximum amount is "+ FormatNumber(dMaxAmt, 2, true, false, true) +".";
+		alert("Maximum amount is "+ FormatNumber(dMaxAmt, 2, true, false, true) +".");
+		voValue.value = FormatNumber(dMaxAmt, 2, true, false, true);
+		voValue.focus();
+		bOK = false
+	}else if (vdCurrAmt <= 0) {
+		voValue.title = "You must pay for a positive amount."
+		alert("You must pay for a positive amount.");
+		voValue.value = FormatNumber(dMaxAmt, 2, true, false, true);
+		voValue.focus();
+		bOK = false
+	}
+	ESettRecalcTotal();
+	
+	return bOK;
+}
+
+function eSettOffEncryptValue(CntrctNoLst,QtyLst,AmtOSLst,AmtLst,IntAmtLst,BrokerageLst,StampDutyLst,ClearingFeeLst,MiscAmtLst){
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');	
+	var splitValue = valaccType.split("|");
+	var jsonObject = {};
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['CntrctNoLst'] = CntrctNoLst;
+	jsonObject['QtyLst'] = QtyLst;
+	jsonObject['AmtOSLst'] = AmtOSLst;
+	jsonObject['AmtLst'] = AmtLst;
+	jsonObject['IntAmtLst'] = IntAmtLst;
+	jsonObject['BrokerageLst'] = BrokerageLst;
+	jsonObject['StampDutyLst'] = StampDutyLst;
+	jsonObject['ClearingFeeLst'] = ClearingFeeLst;
+	jsonObject['MiscAmtLst'] = MiscAmtLst;
+	
+	reqESettOff(jsonObject);
+}
+
+function getESettOff_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	
+	if(sttus == "200"){
+		var eSettOffD = JSON.parse(data.ev);
+		var objListArry = eSettOffD.ObjectList;
+		var objListArry2 = eSettOffD.ObjectList2;
+		if(objListArry.length > 0){
+			for(var i=0; i < objListArry.length; i++){
+				createTblOSDtl(objListArry[i],i);
+				createTblOpymt(objListArry[i],i);
+			}
+			if(objListArry2.length >= 1){
+				createTblSetOffHdrCol(objListArry2[0].ShowSetOffInt);
+				g_sBHName = objListArry2[0].Bhname;
+				for(var j=1; j < objListArry2.length; j++)
+					createTblSetOffHdr(objListArry2[j],j,objListArry2[0].ShowSetOffInt);
+				
+				createTblSetOffFooter(objListArry2[0].ShowSetOffInt);
+			}
+			chgLayout(2);
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createTblOSDtl(data,i){
+	var tblRow;
+	tblRow = "<tr id='trOSDtl"+ i +"'>";
+	tblRow += "<td><span style='verticalAlign:bottom'><input class='chkBoxCtrt' type='checkbox'></span></td>";
+	tblRow += "<td>"+ data.docDate +"</td>";
+	tblRow += "<td>"+ data.dueDate +"</td>";
+	tblRow += "<td>"+ data.docNo +"</td>";
+	tblRow += "<td>"+ data.stkShtName +"</td>";
+	tblRow += "<td>"+ data.price +"</td>";
+	tblRow += "<td>"+ data.purcQty +"</td>";
+	tblRow += "<td>"+ data.osQty +"</td>";
+	tblRow += "<td class='CtrtOsAmt'>"+ data.osAmountDisp +"</td>";
+	tblRow += "<td class='CtrtIntAmt'>"+ data.intAmountDisp +"</td>";
+	tblRow += "<td class='CtrtAmt'>"+ data.payable +"</td>";
+	tblRow += "</tr>";
+	
+	$('#tblOSDtl').append(tblRow);
+	$('#trOSDtl'+i).data("eSettOSDtl",data);
+}
+
+function createTblOpymt(data,i){
+	var tblRow;
+	tblRow = "<tr class='"+ data.docNo +"' id='trOpymt"+ i +"'>";
+	tblRow += "<td>"+ data.docDate +"</td>";
+	tblRow += "<td>"+ data.dueDate +"</td>";
+	tblRow += "<td>"+ data.docNo +"</td>";
+	tblRow += "<td>"+ data.stkShtName +"</td>";
+	tblRow += "<td>"+ data.price +"</td>";
+	tblRow += "<td>"+ data.purcQty +"</td>";
+	tblRow += "<td>"+ data.osQty +"</td>";
+	tblRow += "<td>"+ data.osAmountDisp +"</td>";
+	tblRow += "<td>"+ data.intAmountDisp +"</td>";
+	tblRow += "<td>"+ data.payable +"</td>";
+	tblRow += "</tr>";
+	$('#tblOpymt').append(tblRow);
+	$('#trOpymt'+i).data("eSettOSDtl",data);	
+}
+
+function createTblSetOffHdrCol(bShowSetOffInt){
+	var tblRow;
+	if(bShowSetOffInt == "false"){
+		tblRow ="<tr class='theader'>";
+		tblRow += "<td><img src='../img/check10.gif' width='20'></td>";
+		tblRow += "<td>Date</td>";
+		tblRow += "<td>Ref No</td>";
+		tblRow += "<td>Description</td>";
+		tblRow += "<td>Amount</td>";
+		tblRow += "<td>Int</td>";
+		tblRow += "<td width='20%'>Set Off Amount</td>";
+		tblRow += "</tr>";
+	}else{
+		tblRow ="<tr class='theader'>";
+		tblRow += "<td><img src='../img/check10.gif' width='20'></td>";
+		tblRow += "<td>Date</td>";
+		tblRow += "<td>Ref No</td>";
+		tblRow += "<td>Description</td>";
+		tblRow += "<td>Amount</td>";
+		tblRow += "<td>Int</td>";
+		tblRow += "<td width='20%'>Set Off Amount</td>";
+		tblRow += "<td width='20%'><a style='cursor:hand' onclick='ESettInterest_OnClick()'><u>Set Off Interest</u></a></td>";
+		tblRow += "</tr>";
+	}
+	tblRow += "<tr>";
+	tblRow += "<td colspan='7'><input id='chkAuto' name='chkAuto' onClick='ESettAutoSetOff()' type='checkbox'>&nbsp;Click here for auto set-off</td>";
+	tblRow += "</tr>";
+	$('#tblSetOffHdr').append(tblRow);
+}
+
+function ESettAutoSetOff(){
+	var rowCount, iIndex;
+	var dPay, dSetOff;
+	
+	if (!$('#chkAuto').is(":checked")){
+		$(".chkAmt").prop('checked',false);
+		$('.setOffAmt').html("(0.00)");
+		if(g_sDefBHCode == "079"){
+			$('.setOffAmtInt').html("(0.00)");
+		}
+		g_bExcess = false;
+		ESettRecalcTotalSetOff(false, null);
+	}
+	else{
+		dPay = JSstripChar($('#totAmt').html(), ",");
+		dPay = parseFloat(dPay);
+		dSetOff = 0;
+		$('.chkAmt').each(function() {
+			if (dSetOff < dPay)
+			{			
+				var $row = $(this).closest("tr");		
+				$(this).prop('checked',true);				
+				dSetOff = dSetOff + parseFloat(RemoveBracket(JSstripChar($row.find('.Balance').html(), ",")));
+			}
+		});	
+		ESettRecalcTotalSetOff(true, null);
+	}
+}
+
+function createTblSetOffHdr(data,i,bShowSetOffInt){
+	var tblRow;
+	tblRow = "<tr id='trSetOffDtl"+ i +"'>";
+	tblRow += "<td><input type=checkbox class='chkAmt' onclick='ESettRecalcTotalSetOff(this.checked, this);' id=chkAmt" + i + " name=chkAmt" + i + "></input></td>"
+	tblRow += "<td>"+ data.DocDate +"</td>"
+	tblRow += "<td>"+ data.DocNo +"</td>"
+	tblRow += "<td>"+ data.Desc +"</td>"
+	tblRow += "<td class='Balance'>("+ data.Balance +")</td>"
+	tblRow += "<td class='Interest'>("+ data.Amt +")</td>"
+	if(bShowSetOffInt == "true"){
+		tblRow += "<td class='setOffAmt'  style=' border-right-color: #FFFFFF'>(0.00)</td>"
+		tblRow += "<td class='setOffAmtInt'  style=' border-right-color: #FFFFFF'>(0.00)</td>"
+	}else{
+		tblRow += "<td class='setOffAmt'  style=' border-right-color: #FFFFFF'>(0.00)</td>"	
+	}
+	tblRow += "</tr>";
+	$('#tblSetOffHdr').append(tblRow);
+	$('#trSetOffDtl'+i).data("eSetOffDtl",data);
+}
+
+function createTblSetOffFooter(bShowSetOffInt){
+	var tblRow ="";
+	var sColSettingsWidth = "";
+	var aValue;
+	if (bShowSetOffInt == "false") {
+		sColSettingsWidth = "85%|15%";
+	} else {
+		sColSettingsWidth = "60%|20%|20%";
+	}
+	aValue = sColSettingsWidth.split("\\" + "|");
+	if(bShowSetOffInt == "true"){
+		tblRow += "<tr class='rowTotal'>";		
+		tblRow += "<td width=85%>&nbsp;Total Amount Selected for Set-off&nbsp;</td><td id='totAmtSetOff1' width=15% align=right>(0.00)&nbsp;</td><td id='totAmtSetOff2' width=20% align=right style='background-color:yellow'>(0.00)</td></tr>";		
+		tblRow += "<tr><td width=85%>&nbsp;Net Debit Interest to Settle&nbsp;</td><td id='netDebtInt1' align=right style='background-color:yellow'>0.00&nbsp;</td><td id='netDebtInt2' align=right>&nbsp;</td></tr>";
+	}
+	
+	tblRow += "<tr class='rowTotal'>";
+	tblRow += "<td width='80%'>&nbsp;Total amount selected for set off&nbsp;</td><td id='totAmtSetOff3' align='right' width='20%'>(0.00) </td>";
+	if (bShowSetOffInt == "true") {
+		tblRow += "<td id='totAmtSetOffInt' width="+ aValue[2] +" align=right>&nbsp;</td>";		
+	}
+    tblRow += "</tr>";
+	tblRow += "<tr>";
+    if (bShowSetOffInt == "true") {
+		tblRow += "<td width="+ aValue[0] +">&nbsp;Excess After Set-off&nbsp;</td>";
+		tblRow += "<td id='excessSetOffAmt' width="+ aValue[1] +" align=right>(0.00)&nbsp;</td>";
+		tblRow += "<td id='excessSetOffIntAmt' width="+ aValue[2] +" align=right>(0.00)&nbsp;</td>";
+	}else{
+		tblRow += "<td  width='80%'>&nbsp;Net Credit Balance Available&nbsp;</td>";
+		tblRow += "<td  align='right' width='20%'><span id='netCreBal'>0.00</span></td>";
+        
+	}		
+       
+    tblRow += "</tr>";
+	
+	$('#tblSetOffFooter').append(tblRow);
+	$('#netCreBal').html($('.SetoffOutstanding').html());
+	
+}
+
+function ESettRecalcTotalSetOff(bCheck, obj){
+	if(g_sDefBHCode == "065" || g_sDefBHCode == "086" || g_sDefBHCode == "028"){
+		ESettRecalcTotalFalse(bCheck,obj)
+	}else{
+		ESettRecalcTotalTrue(bCheck,obj)
+	}
+}
+
+function ESettRecalcTotalFalse(bCheck,obj){
+	var rowCount, dTotal, iIndex, dDiff, dSetOff, dInterestTotal, dInterestSetOff, dTotalSelected;
+	var dExcess, dExcessInterest, dInterestSelected, bChecked;
+	var dLastAmt, dLastInterest;
+	bChecked = false;
+	if (g_bExcess && bCheck)
+	{
+		if (obj != null)
+		{
+			obj.checked = false;
+		}
+		return;
+	}
+	dTotal = 0;
+	dInterestTotal = 0;
+	dTotalSelected = 0;
+	dInterestSelected = 0;
+	
+	$('.chkAmt').each(function() {
+		var $row = $(this).closest("tr");		
+		if($(this).is(":checked")){
+			bChecked = true;
+			if (!g_bExcess){
+				if (!isNaN(parseFloat(JSstripChar(RemoveBracket($row.find('.Balance').html()), ","))))
+				{
+					dSetOff = parseFloat(JSstripChar(RemoveBracket($row.find('.Balance').html()), ","))
+				
+				
+					dLastAmt = dSetOff;
+					dTotal = dTotal + dSetOff;
+					dTotalSelected = dTotalSelected + dSetOff;
+					if (dTotal > g_dOSAmtTotal)
+					{	
+						dDiff = dTotal - g_dOSAmtTotal ;
+						if (dDiff > g_dInterestTotal)
+						{
+							dSetOff = dSetOff - dDiff + g_dInterestTotal;
+							dTotal = dTotal - dDiff;
+							g_bExcess = true;
+						}																		
+						else
+						{
+							dSetOff = dSetOff;								
+							dTotal = dTotal;
+						}
+					}
+					dInterestSetOff = parseFloat(ESettgetSetOffInt($row));
+				
+					dLastInterest = dInterestSetOff;
+					dInterestSelected = dInterestSelected + dInterestSetOff;
+					dInterestSetOff = 0.00;////dInterestSetOff * dSetOff / parseFloat(JSstripChar(RemoveBracket(document.all.tblSetOff.rows(iIndex).cells(4).innerText), ","))
+					dInterestTotal = dInterestTotal + dInterestSetOff;
+				
+					if (dInterestTotal > g_dInterestTotal)
+					{
+						dDiff = dInterestTotal - g_dInterestTotal;
+						dInterestSetOff = dInterestSetOff - dDiff;						
+						dInterestTotal = dInterestTotal - dDiff;
+					}
+					dSetOff = Round(dSetOff, 2);
+					dInterestSetOff = Round(dInterestSetOff, 2);
+					$row.find('.setOffAmt').html("(" + FormatNumber(dSetOff, 2, true, false, true) + ") ");
+
+					if(g_sDefBHCode == "079"){
+					$row.find('.setOffAmtInt').html("(0.00)");
+					}
+				}
+			}else{
+				$row.find(".chkAmt").prop('checked',false);
+				$row.find('.setOffAmt').html("(0.00)");								
+						
+				if(g_sDefBHCode == "079"){
+					$row.find('.setOffAmtInt').html("(0.00)");
+				}
+			}
+		}else{
+			$row.find('.setOffAmt').html("(0.00)");
+			if(g_sDefBHCode == "079"){
+			$row.find('.setOffAmtInt').html("(0.00)");
+			}
+			
+		}
+	});
+	
+	if (bChecked)
+	{	
+		dTotal = Round(dTotal,2)
+		dInterestTotal = Round(dInterestTotal,2)
+		$('#totAmtSetOff1').html(FormatNumber(dTotal, 2, true, false, true));
+		$('#totAmtSetOff2').html(FormatNumber(dInterestTotal, 2, true, false, true));
+		
+
+		if (dInterestTotal <= g_dInterestTotal)
+		{	
+			dDiff = Round(g_dInterestTotal - dInterestTotal, 2);
+			$('#netDebtInt1').html(FormatNumber(dDiff, 2, true, false, true) );			
+			if (dTotal < Round(dTotalSelected,2) )
+			{
+				dTotal = dTotal + dDiff;
+				if (dTotal > Round(dTotalSelected,2))
+				{
+					dDiff = dTotal - Round(dTotalSelected,2);
+					dTotal = dTotal + Round(dDiff,2);
+				}
+			}
+		}
+		
+		$('#totAmtSetOff3').html(FormatNumber(dTotal, 2, true, false, true));		
+		dExcess = Round(dTotalSelected - dTotal, 2);
+		$('#excessSetOffAmt').html(FormatNumber(dExcess, 2, true, false, true));				
+		$('#netCreBal').html(FormatNumber(Round(g_dAvailAmt - dTotal , 2), 2, true, false, true));		
+		
+		//setExcessAmt(0.00);	//// FormatNumber(dExcess / dLastAmt * dLastInterest, 2, false, false, true);
+	}
+	else
+	{
+		$('#totAmtSetOff1').html(FormatNumber(0.00, 2, true, false, true));		
+		$('#totAmtSetOff2').html(FormatNumber(0.00, 2, true, false, true));		
+		$('#netDebtInt1').html(FormatNumber(0.00, 2, true, false, true));
+		$('#totAmtSetOff3').html(FormatNumber(0.00, 2, true, false, true));		
+		$('#excessSetOffAmt').html(FormatNumber(0.00, 2, true, false, true));						
+		$('#excessSetOffIntAmt').html(FormatNumber(0.00, 2, true, false, true));		
+		$('#netCreBal').html(FormatNumber(g_dAvailAmt, 2, true, false, true));						
+	}
+	// Determine whether the amount selected has excessed the os amount
+	ESettRecalcNet();
+}
+
+function ESettRecalcTotalTrue(bCheck,obj){
+	var rowCount, dTotal, iIndex, dDiff, dSetOff, dInterestTotal, dInterestSetOff, dTotalSelected;
+	var dExcess, dExcessInterest, dInterestSelected, bChecked;
+	var dLastAmt, dLastInterest;
+	bChecked = false;
+	if (g_bExcess && bCheck){
+		alert("You have over selected!");	
+		if (obj != null){
+			obj.checked = false;
+		}
+		return;
+	}
+	dTotal = 0;
+	dInterestTotal = 0;
+	dTotalSelected = 0;
+	dInterestSelected = 0;
+	
+	$('.chkAmt').each(function() {
+		var $row = $(this).closest("tr");		
+		if($(this).is(":checked")){
+			bChecked = true;
+			if (!g_bExcess){
+				if (!isNaN(parseFloat(JSstripChar(RemoveBracket($row.find('.Balance').html()), ",")))){
+					dSetOff = parseFloat(JSstripChar(RemoveBracket($row.find('.Balance').html()), ","))				
+				
+					dLastAmt = dSetOff;
+					dTotal = dTotal + dSetOff;
+					dTotalSelected = dTotalSelected + dSetOff;
+					if (dTotal > g_dOSAmtTotal)
+					{
+						dDiff = dTotal - g_dOSAmtTotal;
+						dSetOff = dSetOff - dDiff;
+						dTotal = dTotal - dDiff;
+						g_bExcess = true;
+					}
+			
+					dInterestSetOff = parseFloat(ESettgetSetOffInt($row));				
+					dInterestSetOff = parseFloat(JSstripChar(RemoveBracket($row.find('.Interest').html()), ","))							
+				
+					dLastInterest = dInterestSetOff;
+					dInterestSelected = dInterestSelected + dInterestSetOff;
+
+					dInterestSetOff = dInterestSetOff * dSetOff / parseFloat(JSstripChar(RemoveBracket($row.find('.Balance').html()), ","))
+							
+					dInterestTotal = dInterestTotal + dInterestSetOff;
+					if (dInterestTotal > g_dInterestTotal)
+					{
+						dDiff = dInterestTotal - g_dInterestTotal;
+						dInterestSetOff = dInterestSetOff - dDiff;
+						dInterestTotal = dInterestTotal - dDiff;
+					}
+					dSetOff = Round(dSetOff, 2);
+					dInterestSetOff = Round(dInterestSetOff, 2);
+						
+					$row.find('.setOffAmt').html("(" + FormatNumber(dSetOff, 2, false, false, true) + ") ");
+					
+					if(g_sDefBHCode == "079"){
+						$row.find('.setOffAmtInt').html( "("+ FormatNumber(dInterestSetOff, 2, false, false, true) +") ");
+					}				
+				}								
+			}else{
+				$row.find(".chkAmt").prop('checked',false);
+				$row.find('.setOffAmt').html("(0.00)");								
+						
+				if(g_sDefBHCode == "079"){
+					$row.find('.setOffAmtInt').html("(0.00)");
+				}
+			}
+		}else{
+				$row.find('.setOffAmt').html("(0.00)");
+				if(g_sDefBHCode == "079"){
+					$row.find('.setOffAmtInt').html("(0.00)");
+				}				
+			}
+	});
+	
+	if (bChecked)
+	{
+		dTotal = Round(dTotal,2);
+		dInterestTotal = Round(dInterestTotal,2);
+		$('#totAmtSetOff1').html(FormatNumber(dTotal, 2, false, false, true));
+		$('#totAmtSetOff2').html(FormatNumber(dInterestTotal, 2, false, false, true));
+
+		if (dInterestTotal <= g_dInterestTotal)
+		{
+			dDiff = Round(g_dInterestTotal - dInterestTotal, 2);			
+			$('#netDebtInt1').html(FormatNumber(dDiff, 2, false, false, true) );			
+			if (dTotal < dTotalSelected)
+			{
+				dTotal = dTotal + dDiff;
+				if (dTotal > Round(dTotalSelected,2))
+				{
+					dDiff = dTotal - Round(dTotalSelected,2);
+					dTotal = dTotal + Round(dDiff,2);
+				}
+			}
+		}
+		$('#totAmtSetOff3').html(FormatNumber(dTotal, 2, false, false, true));		
+		dExcess = Round(dTotalSelected - dTotal, 2);
+		$('#excessSetOffAmt').html(FormatNumber(dExcess, 2, false, false, true));				
+		$('#excessSetOffIntAmt').html(FormatNumber((dExcess / dLastAmt * dLastInterest), 2, false, false, true));				
+		//for CIMB only
+		$('#netCreBal').html(FormatNumber(Round(g_dAvailAmt - dTotalSelected , 2), 2, false, false, true));					
+	}
+	else
+	{
+		$('#totAmtSetOff1').html(FormatNumber(0.00, 2, false, false, true));		
+		$('#totAmtSetOff2').html(FormatNumber(0.00, 2, false, false, true));		
+		$('#netDebtInt1').html(FormatNumber(0.00, 2, false, false, true));
+		$('#totAmtSetOff3').html(FormatNumber(0.00, 2, false, false, true));		
+		$('#excessSetOffAmt').html(FormatNumber(0.00, 2, false, false, true));						
+		$('#excessSetOffIntAmt').html(FormatNumber(0.00, 2, false, false, true));		
+		//for CIMB only
+		$('#netCreBal').html(FormatNumber(g_dAvailAmt, 2, false, false, true));						
+	}
+	// Determine whether the amount selected has excessed the os amount
+	ESettRecalcNet();
+}
+
+function ESettRecalcNet(){
+	var dPurchase, dSetOffInterest, dSetOff, dSetOffTotal, dNet;
+	if ($('#totAmtSetOff2').length){
+		dSetOffInterest = parseFloat(JSstripChar(RemoveBracket($('#totAmtSetOff2').html()), ','));
+	}else{
+		dSetOffInterest = 0.0;
+	}
+	dSetOff = parseFloat(JSstripChar(RemoveBracket($('#totAmtSetOff3').html()), ','));
+	dSetOffTotal = dSetOffInterest + dSetOff;
+	dNet = g_dContractTotal - dSetOffTotal + Math.abs(g_dExcessDebitInterest);
+	if (dNet > 0)
+	{
+		$('#AmtPayable').html(FormatNumber(dNet, 2, true, false, true));	
+		g_bExcess = false;
+	}
+	else
+	{
+		$('#AmtPayable').html(FormatNumber("0", 2, true, false, true));	
+		g_bExcess = true;
+	}
+}
+
+function Round(dNum, nPos)
+{
+	return Math.round(dNum * Math.pow(10, nPos)) / (Math.pow(10, nPos));
+}
+
+function RemoveBracket(sNum)
+{
+	var sTmp;
+	
+	sTmp = JSstripChar(sNum, "(");
+	sTmp = JSstripChar(sTmp, ")");
+	return sTmp;
+}
+
+function ESettgetSetOffInt($row){
+	if(g_sDefBHCode == "065" || g_sDefBHCode == "086" || g_sDefBHCode == "028"){
+		return 0;
+	}else{
+		return JSstripChar(RemoveBracket($row.find('.Interest').html()), ',');
+	}
+}
+
+function ESettGoPrevPayment(LinkURL){
+	window.open(LinkURL, "WinRptPymt", "top=0,left=0,height=350,width=420,status=no,toolbar=no,menubar=no,location=no");
+}
+
+function ESettGoOverdue(){
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var sBhBranch = splitValue[0];
+	var sBhCliCode = splitValue[1];
+	overDueEncryptValue(sBhBranch, sBhCliCode);
+}
+
+function overDueEncryptValue(sBhBranch , sBhCliCode){
+	var jsonObject = {};
+	jsonObject['BHBranch'] = sBhBranch;
+	jsonObject['BHCliCode'] = sBhCliCode;
+	
+	reqOverduePurch(jsonObject);
+}
+
+function getOverdue_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	$('#stlDuePurchasesTbody').empty();
+	var dTotal = 0.0;
+	if(sttus == "200"){
+		var oDueD = JSON.parse(data.ev);
+		var objListArry = oDueD.ObjectList;
+		if (objListArry.length >0){
+			for(var i =0;i<objListArry.length;i++){
+				dTotal += parseFloat(objListArry[i].Payable);
+				createTblOverdue(objListArry[i], i);
+			}
+			$('#tblFooterTotal').html(dTotal);
+			$('#totODuePurch').html(dTotal);
+		}
+		else{
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}	
+}
+
+function createTblOverdue(data, rowNum){
+	var tblRow;
+	tblRow = "<tr>";
+	tblRow += "<td>"+ data.DocDate +"</td>";
+	tblRow += "<td>"+ data.DueDt +"</td>";
+	tblRow += "<td>"+ data.DocNo +"</td>";
+	tblRow += "<td>"+ data.Stock +"</td>";
+	tblRow += "<td>"+ data.Price +"</td>";
+	tblRow += "<td>"+ data.Qty +"</td>";
+	tblRow += "<td>"+ data.Interest +"</td>";
+	tblRow += "<td>"+ data.OsAmt +"</td>";
+	tblRow += "<td>"+ data.Payable +"</td>";
+	tblRow += "</tr>";
+	
+	$('#stlDuePurchases').append(tblRow);	
+}
+
+function EstlOnlineSubmit_OnSubmit(){
+	var sOnline = parseFloat(JSstripChar($('#AmtPayable').html(),","))
+	var bnkSrc;
+	if(sOnline > 0){
+		if (!$("input[name='radBank']:checked").val()) {
+			alert("Please select a paying bank");
+			return false;
+		}else{
+			bnkSrc = $("input[name='radBank']:checked").val();
+		}
+	}
+	else{
+		bnkSrc = "O";
+	}
+	
+	if ( sOnline > 750000){
+		if (g_sDefBHCode == "086") {
+			alert("Online Banking amount cannot more than 750,000 !");
+			return false;
+		}
+	}
+	
+	if (sOnline > 25000){
+		if (g_sDefBHCode ==  "028") {
+			alert("The total outstanding transactions selected for e-settlement is more than the maximum RM25,000 per transaction limit allowed");
+			return false;
+		}
+	}
+	
+	if(checkPIN($('#txtPIN').val())){
+		eSettPayEncryptValue($('#txtPIN').val(), $('#tblPayDetail').attr("sSetOff"), JSstripChar($('#tblPayDetail').attr("sOnline"),","), $('#tblPayDetail').attr("sCntrctNoLst"), $('#tblPayDetail').attr("sQtyLst"), $('#tblPayDetail').attr("sOSAmtLst"), $('#tblPayDetail').attr("sPayAmtLst"), $('#tblPayDetail').attr("sIntAmtLst"), $('#tblPayDetail').attr("sBrkrgAmtLst"), $('#tblPayDetail').attr("sStampAmtLst"), $('#tblPayDetail').attr("sClearFeeAmtLst"), $('#tblPayDetail').attr("sMiscAmtLst"), $('#tblPayDetail').attr("sContractSetOff"), $('#tblPayDetail').attr("sPaySetOff"), $('#tblPayDetail').attr("sInterestSetOff"),bnkSrc);
+	}
+	return true
+}
+
+function checkPIN(vsPIN)
+{
+	var sPIN=""
+
+	if (vsPIN.length != 6) 
+	{
+		alert("PIN entered is not valid!\nPIN must be 6 digits in length.");
+		return false;
+	} 
+	else 
+	{
+		//make sure 6 "digits"
+		for (var i=0; i < vsPIN.length; ++i) 
+		{
+			// '0' - '9'
+			if (vsPIN.charCodeAt(i) < 48 || vsPIN.charCodeAt(i) > 57)
+				break;
+		}
+
+		if (i < vsPIN.length)
+		{
+			
+			alert("PIN entered is not valid!\nPIN must be 6 digits in length.");
+			return false;
+		} 
+		else 
+		{
+			return true;
+		}
+	}
+}
+
+function eSettPayEncryptValue(sTrdPin, SetOff, Online, Contract,QtyLst,AmtOSLst,AmtLst,IntAmtLst,BrokerageLst,StampDutyLst,ClearingFeeLst,MiscAmtLst,ContractSetOff,PaySetOff,InterestSetOff,BankSrc){
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');	
+	var splitValue = valaccType.split("|");
+	var jsonObject = {};
+	//var jsonObject = {'sBHBranch' : splitValue[0], 'sBHCliCode' : splitValue[1], 'sTrdPin' : sTrdPin, 'SetOff' : SetOff, 'Online' : Online, 'Contract' : Contract, 'Qty' : QtyLst, 'OSAmt' : AmtOSLst, 'Pay' : AmtLst, 'Interest' : IntAmtLst, 'Brokerage' : BrokerageLst, 'StampDuty' : StampDutyLst, 'ClearingFee' : ClearingFeeLst, 'MiscAmt' : MiscAmtLst, 'ContractSetOff' : ContractSetOff, 'PaySetOff' : PaySetOff, 'InterestSetOff' : InterestSetOff, 'BankSrc' : BankSrc};	
+	jsonObject['sBHBranch'] = splitValue[0];
+	jsonObject['sBHCliCode'] = splitValue[1];
+	jsonObject['sTrdPin'] = sTrdPin;
+	jsonObject['SetOff'] = SetOff;
+	jsonObject['Online'] = Online;
+	jsonObject['Contract'] = Contract;
+	jsonObject['Qty'] = QtyLst;
+	jsonObject['OSAmt'] = AmtOSLst;
+	jsonObject['Pay'] = AmtLst;
+	jsonObject['Interest'] = IntAmtLst;
+	jsonObject['Brokerage'] = BrokerageLst;
+	jsonObject['StampDuty'] = StampDutyLst;
+	jsonObject['ClearingFee'] = ClearingFeeLst;
+	jsonObject['MiscAmt'] = MiscAmtLst;
+	jsonObject['ContractSetOff'] = ContractSetOff;
+	jsonObject['PaySetOff'] = PaySetOff;
+	jsonObject['InterestSetOff'] = InterestSetOff;
+	jsonObject['BankSrc'] = BankSrc;
+	reqESettPay(jsonObject);
+}
+
+function processESett_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	if(sttus == "200"){
+		var $accDetail = $('#TrdAccSel');
+		var valaccType=$accDetail.find(':selected').attr('value');
+		var splitValue = valaccType.split("|");
+		var totalVal = JSstripChar($('#AmtPayable').html(),",");
+		var rbVal;
+		var processESettD = JSON.parse(data.ev);
+		var objListArry = processESettD.ObjectList;
+		if (objListArry.length >0){
+			$('.payRefNo').html(objListArry[0].refNo);
+			$('.name').html(objListArry[0].Name);
+			$('.trxDateTime').html(objListArry[0].trxDateTime);	
+			if ($("input[name='radBank']:checked").val()){
+				rbVal = $("input[name='radBank']:checked").val();
+				bankFrm(rbVal, objListArry[0].bankPayeeID, splitValue[0], splitValue[1], objListArry[0].refNo, totalVal, objListArry[0].bankUrlRespURL, objListArry[0].bankUrlReqURL,  objListArry[0].fpxDt,  objListArry[0].bankRefNo, objListArry[0].payType, $('#CliName').val());
+			}
+			chgLayout(4);
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createESettFooter(){
+	var tblRow;
+	tblRow = "<tr class='tblFooter'>";
+	tblRow += "<td colspan='9'></td>"
+	tblRow += "<td><input value='Pay' id='butPay' name='butPay' onClick='ESettPay_OnClick()' type='button'></td>";
+	tblRow += "<td align='right'><span id='Pay'></span></td>";
+	$('#tblOSDbtLine').append(tblRow);
+}
+
+function ESettPay_OnClick(){
+	var sCntrctNo, sCntrctNoLst;
+	var sQty, sQtyLst;
+	var sOSAmt, sOSAmtLst;
+	var sPayAmt, sPayAmtLst;
+	var sIntAmt, sIntAmtLst;
+	var sBrkrgAmt, sBrkrgAmtLst;
+	var sStampAmt, sStampAmtLst;
+	var sClearFeeAmt, sClearFeeAmtLst;
+	var sMiscAmt, sMiscAmtLst;
+	var bChecked;
+	var dTotIntAmt, dTotAmtOS, dTotAmt;
+	var nQtyBalLot, nQtyOrigLot, nLotSize, nQtyCurrLot;
+	var nQtyBal, nQtyOrig, nQtyCurr;
+	
+	dTotIntAmt = 0;
+	dTotAmtOS = 0;
+	sCntrctNoLst = "";
+	sQtyLst = "";
+	sOSAmtLst = "";
+	sPayAmtLst = "";
+	sIntAmtLst = "";
+	sBrkrgAmtLst = "";
+	sStampAmtLst = "";
+	sClearFeeAmtLst = "";
+	sMiscAmtLst = "";
+	
+	var bStop = $('#SetoffOutstanding').data("bStop");
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var eSettlement = splitValue[4];
+	
+	if(!bStop){
+		if(eSettlement == ""){
+			alert("This account is not allowed to perform eDeposit and eSettlement via i*Trade@CIMB.\n Please log on to www.cimbclicks.com.my to perform cash deposit to your account. \nPlease contact i*Trade@CIMB Call Centre at 03-2261 0888 or email to itrade@cimb.com for any enquiries.");
+		}else{
+			if($('.chkCat:checked').length> 0){
+				$('.chkCat').each(function() {
+					if($(this).is(":checked")){
+						var $row = $(this).closest("tr");
+						var data =  $row.data("esett");
+						
+						if($row.find('.osQty').length){
+							if (!ESettTxtQty_OnChange($row.find('.osQty')[0]))
+								return;
+						}else if($row.find('.payable').length){
+							if (!ESettTxtAmt_OnChange($row.find('.payable').val(), $row.find('.payable')[0]))
+								return;
+						}
+						
+						nQtyBalLot = parseFloat(data.quantyBalLot);
+						nQtyOrigLot = parseInt(data.qtyOrigLot);
+
+						/*Convert all lot into qty*/
+						nLotSize = data.lotSize;
+
+						nQtyBal = parseFloat(nQtyBalLot) * parseFloat(nLotSize);
+						nQtyOrig = parseFloat(nQtyOrigLot) * parseFloat(nLotSize);
+						
+						if (nQtyOrig < nQtyBal)
+							nQtyOrig = nQtyBal
+
+						sBrkrgAmt = data.brkrgAmt;
+						sStampAmt = data.stampAmount;
+						sClearFeeAmt = data.clearFee;
+						sMiscAmt = data.miscAmount;
+
+						sCntrctNo = data.docNo;
+						sOSAmt = data.osAmount;
+
+						if ($row.find('.osQty').length) {
+							sQty = $row.find('.osQty').val() + " " + data.osQty;
+							//sQty = sQty.substring(0, sQty.indexOf("X")-2) + sQty.substring(sQty.indexOf("X"), sQty.length);
+
+							nQtyCurrLot = $row.find('.osQty').val() ;
+
+							nQtyCurr = nQtyCurrLot * parseFloat(nLotSize);
+							sBrkrgAmt = parseFloat(sBrkrgAmt) * (nQtyCurr / nQtyOrig);
+
+							//new add
+							if (data.defBHCode == "065" || data.defBHCode == "079" || data.defBHCode == "086" || data.defBHCode == "028") {
+								sStampAmt = parseFloat(sStampAmt) * (nQtyCurrLot / nQtyBalLot);
+								sClearFeeAmt = parseFloat(sClearFeeAmt) * (nQtyCurrLot / nQtyBalLot);
+							}
+						} else {
+							sQty = " ";
+						}
+						
+						if($row.find('.payable').get(0).tagName == "INPUT" ){
+							sPayAmt = JSstripChar($row.find('.payable').val(),",");
+							
+						}else{
+							sPayAmt = JSstripChar($row.find('.payable').html(),",");
+						}						
+
+						if ($row.find('.osQty').length) {
+							sIntAmt = data.intAmount;
+							sIntAmt = parseFloat(sIntAmt) * (parseInt(sQty) / nQtyBal);
+							sOSAmt = parseFloat(sPayAmt) - sIntAmt;
+						} else {
+							sIntAmt = parseFloat(sPayAmt) - parseFloat(JSstripChar(sOSAmt, ","));
+							if (sIntAmt < 0) {
+								sOSAmt = parseFloat(sPayAmt);
+								sIntAmt = 0;
+							}
+						}
+						sIntAmt = Math.round(sIntAmt *100) /100;
+						dTotIntAmt = dTotIntAmt + parseFloat(sIntAmt);
+						sOSAmt = Math.round(sOSAmt *100) /100;
+						dTotAmtOS += parseFloat(sOSAmt);
+
+		//				sStampAmt = document.getElementById('tblOSDbtLine').rows[nCount].getAttribute('StampAmt');
+		//				sClearFeeAmt = document.getElementById('tblOSDbtLine').rows[nCount].getAttribute('ClearFeeAmt');
+		//				sMiscAmt = document.getElementById('tblOSDbtLine').rows[nCount].getAttribute('MiscAmt');
+						sCntrctNoLst += sCntrctNo + "|";
+						sQtyLst += sQty + "|";
+						sOSAmtLst += sOSAmt + "|";
+						sPayAmtLst += sPayAmt + "|";
+						sIntAmtLst += sIntAmt + "|";
+						sBrkrgAmtLst += sBrkrgAmt + "|";
+						sStampAmtLst += sStampAmt + "|";
+						sClearFeeAmtLst += sClearFeeAmt + "|";
+						sMiscAmtLst += sMiscAmt + "|";																		
+
+					
+					}
+				});
+				eSettOffEncryptValue(sCntrctNoLst,sQtyLst,sOSAmtLst,sPayAmtLst,sIntAmtLst,sBrkrgAmtLst,sStampAmtLst,sClearFeeAmtLst,sMiscAmtLst);
+				$('#totSelAmt').html(FormatNumber(dTotAmtOS, 2, true, false, true));
+				$('#totIntAmt').html(FormatNumber(dTotIntAmt, 2, true, false, true));
+				$('#totAmt').html($('#Pay').html());
+				$('#AmtPayable').html($('#Pay').html());
+				g_dContractTotal = Round(JSstripChar($('#Pay').html(),","),2);
+				g_dAvailAmt = parseFloat(JSstripChar($('.SetoffOutstanding').html(),","));
+				g_dOSAmtTotal = dTotAmtOS;
+				g_dInterestTotal = dTotIntAmt;
+				
+				$('#tblPayDetail').attr("sCntrctNoLst",sCntrctNoLst);
+				$('#tblPayDetail').attr("sQtyLst",sQtyLst);
+				$('#tblPayDetail').attr("sOSAmtLst",sOSAmtLst);
+				$('#tblPayDetail').attr("sPayAmtLst",sPayAmtLst);
+				$('#tblPayDetail').attr("sIntAmtLst",sIntAmtLst);
+				$('#tblPayDetail').attr("sBrkrgAmtLst",sBrkrgAmtLst);
+				$('#tblPayDetail').attr("sStampAmtLst",sStampAmtLst);
+				$('#tblPayDetail').attr("sClearFeeAmtLst",sClearFeeAmtLst);
+				$('#tblPayDetail').attr("sMiscAmtLst",sMiscAmtLst);
+			}
+			else{
+				alert("Please select a contract to pay.");
+			}
+		}
+	}else{
+		alert("Dear Valued Clients:\nPlease be advised that our eSettlement and eDeposit services are only avaiable as follows:\n\neSettlement\t: 9:00am to 11:00pm, on business days\neDeposit\t\t: 9:00am to 11:00pm, on business days")
+	}
+}
+
+function ESettAdd_OnClick(){	
+	$('#tblSetOffHdr > tbody').remove();	
+	$('#tblSetOffFooter > tbody').remove();	
+	$("#tblOSDtl").find("tr:gt(0)").remove();	
+	$("#tblOpymt").find("tr:gt(0)").remove();	
+	chgLayout(1);
+}
+
+function ESettDelete_OnClick(){
+	$('.chkBoxCtrt').each(function() {
+		var $row = $(this).closest("tr");		
+		var dataSetOff = $row.data("eSettOSDtl");
+		if($(this).is(":checked")){
+			
+			g_dContractTotal -= parseFloat(JSstripChar($row.find('.CtrtAmt').html(),","));
+			//g_dAvailAmt += parseFloat(JSstripChar($('.SetoffOutstanding').html(),","));
+			g_dOSAmtTotal -= parseFloat(JSstripChar($row.find('.CtrtOsAmt').html(),","));
+			g_dInterestTotal -=parseFloat(JSstripChar($row.find('.CtrtIntAmt').html(),","));			
+			$('#totSelAmt').html(FormatNumber(g_dOSAmtTotal, 2, true, false, true));
+			$('#totIntAmt').html(FormatNumber(g_dInterestTotal, 2, true, false, true));
+			$('#totAmt').html(FormatNumber(g_dContractTotal, 2, true, false, true));
+			$('#AmtPayable').html(FormatNumber(g_dContractTotal, 2, true, false, true));			
+			$("#chkAuto").prop('checked',false);
+			ESettAutoSetOff();
+			
+			$('.chkCat').each(function() {				
+				if($(this).is(":checked")){
+					var $row = $(this).closest("tr");		
+					var data = $row.data("esett");
+					if(data.docNo == dataSetOff.docNo){
+						$(this).prop('checked',false);
+					}
+					
+				}
+			});			
+			
+			$row.remove();
+			$("."+dataSetOff.docNo).remove();			
+			var oldString = $('#tblPayDetail').attr("sCntrctNoLst");
+			var splitValue = oldString.split("|");		
+			var position =0;
+	
+			for(var i=0;i < splitValue.length; i++){
+				if(dataSetOff.docNo == splitValue[i])
+					position = i;
+			}
+			
+			$('#tblPayDetail').attr("sCntrctNoLst",getNewString($('#tblPayDetail').attr("sCntrctNoLst"),position));
+			$('#tblPayDetail').attr("sQtyLst",getNewString($('#tblPayDetail').attr("sQtyLst"),position));
+			$('#tblPayDetail').attr("sOSAmtLst",getNewString($('#tblPayDetail').attr("sOSAmtLst"),position));
+			$('#tblPayDetail').attr("sPayAmtLst",getNewString($('#tblPayDetail').attr("sPayAmtLst"),position));
+			$('#tblPayDetail').attr("sIntAmtLst",getNewString($('#tblPayDetail').attr("sIntAmtLst"),position));
+			$('#tblPayDetail').attr("sBrkrgAmtLst",getNewString($('#tblPayDetail').attr("sBrkrgAmtLst"),position));
+			$('#tblPayDetail').attr("sStampAmtLst",getNewString($('#tblPayDetail').attr("sStampAmtLst"),position));
+			$('#tblPayDetail').attr("sClearFeeAmtLst",getNewString($('#tblPayDetail').attr("sClearFeeAmtLst"),position));
+			$('#tblPayDetail').attr("sMiscAmtLst",getNewString($('#tblPayDetail').attr("sMiscAmtLst"),position));			
+		}
+	});
+	if($('#tblOSDtl tr').length == 1){
+		$('#Pay').html(FormatNumber(0.00, 2, true, false, true));
+		chgLayout(1);
+		$('#tblSetOffHdr > tbody').remove();	
+		$('#tblSetOffFooter > tbody').remove();	
+		$("#tblOSDtl").find("tr:gt(0)").remove();	
+		$("#tblOpymt").find("tr:gt(0)").remove();	
+	}
+}
+
+function getNewString(data, position){
+	var splitValue = data.split("|");
+	var newString="";
+	
+	for(var i=0;i < splitValue.length-1; i++){
+		if(i != position)
+			newString += splitValue[i] + "|";
+	}
+	return newString;
+	
+}
+
+function ESettSubmit_OnClick(){
+	var sSetOff, sContractSetOff, sInterestSetOff;
+	var sPaySetOff;
+	var dNetDebitInterest, dDiff, dAvailPaySetOff, dPaySetOff;
+	var iIndex, rowCount;
+	var bExcessDebitInterest;
+
+	bExcessDebitInterest = false;
+	
+	sSetOff = parseFloat(JSstripChar(RemoveBracket($('#totAmtSetOff3').html()), ','));			
+
+	if($('#netDebtInt1').length){
+		dNetDebitInterest = parseFloat(JSstripChar($('#netDebtInt1').html(), ','));	
+	}else{
+		dNetDebitInterest = 0.0;	
+	}
+	
+	sContractSetOff = "";
+	sPaySetOff = "";
+	sInterestSetOff = "";
+	
+	$('.chkAmt').each(function() {				
+		if($(this).is(":checked")){
+			var $row = $(this).closest("tr");	
+			var data = $row.data("eSetOffDtl");
+			
+			sContractSetOff += data.docNo + "|";
+			dPaySetOff = parseFloat(JSstripChar(RemoveBracket($row.find(".setOffAmt").html()), ","));
+			if (dNetDebitInterest > 0)
+			{
+				dAvailPaySetOff = parseFloat(JSstripChar(RemoveBracket($row.find(".Balance").html()), ","));			
+				
+				dDiff = dAvailPaySetOff - dPaySetOff;
+				if (dDiff > dNetDebitInterest) {
+					dPaySetOff = dPaySetOff + dNetDebitInterest;
+				} else {
+					bExcessDebitInterest = true;
+					dPaySetOff = dAvailPaySetOff;
+					g_dExcessDebitInterest = dDiff - dNetDebitInterest;
+					//RecalcNet();
+				}
+			}			
+			sPaySetOff += dPaySetOff + "|";
+			if(g_sDefBHCode == "065" || g_sDefBHCode == "086" || g_sDefBHCode == "028"){
+				sInterestSetOff = sInterestSetOff + "0" +"|";
+			}else{
+				sInterestSetOff = sInterestSetOff + $row.find(".Interest").html() +"|";
+			}
+						
+		}
+	});
+	
+	$('.payamount').html($('#AmtPayable').html());
+	createBankSelection(g_sDefBHCode);
+	createTblPayDetail(sSetOff,$('#AmtPayable').html());	
+	$('#tblPayDetail').attr("sInterestSetOff",sInterestSetOff);
+	$('#tblPayDetail').attr("sContractSetOff",sContractSetOff);
+	$('#tblPayDetail').attr("sPaySetOff",sPaySetOff);	
+	$('#tblPayDetail').attr("sSetOff",sSetOff);	
+	$('#tblPayDetail').attr("sOnline",$('#AmtPayable').html());	
+	
+	chgLayout(3);
+
+}
+
+function createBankSelection(sDefBHCode){
+	var tblRow = "";
+	var sBroker;
+	if (sDefBHCode == "076") {
+		sBroker = "KLCS";
+	} else if (sDefBHCode == "065") {		
+		sBroker = "CIMB";	
+	} else if (sDefBHCode == "086") {
+		sBroker = "AMSEC";	
+	} else if (sDefBHCode == "028") {
+		sBroker = "AFFIN";	
+	} else {
+		sBroker = "JFAPEX";
+	}
+	if (sBroker == "CIMB"){
+		$('#subPymt_notice').show();
+		$('#note1').html("CIMB Bank @CIMBClicks and Maybank2U.com");
+		$('#note2').html("CIMB Bank @CIMBClicks and Maybank2U.com");
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='B' type='radio'> <label class='bnkDesc'>**CIMB Bank</label><img src='../img/stlCIMBBank.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+		
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='M' type='radio' > <label class='bnkDesc'>Maybank</label><img src='../img/stlMayBank.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+	}else if (sBroker == "KLCS"){		
+		$('#note1').html("Alliance Online and Maybank2U.com");
+		$('#note2').html("Alliance Online and Maybank2U.com");
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='M' type='radio' > <label class='bnkDesc'>Maybank</label><img src='../img/stlMayBank.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+		
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='A' type='radio' > <label class='bnkDesc'>Alliance Bank</label><img src='../img/stlallianceonline.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+	}else if (sBroker == "JFAPEX"){		
+		$('#note1').html("Maybank2U.com");
+		$('#note2').html("Maybank2U.com before effecting online funds transfers for your <BR/>settlements and/or deposits.");
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='M' type='radio' > <label class='bnkDesc'>Maybank</label><img src='../img/stlMayBank.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+		
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='O' type='hidden' > ";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+	}else if (sBroker == "AMSEC"){		
+		$('#note1').html("AmOnline Banking");
+		$('#note2').html("AmOnline Banking");
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='D' type='radio' > <label class='bnkDesc'>AmBank</label><img src='../img/amOnline.gif' class='img-responsive'>";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+		
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='O' type='hidden'> ";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+	}else if (sBroker == "AFFIN"){		
+		$('#note1').html("Affin Bank");
+		$('#note2').html("AffinOnline Banking");
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='D' type='radio'> <label class='bnkDesc'>Affin Bank</label><img src='../img/affin_logo.gif' class='img-responsive' >";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+		
+		tblRow += "<div class=' col-2'><div>";		
+		tblRow += "<label>";
+		tblRow += "<input name='radBank' id='radBank' value='O' type='hidden'> ";
+		tblRow += "</label>";
+		tblRow += "</div></div>";
+	}
+	
+	$('#selectBank').append(tblRow);
+	
+	$("input[name='radBank']").change(function(){
+		if($('#AmtPayable').html() == "0.00"){
+			alert("You do not need to make online payment.");
+		}else{
+			var $row = $(this).closest('label');
+			$('.bankDesc').html($row.find('.bnkDesc').text());
+			
+		}
+	});
+}
+
+function createTblPayDetail(sSetOff, sOnline){
+	var tblRow,dTotal=0.0;
+	tblRow = "";
+	if(!(sSetOff == "0" || sSetOff == "")){
+		dTotal += parseFloat(sSetOff);
+		tblRow += "<tr>";
+		tblRow += "<td>Setoff</td>";
+		tblRow += "<td>Trust A/C</td>";
+		tblRow += "<td>"+ g_sBHName +"</td>";
+		tblRow += "<td>"+ sSetOff +"</td>";
+		tblRow += "</tr>";
+	}
+	
+	if(!(sOnline == "0.00" || sOnline == "")){
+		dTotal += parseFloat(JSstripChar(sOnline,","));
+		tblRow += "<tr>";
+		tblRow += "<td>Online Transfer</td>";
+		tblRow += "<td class='bankDesc'></td>";
+		tblRow += "<td></td>";
+		tblRow += "<td>"+ sOnline +"</td>";
+		tblRow += "</tr>";
+	}	
+	$('#tblPayDetail').append(tblRow);
+	$('#tblPayOption').append(tblRow);
+	$('.stlTotAmt').html(FormatNumber(dTotal, 2, true, false, true));
+}
+
+function EStlOnlineBack_OnClick(){
+	chgLayout(2);
+	$("#tblPayDetail").find("tr:gt(0)").remove();
+	$("#tblPayOption").find("tr:gt(0)").remove();
+	$('#selectBank').empty();	
+}
+
+function ESettCancel_OnClick(){
+	window.close();
+}
+
+function settStsHistBtn(){
+	if(iBHCode == "076"){
+		$('#butClck').css("display","");
+		$('#butClck').val("Old System Records");
+		$('#butClck').attr("onclick","butOldHistory_OnClick()");
+	}
+	else{
+		$('#butClck').css("display","");
+		$('#butClck').val("History");
+		$('#butClck').attr("onclick","butHistory_OnClick()");
+	}
+	eSettStsEncryptValue();
+}
+
+function eSettStsEncryptValue(){
+	$('#tblDtl').empty();
+	var v="";
+	var hisVal="";
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	if(valaccType != null){
+		var splitValue = valaccType.split("|");
+		var statusSel = $('#selStatus');
+		var valStatusSel = statusSel.find(':selected').attr('value');
+		var statusVal = $("#selStatus").val();
+		var jsonObject = {};
+		jsonObject['Status'] = valStatusSel;
+		jsonObject['History'] = eStmtStsHisVal;
+		jsonObject['BHCliCode'] = splitValue[1];
+		jsonObject['BHBranch'] = splitValue[0];
+		v += valaccType;
+		console.log("TrdAccSel Value : "+v);
+		
+		reqSettSts(jsonObject);
+	}
+}
+
+function butHistory_OnClick(){
+	$('#butClck').val("Today");
+	$('#butClck').attr("onclick","butToday_OnClick()");
+	
+	eStmtStsHisVal="HF";
+	eSettStsEncryptValue();
+}
+
+function butToday_OnClick(){
+	$('#butClck').val("History");
+	$('#butClck').attr("onclick","butHistory_OnClick()");
+	eStmtStsHisVal = "";
+	eSettStsEncryptValue();
+}
+
+function getEStmtSts_respose(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	if(sttus == "200"){
+		var eSettStsD = JSON.parse(data.ev);
+		var objListArry = eSettStsD.ObjectList;
+		$('#paidSuccessful').html("RM "+objListArry[0].totSuccess);
+		$('#paidPending').html("RM "+objListArry[0].totPending);
+		$('#currentOS').html("RM "+objListArry[0].totOutstd);
+		if('#tblDtlInfo'!=null){
+			console.log("Have Value");
+			$('#tblDtlInfo').empty();
+		}
+		else{
+			console.log("Empty Value");
+		}
+		
+		var paymentCol, dtTmCol, detailsCol, amtCol, statusCol, resubmitURL;
+		if (objListArry[0].eSettStsDtl.length > 0){
+			for(var i=0;i<objListArry[0].eSettStsDtl.length;i++){
+				paymentCol = objListArry[0].eSettStsDtl[i].refNo;
+				dtTmCol = objListArry[0].eSettStsDtl[i].lastUpd;
+				resubmitURL = objListArry[0].eSettStsDtl[i].resubmitUrl;
+				amtCol = objListArry[0].eSettStsDtl[i].amount;
+				statusCol = objListArry[0].eSettStsDtl[i].status ;
+				createEStmtStsTable(i);
+				eStmtStsRow(paymentCol, dtTmCol, amtCol, statusCol, resubmitURL, getRowClass(i));
+			}
+			$('#tblDtl').css("display","");
+			$('#tblFooterLine').css("display","");
+			$('#noDataMsg').hide();
+		}
+		else{
+			$('#tblDtl').css("display","none");
+			$('#tblFooterLine').css("display","none");
+			$('#noDataMsg').text("There is no record found");
+			$('#noDataMsg').show();
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createEStmtStsTable(row){
+	var rowHeader = "", rowCategory="";
+	
+	if(row == 0){
+		rowHeader += "<thead>";
+		rowHeader += "<tr>";
+		rowHeader += "<th>Payment</th>";
+		rowHeader += "<th>Date/Time</th>";
+		rowHeader += "<th>Details</th>";
+		rowHeader += "<th>Amount</th>";
+		rowHeader += "<th>Status</th>";
+		rowHeader += "<th>&nbsp;</th>";
+		rowHeader += "</tr>";
+		rowHeader += "<thead>";
+		rowHeader += "</tr>";
+		
+		$("#tblDtl").append($("<table class='responsive' cellspacing='0' id='stlPayStatus'></table>"));
+		$("#stlPayStatus").append(rowHeader);
+	}
+}
+
+function eStmtStsRow(paymentCol, dtTmCol, amtCol, statusCol, resubmitURL, cls){
+	var tblRow;
+	var $accDetail = $('#TrdAccSel');
+	var valaccType=$accDetail.find(':selected').attr('value');
+	var splitValue = valaccType.split("|");
+	var cliCode = splitValue[1];
+	
+	tblRow = "<tr class='tblRow "+cls+"'>";
+	tblRow += "<td><a data-toggle='modal' data-target='#paymentDetails' style='cursor: hand' onClick='eStlDetails(\""+paymentCol+"\");'><u>"+paymentCol+"</u></a></td>";
+	tblRow += "<td>"+dtTmCol+"</td>";
+	tblRow += "<td><img src='../../img/MagniBg.gif' data-toggle='modal' data-target='#paymentContractDetails' style='cursor: hand' onClick='eStlContracts(\""+paymentCol+"\",\""+cliCode+"\")'></td>";
+	tblRow += "<td>"+amtCol+"</td>";
+	tblRow += "<td>"+statusCol+"</td>";
+	if(statusCol == "Pending"){
+		tblRow += "<td width='10%'>&nbsp;&nbsp;<a style='cursor: hand' onclick=eStlResubmit(\""+resubmitURL+"\")><u>Resubmit</u></a></td>";
+	}
+	else{
+		tblRow += "<td></td>";
+	}
+	tblRow += "</tr>";
+	$("#stlPayStatus").append(tblRow);
+}
+
+function eStlDetails(refNoP){
+	var jsonObject = {};
+	jsonObject['RefNo'] = refNoP;
+	
+	reqSettDtl(jsonObject);
+}
+
+function getEStlDetails_response(data){
+	console.log(data);
+	var sttus = data.s;
+	var msg = data.msg;
+	$('#stlPayDetailDiv').empty();
+	if(sttus == "200"){
+		console.log("Generating Settlement Status Details");
+		var settStsDtlsD = JSON.parse(data.ev);
+		var objListArry = settStsDtlsD.ObjectList;
+		var lineCol,refNoDtl,methodCol, descCol, branchCol, amountCol;
+		if (objListArry.length > 0){
+			for(var i=0;i<objListArry.length;i++){
+				lineCol = objListArry[i].Line;
+				methodCol = objListArry[i].Method;
+				descCol = objListArry[i].Description;
+				branchCol = objListArry[i].Branch;
+				amountCol = objListArry[i].Amount;
+				refNoDtl = objListArry[i].RefNo;
+				$('#refNoSpan').html(refNoDtl);
+				
+				createEStlDetailsTable(i);
+				createEStlDetailsRow(lineCol, methodCol, descCol, branchCol, amountCol);
+			}
+			$('#noDataMsgstlPayDetail').hide();
+		}
+		else{
+			$('#noDataMsgstlPayDetail').text("There is no record found");
+			$('#noDataMsgstlPayDetail').show();
+			console.log("There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createEStlDetailsTable(row){
+	var rowHeader = "";
+	if (row == 0){
+		rowHeader += "<thead>";
+		rowHeader += "<tr>";
+		rowHeader += "<th>Line</th>";
+		rowHeader += "<th>Method</th>";
+		rowHeader += "<th>Description</th>";
+		rowHeader += "<th>Branch</th>";
+		rowHeader += "<th>Amount</th>";
+		rowHeader += "</tr>";
+		rowHeader += "<thead>";
+		rowHeader += "</tr>";
+		$("#stlPayDetailDiv").append($("<table class='responsive' id='stlPayDetail'></table>"));
+		$("#stlPayDetail").append(rowHeader);
+	}
+}
+
+function createEStlDetailsRow(lineCol, methodCol, descCol, branchCol, amountCol, cls){
+	var tblRow;
+	if (branchCol == ""){
+		branchCol ="&nbsp";
+	}
+	tblRow += "<tr>";
+	tblRow += "<td>"+lineCol+"</td>";
+	tblRow += "<td>"+methodCol+"</td>";
+	tblRow += "<td>"+descCol+"</td>";
+	tblRow += "<td>"+branchCol+"</td>";
+	tblRow += "<td>"+amountCol+"</td>";
+	tblRow += "</tr>";
+	$("#stlPayDetail").append(tblRow);
+}
+
+function eStlContracts(refNoP, cliCodeP){
+	var jsonObject = {};
+	jsonObject['RefNo'] = refNoP;
+	jsonObject['BHCliCode'] = cliCodeP;
+	
+	reqEStlCtrct(jsonObject);
+}
+
+function getEStlContracts_response(data){
+	var sttus = data.s;
+	var msg = data.msg;
+	$('#tblOSDtlDiv').empty();
+	if(sttus == "200"){
+		console.log("Generating Settlement Status Contract Data...");
+		var contraD = JSON.parse(data.ev);
+		var objListArry = contraD.ObjectList;
+		var trxDateCol, dueDateCol, refNoCol, stockCol, priceCol, qtyCol, OSAmtCol, amountCol;
+		if (objListArry.length > 0){
+			for(var i=0;i<objListArry.length;i++){
+				trxDateCol = objListArry[i].TrxDt;
+				dueDateCol = objListArry[i].DueDt;
+				refNoCol = objListArry[i].RefNo;
+				stockCol = objListArry[i].Stock;
+				priceCol = objListArry[i].Price;
+				qtyCol = objListArry[i].Qty;
+				OSAmtCol = objListArry[i].osAmount;
+				amountCol = objListArry[i].Amount;
+				$('#RefNoDtl').html(refNoCol);
+				
+				createEStlContractsTable(i);
+				createEStlContractRow(trxDateCol, dueDateCol, refNoCol, stockCol, priceCol, qtyCol, OSAmtCol, amountCol);
+			}
+			$('#noDataMsgTblOSDtl').hide();
+		}
+		else{
+			$('#noDataMsgTblOSDtl').text("There is no record found");
+			$('#noDataMsgTblOSDtl').show();
+			console.log("[Settlement Status]There is no record found");
+		}
+	}
+	else{
+		alert(msg);
+	}
+}
+
+function createEStlContractsTable(row){
+	var rowHeader = "";
+	
+	if (row == 0){
+		rowHeader += "<thead>";
+		rowHeader += "<tr>";
+		rowHeader += "<th>Trx Date</th>";
+		rowHeader += "<th>Due Date</th>";
+		rowHeader += "<th>Ref No</th>";
+		rowHeader += "<th>Stock</th>";
+		rowHeader += "<th>Price</th>";
+		rowHeader += "<th>Qty</th>";
+		rowHeader += "<th>O/S Amt</th>";
+		rowHeader += "<th>Amount</th>";
+		rowHeader += "</tr>";
+		rowHeader += "<thead>";
+		rowHeader += "</tr>";
+		
+		$("#tblOSDtlDiv").append($("<table class='responsive' name='tblOSDtl' id='tblOSDtl'></table>"));
+		$("#tblOSDtl").append(rowHeader);
+	}
+}
+
+function createEStlContractRow(trxDateCol, dueDateCol, refNoCol, stockCol, priceCol, qtyCol, OSAmtCol, amountCol){
+	var tblRow;
+	
+	if(qtyCol == ""){
+		qtyCol = "&nbsp;";
+	}
+	
+	tblRow += "<tr>";
+	tblRow += "<td>"+trxDateCol+"</td>";
+	tblRow += "<td>"+dueDateCol+"</td>";
+	tblRow += "<td>"+refNoCol+"</td>";
+	tblRow += "<td>"+stockCol+"</td>";
+	tblRow += "<td>"+priceCol+"</td>";
+	tblRow += "<td>"+qtyCol+"</td>";
+	tblRow += "<td>"+OSAmtCol+"</td>";
+	tblRow += "<td>"+amountCol+"</td>";
+	tblRow += "</tr>";
+	
+	$("#tblOSDtl").append(tblRow);
+}
+
+function eStlResubmit(resubmitURL){
+	window.open(resubmitURL, "Resubmit", "top=0,left=0,height=350,width=420,status=no,toolbar=no,menubar=no,location=no");
+}
+
+function bankFrm(rbVal, bankPayeeID, bhBranchBnk, cliCode, refNumb, totalVal, respondURL, requestURL, dateForm, bankRefNum, payTypeform){
+	var inputVal = "";
+	var requestString;
+	
+	if (rbVal != "M"){
+		
+		if(rbVal == "B"){
+			inputVal += "<input type='hidden' name='payeeId' value='"+ bankPayeeID +"'>";
+			inputVal += "<input type='hidden' name='billAccountNo' value='"+ bhBranchBnk + cliCode +"'>";
+			inputVal += "<input type='hidden' name='billAccountNo' value='"+ bhBranchBnk + cliCode +"'>";
+			inputVal += "<input type='hidden' name='billReferenceNo' value='"+ refNumb +"'>";
+			inputVal += "<input type='hidden' name='amount' value='"+ totalVal +"'>";
+			inputVal += "<input type='hidden' name='payeeResponseURL' value='"+ respondURL +"'>";
+		}
+		
+		else if(rbVal == "F"){
+			inputVal += "<input type='hidden' name='msgType' value='AR'>";
+			inputVal += "<input type='hidden' name='msgToken' value='01'>";
+			inputVal += "<input type='hidden' name='excOrdNo' value='"+respondURL+"'>";
+			inputVal += "<input type='hidden' name='excOrderCount' value='1'>";
+			inputVal += "<input type='hidden' name='transcDate' value='"+ dateForm +"'>";
+			inputVal += "<input type='hidden' name='currency' value='MYR'>";
+			inputVal += "<input type='hidden' name='amt' value='"+ totalVal +"'>";
+			inputVal += "<input type='hidden' name='chargeType' value='AA'>";
+			inputVal += "<input type='hidden' name='pay_refno' value='"+ refNumb +"'>";
+			inputVal += "<input type='hidden' name='sellerID' value='"+bankPayeeID+"'>";
+			inputVal += "<input type='hidden' name='bankCode' value='01'>";
+		}
+		
+		else if(rbVal == "A"){
+			inputVal += "<input type='hidden' name='comp_id' value='"+ bankPayeeID +"'>";
+			inputVal += "<input type='hidden' name='pay_refno' value='"+ bankRefNum +"'>";
+			inputVal += "<input type='hidden' name='client_no' value='"+ bhBranchBnk + cliCode +"'>";
+			inputVal += "<input type='hidden' name='pay_type' value='"+ payTypeform +"'>";
+			inputVal += "<input type='hidden' name='amt' value='"+ totalVal +"'>";
+		}
+		
+		else if(rbVal == "D"){
+			requestString = "merchantID="+ bankPayeeID +"&InvoiceNo="+ cliCode +"&TransAmount="+ totalVal +"&field1="+ refNumb +"&field2="+ bhBranchBnk + cliCode +"&field3="+ bankRefNum +"&field4=&field5=&field6=&field7=";
+			inputVal += "<input type='hidden' name='requestString' value='"+ requestString +"'>";
+		}
+		
+		else if(rbVal == "I"){
+			inputVal += "<input type='hidden' name='payeeId' value='"+ bankPayeeID +"'>";
+			inputVal += "<input type='hidden' name='billAccountNo' value='" + cliCode + "'>";
+			inputVal += "<input type='hidden' name='billReferenceNo' value='" + cliNameBnkForm + "'>";
+			inputVal += "<input type='hidden' name='billReferenceNo2' value='" + bankRefNum + "'>";
+			inputVal += "<input type='hidden' name='responseURL' value='"+ respondURL +"'>";
+			inputVal += "<input type='hidden' name='amount' value='" + totalVal + "'>";
+		}
+		
+		$("#frmBank").attr("action",requestURL);
+		if(rbVal == "F"){
+			$("#frmBank").attr("target","fpx");
+		}else{
+			$("#frmBank").attr("target","winBank");
+		}
+		$("#frmBank").append(inputVal);
+		if(rbVal == "F"){
+			window.open("","fpx","width=1100, height=500");
+		}else{
+			window.open("","winBank","width=1100, height=500");
+		}
+		
+		$("#frmBank").submit();
+		
+	}
+	
+	else{
+		var sURL;
+		sURL = requestURL + bankPayeeID +"$1$" + totalVal + "$1$" + refNumb + "$1$" + bhBranchBnk + cliCode + "$" + respondURL;
+		window.open(sURL,"winBank","width=1100, height=500");
+		
+		//sURL = \""+ oN2NSession.getSetting("ESTL_M2U_URL") + sBankPayeeID +"$1$"+ Double.parseDouble(sAmt) +"$1$"+ sRefNoFull +"$1$"+ sBHBranch + sBHCliCode +"$"+ oN2NSession.getSetting("ESTL_M2U_RESPURL") +"\";
+	}
+	
+	
+}
+
+function isSearchAuthorize(category){
+	if(category=="A"||category=="S"||category=="D"||category=="R"){//admin, super admin, dealer, remisier
+		return true;
+	}
+	return false;
+}
+
+function searchDisplay(button){
+	if(button=="on"){
+		//selTrdAcc
+		$("#TrdAccSel").css("display","none");
+		$("#txtTrdAccSrch").val("");
+		$("#txtTrdAccSrch").css("display","");
+		$("#butTrdAccSrch").html("<b>Go</b>");
+		$("#txtTrdAccSrch").focus();
+	}
+	else{
+		$("#txtTrdAccSrch").css("display","none");
+		$("#TrdAccSel").css("display","");
+		$("#butTrdAccSrch").html("<i class='userFindicon'></i>");
+	}
+}
+
+function mapAccType(symbol){
+	var value = "";
+	switch(symbol){
+		case "M":
+			value = "Margin";
+			break;
+		case "T":
+			value = "Non Margin";
+			break;
+		case "N":
+			value = "Nominees";
+			break;
+		case "X":
+			value = "STS";
+			break;
+		case "V":
+			value = "EES A/C";
+			break;
+		case "W":
+			value = "ESOS";
+			break;
+		case "K":
+			value = "Ext ESOS";
+			break;
+		case "H":
+			value = "Ext Margin";
+			break;
+		case "Y":
+			value = "Clicks Trader";
+			break;
+	}
+	return value;
+}
+
+function getRowClass(n){
+	return (n % 2 == 0)?"even":"odd";
+}
+
+function mapBank(symbolBank){
+	
+	var bankTxt="";
+		
+	if(symbolBank=="B"){
+		bankTxt = "CIMB<i>Clicks</i> - CIMB Bank";
+	}
+	else if(symbolBank=="F"){
+		bankTxt = "FPX";
+	}
+	else if(symbolBank=="M"){
+		bankTxt = "Maybank2U.com";
+	}
+	else if(symbolBank=="A"){
+		bankTxt = "Alliance Online";
+	}
+	else if(symbolBank=="S"){
+		bankTxt = "Maybank2U.com.sg";
+	}
+	else if(symbolBank=="D"){
+		bankTxt = "AmDirect Online";
+	}
+	else{
+		bankTxt = "";
+	}
+	
+	return bankTxt;
+}
+
+function getPDFRpt(rptType){
+	var selTrdAcc, frDate, toDate, rptId, arrTrdAcc, rptName;
+	selTrdAcc = $("#TrdAccSel").val()!=null?$("#TrdAccSel").val():"";
+	arrTrdAcc = selTrdAcc.split("|");
+	selTrdAcc = arrTrdAcc[1] + "-" + arrTrdAcc[0];
+	console.log("TrdAccSel value : "+selTrdAcc);
+
+	//rptId : 1=contract, 2=soa, 3=annual
+	if(rptType == "Contract"){ 
+		rptName="contract";
+		rptId = 1;
+		frDate = $("#frDt").val()!=null?$("#frDt").val():"";
+		toDate = $("#toDt").val()!=null?$("#toDt").val():"";
+	} else if(rptType == "SOA"){
+		rptName="soa";
+		//rptId = 3;
+		rptId = 2;
+		frDate = new Date();
+		frDate.setMonth(frDate.getMonth() - 12);
+		frDate.setDate(1);
+		frDate = frDate.getDate() + "-" + (frDate.getMonth()+1) + "-" + frDate.getFullYear();
+		
+		toDate = new Date();
+		toDate.setDate(1);
+		toDate.setDate(toDate.getDate() - 1);
+		toDate = toDate.getDate() + "-" + (toDate.getMonth()+1) + "-" + toDate.getFullYear();
+
+		isSOA = true;
+	}
+	console.log("From: "+frDate);
+	console.log("To: "+toDate);
+	
+	var jsonObject = {};
+	jsonObject['rptnm'] = rptName;
+	jsonObject['frdt'] = frDate;
+	jsonObject['todt'] = toDate;
+	jsonObject['ctyp'] = "C";
+	jsonObject['ex'] = "PH";
+	jsonObject['bhcc'] = selTrdAcc;
+	jsonObject['rptid'] = rptId;
+	
+	getPDFRptReq(jsonObject);
+}
+
+function getAnnualSOA(){
+	var selTrdAcc, frDate, toDate, rptId, arrTrdAcc, rptName;
+	selTrdAcc = $("#TrdAccSel").val()!=null?$("#TrdAccSel").val():"";
+	arrTrdAcc = selTrdAcc.split("|");
+	selTrdAcc = arrTrdAcc[1] + "-" + arrTrdAcc[0];
+	console.log("TrdAccSel value : "+selTrdAcc);
+	
+	rptName="Annual";
+	rptId = 3;
+	frDate = new Date();
+	frDate.setMonth(1);
+	frDate.setDate(1);
+	frDate.setFullYear(frDate.getFullYear()-1);
+	frDate = frDate.getDate() + "-" + frDate.getMonth() + "-" + frDate.getFullYear();
+		
+	toDate = new Date();
+	toDate.setMonth(1);
+	toDate.setDate(1);
+	toDate = toDate.getDate() + "-" + toDate.getMonth() + "-" + toDate.getFullYear();
+
+	console.log("Annual SOA From:"+frDate);
+	console.log("Annual SOA To:"+toDate);
+
+	var jsonObject = {};
+	jsonObject['rptnm'] = "annual";
+	jsonObject['frdt'] = frDate;
+	jsonObject['todt'] = toDate;
+	jsonObject['ctyp'] = "C";
+	jsonObject['ex'] = "PH";
+	jsonObject['bhcc'] = selTrdAcc;
+	jsonObject['rptid'] = rptId;
+
+	getAnnualSOAReq(jsonObject);
+
+}
+
+function getAnnualSOAResp(data) {
+	console_log("getAnnualSOAResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		console_log("getAnnualSOAResp:"+data.ev);
+		var report = JSON.parse(data.ev);
+		var reports = report.rptls;
+		if (reports.length > 0){/*added thead and tbody to html to make table structure correct
+			$("#tblPdfAnnualSOA").append("\
+				<thead> \
+					<tr> \
+						<th>Report Date</th>\
+						<th>Option</th>\
+					</tr> \
+				</thead> \
+			");*/
+			$("#tblPdfAnnualSOA tbody").empty();
+			for(var i=0;i<reports.length;i++){
+				var reportDt = reports[i].rptdt, filename;
+				day = reportDt.substring(0,2);
+				year = reportDt.substring(6,10);
+				month = getMonth(Number(reportDt.substring(3,5))-1);
+				id = "rpt" + month + year;
+
+				//if(reports[i].fnm == "SOA"){
+					reportDt = month + "" + year;
+					filename = "Statement_of_Account_" + reportDt;
+				//}
+				$("#tblPdfAnnualSOA tbody").append("\
+					<tr> \
+						<td>" + reportDt + "</td> \
+						<td><span style='color:blue;cursor:pointer' onclick=\"downloadPDF('"+reports[i].rptid+"','"+filename+"')\">View/Download</span></td> \
+					</tr> \
+				");
+			}
+			//$('#tblPdfAnnualSOA tbody .noDataMsg').hide();
+		} else {
+			$("#tblPdfAnnualSOA tbody").empty();
+			$("#tblPdfAnnualSOA tbody").append("\
+				<tr> \
+					<td class='text-center' colspan='2'>There is no record found</td> \
+				</tr> \
+			");
+			console.log("There is no record found");
+		}
+	}
+}
+
+function getPDFRptResp(data){
+	console_log("getPDFRptResp:"+JSON.stringify(data));
+	if(data.s&&data.s=="200"){
+		console_log("getPDFRptResp:"+data.ev);
+		var report = JSON.parse(data.ev);
+		var reports = report.rptls;
+		if (reports.length > 0){/*added thead and tbody to html to make table structure correct
+			$("#tblPdfRpt").append("\
+				<thead> \
+					<tr> \
+						<th>Report Date</th>\
+						<th>Option</th>\
+					</tr> \
+				</thead> \
+			");*/
+			$("#tblPdfRpt tbody").empty();
+			for(var i=0;i<reports.length;i++){
+				var reportDt = reports[i].rptdt, filename;
+				day = reportDt.substring(0,2);
+				year = reportDt.substring(6,10);
+				month = getMonth(Number(reportDt.substring(3,5))-1);
+				id = "rpt" + month + year;
+
+				if(reports[i].fnm == "Contract"){
+					reportDt = day + "-" + month + "-" + year;
+					filename = "Purchase_and_Sales_Daily_Invoice_" + reportDt; 
+				}
+				if(reports[i].fnm == "SOA"){
+					reportDt = month + "" + year;
+					filename = "Statement_of_Account_" + reportDt;
+				}
+				$("#tblPdfRpt tbody").append("\
+					<tr> \
+						<td>" + reportDt + "</td> \
+						<td><span style='color:blue;cursor:pointer' onclick=\"downloadPDF('"+reports[i].rptid+"','"+filename+"')\">View/Download</span></td> \
+					</tr> \
+				");
+			}
+			//$('#tblPdfRpt tbody .noDataMsg').hide();
+		} else {
+			$("#tblPdfRpt tbody").empty();
+			$("#tblPdfRpt tbody").append("\
+				<tr> \
+					<td class='text-center' colspan='2'>There is no record found</td> \
+				</tr> \
+			");
+			console.log("There is no record found");
+		}
+
+		if (isSOA) {
+			//get annual soa
+			getAnnualSOA();
+		}
+
+	}
+}
+
+function getPDFRptById(rptId, rptName, action){
+	var jsonObject = {};
+	jsonObject['rptid'] = rptId;
+	jsonObject['rptnm'] = rptName;
+	
+	console.log("getPDFRptByID:"+ JSON.stringify(jsonObject));
+	//console.log(rptName);
+
+	if (action == "download"){
+		getPDFRptByIdReq(jsonObject);
+	}else{
+		encDisplayRpt(jsonObject);
+	}
+}
+
+function checkIOS(){
+	console_log("Checking User Agent");
+	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+	return iOS;
+}
+
+function encDisplayRpt(jsonObject){
+	var encryptedJSONStr;
+	var csReqParam;
+	var jsonData = JSON.stringify(jsonObject);
+	inputValue = jsonData;
+	if(ct != 0){
+		encryptValue(function(output){
+			outputValue=output
+		});
+	}
+	csReqParam = MD5CheckSum(outputValue);
+	displayPDFRptInNewTab(outputValue,csReqParam);
+}
+
+function displayPDFRptInNewTab(encryptedJSONStr,csParam){
+	var ctReqParam = ct+","+public_id;
+	$("#ae").val(ae);
+	$("#ct").val(ctReqParam);
+	$("#ev").val(encryptedJSONStr);
+	$("#cs").val(csParam.toString());
+	$("#frmDownloadPdf").attr("target","_blank");
+	$("#frmDownloadPdf").attr("action",getPDFViewRptById_url);
+	$("#frmDownloadPdf").attr("method","get");
+
+	$("#frmDownloadPdf_submit").click(); 
+}

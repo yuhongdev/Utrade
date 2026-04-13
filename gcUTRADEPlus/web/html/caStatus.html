@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Corporate Action Application Status</title>
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/ca.css">
+<link rel="stylesheet" type="text/css" href="../../style/default.css">
+<script src="../../js/jquery-3.6.0.js"></script>
+<script src="../../js/jquery-ui.js"></script>
+<script src="../../js/jquery.jcryption.min.js"></script>
+<script src='../../js/validate/jquery.uniform.js'></script>
+<script src="../../js/validate/jquery.metadata.js"></script>
+<script src="../../js/validate/jquery.validate.js"></script>
+<script src="../../js/AesUtil.js"></script>
+<script src="../../js/aes.js"></script>
+<script src="../../js/pbkdf2.js"></script>
+<script src="../../js/login_util.js"></script>
+<script src="../../js/login_encrypt.js"></script>
+<script src="../js/ca_util.js"></script>
+<script src="../js/ca_encrypt.js?v=2"></script>
+<script src="../../js/ga.js"></script>
+<script>
+	<!--Check login status-->				
+		$(document).ready(function(){								
+				if(login_agent!=null){
+					if(login_agent.status=="true"){					
+						tradeAccInfoStatus();
+						//getSubsLogEncryptValue();
+					}else{
+						//$('#tblTDHdr').hide();
+						$("#caSubsStatus").css("display","none"); 
+						alert("Please Login");
+					}
+				}
+			});
+</script>
+        <script>		
+			function chgLayout(layout){
+				$("#divSelectAcc").css("display","none"); 
+				$("#divReadAgree").css("display","none"); 
+				$("#divSubscript").css("display","none"); 
+				$("#divComplete").css("display","none"); 
+				
+				switch(layout){
+					case 1: // Select Account
+						$("#divSelectAcc").css("display",""); 
+						break;
+					case 2: // Read/Agree
+						$("#divReadAgree").css("display","");
+						break;
+					case 3: // display Subscription Page
+						$("#divSubscript").css("display",""); 
+						break;
+					case 4: //display force change pin form
+						$("#divComplete").css("display","");
+						break;
+				}	
+			}
+        </script>
+</head>
+<body>
+<section id="contents" class="container">
+  <div class="wrap_in">
+    <div class="wrap_in2">
+      <div class="header ">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr height="19">
+              <td class="clsSectionHeader col-xs-6">&nbsp;CA Application Status</td>
+              <td class="clsSectionHeader col-xs-6 text-right">Last Update 04/12/2017&nbsp;&nbsp;</td>
+             <!--<td width="7%" ><img src="img/butPrint.gif" title="Print" style="cursor:pointer" onclick="window.print();" height="18" width="18" border="0" / class="hidden-xs">-->
+			  <!--<img id="imgHelp" src="img/lightbulboff.jpg" onmouseover="this.src='/img/gcCIMBV/lightbulbon.jpg'" onmouseout="this.src='/img/gcCIMBV/lightbulboff.jpg'" title="Summary: Display your financial position in this securities" height="19" width="20" border="0" /> --></td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+  <!-- ============================================================================================================================-->     
+   <!-- divcaHistory -->
+      <div id="divdivcaHistory" class="wrap_in3">
+	 <form id="formSelect" name="formRead" action="" method="get">
+	 <h3 id="" class="tit_h3">Select Account</h3>
+      <div class="tbl_row_in ">
+        <table id="">
+          <colgroup>
+          <col style="width:24%">
+          <col>
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">Client's Name</th>
+              <!--Product Status/Purchase Method  -->
+              <td>koktean&nbsp;&nbsp;
+                <label id="lblCliName">[LIM KOK TEAN]</label></td>
+            </tr>
+            <tr>
+              <!-- GST -->
+              <th scope="row">&nbsp;Account Number</th>
+              <td> <select id="selTrdAcc" name="selTrdAcc2" style="max-width:270px" onchange='selOption_OnChange(&quot;&quot;)'>
+                <option selected="selected" value="YC1672-001">Clicks Trader (C1672-001) LIM KOK TEAN</option>
+                <option value="MMM1059-001">Margin (MM1059-001) LIM KOK TEAN</option>
+                <option value="T000029619-001">Non Margin (000029619-001) LIM KOK TEAN</option>
+                <option value="KN2N005-001">Ext ESOS (N2N005-001) LIM KOK TEAN</option>
+              </select></td>
+            </tr>
+          </tbody>
+        </table>
+	</div>	
+      </form>
+	   <!-- Button Area -->
+		  <div class="btnRArea">
+			<div class="btn_r"><a href="#" target="" class="btn_gb1 btn_m2">Application(s) History</a>
+			</div>
+		  </div>
+		  <!-- Button Area end -->
+	  <h3 id="" class="tit_h3">Corporate  Action Subscription</h3>
+      <div class="tbl_col table-responsive big " >
+		  <table class="table table-striped tblcahistory">
+            <caption>
+            </caption>
+            <colgroup>
+            <col >
+            <col class="col-xs-3">
+            <col>
+            <col class="col-xs-3">
+            <col >
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Application Date</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Quantity Of Shares</th>
+                <th scope="col" style="min-width: 150px;">Staus</th>
+                <th scope="col">App Ref No.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Oct 24, 2017</td>
+                <td>CHINA BANKING CORPORATION</td>
+                <td>300</td>
+                <td>You are only allowed to subscribe. Subscription date from [Oct 5 2017 12:00AM] until [Nov 5 2017 5:00PM].</td>
+                <td> 2191001</td>
+              </tr>
+              <tr>
+                <td>Dec 1, 2014</td>
+                <td>
+ALLIANCE SELECT FOODS INC</td>
+                <td>400</td>
+                <td><a href="#">Pending</a></td>
+                <td> 219510</td>
+              </tr>
+              <tr>
+                <td>Oct 24, 2017</td>
+                <td>AG FINANCE INCORPORATED</td>
+                <td><p>1000</p></td>
+                <td>Approve</td>
+                <td> 219104</td>
+              </tr>
+              <tr>
+                <td>Dec 24, 2017</td>
+                <td>UNIVERSAL ROBINA CORPORATION</td>
+                <td><p>200</p></td>
+                <td>Cancelled</td>
+                <td> 219204</td>
+              </tr>
+              <tr>
+                <td>Dec 30, 2014</td>
+                <td>SM PRIME HOLDINGS INC</td>
+                <td>300</td>
+                <td>Cancelled</td>
+                <td> 219302</td>
+              </tr>
+            </tbody>
+          </table>
+		  
+        </div>
+		<!-- Button Area -->
+		  <div class="btnRArea">
+		  	<div class="btn_r"><a href="#" class="btn btn_nor2 btn_m2 disabled" role="button" aria-disabled="true">Resubmit</a></div>
+			<div class="btn_r"><a href="#" class="btn btn_nor2 btn_m2 disabled" role="button" aria-disabled="true">Cancel</a></div>
+	    </div>
+		  <!-- Button Area end -->
+		<p>&nbsp;</p>
+		  <div  class="ls_note" >
+					  <p > Note:</p>
+					  <p>For Resubmission or cancellation, please click on &lt;Pendingt&gt; column<br />
+					  </p>
+					</div>
+      </div>
+      <!-- /divcaHistory -->
+<!-- ============================================================================================================================-->
+      <!-- divReadAgree --><!-- /divReadAgree -->
+<!-- ============================================================================================================================-->
+      <!-- divSubscript--><!-- /divSubscript-->
+      <!-- ============================================================================================================================-->       
+      <!-- divComplete-->
+          <tr>
+            <td><!-- //title -->
+              <!-- detail -->
+      <tr >
+            <td valign="top" style='border-top:none; padding:10.0pt 15.0pt 25.0pt 15.0pt'>&nbsp;</td>
+      </tr>
+          </td>
+          
+          </tr>
+          
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+      </div>
+       <!-- /divComplete-->
+    </div>
+    <!-- wrap_in2-->
+  </div>
+  <!-- wrap_in-->
+</section>
+</body>
+</html>

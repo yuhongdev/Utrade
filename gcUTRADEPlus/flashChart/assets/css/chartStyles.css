@@ -1,0 +1,61 @@
+/* CSS file */
+global
+{
+	fontFamily : Arial;
+	fontSize : 10px;
+}
+.toolbar
+{
+	backgroundColor : #EFF0F5;
+}
+.statusbar
+{
+	backgroundColor : #EFF0F5;
+}
+
+.tradingLinelabel
+{
+	fontSize: 15;
+}
+
+.lastCallout
+{
+	backgroundAlpha:0.2;
+}
+
+.markerButton-news
+{
+	cornerRadius: 4,4,4,4;
+	paddingTop : -2;
+	paddingBottom: 4;
+	upImage: "assets/images/cloud1.png";
+	downImage: "assets/images/cloud2.png";
+	selectedDownImage: "assets/images/cloud2.png";
+	selectedOverImage: "assets/images/cloud2.png";
+}
+
+.markerDescription-news
+{
+	fontSize: 12;
+}
+
+.markerButton-dividend
+{
+	upColor: #428AFF,#1D52AD;
+	upBorder: #ffffff;
+	textColor: #ffffff;
+	textSelectedColor: #eeeeee;
+	textRollOverColor: #eeeeee;
+	paddingBottom:2;
+	paddingTop:-2;
+	cornerRadius:2;
+	upImage: "assets/images/cloud1.png";
+	downImage: "assets/images/cloud2.png";
+	selectedDownImage: "assets/images/cloud2.png";
+	selectedOverImage: "assets/images/cloud2.png";
+}
+
+.markerDescription-dividend
+{
+	backgroundColor:#ffaaaa;
+}

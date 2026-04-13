@@ -1,0 +1,1 @@
+var sRanking_MY='4 October 2012|MATA DUITAN|Never give up|YOYO|ANTS|Team Brilliant|eTraders|BUMIVEST|UTP Youths|BotakHoSel|THREE|';

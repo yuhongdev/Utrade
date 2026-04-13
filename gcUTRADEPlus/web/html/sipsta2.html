@@ -1,0 +1,1024 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIP Schedule</title>
+<link href="../fonts/icomoon/styles.css" rel="stylesheet" type="text/css">
+<link href="../css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+<link href="../css/bootstrap-5.3.6.min.css" rel="stylesheet" type="text/css"/>
+<link href="../css/elements.css" rel="stylesheet" type="text/css"/>
+<link href="../css/sip.css" rel="stylesheet" type="text/css"/>
+<link href="../css/bootstrap-switch.css" rel="stylesheet" type="text/css"/>
+<link href="../css/jquery-ui_v1.12.0.css" rel="stylesheet" type="text/css"/>
+<link href="../css/loading.css" rel="stylesheet" type="text/css"/>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-3.6.0.js?v1"></script>
+    <script src="../js/jquery-ui.js?v1"></script>
+	<script src="../js/moment.js"></script>
+	<script src="../js/theme.js?v1"></script>
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js?v1"></script>
+	<script type="text/javascript" src="../js/bootstrap-tooltip.js?v1"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    
+    <!-- REST API -->
+	<script src="../js/AesUtil.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/pbkdf2.js"></script>    
+	<script type="text/javascript" src="../js/jquery.jcryption.min.js?v1"></script>
+	<script type="text/javascript" src="../js/common_util.js?v1"></script>
+
+	<script src="../js/login_conf.js"></script>
+	<script src="../js/sip_main.js"></script>
+	<script src="../js/sip_conf.js"></script>
+	
+
+<!--import datepicker-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+		<script>	
+
+$(document).ready(function(){
+            chkSess();
+			console.log("Login Agent Value :" + login_agent);
+			if(login_agent!=null){
+				if(login_agent){
+					trdAccATP();
+					
+					
+				}else{
+					$('#tbl_sip').css("display","none");
+					$('.container').hide();
+					$('#tblact').hide();
+					alert("Please Login");
+
+				}
+			}			
+		});		
+			function chgLayout(layout){
+				$("#addSIP-step1").css("display","none"); 
+				$("#addSIP-step2").css("display","none"); 
+				$("#addSIP-step3").css("display","none"); 
+				$("#editSIP-step1").css("display","none"); 
+				$("#editSIP-step2").css("display","none"); 
+				$("#editSIP-step3").css("display","none"); 
+				$("#deleteSIP-step1").css("display","none"); 
+				$("#deleteSIP-step2").css("display","none");
+				switch(layout){
+					case 1: 
+						$("#addSIP-step1").css("display",""); 
+						break;
+					case 2: 
+						$("#addSIP-step2").css("display","");
+						break;
+					case 3: 
+						$("#addSIP-step3").css("display",""); 
+						break;
+					case 4: 
+						$("#editSIP-step1").css("display",""); 
+						break;
+					case 5: 
+						$("#editSIP-step2").css("display","");
+						break;
+					case 6: 
+						$("#editSIP-step3").css("display",""); 
+						break;
+					case 7: 
+						$("#deleteSIP-step1").css("display","");
+						break;
+					case 8: 
+						$("#deleteSIP-step2").css("display",""); 
+						break;
+					
+				}	
+			}
+			
+function refreshPage(){
+		window.location.reload();
+}
+
+function startSIP(){
+		AccInfoEncryptValue();
+		$('#lastUpdateVal').html($.datepicker.formatDate("dd/mm/yy", new Date()));
+}
+function changeFilter(str)
+{
+$("#filterStatus").html(str);
+AccInfoEncryptValue();
+}
+     
+	 </script>
+</head>
+
+<body>
+<div class="container" >
+  <!-- Menu Button Start -->
+  <div class="topbar">
+  <!--   <div class="clsSectionHeader col-xs-12">&nbsp;SIP Schedule</div> -->
+   <h3 class="tit_h3">SIP Schedule</h3>
+      <div class="tit f_left">
+      	You currently have total: <b class="em">
+      	<label id="ttlRecord"></label>
+      	</b> SIP Schedule. 
+      	<a href="#" onClick="refreshPage()"  class=" btn-flat white big" id="refresh">
+      	<div class="glyphicon glyphicon-refresh " aria-hidden="true"></div></a>
+      </div>
+      <div class="update"><label id="lastUpdDt">Last Update:</label> <label id="lastUpdDtVal"></label></div> 
+  </div>
+  <div class="clear"></div>
+    <div style="display:none">
+		<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
+		<select style=""   name="selTrdAcc" id="TrdAccSel"></select>
+
+	</div>
+
+  <div class="tblact_top row" id="tblact">
+	<div class="f_right"> 
+       <a href="sipadd.html" class=" btn-flat general btnBig" id="menu2"><div class="glyphicon glyphicon-plus " aria-hidden="true"></div> 
+       <span> Create SIP Schedule</span> </a>	
+      </div>
+	
+  	<div class="opt_filter f_left">
+        <div class="dropdown f_right">
+          <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+          <span class="icon-1x icon-filter4 white"></span>
+          <span class="caret white"></span></button>
+          <ul class="dropdown-menu pull-right">
+		  	<li><a href="#" onclick="changeFilter(this.value);" value="All">ALL</a></li>
+            <li><a href="#" onclick="changeFilter(this.value);" value="Active">ACTIVE</a></li>
+			<li><a href="#" onclick="changeFilter(this.value);" value="Pending">PENDING</a></li>
+            <li><a href="#" onclick="changeFilter(this.value);" value="Cancelled">CANCELLED</a></li>
+        
+          </ul>
+	   <div style="display:none">
+		<label id="filterStatus">All</label>
+
+		</div>	
+        </div>
+	</div>	
+   		
+  </div>
+  <!-- SIP Table Start -->
+  <div class="tbl_col" id="tbl_col_sip">
+    <table id="tbl_sip" class="responsive">
+      <thead>
+        <tr>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Stock Code</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">No. of Remaining Buy Traders</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Order Ref</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Cash Amount</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Start Date</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Schedule Option</th>
+          <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Next Buy Schedule</th>
+          <th class="col-md-3 col-sm-2 col-xs-2 center" scope="col">Status</th>
+          <th  class="col-md-3 col-sm-3 col-xs-3 no-sort" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+		<!--<tr>
+		  <td>ALI</td>
+		  <td><p>12</p></td>
+		  <td>R1111</td>
+		  <td>2,600.00</td>
+		  <td>10-12-2017</td>
+		  <td>Monthly</td>
+		  <td>10-01-2018</td>
+		  <td><b>ACTIVE</b></td>
+		  <td id="sipbtn">
+            <div class="editSIP"><a href="#" class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-editSIP" onclick=""><span class="glyphicon glyphicon-pencil " aria-hidden="true"></span></a></div>
+            <div class="deleteSMS"><a class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-deleteSIP"  id="" onclick="" data-original-title="" title=""><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div></td>
+        </tr>
+        <tr>
+		  <td>SGI</td>
+		  <td><p>36</p></td>
+		  <td>R1112</td>
+		  <td>5,000.00</td>
+		  <td>11-12-2017</td>
+		  <td>Monthly</td>
+		  <td>10-01-2018</td>
+		  <td><b>CANCELLED</b></td>
+          <td id="sipbtn">
+            <div class="editSIP"><a href="#" class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-editSIP" onclick=""><span class="glyphicon glyphicon-pencil " aria-hidden="true"></span></a></div>
+            <div class="deleteSMS"><a class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-deleteSIP"  id="" onclick="" data-original-title="" title=""><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div></td>
+        </tr>
+        <tr id="alertRecord_36">
+		  <td>TUGS</td>
+		  <td>24</td>
+		  <td>R1113</td>
+		  <td>7,000.00</td>
+		  <td>10-12-2017</td>
+		  <td>Yearly</td>
+		  <td>10-12-2018</td>
+		  <td><b>ACTIVE</b></td>
+          <td id="sipbtn">
+            <div class="editSIP"><a href="#" class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-editSIP" onclick=""><span class="glyphicon glyphicon-pencil " aria-hidden="true"></span></a></div>
+            <div class="deleteSMS"><a class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-deleteSIP"  id="" onclick="" data-original-title="" title=""><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div></td>
+        </tr> -->
+      </tbody>
+    </table>
+	<p id="noDataMsg" class="nofound"></p>
+
+  </div>
+  <!-- SIP Table End -->
+  
+  <p>&nbsp;</p>
+  <div class="clear"> &nbsp;</div>
+
+  
+  
+
+  <!-- Modal Add SIP -->
+  <div class="modal modal-transparent fade" id="modal-addSIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeAddStkAlert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          
+        </div>
+        <div class="modal-body">
+		<!---Step1-->
+		<div class="tab-content">
+  		<div id="addSIP-step1" class="tab-pane fade in active">
+              <form class="form-inline">
+			  <h4 class="modal-title">Add New SIP Schedule</h4>
+			  <div class="tbl_row_in big">
+			<table >
+              <colgroup>
+              <col style="width:30%" />
+              <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row" >Stock Code</th>
+                  <td> 
+				  <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+						<input id="" class="form-control" type="text"  />
+						<span class="input-group-addon"><a href="#" data-toggle="modal" data-target="#stocklist"><i class="icon-search4"></i></a></span>
+					</div>
+					</div>
+					</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td>
+				  	<div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+				  		<input  class="form-control" name="" type="text" />
+					</div>
+					</div>
+				</td>
+                </tr>
+                <tr>
+                  <th scope="row">Period</th>
+                  <td >
+				  <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+				 	 <select  class="form-control" name=""  >
+                      <option selected="selected" value="Weekly"  class="">Weekly</option>
+                      <option value="Monthy">Monthly</option>
+                      <option value="Quartery">Quartery</option>
+                      <option value="Semi-Annual">Semi-Annual</option>
+                    </select>
+					</div>
+				</div>
+				</td>
+                </tr>
+                <tr>
+                  <th scope="row">Start Date</th>
+                  <td >				  
+				   <div class="form-group-sm">
+						<div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+						<input id="" class="form-control" type="text" readonly />
+						<span class="input-group-addon"><i class="icon-calendar22"></i></span>
+						</div>
+					</div>
+				  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Duration</th>
+                  <td>
+				   <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+					  <select id="" class="form-control" name="select"  >
+						  <option selected="selected" value="6mth"  class="">6 Months</option>
+						  <option value="1yr">1 Year</option>
+						  <option value="2yr">2 Years</option>
+						  <option value="3yr">3 years</option>
+						</select>
+					</div>
+				</div>	
+				</td>
+                </tr>
+                <tr>
+				
+                  <th scope="row">Order Mode <a data-toggle="popover" data-container="body" data-placement="right" type="button" data-html="true" href="#" id="odrMode" data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
+				  </th>
+                  <td >
+					  <div class="form-group-sm ">
+						<div id="" class="input-group col-xs-12">
+						  	<select id="odrMode" class="form-control" name="">
+							  <option selected="selected" value="manual"  class="">Manual</option>
+							  <option value="1yr">Auto</option>
+							</select>
+						</div>
+					</div>
+				</td>
+                </tr>
+              </tbody>
+            </table>
+			</div>
+			<!-- Button Area -->
+            <div class="btnRArea">
+              <div class="btn_r"> <a href="javascript:void(0)" onClick="" class="btn_gb3 btn_s1" name="">Clear</a> </div>
+              <div class="btn_r"><a data-toggle="tab" href="#addSIP-step2" class="btn_gb3 btn_s1">Submit</a>
+			  </div>
+            </div>
+            <!-- Button Area -->
+              </form>
+        
+			<div id="popover-content-odrMode" class="hide">
+				<div class="tbl_row tbl_row_in3 ">
+      				<table >
+						<colgroup>
+                          <col style="width: 90px">
+                          <col>
+                          </colgroup>
+				  	 <tbody>
+						<tr>
+						  <th scope="row">Manual</th>
+						  <td>This would need you to log in UTrade account during every chosen period to trigger a buy-request issued by the SIP reminder that will pop up from your portfolio screen. It would ask you to “Buy Now” or “Skip” to the next period.</td>
+						</tr>
+						<tr>
+						  <!-- GST -->
+						  <th scope="row">Automatic</th>
+						  <td>This would activate the SIP scheduler to automatically send a buy order for you. Your account must have the necessary funds available to activate the auto order, and the order is still subject to share availability for matching. Please verify your orders status to confirm a matched/unmatched order</td>
+						</tr>
+					  </tbody>
+				</table>
+				</div>
+			</div>
+			</div>
+        <!--========--> 
+
+		<!---Step2-->
+ 		 <div id="addSIP-step2" class="tab-pane fade">
+         
+        <form name="" action="" method="POST">
+		<h4 class="modal-title">Review SIP Schedule</h4>
+          <div class="tbl_row_in big">
+            <table>
+              <colgroup>
+                <col style="width:30%" />
+                <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row" >Stock Code</th>
+                  <td><label>ALI</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td><label>5,000.00</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Period</th>
+                  <td><label>Monthly</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Start Date</th>
+                  <td><label>10-12-2017</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Duration</th>
+                  <td><label>1 YEAR</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Order Mode</th>
+                  <td><label>Automatic</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Date / Time</th>
+                  <td><label >02-12-2017 12:27:40 PM</label></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="clearfix"></div>
+			<p>&nbsp;</p>
+            <div class="ls_note">
+              <p class="red"> Important:</p>
+              <p>You are creating an <b>SIP</b> +Calendar. Please review Carefully.</p>
+              <p>Confirm by typing in your Trading Pin at the bottom then clicking OK. </p>
+            </div>
+            <div class="well-sm pin bglightblue">
+              <div class="form-inline form-group-sm ">
+                <label for="PIN">Trading PIN:</label>
+                <input type="password" class=" form-control-static " id="acc1"  maxlength="" style="max-width:138px">
+				<a data-toggle="tab" href="#addSIP-step3" class="btn btn-sm btn_gb3 btn_s1"> Confirm</a>
+                <a href="javascript:void(0)" onClick="#" class=" btn btn-sm btn_gb3 btn_s1 "> Cancel </a>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </form>
+        </div>
+		
+        <!--========--> 
+		<!---Step3-->
+		  <div id="addSIP-step3" class="tab-pane fade">
+             <form name="" action="" method="POST">
+			 <p>&nbsp;</p>
+			  <h4 class="center red">Your SIP Schedule submit succefully</h4>
+				  <p></p>
+				  <div class=" table tbl_row_in big">
+					<div class="row">
+					  <div class="col-md-12 col-xs-12">
+						<table>
+						  <colgroup>
+						  <col style="width:30%">
+						  <col>
+						  </colgroup>
+						  <tbody>
+							<tr>
+							  <th scope="row">Reference number</th>
+							  <td><label>RF000111</label></td>
+							</tr>
+							<tr>
+							  <th scope="row" >Stock Code</th>
+							  <td><label>ALI</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Cash Value</th>
+							  <td><label>5,000.00</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Period</th>
+							  <td><label>Monthly</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Start Date</th>
+							  <td><label>10-10-2013</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Duration</th>
+							  <td><label>1 YEAR</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Order Mode</th>
+							  <td><label>Automatic</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Date / Time</th>
+							  <td><label >02-12-2017 12:27:40 PM</label></td>
+							</tr>
+						  </tbody>
+						</table>
+					  </div>
+					  <div class="col-md-12 col-xs-12"></div>
+					  <p></p>
+					</div>
+					<div  class="ls_note" >
+					  <p class=" red"> Note:</p>
+					  <p>After creating your SIP schedule, you will receive an SIP reminder email 2 days before your buying schedule</p>
+					  <p>For more information, please contact Utrade call centre at .</p>
+					</div>
+				  </div>
+				  <!-- Button Area -->
+				  <div class="btnRArea center">
+					<div class="btn" ><a href="#" target="" class="btn_gb3 btn_m" data-dismiss="modal">Close</a></div>
+				  </div>
+				  <p></p>
+				  <p></p>
+
+        </form>
+          </div>
+        <!--========-->  
+		<div class="clear"></div>
+		</div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Add SIP End -->
+  
+  
+  <!-- Modal EditSIP -->
+  <div class="modal modal-transparent fade" id="modal-editSIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          
+        </div>
+        <div class="modal-body">
+		<div class="tab-content">
+		<!---Step1-->
+  		<div id="editSIP-step1" class="tab-pane fade in active">
+			  <form class="form-inline">
+			  <h4 id="" class="modal-title">SIP Schedule - ALI</h4>
+                <div id="div_sipschedule" class="table-responsive tbl_row_in big">
+                  <table id="tbl_sipschedule" class=" center">
+					  <thead>
+						<tr>
+						  <th class="col-sm-1 center" scope="col"><input type="checkbox" onclick="toggle(this);" class="large" /></th>
+						  <th class="col-sm-2 center" scope="col">Schedule</th>
+						  <th class="col-sm-3 center" scope="col">Stock</th>
+						  <th class="col-sm-2 center" scope="col">Cash Value</th>
+						  <th class="col-sm-2 center" scope="col">Match Qty</th>
+						  <th class="col-sm-2 center" scope="col">Match Prc</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+						<tr>
+						  <td> <input type="checkbox" name="foo" value="" class="large"/></td>
+						  <td>10-01-2018</td>
+						  <td>ALI</td>
+						  <td>5,000.00</td>
+						  <td>0</td>
+						  <td >0</td>
+						</tr>
+					  </tbody>
+					</table>
+                </div>
+		<!-- Button Area -->
+            <div class="btnRArea">
+              <div class="btn_r"> <a data-dismiss="modal" class="btn_gb3 btn_s1">Cancel</a> </div>
+              <div class="btn_r"><a data-toggle="tab" href="#editSIP-step2" class="btn_gb3 btn_s1">Next</a>
+			  </div>
+            </div>
+            <!-- Button Area -->
+              </form>
+        </div>
+        <!--========--> 
+
+		<!---Step2-->
+ 		 <div id="editSIP-step2" class="tab-pane fade">
+         
+        <form name="" action="" method="POST">
+		<h4 class="modal-title">SIP Schedule - ALI</h4>
+          <div class="tbl_row_in big">
+			<table >
+              <colgroup>
+              <col style="width:30%" />
+              <col />
+              </colgroup>
+              <tbody>
+			   <tr>
+                  <th scope="row" >Ref #</th>
+                <td><label id = "refNo2">779</label></td>
+                </tr>
+                <tr>
+                  <th scope="row" >Stock Code</th>
+                  <td><label id = "stockCode2">ALI</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td><div class="form-group-sm ">
+					<input id= "cashValue2" name="" type="text" class="form-control" />
+				</div>
+				</td>
+                </tr>
+                
+                <tr>
+                  <th scope="row">By Schedule</th>
+                  <td >
+				   <div class="form-group-sm">
+						<div id="datepicker-edit" class="input-group date" data-date-format="dd-mm-yyyy">
+						<input id="bySchedule2" class="form-control" type="text" readonly />
+						<span class="input-group-addon"><i class="icon-calendar22"></i></span>
+					</div>
+					</div>
+					
+				  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Order Mode 
+				  </th>
+                   <td >
+				  <div class="form-group-sm">
+				  <select id="orderMode2" name="" class="form-control">
+                      <option selected="selected" value="manual"  class="">Manual</option>
+                      <option value="1yr">Automatic</option>
+                    </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="clearfix">&nbsp;</div>
+            <div class="well-sm pin bglightblue form-inline">
+              <div class=" form-group-sm ">
+                <label for="PIN">Trading PIN:</label>
+                <input type="password" class=" form-control-static" id="acc1" maxlength="" style="max-width:138px">
+				<!-- Button -->
+               
+				<a data-toggle="tab" href="#editSIP-step3" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
+				<a data-toggle="tab" href="#editSIP-step1" class=" btn btn-sm btn_gb3 btn_s1"> Back </a>
+                
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+		
+        <!--========--> 
+		<!---Step3-->
+		  <div id="editSIP-step3" class="tab-pane fade">
+             <form name="" action="" method="POST">
+			 <p>&nbsp;</p>
+			  <h4 class="center red">Your SIP Schedule edited succefully</h4>
+				  <p></p>
+				  <div class=" table tbl_row_in big">
+					<div class="row">
+					  <div class="col-md-12 col-xs-12">
+						<table>
+						  <colgroup>
+						  <col style="width:30%">
+						  <col>
+						  </colgroup>
+						  <tbody>
+							<tr>
+							  <th scope="row">Reference number</th>
+							  <td><label>RF000111</label></td>
+							</tr>
+							<tr>
+							  <th scope="row" >Stock Code</th>
+							  <td><label>ALI</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Cash Value</th>
+							  <td><label>5,000.00</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Period</th>
+							  <td><label>Monthly</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Start Date</th>
+							  <td><label>10-10-2017</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Duration</th>
+							  <td><label>1 YEAR</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Order Mode</th>
+							  <td><label>Automatic</label></td>
+							</tr>
+						  </tbody>
+						</table>
+					  </div>
+					  <div class="col-md-12 col-xs-12"></div>
+					  <p>&nbsp;</p>
+					</div>
+					<div  class="ls_note" >
+					  <p class=" red"> Note:</p>
+					  <p>After creating your SIP schedule, you will receive an SIP reminder email 2 days before your buying schedule</p>
+					  <p>For more information, please contact Utrade call centre at .</p>
+					</div>
+				  </div>
+				  <!-- Button Area -->
+				  <div class="btnRArea center">
+					<div><a href="#" target="" class="btn_gb3 btn_m1" data-dismiss="modal">Close</a></div>
+				  </div>
+				  <p></p>
+				  <p></p>
+
+        </form>
+          </div>
+        <!--========-->  
+		</div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal EditSIP End -->
+  
+  
+  <!-- Modal DeleteSIP -->
+  <div class="modal modal-transparent fade" id="modal-deleteSIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        </div>
+        <div class="modal-body">
+		<div class="tab-content">
+  		<!---Step1-->
+ 		 <div id="deleteSIP-step1" class="tab-pane fade in active">
+        <form name="" action="" method="POST">
+		<h4 class="modal-title">Delete SIP Schedule</h4>
+          <div class="tbl_row_in big">
+            <table>
+              <colgroup>
+                <col style="width:30%">
+                <col>
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row">Stock Code</th>
+                  <td><label>ALI</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td><label>5,000.00</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Period</th>
+                  <td><label>Monthly</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Start Date</th>
+                  <td><label>10-12-2017</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Duration</th>
+                  <td><label>1 YEAR</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Order Mode</th>
+                  <td><label>Automatic</label></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="clearfix"></div>
+			<p>&nbsp;</p>
+            <div class="well-sm pin bglightblue">
+              <div class="form-inline form-group-sm">
+                <label for="PIN" >Trading PIN:</label>
+                <input type="password" class="form-control-static" id="acc1" maxlength="" style="max-width:138px">
+				<a data-toggle="tab" href="#deleteSIP-step2" class="btn btn-sm btn_gb3 btn_s1" aria-expanded="true"> Confirm </a>
+                <a href="javascript:void(0)" onclick="#" data-dismiss="modal" class=" btn btn-sm btn_gb3 btn_s1"> Cancel </a>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </form>
+        </div>
+        <!--========--> 
+		
+		<!---Step2-->
+		  <div id="deleteSIP-step2" class="tab-pane fade">
+             <form name="" action="" method="POST">
+			 <p>&nbsp;</p>
+			  <h4 class="center red">Your SIP Schedule Deleted succefully</h4>
+				  <p></p>
+				  <div class=" table tbl_row_in big">
+					<div class="row">
+					  <div class="col-md-12 col-xs-12">
+						<table>
+						  <colgroup>
+						  <col style="width:30%">
+						  <col>
+						  </colgroup>
+						  <tbody>
+							<tr>
+							  <th scope="row">Reference number</th>
+							  <td><label>RF000111</label></td>
+							</tr>
+							<tr>
+							  <th scope="row" >Stock Code</th>
+							  <td><label>ALI</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Cash Value</th>
+							  <td><label>5,000.00</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Period</th>
+							  <td><label>Monthly</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Start Date</th>
+							  <td><label>10-10-2013</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Duration</th>
+							  <td><label>1 YEAR</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Order Mode</th>
+							  <td><label>Automatic</label></td>
+							</tr>
+						  </tbody>
+						</table>
+					  </div>
+					</div>
+				  </div>
+				  <!-- Button Area -->
+				  <div class="btnRArea center">
+					<div><a href="#" target="" class="btn_gb3 btn_m1" data-dismiss="modal">Close</a></div>
+				  </div>
+				  <p></p>
+				  <p></p>
+
+        </form>
+          </div>
+        <!--========-->  
+		
+		</div><!--tab-content END-->
+        </div><!--modal-body END-->
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal DeleteSIP End -->
+	
+<!---Modal:Stocklist--->
+
+<div class="modal modal-transparent fade" id="stocklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        </div>
+        <div class="modal-body">
+		<h4 id="" class="tit_h2">SIP Stock List</h4>
+		  <div class="tbl_row">
+		  <iframe src="stocklist.html" height="400"  width="100%" frameborder="0"></iframe>
+		  <!-- Button Area -->
+				  <div class="btnRArea center">
+					<div class="btn" ><a href="#" target="" class="btn_gb3 btn_m" data-dismiss="modal">Close</a></div>
+				  </div>
+				  <p></p>
+				  <p></p>
+		</div>
+		
+		</div><!--modal-body END-->
+        <div class="modal-footer"></div>
+	</div>
+    </div>
+  </div>
+ </div>
+    
+     <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+	<script>
+
+		$(document).ready(function() {
+			$('#tbl_sip').DataTable( {
+			"dom": '<"toolbar">frtpi' , /*"dom": '<"toolbar">frtip'*/
+			 "order": [[ 0, "asc" ]],
+			 "columnDefs": [{
+				  // select-all column 0
+					 "targets": 0,
+					 "searchable":true,
+					 "orderable":true,
+					},
+					// no-sort columns
+					{	
+					"targets": 'no-sort',
+					"orderable": false,
+					} ,
+				],
+		  "oLanguage": { "sSearch": "" , "sSearchPlaceholder" : "Stock Code"},
+			"bPaginate": false,
+			"bLengthChange": false,
+			"bFilter": true,
+			"bSort": true,
+			"bInfo": false,
+			"aoColumns": [ {"bSearchable": true}/*stock*/, {"bSearchable": false}, {"bSearchable": false}, {"bSearchable": false}, {"bSearchable": false}, {"bSearchable": false}, {"bSearchable": false}, {"bSearchable": false}/*status*/, {"bSearchable": false}],
+		} );
+	} );
+	</script>
+
+<script type="text/javascript">
+	$(function () {
+		  $("#datepicker").datepicker({ 
+				autoclose: true, 
+				todayHighlight: true
+		  }).datepicker('update', new Date());
+		});
+</script>	
+
+<script type="text/javascript">
+	$(function () {
+		  $("#datepicker-edit").datepicker({ 
+				autoclose: true, 
+				todayHighlight: true
+		  }).datepicker('update', new Date());
+		});
+</script>	
+
+<script>
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+
+
+<script>
+  $("[data-toggle=popover]").each(function(i, obj) {
+	$(this).popover({
+	  html: true,
+	  content: function() {
+		var id = $(this).attr('id')
+		return $('#popover-content-' + id).html();
+	  }
+	});
+	});
+</script>
+
+<script language="JavaScript">
+	function toggle(source) {
+	  checkboxes = document.getElementsByName('foo');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+		checkboxes[i].checked = source.checked;
+	  }
+	}
+</script>
+
+</body>
+</html>

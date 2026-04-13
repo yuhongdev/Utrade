@@ -1,0 +1,67 @@
+/* CSS file */
+global
+{
+	fontFamily : Arial;
+	fontSize : 10px;
+	paddingLeft:1;
+}
+
+.background
+{
+	backgroundGradientColors:#ffffff,#ffffff;
+}
+
+TabBar {
+	fontFamily : Arial;
+	fontSize : 10px;
+	tabStyleName : nonSelectedTab;
+	backgroundColor: #ffffff;
+}
+.nonSelectedTab
+{
+	fontWeight : normal;
+	color : #68696b;
+	fillColors: #f6f6f6, #f6f6f6; 
+	paddingLeft:1;
+	paddingRight:1;
+	cornerRadius:0;
+}
+.activeTabStyle {
+	fontWeight : bold;
+	color : #000000;
+	paddingLeft:2;
+	paddingRight:2;
+	cornerRadius:0;
+}
+.crosshair
+{
+	lineColor : #A1A4A9;
+	lineAlpha : 0.5;
+}
+
+.legend
+{
+	fontSize : 11;
+}
+
+.xAxisAxisStroke
+{
+	color : #7d7d7d;
+}
+.yAxisAxisStroke
+{
+	color : #7d7d7d;
+}
+
+.chartBackground
+{
+	color : #ffffff;
+}
+
+.dataInfoPanel
+{
+	fillColors : #eeeeee, #eeeeee;
+	fillAlphas : 0.9, 0.9;
+	borderColor : #A5A5A5;
+	dropShadowEnabled : false;
+}

@@ -1,0 +1,53 @@
+.sliderwrapper{
+	position: relative; /*leave as is*/
+	overflow: hidden; /*leave as is*/
+	width: 495px; /*width of featured content slider*/
+	height: 200px;
+}
+
+.sliderwrapper .contentdiv{
+	visibility: hidden; /*leave as is*/
+	position: absolute; /*leave as is*/
+	left: 0;  /*leave as is*/
+	top: 0;  /*leave as is*/
+	background: white;
+	width: 500px; /*width of content DIVs within slider. Total width should equal slider's inner width (390+5+5=400) */
+	height: 100%;
+	filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+
+.pagination{
+	width: 495px; /*Width of pagination DIV. Total width should equal slider's outer width (400+10+10=420)*/
+	height:30px;	
+	/*background-color : #FFFFFF;
+	background-image : url(../images/promotion/secondary/sec_back_lp.gif);
+	background-position : top;
+	background-repeat : repeat-x;*/
+}
+
+.pagination a{
+	width: 162px;
+	display: inline-block;
+	border-bottom: 1px solid #FFFFFF;/**/
+	background: #f2f2f2;
+	color: #002B54;
+	font: 12px Arial bold;
+	text-align:center;
+	text-decoration: none;	
+	line-height:30px;	
+	padding:0px 3px;
+}
+
+.pagination a:hover, .pagination a.selected{
+	/*color: #000;
+	background-color: #FEE496;*/
+	background: #0099CC;
+	color: #FFFFFF;	
+	padding:0px 3px;
+	background-image: url(../images/icon/highlighted.jpg);
+	background-repeat: no-repeat;
+	background-position: 50% 130%;	
+	/*//visibility: hidden;*/
+}

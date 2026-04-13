@@ -1,0 +1,113 @@
+var tradeAcc_url= api_path+"getTradeAcc?";
+var tradeAccInfoATP_url= api_path+"getTradeAccATP?";
+var getTradeBeyondReport_url= api_path+"getTradeBeyondRpt?";
+var getMarginAccSummRpt_url= api_path+"getMarginAccSummRpt?";
+var getClientSummaryRpt_url= api_path+"getClientSummRpt?";
+var getrptContraDtl_url= api_path+"getContraDtlClientOS?";
+var getTraderDepositRpt_url= api_path+"getTraderDepositReport?";
+var getMonthlySummaryMth_url= api_path+"getMonthlySummRptMth?";
+var getMonthlySummaryRpt_url= api_path+"getMonthlySummRpt?";
+var geteDep_url= api_path+"getEDepRpt?";
+var getCashDep_url= api_path+"processEDeposit?";
+var getESettRpt_url= api_path+"geteSettlmtRpt?";
+var getStlMultiPayment_url= api_path+"getEStlMultiPayment?";
+var getESettOff_url= api_path+"getReceiptContractInfo?";
+var getOverDue_url= api_path+"getEStlOverDue?";
+var processESett_url= api_path+"processESettlement?";
+var getESettlPaySts_url= api_path+"getESettlPaySts?";
+var getESettlPayDetail_url= api_path+"getEStlPaymentDtl?";
+var getESettlPayCtrt_url= api_path+"getEStlPaymentCtrt?";
+var getPDFRpt_url= api_path+"getPDFRpt?";
+var getPDFRptById_url = api_path+"getPDFRptById?";
+
+var ct=1, ae=1;
+var debug_log = true;
+
+function reqtradeAccInfo(jsonObject){
+	getRestApiResp(tradeAcc_url,ct,jsonObject,ae,tradeAccInfo_response);
+}
+
+function reqTrdAccATP(jsonObject){
+	getRestApiResp(tradeAccInfoATP_url,ct,jsonObject,ae,tradeAccInfo_response);
+}
+
+function tradeBydReq(jsonObject){
+	getRestApiResp(getTradeBeyondReport_url,ct,jsonObject,ae,getTradeBeyondReport_response);
+}
+
+function reqMarginAccRpt(jsonObject){
+	getRestApiResp(getMarginAccSummRpt_url,ct,jsonObject,ae,getMarginAccSummRpt_response);
+}
+
+function reqCliSummRpt(jsonObject){
+	getRestApiResp(getClientSummaryRpt_url,ct,jsonObject,ae,getClientSumm_response);
+}
+
+function reqRptContraDtl(jsonObject){
+	getRestApiResp(getrptContraDtl_url,ct,jsonObject,ae,getrptContraDtl_response);
+}
+
+function reqTrderDepRpt(jsonObject){
+	getRestApiResp(getTraderDepositRpt_url,ct,jsonObject,ae,getTraderDepositRpt_response);
+}
+
+function reqMthSummMth(jsonObject){
+	getRestApiResp(getMonthlySummaryMth_url,ct,jsonObject,ae,getMonthlySummMth_response);
+}
+
+function reqMonthlySumm(jsonObject){
+	getRestApiResp(getMonthlySummaryRpt_url,ct,jsonObject,ae,getMonthlySumm_response);
+}
+
+function reqEDep(jsonObject){
+	getRestApiResp(geteDep_url,ct,jsonObject,ae,getEDep_response);
+}
+
+function reqCashDep(jsonObject){
+	getRestApiResp(getCashDep_url,ct,jsonObject,ae,getCashDep_response);
+}
+
+function reqESettRpt(jsonObject){
+	getRestApiResp(getESettRpt_url,ct,jsonObject,ae,getESett_response);
+}
+
+function reqStlMultiPmt(jsonObject){
+	getRestApiResp(getStlMultiPayment_url,ct,jsonObject,ae,getStlMultiPayment_response);
+}
+
+function reqESettOff(jsonObject){
+	getRestApiResp(getESettOff_url,ct,jsonObject,ae,getESettOff_response);
+}
+
+function reqOverduePurch(jsonObject){
+	getRestApiResp(getOverDue_url,ct,jsonObject,ae,getOverdue_response);
+}
+
+function reqESettPay(jsonObject){
+	getRestApiResp(processESett_url,ct,jsonObject,ae,processESett_response);
+}
+
+function reqSettSts(jsonObject){
+	getRestApiResp(getESettlPaySts_url,ct,jsonObject,ae,getEStmtSts_respose);
+}
+
+function reqSettDtl(jsonObject){
+	getRestApiResp(getESettlPayDetail_url,ct,jsonObject,ae,getEStlDetails_response);
+}
+
+function reqEStlCtrct(jsonObject){
+	getRestApiResp(getESettlPayCtrt_url,ct,jsonObject,ae,getEStlContracts_response);
+}
+
+function getPDFRptReq(jsonObject){
+	getRestApiResp(getPDFRpt_url,ct,jsonObject,ae,getPDFRptResp);
+}
+
+function getPDFRptByIdReq(jsonObject){
+	var jsonStr = JSON.stringify(jsonObject);
+	$("#ev").val(jsonStr);
+	$("#cs").val(MD5CheckSum(jsonStr));
+	$("#frmDownloadPdf").attr("target","iframePdf");
+	$("#frmDownloadPdf").attr("action",getPDFRptById_url);
+	$("#frmDownloadPdf_submit").click();
+}

@@ -1,0 +1,59 @@
+.tblBorder
+{
+	BORDER-LEFT: #C2C2C2 0.5mm solid;
+	BORDER-RIGHT: #C2C2C2 0.5mm solid;
+	BORDER-TOP: #C2C2C2 0.5mm solid;
+	BORDER-BOTTOM: #C2C2C2 0.5mm solid;
+}
+
+.tblStkHeader
+{
+	BACKGROUND-COLOR: #9A0000;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 8pt;	
+	TEXT-ALIGN: middle;
+	Color: #FFFFFF
+}
+
+.tblMainHeader
+{
+	BACKGROUND-COLOR: #736F6E;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 9pt;	
+	TEXT-ALIGN: middle;
+	Color: #000000
+}
+
+.tblTopHeader
+{
+	BACKGROUND-COLOR: #9A0000;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 8pt;	
+	TEXT-ALIGN: middle;
+	Color: #FFFFFF
+}
+
+.tblHeader
+{
+	BACKGROUND-COLOR: #9A0000;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 8pt;	
+	TEXT-ALIGN: middle;
+	Color: #FFFFFF
+}
+
+.tblOddRow
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-ALIGN: left
+}
+
+.tblEvenRow
+{
+	BACKGROUND-COLOR: #CCCCCC;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-ALIGN: left
+}

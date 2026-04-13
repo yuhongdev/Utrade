@@ -1,0 +1,52 @@
+Ext.define('TCPlus.model.EquityPrtfRecord', {
+    extend: 'Ext.data.Model',
+    fields: [
+        {name: 'PrtfNo', mapping: 'PrtfNo', sortType: 'asUCString'},
+        {name: 'StkCode', mapping: 'StkCode', sortType: 'asUCString'},
+        {name: 'StkName', mapping: 'StkName', sortType: 'asUCString'},
+        {name: 'AccNo', mapping: 'AccNo', sortType: 'asUCString'},
+        {name: 'YrHigh', mapping: 'YrHigh', sortType: 'asFloat'},
+        {name: 'YrLow', mapping: 'YrLow', sortType: 'asFloat'},
+        {name: 'DayHigh', mapping: 'DayHigh', sortType: 'asFloat'},
+        {name: 'DayLow', mapping: 'DayLow', sortType: 'asFloat'},
+        {name: 'RefPrc', mapping: 'RefPrc', sortType: 'asFloat'},
+        {name: 'QtyOnHand', mapping: 'QtyOnHand', sortType: 'asInt'},
+        {name: 'UncommitedShare', mapping: 'UncommitedShare', sortType: 'asInt'},
+        {name: 'QtyAvlb', mapping: 'QtyAvlb', sortType: 'asInt'},
+        {name: 'QtySIP', mapping: 'QtySIP', sortType: 'asInt'},
+        {name: 'AvgPurPrc', mapping: 'AvgPurPrc', sortType: 'asFloat'},
+        {name: 'Last', mapping: 'Last', sortType: 'asFloat'},
+        {name: 'Volume', mapping: 'Volume', sortType: 'asInt'},
+        {name: 'LotSize', mapping: 'LotSize', sortType: 'asInt'},
+        {name: 'ChgAmt', mapping: 'ChgAmt', sortType: 'asFloat'},
+        {name: 'ChgPc', mapping: 'ChgPc', sortType: 'asFloat'},
+        {name: 'UrlGLAmt', mapping: 'UrlGLAmt', sortType: 'asFloat'},
+        {name: 'UrlGLPc', mapping: 'UrlGLPc', sortType: 'asFloat'},
+        {name: 'MktVal', mapping: 'MktVal', sortType: 'asInt'},
+        {name: 'Currency', mapping: 'Currency', sortType: 'asUCString'},
+        {name: 'ExchangeCode', mapping: 'ExchangeCode', sortType: 'asUCString'},
+        {name: 'QtySold', mapping: 'QtySold', sortType: 'asInt'},
+        {name: 'QtySusp', mapping: 'QtySusp', sortType: 'asInt'},
+        {name: 'avgsp', mapping: 'avgsp', sortType: 'asFloat'},
+        {name: fieldBuy, mapping: fieldBuy, sortType: 'asFloat'},
+        {name: fieldSell, mapping: fieldSell, sortType: 'asFloat'},
+        {name: fieldIndexCode, mapping: fieldIndexCode, sortType: 'asInt'},
+        {name: fieldStkStatus, mapping: fieldStkStatus, sortType: 'asUCString'},
+        {name: 'TradeValue', mapping: 'TradeValue', sortType: 'asFloat'},
+        {name: 'SettOpt', mapping: 'SettOpt', sortType: 'asUCString'},
+        {name: 'BCode', mapping: 'BCode', sortType: 'asUCString'},
+        {name: 'AccountName', mapping: 'AccountName', sortType: 'asUCString'},
+        {name: fieldRSSIndicator, mapping: fieldRSSIndicator, sortType: 'asUCString'},
+        {name: 'ReqCC', mapping: 'ReqCC', sortType: 'asUCString'},
+        {name: 'Amount', mapping: 'Amount' , sortType: 'asFloat'}
+    ],
+    proxy: {
+        type: 'memory',
+        reader: {
+            rootProperty: 'data',
+            totalProperty: 'count',
+            successProperty: 'success',
+            idProperty: 'PrtfNo'
+        }
+    }
+});

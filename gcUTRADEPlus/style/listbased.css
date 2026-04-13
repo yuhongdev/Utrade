@@ -1,0 +1,176 @@
+/* 
+	General styles for this example page */
+	/*html{
+		height:100%;
+	}
+	body{
+		font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+		font-size:0.8em;
+		margin:0px;
+		padding:0px;
+		text-align:center;
+		background-color:#E2EBED;
+		height:100%;
+	}
+	
+	p{
+		margin-top:5px;
+		margin-bottom:10px;
+	}*/
+	
+	#mainContainer{
+		width:724px;
+		height:28px;
+		margin:0 auto;
+		text-align:left;
+		background-color: #002B54;
+		padding-left:0px;
+		padding-right:0px;
+		padding-bottom:0px;	
+		padding-top:5px;	
+		font: normal bold 12px Arial;
+		color: #FFFFFF;
+	}
+	
+	#dhtmlgoodies_menu img{
+		border:0px;
+	}
+
+	/* End general styles for this example page */
+	/* General configuration CSS */
+	
+	#dhtmlgoodies_menu ul li ul{
+		display:none;	/* Needed to display ok in Opera */
+	}
+		
+	#dhtmlgoodies_menu{
+		visibility:hidden;	
+	}
+	#dhtmlgoodies_menu ul{
+		margin:0px;	/* No indent */
+		padding:0px;	/* No indent */
+	}
+	#dhtmlgoodies_menu li{
+		list-style-type:none;	/* No bullets */
+	}	
+	#dhtmlgoodies_menu a{
+		margin:0px;
+		padding:0px;
+	}
+	/* End general configuration CSS */
+	
+	
+	/* Cosmetic */
+	
+	/***********************************************************************
+		CSS - MENU BLOCKS
+	 	General rules for all menu blocks (group of sub items) 
+	***********************************************************************/
+	#dhtmlgoodies_menu ul{
+		border:1px solid #000;
+		/*background-color:#002B54;*/
+		padding:1px;
+	}
+		
+	#dhtmlgoodies_menu ul.menuBlock1{	/* Menu bar - main menu items */
+		border:0px;
+		padding:1px;
+		background-color:#002B54;
+		overflow:visible;
+	}
+	#dhtmlgoodies_menu ul.menuBlock2{	/* Menu bar - main menu items */
+		border:0px;
+		padding:1px;
+		background-color:#002B54;
+	}
+	
+	/***********************************************************************
+		CSS - MENU ITEMS
+	 	Here, you could assign rules to the menu items at different depths.
+	***********************************************************************/
+	/* General rules for all menu items */
+	#dhtmlgoodies_menu a{
+		font: normal bold 11px Arial;
+		color: #FFFFFF;
+		text-decoration:none;
+		padding-left:5px;
+		padding-right:5px;
+	
+	}
+	
+	#dhtmlgoodies_menu a:hover{
+		font: normal bold 11px Arial;
+		color: #FFFFFF;
+		text-decoration:none;
+		padding-left:5px;
+		padding-right:5px;
+	
+	}
+	/*
+	Main menu items 
+	*/
+	
+	#dhtmlgoodies_menu .currentDepth1{
+		height:21px;
+		padding-left:3px;
+		padding-right:3px;
+		/*border:1px solid #E2EBED;*/
+	}
+	#dhtmlgoodies_menu .currentDepth1over{
+		height:21px;
+		padding-left:5px;
+		padding-right:5px;
+		/*background-color:#0099CC;*/
+		color:#700019;
+		/*border:1px solid #000;	*/
+	}
+	#dhtmlgoodies_menu .currentDepth1 a{
+		font-weight:bold;
+	}
+	#dhtmlgoodies_menu .currentDepth1over a{	/* Text rules */
+		color:#FFF;
+		font-weight:bold;
+	}
+	
+	/* Sub menu depth 1 */
+	#dhtmlgoodies_menu .currentDepth2{
+		height:21px;
+		width:150px;
+		padding-right:2px;
+		/*border:1px solid #FFF;*/
+	}
+	#dhtmlgoodies_menu .currentDepth2over{
+		height:21px;
+		width:150px;
+		padding-right:2px;
+		background-color:#0099CC;
+		color:#FFFFFF;
+		/*border:1px solid #000;*/
+	}	
+	#dhtmlgoodies_menu .currentDepth2over a{	/* Text rules */
+		color:#FFFFFF;
+	}	
+	/* Sub menu depth 2 */
+	#dhtmlgoodies_menu .currentDepth3{
+		height:21px;
+		width:150px;
+		padding-right:2px;
+		/*border:1px solid #FFF;*/
+	}
+	#dhtmlgoodies_menu .currentDepth3over{
+		height:21px;
+		width:150px;
+		padding-right:2px;
+		background-color:#0099CC;
+		/*border:1px solid #000;*/
+	}
+	/* Sub menu depth 3 */
+	#dhtmlgoodies_menu .currentDepth4{
+		padding-right:2px;
+		/*border:1px solid #FFF;*/
+	}
+	#dhtmlgoodies_menu .currentDepth4over{
+		padding-right:2px;
+		background-color:#0099CC;
+		/*border:1px solid #000;*/
+	}	

@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Session Timeout</title>
+<style type=text/css> 
+ 
+</head>
+<body>
+ 
+<script language='javascript'> 
+</script>
+	<table cellpadding=0 cellspacing=0 border=0 width=100%>
+    		<tr><td>&nbsp;</td></tr>
+    
+    <!--Content-->    
+    <tr><td>
+         Your session had timeout or the page you request was not found.<br/><br/>
+        
+       	    Please click on the close button below to close the window or click again button below to relogin to relogin to system.<br/><br/>
+        
+	    Thank you for participating in <br/><b style='font-size:16px;'>CIMB ASEAN Youth Stock Challenge 2012</b>.
+ 
+    </td></tr>
+ </table>
+</body>
+</html>
+<%
+	session.invalidate();
+%>

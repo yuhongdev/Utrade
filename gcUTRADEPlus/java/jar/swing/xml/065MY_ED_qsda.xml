@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Setting>
+<MenuConfig>
+	<Menu level="1">
+		<SubMenu Pos="0" PanelPos="0,0,67,20|0,0,83,20|0,0,101,20">
+			<Title TermID="1000007">Filter</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnFilter_mouseReleased</ActionID>
+			<Value></Value>
+
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000014">All</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>ALL_COUNTER_MODE</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+
+				</SubMenu>
+				<SubMenu>
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+
+				<SubMenu>
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>CONTRACT_BY_FEED</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+
+				<SubMenu>
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+
+					<Title TermID="1000046">IPO/New Listing</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>IPO_NEW_LISTING</ActionID>
+					<Value>N</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+
+					<Title TermID=""></Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>LINE_SEPARATOR</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="67,0,60,20|83,0,80,20|101,0,100,20">
+			<Title TermID="1000065">Tools</Title>
+			<URL Source="" ParamName=""></URL>
+			<ActionID>btnTools_mouseReleased</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000066">Reset</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>Reset</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="">Reset Cache</Title>
+
+					<URL Source="" ParamName=""></URL>
+					<ActionID>RESET_CACHE</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="127,0,103,20|163,0,133,20|201,0,162,20">
+			<Title TermID="1000078">Chart</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>btnChart_mouseReleased</ActionID>
+					<Value></Value>
+					<Enabled>1</Enabled>
+				<SubMenu>
+
+					<Title TermID="1000079">Stock Tracker</Title>
+					<URL Source="" ParamName="">http://tgame.itradecimb.com.my/gcCIMB/applet/pdt_StkTracker.jsp?c=1&amp;|left=20&amp;top=40&amp;width=795&amp;height=575&amp;tw=WinStkTracker|</URL>
+					<ActionID>StockTrackerPopin</ActionID>
+					<Value>9</Value>
+
+					<Enabled>1</Enabled>
+				</SubMenu>
+				
+				<SubMenu>
+					<Title TermID="1000137">End of Day Chart</Title>
+					<URL Source="web" ParamName="LINK_TYPE_EODCHART_URL"></URL>
+
+					<ActionID>StockInfoPopup</ActionID>
+					<Value>11</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000440">Analysis Chart</Title>
+                                        <URL Source="" ParamName="">http://tgame.itradecimb.com.my/gcCIMB/anlyChart.jsp?c=1&amp;|left=20&amp;top=40&amp;width=800&amp;height=585&amp;tw=WinAnalysis|</URL> 
+					<ActionID>StockInfoPopup</ActionID>
+					<Value>10</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+
+		<SubMenu Pos="0" PanelPos="230,0,96,20|296,0,123,20|363,0,150,20">
+		<Title TermID="0">Advance Chart</Title>
+			<URL Source="" ParamName="">http://chart.n2nconnect.com/FAChart/NNSP.jsp?sTitle=APEX|left=50&amp;top=30&amp;width=930&amp;height=640&amp;tw=WinAdvMDEXChart|</URL>
+			<ActionID>DirectURLPopup</ActionID>
+			<Value>0</Value>
+			<Enabled>1</Enabled>
+				
+		</SubMenu>
+	<!--  <SubMenu Pos="0" PanelPos="326,0,79,20|419,0,102,20|513,0,125,20">
+			<Title TermID="1000275">Info</Title>
+			<URL Source="web" ParamName="STOCK_GENERAL_URL">http://tgame.itradecimb.com.my/gcCIMB/java/jar/xml/Info.xml</URL>
+
+			<ActionID>StockInfoPopin</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu> -->
+	<!--  <SubMenu Pos="0" PanelPos="405,0,87,20|521,0,112,20|638,0,138,20"> -->
+	<SubMenu Pos="0" PanelPos="326,0,79,20|419,0,102,20|513,0,125,20">
+			<Title TermID="1000048">Trade</Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000049">Buy</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>BuySellStockPopup</ActionID>
+
+					<Value>Buy</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000050">Sell</Title>
+					<URL Source="" ParamName=""></URL>
+					<ActionID>BuySellStockPopup</ActionID>
+
+					<Value>Sell</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000053">Cancel/Revise</Title>
+					<URL Source="web" ParamName="CANCELLED_ORDERS_URL">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+					<ActionID>OrdersPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<!--  <SubMenu Pos="0" PanelPos="492,0,111,20|633,0,144,20|776,0,175,20">
+			<Title TermID="1000054">My Portfolio</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000055">Personal Portfolio</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/prtfSumm_BT.asp|tw=WinPrtf</URL>
+
+					<ActionID>PortfolioPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000056">Realized Gain/Loss</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/prtfRealGL.asp|tw=WinGainLoss</URL>
+
+					<ActionID>RealizedGLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu> -->
+		<!--  <SubMenu Pos="0" PanelPos="603,0,111,20|777,0,143,20|951,0,175,20"> -->
+		 <SubMenu Pos="0" PanelPos="405,0,87,20|521,0,112,20|638,0,138,20">
+		<Title TermID="1000057">Order Status</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000058">All Orders</Title> 
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=A</URL>
+
+					<ActionID>OrdersPopup</ActionID>
+					<Value>-1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1002345">Active Orders</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=O</URL>
+
+					<ActionID>OrdersPopup_Active</ActionID>
+					<Value>A</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1002346">Open Orders</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=M</URL>
+
+					<ActionID>OrdersPopup_Open</ActionID>
+					<Value>2</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1002347">Filled Orders</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=L</URL>
+
+					<ActionID>OrdersPopup_Filled</ActionID>
+					<Value>4</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1002348">Inactive Orders</Title>
+					<URL Source="" ParamName="">http://test.itradecimb.com/bin/ordStatus.asp?|left=30&amp;top=100&amp;width=725&amp;height=450&amp;tw=WinOrdStatus|Filter=X</URL>
+
+					<ActionID>OrdersPopup_Inactive</ActionID>
+					<Value>C</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+			
+		</SubMenu>		
+		<SubMenu Pos="0" PanelPos="603,0,171,20|777,0,223,20|951,0,275,20">
+  			<Title TermID=""> </Title>
+			<ActionID></ActionID>
+			<Value></Value>
+			<Enabled>0</Enabled>
+  		</SubMenu>		 
+		<!-- <SubMenu Pos="0" PanelPos="714,0,60,20|920,0,80,20|1126,0,100,20"> -->
+		 <SubMenu Pos="0" PanelPos="492,0,111,20|633,0,144,20|776,0,175,20">
+		<Title TermID="1000063">Report</Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>dropdown menu</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+				<SubMenu>
+					<Title TermID="1000064">Client Summary</Title>
+					<URL Source="" ParamName="">http://tgame.itradecimb.com.my/gcCIMB/rptSumm.jsp?|left=30&amp;top=100&amp;width=720&amp;height=550&amp;tw=WinRptSumm</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>1</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000292">Monthly Statement</Title>
+					<URL Source="" ParamName="">http://tgame.itradecimb.com.my/gcCIMB/rptBosMth.jsp?|left=30&amp;top=100&amp;width=720&amp;height=450&amp;tw=WinRptBOSMth&amp;scrollbars=yes</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+				<SubMenu>
+					<Title TermID="1000305">Margin Account Summary</Title>
+					<URL Source="" ParamName="">http://tgame.itradecimb.com.my/gcCIMB/rptMgnSumm.jsp?|left=130&amp;top=160&amp;width=555&amp;height=430&amp;tw=WinRptMgnSumm</URL>
+
+					<ActionID>DirectURLPopup</ActionID>
+					<Value>0</Value>
+					<Enabled>1</Enabled>
+				</SubMenu>
+		</SubMenu>
+		<SubMenu Pos="0" PanelPos="0,335,320,160|0,332,370,160|0,331,420,160">
+			<Title TermID=""></Title>
+
+			<URL Source="" ParamName=""></URL>
+			<ActionID>MARKET_DEPT</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>  
+		<SubMenu Pos="0" PanelPos="320,335,470,160|370,335,621,160|420,335,791,160">
+			<Title TermID=""></Title>
+			<URL Source="" ParamName=""></URL>
+
+			<ActionID>ALL_NEWS</ActionID>
+			<Value></Value>
+			<Enabled>1</Enabled>
+		</SubMenu>	
+	</Menu>
+</MenuConfig>
+
+</Setting>
+

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zui title="Stock General Information" width="700" height="450" centered="true">
+	<panel id="top"  border="0" contentLayout="cols=2" layout="fh">
+		<label layout="col=1" foreColor="255,255,255" bgColor='100,149,237' size="15,20"/>
+		<panel id="top2" border="0" contentLayout="cols=1" layout="cweight=1;">
+			<label id="100" layout="col=1" foreColor="255,255,255" bgColor='100,149,237' alignment="left" size="100,20"/>
+		</panel>
+	</panel>
+	<panel id="pnlGeneral" border="0" contentLayout="cols=2" layout="fh">
+		<label layout="col=1" size="20,20"/>
+		<panel id="pnl1" border="1" contentLayout="cols=3" layout="col=2" borderColor="255,255,255">
+			<label id="stockFullName" foreColor="0,255,255" layout="col=1" resource_id="1000419" desc="Stock Full Name" size="100,20"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":" size="20,20"/>
+			<label id="39" layout="col=3" size="572,20"/>
+		</panel>
+		<label layout="col=1" size="20,20"/>
+		<panel id="pnl2" border="1" contentLayout="cols=3" layout="col=2" borderColor="255,255,255">
+			<label id="indices" foreColor="0,255,255" layout="col=1" resource_id="1000267" desc="Indices" size="100,20"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":" size="20,20"/>
+			<label id="100002" layout="col=3" size="572,20"/>
+		</panel>
+	</panel>
+	
+	<panel id="middle1" border="0" contentLayout="cols=6" layout="fh">
+		<label layout="col=1" size="20,20"/>
+		<panel id="pnl3" border="1" contentLayout="cols=3" layout="col=2" borderColor="255,255,255">
+			<label id="status" foreColor="0,255,255" layout="col=1" resource_id="1000420" desc="Status" size="100,20"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":" size="20,20"/>
+			<label id="100003" layout="col=3" size="110,20"/>
+			
+			<label id="tradingBoard" foreColor="0,255,255" layout="col=1" resource_id="1000431" desc="Trading Board"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="100001" layout="col=3"/>
+		
+			<label id="sector" foreColor="0,255,255" layout="col=1" resource_id="1000108" desc="Sector"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="37" layout="col=3"/>
+			
+			<label id="lotSize" foreColor="0,255,255" layout="col=1" resource_id="1000421" desc="Lot Size"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="40" layout="col=3"/>
+			
+			<label id="isin" foreColor="0,255,255" layout="cols=1" resource_id="1001449" desc="ISIN" />
+			<label foreColor="0,255,255" layout="col=1" alignment="center" text=":"/>
+			<label id="100101" layout="col=1"/>
+			
+			<label id="foreignLimit" foreColor="0,255,255" layout="cols=1" resource_id="1000429" desc="Foreign Limit"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="155" layout="col=3"/>
+			
+			<label id="deliveryBasic" foreColor="0,255,255" layout="cols=1" resource_id="1000414" desc="Delivery Basis"/>
+			<label  foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="42" layout="col=3"/>
+			
+			<label id="sharesIssued" foreColor="0,255,255" layout="cols=1" resource_id="1000430" desc="Shares Issued" />
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="41" layout="col=3"/>
+		</panel>
+		<label layout="col=3" size="20,20"/>
+		<panel id="pnl4" border="1" contentLayout="cols=3" layout="col=4" borderColor="255,255,255">
+			<label id="totalSSellVol" foreColor="0,255,255" layout="col=1" resource_id="1000433" desc="Total S. Sell Vol" size="100,20"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"  size="20,20"/>
+			<label id="239" layout="col=3" size="110,20"/>
+			
+			<label id="netSSel" foreColor="0,255,255" layout="col=1" resource_id="1000434" desc="Net S. Sell"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="100105" layout="col=3"/>
+			
+			<label id="totalBuyValue" foreColor="0,255,255" layout="col=1" resource_id="1000426" desc="Total Buy Vol"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="238" layout="col=3"/>
+			
+			<label id="totalSellVol" foreColor="0,255,255" layout="col=1" resource_id="1000427" desc="Total Sell Vol"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="237" layout="col=3"/>
+			
+			<label id="totalBuyTrans" foreColor="0,255,255" layout="cols=1" resource_id="1000724" desc="Total Buy Trans"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="241" layout="col=3"/>
+			
+			<label id="totalSellTrans" foreColor="0,255,255" layout="cols=1" resource_id="1000725" desc="Total Sell Trans"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="242" layout="col=3"/>
+			
+			<label id="valueTraded" foreColor="0,255,255" layout="cols=1" resource_id="1000741" desc="Value Traded"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="102" layout="col=3"/>
+			
+			<label id="mktCap" foreColor="0,255,255" layout="cols=1" text="" resource_id="1000742" desc="Mkt Cap."/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+	    	<label id="100004" layout="col=3"/>
+		</panel>
+		<label layout="col=5" size="20,20"/>
+		<panel id="pnl5" border="1" contentLayout="cols=3" layout="col=6" borderColor="255,255,255">
+			<label id="referencePrice" foreColor="0,255,255" layout="col=1" resource_id="0" desc="LACP" size="100,20"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":" size="20,20"/>
+			<label id="51" layout="col=3" size="110,20"/>
+
+			<label id="highPrice" foreColor="0,255,255" layout="col=1" resource_id="1000423" desc="High Price"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="56" layout="col=3"/>
+			
+			<label id="lowPrice" foreColor="0,255,255" layout="col=1" resource_id="1000424" desc="Low Price"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="57" layout="col=3"/>
+			
+			<label id="lastDone" foreColor="0,255,255" layout="cols=1" resource_id="1000425" desc="Last Done"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="98" layout="col=3"/>
+			
+			<label id="volume" foreColor="0,255,255" layout="cols=1" resource_id="1000106" desc="Volume"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="101" layout="col=3"/>
+			
+			<label id="parValue" foreColor="0,255,255" layout="cols=1" alignment="left" resource_id="1002170" desc="PAR Value" />
+			<label  foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="123" layout="col=3" alignment="left" text="" />
+
+
+			<label id="upper_limit_price" foreColor="0,255,255" layout="cols=1" resource_id="1000612" desc="Upper Limit Price"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="100110" layout="col=3"/>
+			
+			<label id="lower_limit_price" foreColor="0,255,255" layout="cols=1" resource_id="1000613" desc="Lower Limit Price"/>
+			<label foreColor="0,255,255" layout="col=2" alignment="center" text=":"/>
+			<label id="100111" layout="col=3"/>
+		</panel>
+	</panel>
+	<separator visible="false" />
+	<separator visible="false" />
+	<panel id="middle2" border="0" contentLayout="cols=5" layout="fh">
+		<label layout="col=1" size="2,20"/>
+		<panel id="pnl6" border="1" contentLayout="cols=3" layout="col=2" borderColor="255,255,255">
+			<label id="QtyBuyPrice" foreColor="0,255,255" layout="col=1" resource_id="" desc="Buy Qty/Price"/>
+			
+			<label id="1stBuy" foreColor="0,255,255" layout="skip=3" resource_id="1000113" desc="1st Buy" size="100,20"/>
+			<label id="58" layout="cols=2" size="110,20"/>
+			<label id="68" layout="cols=3" size="110,20"/>
+		
+			<label id="2ndBuy" foreColor="0,255,255" layout="col=1" resource_id="1000112" desc="2nd Buy"/>
+			<label id="59" layout="cols=2"/>
+			<label id="69" layout="cols=3"/>
+			
+			<label id="3rdBuy" foreColor="0,255,255" layout="col=1" resource_id="1000111" desc="3rd Buy"/>
+			<label id="60" layout="cols=2"/>
+			<label id="70" layout="cols=3"/>
+			
+			<label id="4thBuy" foreColor="0,255,255" layout="col=1" resource_id="" desc="4th Buy"/>
+			<label id="61" layout="cols=2"/>
+			<label id="71" layout="cols=3"/>
+			
+			<label id="5thBuy" foreColor="0,255,255" layout="col=1" resource_id="" desc="5th Buy"/>
+			<label id="62" layout="cols=2"/>
+			<label id="72" layout="cols=3"/>
+		</panel>
+		<label layout="col=3" size="15,20"/>
+		<panel id="pnl7" border="1" contentLayout="cols=3" layout="col=4" borderColor="255,255,255">
+			<label id="sellPriceQty" foreColor="0,255,255" layout="col=1" resource_id="" desc="Sell Price/Qty"/>
+			
+			<label id="1stSell" foreColor="0,255,255" layout="skip=3" resource_id="1000114" desc="1st Sell" size="100,20"/>
+			<label id="88" layout="cols=2" size="110,20"/>
+			<label id="78" layout="cols=3" size="110,20"/>
+		
+			<label id="2ndSell" foreColor="0,255,255" layout="cols=1" resource_id="1000115" desc="2nd Sell"/>
+			<label id="89" layout="cols=2"/>
+			<label id="79" layout="cols=3"/>
+			
+			<label id="3rdSell" foreColor="0,255,255" layout="cols=1" resource_id="1000116" desc="3rd Sell"/>
+			<label id="90" layout="cols=2"/>
+			<label id="80" layout="cols=3"/>
+			
+			<label id="4thSell" foreColor="0,255,255" layout="cols=1" resource_id="" desc="4th Sell"/>
+			<label id="91" layout="cols=2"/>
+			<label id="81" layout="cols=3"/>
+			
+			<label id="5thSell" foreColor="0,255,255" layout="cols=1" resource_id="" desc="5th Sell"/>
+			<label id="92" layout="cols=2"/>
+			<label id="82" layout="cols=3"/>
+		</panel>
+	</panel>
+	<separator visible="false" />
+</zui>

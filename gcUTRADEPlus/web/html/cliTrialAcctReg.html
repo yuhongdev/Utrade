@@ -1,0 +1,673 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Registration page</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+			
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600|Roboto+Slab" rel="stylesheet">
+
+		<link rel="stylesheet" href="../css/maroon/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/maroon/style.css" />	
+
+		<link rel="stylesheet" href="../css/error-form.css" />
+		<link rel="stylesheet" href="../css/default.css" />
+		<link rel="stylesheet" href="../css/jquery-ui.css" />			
+		<link rel="stylesheet" href="../css/jquery-ui.theme.css" />	
+		
+		<style>
+			td{
+				height:20px;
+				font-size:12px;
+			}
+			/*#tblRegister tr td:nth-child(1){
+				text-align:right;
+				padding-right:15px;
+			}*/
+			#div_hint{
+				display:none;
+			}
+		</style>	
+	</head>
+	<body>
+		<div class="container">
+			<div id="divRegister" name="divRegister">
+				<form id="frmRegister" name="frmRegister" method="post">
+					
+					<div id="tblRegister" class="form-horizontal">
+						
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Enter Personal Information</h3>
+							</div>
+						</div>
+
+						<div class="clearfix" style="margin-top: 40px;"></div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameLast" class="col-sm-4 control-label">Last Name</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_cliNameLast" name="frmRegister_cliNameLast" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_cliNameFirst" class="col-sm-4 control-label">First Name</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_cliNameFirst" name="frmRegister_cliNameFirst" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="frmRegister_cliNameMiddle" class="col-sm-4 control-label">Middle Name</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_cliNameMiddle" name="frmRegister_cliNameMiddle" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label for="frmRegister_dob" class="col-sm-4 control-label">Date Of Birth</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_dob" name="frmRegister_dob" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_email" class="col-sm-4 control-label">Email</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_email" name="frmRegister_email" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_add1" class="col-sm-4 control-label">Address</label>
+							<div class="col-sm-4">
+								<div>
+									<input class="form-control" type="text" id="frmRegister_add1" name="frmRegister_add1" />
+								</div>
+								<div style="margin-top: 10px">
+									<input class="form-control" type="text" id="frmRegister_add2" name="frmRegister_add2" />
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label for="frmRegister_country" class="col-sm-4 control-label">Country</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="frmRegister_country" name="frmRegister_country">
+									<option value="">Select your country</option>	
+									<option value="AF">AFGHANISTAN</option>
+									<option value="AX">ALAND ISLANDS</option>
+									<option value="AL">ALBANIA</option>
+									<option value="DZ">ALGERIA</option>
+									<option value="AS">AMERICAN SAMOA</option>
+									<option value="ADT">ANDOR</option>
+									<option value="AD">ANDORRA</option>
+									<option value="AI">ANGUILLA</option>
+									<option value="AQ">ANTARCTICA</option>
+									<option value="AG">ANTIGUA AND BARBUDA</option>
+									<option value="AR">ARGENTINA</option>
+									<option value="AM">ARMENIA</option>
+									<option value="AW">ARUBA</option>
+									<option value="AU">AUSTRALIA</option>
+									<option value="AT">AUSTRIA</option>
+									<option value="AZ">AZERBAIJAN</option>
+									<option value="BS">BAHAMAS</option>
+									<option value="BH">BAHRAIN</option>
+									<option value="BD">BANGLADESH</option>
+									<option value="BB">BARBADOS</option>
+									<option value="BY">BELARUS</option>
+									<option value="BE">BELGIUM</option>
+									<option value="BZ">BELIZE</option>
+									<option value="BJ">BENIN</option>
+									<option value="BM">BERMUDA</option>
+									<option value="BT">BHUTAN</option>
+									<option value="BO">BOLIVIA</option>
+									<option value="BQ">BONAIRE, SAINT EUSTAT & SABA</option>
+									<option value="BA">BOSNIA AND HERZEGOWINA</option>
+									<option value="BW">BOTSWANA</option>
+									<option value="BV">BOUVET ISLAND</option>
+									<option value="BR">BRAZIL</option>
+									<option value="IO">BRITISH INDIAN OCEAN TERRITORY</option>
+									<option value="VGI">BRITISH VIRGIN ISLANDS</option>
+									<option value="BN">BRUNEI DARUSSALAM</option>
+									<option value="BG">BULGARIA</option>
+									<option value="BF">BURKINA FASO</option>
+									<option value="BI">BURUNDI</option>
+									<option value="KH">CAMBODIA</option>
+									<option value="CM">CAMEROON</option>
+									<option value="CA">CANADA</option>
+									<option value="CV">CAPE VERDE</option>
+									<option value="KY">CAYMAN ISLANDS</option>
+									<option value="TD">CHAD</option>
+									<option value="CL">CHILE</option>
+									<option value="CN">CHINA</option>
+									<option value="CX">CHRISTMAS ISLAND</option>
+									<option value="CC">COCOS (KEELING) ISLANDS</option>
+									<option value="CO">COLOMBIA</option>
+									<option value="KM">COMOROS</option>
+									<option value="CG">CONGO</option>
+									<option value="CD">CONGO, DEMOCRATIC REPUBLIC</option>
+									<option value="CK">COOK ISLANDS</option>
+									<option value="CR">COSTA RICA</option>
+									<option value="CI">COTE D'IVOIRE</option>
+									<option value="HR">CROATIA</option>
+									<option value="CU">CUBA</option>
+									<option value="CW">CURACAO</option>
+									<option value="CY">CYPRUS</option>
+									<option value="CZ">CZECH REPUBLIC</option>
+									<option value="DK">DENMARK</option>
+									<option value="DJ">DJIBOUTI</option>
+									<option value="DM">DOMINICA</option>
+									<option value="DO">DOMINICAN REPUBLIC</option>
+									<option value="TP">EAST TIMOR</option>
+									<option value="EC">ECUADOR</option>
+									<option value="EG">EGYPT</option>
+									<option value="SV">EL SALVADOR</option>
+									<option value="GQ">EQUATORIAL GUINEA</option>
+									<option value="ER">ERITREA</option>
+									<option value="EE">ESTONIA</option>
+									<option value="ET">ETHIOPIA</option>
+									<option value="FK">FALKLAND ISLANDS (MALVINAS)</option>
+									<option value="FO">FAROE ISLANDS</option>
+									<option value="FJ">FIJI</option>
+									<option value="FI">FINLAND</option>
+									<option value="FR">FRANCE</option>
+									<option value="GF">FRENCH GUIANA</option>
+									<option value="PF">FRENCH POLYNESIA</option>
+									<option value="TF">FRENCH SOUTHERN TERRITORIES</option>
+									<option value="GA">GABON</option>
+									<option value="GM">GAMBIA</option>
+									<option value="GE">GEORGIA</option>
+									<option value="DE">GERMANY</option>
+									<option value="GH">GHANA</option>
+									<option value="GI">GIBRALTAR</option>
+									<option value="GR">GREECE</option>
+									<option value="GL">GREENLAND</option>
+									<option value="GD">GRENADA</option>
+									<option value="GP">GUADELOUPE</option>
+									<option value="GU">GUAM</option>
+									<option value="GT">GUATEMALA</option>
+									<option value="GG">GUERNSEY & ALDERNEY	CHANNEL ISLAND</option>
+									<option value="GN">GUINEA</option>
+									<option value="GW">GUINEA-BISSAU</option>
+									<option value="GY">GUYANA</option>
+									<option value="HT">HAITI</option>
+									<option value="HM">HEARD AND MC DONALD ISLANDS (HEARD)</option>
+									<option value="HMI">HEARD AND MC DONALD ISLANDS (MCDONALD)</option>
+									<option value="HN">HONDURAS</option>
+									<option value="HK">HONG KONG</option>
+									<option value="HU">HUNGARY</option>
+									<option value="IS">ICELAND</option>
+									<option value="IN">INDIA</option>
+									<option value="ID">INDONESIA</option>
+									<option value="IR">IRAN (ISLAMIC REPUBLIC OF)</option>
+									<option value="IQ">IRAQ</option>
+									<option value="IE">IRELAND</option>
+									<option value="IM">ISLE OF MAN</option>
+									<option value="IL">ISRAEL</option>
+									<option value="IT">ITALY</option>
+									<option value="JM">JAMAICA</option>
+									<option value="JP">JAPAN</option>
+									<option value="JE">JERSEY</option>
+									<option value="JO">JORDAN</option>
+									<option value="KZ">KAZAKHSTAN</option>
+									<option value="KE">KENYA</option>
+									<option value="KI">KIRIBATI</option>
+									<option value="KV">KOSOVO</option>
+									<option value="KW">KUWAIT</option>
+									<option value="KG">KYRGYZSTAN</option>
+									<option value="LA">LAOS</option>
+									<option value="LV">LATVIA</option>
+									<option value="LB">LEBANON</option>
+									<option value="LS">LESOTHO</option>
+									<option value="LR">LIBERIA</option>
+									<option value="LY">LIBYA</option>
+									<option value="LI">LIECHTENSTEIN</option>
+									<option value="LT">LITHUANIA</option>
+									<option value="LU">LUXEMBOURG</option>
+									<option value="MO">MACAU</option>
+									<option value="MK">MACEDONIA</option>
+									<option value="MG">MADAGASCAR</option>
+									<option value="MW">MALAWI</option>
+									<option value="MY">MALAYSIA</option>
+									<option value="MV">MALDIVES</option>
+									<option value="ML">MALI</option>
+									<option value="MT">MALTA</option>
+									<option value="MH">MARSHALL ISLANDS</option>
+									<option value="MQ">MARTINIQUE</option>
+									<option value="MR">MAURITANIA</option>
+									<option value="MU">MAURITIUS</option>
+									<option value="YT">MAYOTTE</option>
+									<option value="MX">MEXICO</option>
+									<option value="FM">MICRONESIA</option>
+									<option value="MD">MOLDOVA</option>
+									<option value="MC">MONACO</option>
+									<option value="MN">MONGOLIA</option>
+									<option value="CS">MONTENEGRO</option>
+									<option value="MS">MONTSERRAT</option>
+									<option value="MA">MOROCCO</option>
+									<option value="MZ">MOZAMBIQUE</option>
+									<option value="MM">MYANMAR</option>
+									<option value="NA">NAMIBIA</option>
+									<option value="NR">NAURU</option>
+									<option value="NP">NEPAL</option>
+									<option value="AN">NETHERLANDS ANTILLES</option>
+									<option value="NL">NETHERLANDS</option>
+									<option value="NC">NEW CALEDONIA</option>
+									<option value="NZ">NEW ZEALAND</option>
+									<option value="NI">NICARAGUA</option>
+									<option value="NG">NIGERIA</option>
+									<option value="NU">NIUE</option>
+									<option value="NF">NORFOLK ISLAND</option>
+									<option value="MP">NORTHERN MARIANA ISLANDS</option>
+									<option value="NO">NORWAY</option>
+									<option value="OM">OMAN</option>
+									<option value="PK">PAKISTAN</option>
+									<option value="PW">PALAU</option>
+									<option value="PW">PALESTINE</option>
+									<option value="PA">PANAMA</option>
+									<option value="PG">PAPUA NEW GUINEA</option>
+									<option value="PY">PARAGUAY</option>
+									<option value="PE">PERU</option>
+									<option value="PH" selected="selected">PHILIPPINES</option>
+									<option value="PN">PITCAIRN ISLAND</option>
+									<option value="PL">POLAND</option>
+									<option value="PT">PORTUGAL</option>
+									<option value="PR">PUERTO RICO</option>
+									<option value="QA">QATAR</option>
+									<option value="RE">REUNION</option>
+									<option value="RO">ROMANIA</option>
+									<option value="RU">RUSSIAN</option>
+									<option value="RW">RWANDA</option>
+									<option value="BL">SAINT BARTHELEMY</option>
+									<option value="SH">SAINT HELENA</option>
+									<option value="KN">SAINT KITTS AND NEVIS(KITTS)</option>
+									<option value="KN">SAINT KITTS AND NEVIS(NEVIS)</option>
+									<option value="LC">SAINT LUCIA</option>
+									<option value="MF">SAINT MARTIN</option>
+									<option value="PM">SAINT PIERRE & MIQUELON(MIQUELON)</option>
+									<option value="PMS">SAINT PIERRE & MIQUELON(SAINT PIERRE)</option>
+									<option value="VC">SAINT VINCENT AND THE GRENADINES</option>
+									<option value="WS">SAMOA</option>
+									<option value="SM">SAN MARINO</option>
+									<option value="ST">SAO TOME AND PRINCIPE</option>
+									<option value="SA">SAUDI ARABIA</option>
+									<option value="SN">SENEGAL</option>
+									<option value="SC">SEYCHELLES</option>
+									<option value="SL">SIERRA LEONE</option>
+									<option value="SG">SINGAPORE</option>
+									<option value="SG1">SINGAPORE</option>
+									<option value="SX">SINT MAARTEN</option>
+									<option value="SK">SLOVAKIA (Slovak Republic)</option>
+									<option value="SI">SLOVENIA</option>
+									<option value="SB">SOLOMON ISLANDS</option>
+									<option value="SO">SOMALIA</option>
+									<option value="ZA">SOUTH AFRICA</option>
+									<option value="GS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(GEORGIA)</option>
+									<option value="GSS">SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS(SANDWICH)</option>
+									<option value="KR">SOUTH KOREA</option>
+									<option value="SS">SOUTH SUDAN</option>
+									<option value="ES">SPAIN</option>
+									<option value="LK">SRI LANKA</option>
+									<option value="SD">SUDAN</option>
+									<option value="SR">SURINAME</option>
+									<option value="SJ">SVALBARD AND JAN MAYEN</option>
+									<option value="SZ">SWAZILAND</option>
+									<option value="SE">SWEDEN</option>
+									<option value="CH">SWITZERLAND</option>
+									<option value="SY">SYRIAN</option>
+									<option value="TW">TAIWAN</option>
+									<option value="TJ">TAJIKISTAN</option>
+									<option value="TZ">TANZANIA</option>
+									<option value="TH">THAILAND</option>
+									<option value="TG">TOGO</option>
+									<option value="TK">TOKELAU</option>
+									<option value="TO">TONGA</option>
+									<option value="TT">TRINIDAD AND TOBAGO(TOBAGO)</option>
+									<option value="TTT">TRINIDAD AND TOBAGO(TRINIDAD)</option>
+									<option value="TN">TUNISIA</option>
+									<option value="TR">TURKEY</option>
+									<option value="TM">TURKMENISTAN</option>
+									<option value="TC">TURKS AND CAICOS ISLANDS</option>
+									<option value="TV">TUVALU</option>
+									<option value="UG">UGANDA</option>
+									<option value="UA">UKRAINE</option>
+									<option value="AE">UNITED ARAB EMIRATES</option>
+									<option value="GB">UNITED KINGDOM</option>
+									<option value="UM">UNITED STATES MINOR OUTLYING ISLANDS</option>
+									<option value="US">UNITED STATES OF AMERICA</option>
+									<option value="UY">URUGUAY</option>
+									<option value="UZ">UZBEKISTAN</option>
+									<option value="VU">VANUATU</option>
+									<option value="VE">VENEZUELA</option>
+									<option value="VN">VIETNAM</option>
+									<option value="VG">VIRGIN ISLANDS (UK)</option>
+									<option value="VI">VIRGIN ISLANDS (USA)</option>
+									<option value="WF">WALLIS AND FUTUNA ISLANDS</option>
+									<option value="EH">WESTERN SAHARA</option>
+									<option value="YE">YEMEN</option>
+									<option value="ZM">ZAMBIA</option>
+									<option value="ZE">ZIMBABWE</option>
+									<option value="ZW">ZIMBABWE</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_province" class="col-sm-4 control-label">Province</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="frmRegister_province" name="frmRegister_province">
+									<option value="">Select your province</option>
+									<option value="NCR">METRO MANILA</option>
+									<option value="ABR">ABRA</option>
+									<option value="AGN">AGUSAN DEL NORTE</option>
+									<option value="AGS">AGUSAN DEL SUR</option>
+									<option value="AKL">AKLAN</option>
+									<option value="ALB">ALBAY</option>
+									<option value="ANT">ANTIQUE</option>
+									<option value="APA">APAYAO</option>
+									<option value="AUR">AURORA</option>
+									<option value="BAS">BASILAN</option>
+									<option value="BAN">BATAAN</option>
+									<option value="BTN">BATANES</option>
+									<option value="BTG">BATANGAS</option>
+									<option value="BRN">BENGUET</option>
+									<option value="BIL">BILIRAN</option>
+									<option value="BOH">BOHOL</option>
+									<option value="BUK">BUKIDNON</option>
+									<option value="BUL">BULACAN</option>
+									<option value="CAG">CAGAYAN</option>
+									<option value="CAN">CAMARINES NORTE</option>
+									<option value="CAS">CAMARINES SUR</option>
+									<option value="CAM">CAMIGUIN</option>
+									<option value="CAP">CAPIZ</option>
+									<option value="CAT">CATANDUANES</option>
+									<option value="CAV">CAVITE</option>
+									<option value="CEB">CEBU</option>
+									<option value="COM">COMPOSTELA VALLEY</option>
+									<option value="NCO">COTABATO</option>
+									<option value="DAV">DAVAO DEL NORTE</option>
+									<option value="DAS">DAVAO DEL SUR</option>
+									<option value="DVO">DAVAO OCCIDENTAL</option>
+									<option value="DAO">DAVAO ORIENTAL</option>
+									<option value="DIN">DINAGAT ISLANDS</option>
+									<option value="EAS">EASTERN SAMAR</option>
+									<option value="GUI">GUIMARAS</option>
+									<option value="IFU">IFUGAO</option>
+									<option value="ILN">ILOCOS NORTE</option>
+									<option value="ILS">ILOCOS SUR</option>
+									<option value="ILI">ILOILO</option>
+									<option value="ISA">ISABELA</option>
+									<option value="KAL">KALINGA</option>
+									<option value="LUN">LA UNION</option>
+									<option value="LAG">LAGUNA</option>
+									<option value="LAN">LANAO DEL NORTE</option>
+									<option value="LAS">LANAO DEL SUR</option>
+									<option value="LEY">LEYTE</option>
+									<option value="MAG">MAGUINDANAO</option>
+									<option value="MAD">MARINDUQUE</option>
+									<option value="MAS">MASBATE</option>
+									<option value="MSC">MISAMIS OCCIDENTAL</option>
+									<option value="MSR">MISAMIS ORIENTAL</option>
+									<option value="MOU">MOUNTAIN</option>
+									<option value="NEC">NEGROS OCCIDENTAL</option>
+									<option value="NER">NEGROS ORIENTAL</option>
+									<option value="NSA">NORTHERN SAMAR</option>
+									<option value="NUE">NUEVA ECIJA</option>
+									<option value="NUV">NUEVA VIZCAYA</option>
+									<option value="MDC">OCCIDENTAL</option>
+									<option value="MDR">ORIENTAL</option>
+									<option value="PLW">PALAWAN</option>
+									<option value="PAM">PAMPANGA</option>
+									<option value="PAN">PANGASINAN</option>
+									<option value="QUE">QUEZON</option>
+									<option value="QUI">QUIRINO</option>
+									<option value="RIZ">RIZAL</option>
+									<option value="ROM">ROMBLON</option>
+									<option value="WSA">SAMAR</option>
+									<option value="SAR">SARANGANI</option>
+									<option value="SIG">SIQUIJOR</option>
+									<option value="SOR">SORSOGON</option>
+									<option value="SCO">SOUTH COTABATO</option>
+									<option value="SLE">SOUTHERN LEYTE</option>
+									<option value="SUK">SULTAN KUDARAT</option>
+									<option value="SLU">SULU</option>
+									<option value="SUN">SURIGAO DEL NORTE</option>
+									<option value="TAR">TARLAC</option>
+									<option value="TAW">TAWI-TAWI</option>
+									<option value="ZMB">ZAMBALES</option>
+									<option value="ZAN">ZAMBOANGA DEL NORTE</option>
+									<option value="ZAS">ZAMBOANGA DEL SUR</option>
+									<option value="ZSI">ZAMBOANGA SIBUGAY</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="frmRegister_telno1" class="col-sm-4 control-label">Phone No</label>
+							<div class="col-sm-4">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_telno1" name="frmRegister_telno1" style="min-width:50px" />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_telno2" name="frmRegister_telno2" />		
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_mobile1" class="col-sm-4 control-label">Mobile No</label>
+							<div class="col-sm-4">
+								<div class="row gutter-10">
+									<div class="col-xs-3">
+										<input class="form-control" type="text" id="frmRegister_mobile1" name="frmRegister_mobile1" style="min-width:50px" />
+									</div>
+									<div class="col-xs-9">
+										<input class="form-control" type="text" id="frmRegister_mobile2" name="frmRegister_mobile2" />
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_accOthBroker" class="col-sm-4 control-label">Who is your current broker?</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="frmRegister_accOthBroker" name="frmRegister_accOthBroker">
+									<option value="">Select your current broker</option>	
+									<option value="COL">COL Financial</option>
+									<option value="BPI">BPI Trade</option>
+									<option value="METRO">First Metro Sec</option>
+									<option value="BDO">BDO Nomura Sec</option>
+									<option value="OTHER">Other BHs</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="clearfix" style="margin-top: 30px;"></div>
+
+						<div class="row">
+							<div class="col-sm-9 col-sm-offset-3">
+								<h3>Enter Login Information</h3>
+							</div>
+						</div>
+						
+						<div class="clearfix" style="margin-top: 20px;"></div>
+						<div class="form-group">
+							<label for="frmRegister_userID" class="col-sm-4 control-label">Username</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_userID" name="frmRegister_userID" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">
+									(Max. 15 characters)
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_pwd" class="col-sm-4 control-label">Password</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegister_pwd" name="frmRegister_pwd" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">
+									(6-16 alphanumeric characters)
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_confPwd" class="col-sm-4 control-label">Re-type Password</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="password" id="frmRegister_confPwd" name="frmRegister_confPwd" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block">
+									(6-16 alphanumeric characters)
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+								<label for="frmRegister_hintType" class="col-sm-4 control-label">*Hint for Forgotten Password</label>
+								<div class="col-sm-4">
+									<select class="form-control" id="frmRegister_hintType" name="frmRegister_hintType">
+										<option value="What is your Pet's Name?">What is your Pet's Name?</option>
+										<option value="What was the name of your first school?">What was the name of your first school?</option>
+										<option value="Who was your childhood hero?">Who was your childhood hero?</option>
+										<option value="What is your favorite pastime?">What is your favorite pastime?</option>
+										<option value="What is your all-time favorite sports team?">What is your all-time favorite sports team?</option>
+										<option value="What is your father's middle name?">What is your father's middle name?</option>
+										<option value="What was your high school mascot?">What was your high school mascot?</option>
+										<option value="What make was your first car or bike?">What make was your first car or bike?</option>
+										<option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+										<option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+										<option value="OTR">Others</option>
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<div class="help-block"></div>
+								</div>
+							</div>
+
+						<div id="div_hint" class="form-group">
+							<label for="frmRegister_hint" class="col-sm-4 control-label">Question</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_hint" name="frmRegister_hint" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="frmRegister_hintAns" class="col-sm-4 control-label">Answer to your hint</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="frmRegister_hintAns" name="frmRegister_hintAns" />
+							</div>
+							<div class="col-sm-4">
+								<div class="help-block"></div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<footer class="form-action-wrap">
+									<div class="pull-right float-break-md">
+										<div class="form-inline">
+											
+											<div class="btn-group" style="margin-right: 10px;">
+												<input class="btn btn-sm btn-primary" type="submit" value="Submit" style="width:100px"/> 
+											</div>
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+
+
+					</div>
+
+					
+				</form>
+			</div>
+			
+		</div>
+
+		<script src="../js/jquery-3.7.1.min.js"></script>		
+		<script src="../js/jquery.jcryption.min.js"></script>
+		<script src="../../js/crypto/crypto-js-4.2.0.min.js"></script>
+		<script src="../js/AesUtil.js"></script>
+		<!-- <script src="../js/aes.js"></script>
+		<script src="../js/pbkdf2.js"></script> -->				
+		<script src="../js/common_util.js"></script>
+		<script src="../js/register_conf.js"></script>
+		<script src="../js/register_main.js"></script>
+		<script src="../js/bms_setting.js"></script>
+		<script src="../js/validate/jquery.validate-1.22.0.min.js"></script>
+		<script src="../js/jquery-ui.js"></script>
+		<script src="../js/cliTrialAcctReg.js"></script>
+
+		<script>
+			$(document).ready(function(){	
+
+			//added change function to check if phone number or mobile number has been populated
+				$('#frmRegister_mobile1').change(function() { 
+					$("span[for=frmRegister_telno1]").hide();
+				});
+
+				$('#frmRegister_mobile2').change(function() { 
+					$("span[for=frmRegister_telno2]").hide();
+				});
+
+				$('#frmRegister_telno1').change(function() { 
+					$("span[for=frmRegister_mobile1]").hide();
+				});
+
+				$('#frmRegister_telno2').change(function() { 
+					$("span[for=frmRegister_mobile2]").hide();
+				});
+
+			});
+		</script>
+	</body>
+</html>

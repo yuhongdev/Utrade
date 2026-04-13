@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIP Schedule</title>
+<link href="../fonts/icomoon/styles.css" rel="stylesheet" type="text/css">
+<link href="../css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+<link href="../css/bootstrap-5.3.6.min.css" rel="stylesheet" type="text/css"/>
+<link href="../css/elements.css" rel="stylesheet" type="text/css"/>
+<link href="../css/sip.css" rel="stylesheet" type="text/css"/>
+<link href="../css/bootstrap-switch.css" rel="stylesheet" type="text/css"/>
+<link href="../css/jquery-ui_v1.12.0.css" rel="stylesheet" type="text/css"/>
+<link href="../css/loading.css" rel="stylesheet" type="text/css"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../../js/jquery-3.6.0.js?v1"></script>
+    <script src="../js/jquery-ui.js?v1"></script>
+	<script src="../js/moment.js"></script>
+	<script src="../js/theme.js?v1"></script>
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	<!--<script src="../js/loading-overlay.min.js?v1"></script>-->
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js?v1"></script>
+	<script type="text/javascript" src="../js/bootstrap-tooltip.js?v1"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript" src="../js/bootstrap-confirmation.js?v1"></script>
+	 <!-- REST API -->
+	<script src="../js/AesUtil.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/pbkdf2.js"></script>    
+	<script type="text/javascript" src="../js/jquery.jcryption.min.js?v1"></script>
+	<script type="text/javascript" src="../js/common_util.js?v1"></script>
+
+	<script src="../js/login_conf.js"></script>
+	<script src="../js/sip_main.js"></script>
+	<script src="../js/sip_conf.js"></script>
+<!--import datepicker-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+		<script>	
+		
+		
+			function chgLayout(layout){
+				$("#addSIP-step1").css("display","none"); 
+				$("#addSIP-step2").css("display","none"); 
+				$("#addSIP-step3").css("display","none"); 
+
+				switch(layout){
+					case 1: 
+						$("#addSIP-step1").css("display",""); 
+						break;
+					case 2: 
+						$("#addSIP-step2").css("display","");
+						break;
+					case 3: 
+						$("#addSIP-step3").css("display",""); 
+						break;
+					
+					
+				}	
+			}
+	
+			
+        </script>
+</head>
+
+<body>
+ <div class="container max700">
+ <div style="display:none">
+		<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
+		<select style=""   name="selTrdAcc" id="TrdAccSel"></select>
+
+	</div>
+
+  <!-- Add SIP -->
+		<div class="tab-content">
+<!--		
+		<div class="header ">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td class="clsSectionHeader col-xs-12">&nbsp;Create SIP Schedule</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+-->	  
+  		<div id="addSIP-step1" class="well well-sm bgwhite tab-pane fade in active">
+              <form class="form-inline">
+			  <h3 class="tit_h3">Add New SIP Schedule</h3>
+			  <div class="tbl_row_in big">
+			<table id="tblAddNew">
+              <colgroup>
+              <col style="width:30%" />
+              <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row" >Stock Code</th>
+                  <td> 
+				  <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+						<input id="stkCode" class="form-control " type="text"  />
+						<span data-toggle="modal" data-target="#stocklist" class="input-group-addon"><i class="icon-list3"></i> List</span>
+					
+				
+					</div>
+					</div>
+					</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td>
+				  <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+				  		<input id="cashValue" name="" class="form-control" type="text" />
+					</div>
+					</div>
+				</td>
+                </tr>
+                <tr>
+                  <th scope="row">Period</th>
+				  <td >
+				  <div class="form-group-sm ">
+					<div id="" class="input-group col-xs-12">
+					  <select id="period" class="form-control" name=""  >
+						  <option selected="selected" value="Weekly"  class="">Weekly</option>
+						  <option value="Monthy">Monthly</option>
+						  <option value="Quartery">Quartery</option>
+						  <option value="Semi-Annual">Semi-Annual</option>
+						</select>
+						</div>
+						</div>
+					
+					</td>
+                </tr>
+                <tr>
+                  <th scope="row">Start Date</th>
+				  
+                  <td >
+				  
+				   <div class="form-group-sm">
+						<div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+						<input id="startDate" class="form-control" type="text" readonly />
+						<span class="input-group-addon"><i class="icon-calendar22"></i></span>
+					</div>
+					</div>
+					
+				  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Duration</th>
+                  <td ><div class="form-group-sm">
+				  <div id="" class="input-group col-xs-12">
+				  <select id="duration" name="select" class="form-control">
+                      <option selected="selected" value="6mth"  class="">6 Months</option>
+                      <option value="1yr">1 Year</option>
+                      <option value="2yr">2 Years</option>
+                      <option value="3yr">3 years</option>
+                    </select>
+				</div>
+					</div>
+				</td>
+                </tr>
+                <tr>
+				
+                  <th scope="row">Order Mode <a data-toggle="popover" data-container="body" data-placement="right" type="button" data-html="true" href="#" id="odrMode" data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
+				  </th>
+                  <td ><div class="form-group-sm">
+				  	<div id="" class="input-group col-xs-12">
+				  	<select id="orderMode" name="" class="form-control">
+                      <option selected="selected" value="mannual" >Manual</option>
+                      <option value="1yr">Automatic</option>
+                    </select>
+					</div>	
+					</div>
+				</td>
+                </tr>
+              </tbody>
+            </table>
+			</div>
+			<div class="clearfix"></div>
+			<!-- Button Area -->
+            <div class="btnRArea">
+              <div class="btn_r"> <a href="javascript:void(0)" onClick="" class="btn_gb3 btn_s1" name="">Clear</a></div>
+              <div class="btn_r"><a data-toggle="tab" href="#addSIP-step2" class="btn_gb3 btn_s1" onclick="addSchRev()" >Submit</a></div>
+            </div>
+			<div class="clearfix"></div>
+            <!-- Button Area -->
+              </form>
+        
+			<div id="popover-content-odrMode" class="hide">
+				<div class="tbl_row tbl_row_in3 ">
+      				<table >
+						<colgroup>
+                          <col style="width: 90px">
+                          <col>
+                          </colgroup>
+				  	 <tbody>
+						<tr>
+						  <th scope="row">Manual</th>
+						  <td>This would need you to log in UTrade account during every chosen period to trigger a buy-request issued by the SIP reminder that will pop up from your portfolio screen. It would ask you to “Buy Now” or “Skip” to the next period.</td>
+						</tr>
+						<tr>
+						  <!-- GST -->
+						  <th scope="row">Automatic</th>
+						  <td>This would activate the SIP scheduler to automatically send a buy order for you. Your account must have the necessary funds available to activate the auto order, and the order is still subject to share availability for matching. Please verify your orders status to confirm a matched/unmatched order</td>
+						</tr>
+					  </tbody>
+				</table>
+				</div>
+			</div>
+			</div>
+        <!--========--> 
+
+		<!---Step2-->
+ 		 <div id="addSIP-step2" class="well well-sm bgwhite tab-pane fade">
+        <form name="" action="" method="POST">
+		<h3 class="tit_h3">Review SIP Schedule</h3>
+          <div class="tbl_row_in big">
+            <table id="tblReview">
+              <colgroup>
+                <col style="width:30%" />
+                <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row" >Stock Code</th>
+                  <td><label id = "stockCode2">ALI</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Cash Value</th>
+                  <td><label id= "cashValue2">5,000.00</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Period</th>
+                  <td><label id = "period2">Monthly</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Start Date</th>
+                  <td><label id = "startDate2">10-12-2017</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Duration</th>
+                  <td><label id = "duration2">1 YEAR</label></td>
+                </tr>
+                <tr>
+                  <th scope="row">Order Mode</th>
+                  <td><label id= "orderMode2">Automatic</label></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="clearfix"></div>
+			<p>&nbsp;</p>
+            <div class="ls_note">
+              <p class="red"> Important:</p>
+              <p>You are creating an <b>SIP</b> calendar. Please review carefully<!-- <a href="#otherNote" data-toggle="collapse" class="collapsed" aria-expanded="false" style="display:">click here</a>--></p>
+			  
+              
+            </div>
+            <div class="well-sm pin bglightblue">
+              <div class="form-inline form-group-sm ">
+                <label for="PIN">Trading PIN:</label>
+                <input id="tradingPin" type="password" class=" form-control-static " id="acc1"  maxlength="" style="max-width:138px">
+               
+				<a data-toggle="tab" href="#addSIP-step3" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
+				<a data-toggle="tab" onclick="goBack()" class="btn btn-sm btn_gb3 btn_s1"> Back </a>
+                <a href="javascript:void(0)" onClick="#" class=" btn btn-sm btn_gb3 btn_s1 "> Cancel </a>
+                
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </form>
+        </div>
+        <!--========-->
+		
+		<!---Step3-->
+		  <div id="addSIP-step3" class="well well-sm bgwhite tab-pane fade">
+             <form name="" action="" method="POST">
+			  <h2 class="center red">Your SIP Schedule submit succefully</h2>
+				  <p></p>
+				  <div class=" table tbl_row_in big">
+					<div class="row">
+					  <div class="col-md-12 col-xs-12">
+						<table id="tblAddSub">
+						  <colgroup>
+						  <col style="width:30%">
+						  <col>
+						  </colgroup>
+						  <tbody>
+							<!--<tr>
+							  <th scope="row">Reference number</th>
+							  <td><label>RF000111</label></td>
+							</tr>
+							<tr>
+							  <th scope="row" >Stock Code</th>
+							  <td><label>ALI</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Cash Value</th>
+							  <td><label>5,000.00</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Period</th>
+							  <td><label>Monthly</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Start Date</th>
+							  <td><label>10-10-2013</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Duration</th>
+							  <td><label>1 YEAR</label></td>
+							</tr>
+							<tr>
+							  <th scope="row">Order Mode</th>
+							  <td><label>Automatic</label></td>
+							</tr>-->
+						  </tbody>
+						</table>
+					  </div>
+					  <div class="col-md-12 col-xs-12"></div>
+					  <p></p>
+					</div>
+					<div  class="ls_note" >
+					  <p class=" red"> Note:</p>
+					  <p>After creating your SIP schedule, you will receive an SIP reminder email 2 days before your buying schedule</p>
+					  <p>For more information, please contact Utrade call centre at .</p>
+					</div>
+				  </div>
+				  <!-- Button Area -->
+				  <div class="btnRArea center">
+					<div><a href="sipsta.html" target="" class="btn_gb3 btn_m1" >Check SIP Status</a></div>
+				  </div>
+				  <p></p>
+				  <p></p>
+
+        </form>
+          </div>
+        <!--========-->  
+		</div>
+  <!-- Add SIP End -->
+  <div class="clearfix"></div>
+  
+<!---Modal:Stocklist--->
+<div class="modal modal-transparent fade" id="stocklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		  <br>
+        </div>
+        <div class="modal-body">
+		<h4 id="" class="tit_h2">SIP Stock List</h4>
+		  <div class="tbl_row">
+		  <iframe src="stocklist.html" height="400"  width="100%" frameborder="0"></iframe>
+		  <!-- Button Area -->
+				 <div class="btnRArea">
+              <div class="btn_r"> <a data-dismiss="modal" class="btn_gb3 btn_s1">Close</a> </div>
+           	  </div>
+            </div>
+		</div>
+		
+		<!--modal-body END-->
+        <div class="modal-footer"></div>
+		</div>
+	</div>
+    </div>
+<!----Modal:Stocklist  END ---> 
+<div class="clearfix"></div>
+ </div>   
+
+    <script>
+	  	$(function () {
+	  		$('[data-toggle="confirmation"]').confirmation()
+	  	})
+  	</script>
+
+
+<script type="text/javascript">
+	$(function () {
+		  $("#datepicker").datepicker({ 
+				autoclose: true, 
+				todayHighlight: true
+		  }).datepicker('update', new Date());
+		});
+</script>	
+
+<script type="text/javascript">
+	$(function () {
+		  $("#datepicker-edit").datepicker({ 
+				autoclose: true, 
+				todayHighlight: true
+		  }).datepicker('update', new Date());
+		});
+</script>	
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+
+<script>
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+
+
+<script>
+  $("[data-toggle=popover]").each(function(i, obj) {
+	$(this).popover({
+	  html: true,
+	  content: function() {
+		var id = $(this).attr('id')
+		return $('#popover-content-' + id).html();
+	  }
+	});
+	});
+</script>
+
+<script language="JavaScript">
+	function toggle(source) {
+	  checkboxes = document.getElementsByName('foo');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+		checkboxes[i].checked = source.checked;
+	  }
+	}
+</script>
+
+</body>
+</html>

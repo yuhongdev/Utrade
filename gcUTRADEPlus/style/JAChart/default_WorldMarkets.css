@@ -1,0 +1,67 @@
+.tblUp {
+	color: #339900;
+}
+
+.tblDown {
+	color: #C80000;
+}
+
+.tblUnchg {
+	color: #6600FF;
+}
+
+.tblTrdCimbBorder
+{
+	BORDER-LEFT: #C2C2C2 0.5mm solid;
+	BORDER-RIGHT: #C2C2C2 0.5mm solid;
+	BORDER-TOP: #C2C2C2 0.5mm solid;
+	BORDER-BOTTOM: #C2C2C2 0.5mm solid;
+}
+
+.tblTrdCimbMainHeader
+{
+/*
+	BACKGROUND-COLOR: #D4D4D4;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 9pt;	
+	TEXT-ALIGN: middle;
+	Color: #000000
+*/
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 8pt;	
+	Color: #0e3055;
+}
+
+.tblTrdCimbMainFootner
+{
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 7pt;	
+	Color: #0e3055;
+}
+
+.tblTrdCimbHeader
+{
+	BACKGROUND-COLOR: #E6E6E6;
+	FONT-FAMILY: Arial;
+	FONT-SIZE: 8pt;	
+	TEXT-ALIGN: middle;
+	Color: #4e5e6f
+}
+
+.tblTrdCimbOddRow
+{
+	BACKGROUND-COLOR: #EEEEEE;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-ALIGN: left;
+	Color     : 4e5e6f
+}
+
+.tblTrdCimbEvenRow
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 8pt;
+	TEXT-ALIGN: left;
+	Color     : 4e5e6f
+}

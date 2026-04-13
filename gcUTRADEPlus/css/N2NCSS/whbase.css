@@ -1,0 +1,1267 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 10, 2015, 1:09:24 PM
+    Author     : eatsopheakboth
+*/
+
+/* white color gap between tab */
+.top-panel >.x-tab-bar-default-top, .x-tab-default-bottom,.x-tab-bar-default-bottom{
+    background-image: none ;
+}
+.x-tab.x-tab-active.x-tab-default-top,.x-tab.x-tab-active.x-tab-default-bottom{
+    background: #131B27;
+    border-radius: 0px 7px 0px 0px;
+}
+.x-tab.x-tab-active.x-tab-default .x-tab-inner-default,.x-tab-inner-default{
+    color:#fff;
+}
+
+/*to have round corner for the inactive tab*/
+.x-tab-default-top,.x-tab-default-bottom,.charts .x-tab-default-bottom{
+    border-color: #7b8798;
+    box-shadow: none !important;
+    border-radius: 25px;
+    background: #364152;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px 7px 0px 0px;   
+}
+.x-toolbar-default{
+    background-color:#27313C;
+    background-image: none;
+    border: none;
+}
+/*.x-body{
+    color: #fff;
+}*/
+.x-tab-bar-strip-default{
+    background-color: #27313C;
+    border: none;
+}
+/* do not show the thin line above Total, Buy and sell tab*/
+.charts.pie-charts .x-tab-bar-strip-default{
+    background-color: #eaeaea;
+}
+
+.x-btn-inner-default-toolbar-small{
+    color: #fff;
+}
+.N2N_OrderPad_BackDefault div{
+    background-color: #fff;
+}
+.x-column-header{
+    background-color:#E5EAED;
+    background-image: none;
+}
+.x-form-text-default{
+    background-image: none;
+    min-height: 15px;
+    font-size: 12px;
+    height:17px;
+}
+.x-toolbar label{
+    color: #fff;
+}
+.x-toolbar-item .x-btn-inner-default-toolbar-medium{
+    color: #fff;
+}
+div#topPanelSummaryPanel.x-toolbar.x-toolbar-default.x-box-layout-ct{
+    border: none;
+    background-color: #fff;
+}
+div#topPanelSummaryPanel.x-toolbar.x-toolbar-default.x-box-layout-ct label{
+    color: #000;
+}
+.x-tab-bar-top>.x-tab-bar-body-default{
+    border: none;
+}
+.x-btn-over.x-btn-default-toolbar-medium{
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+    border-width:0px;
+}
+
+/*when hover over the tab, need to maintain the round corner*/
+.x-tab-over.x-tab-default-top, .x-tab-over.x-tab-default-left, .x-tab-over.x-tab-default-right{
+    background: #4a5b68;
+    color: #c2cbd2;
+    border-radius: 0jpx 7px 0px 0px; 
+}
+.x-panel-body-default{
+    border-color: #676F78;
+}
+.x-btn.x-btn-menu-active.x-btn-default-toolbar-medium, 
+.x-btn.x-btn-pressed.x-btn-default-toolbar-medium{
+    background-color: transparent;
+    background-image: none;
+    color: #c2cbd2;
+}
+.x-btn-default-small {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-image: none;
+    background-color: transparent;
+}
+.x-panel-header-default{
+    background-color:#27313C;
+    background-image:none;
+}
+.x-panel-header-title-default{
+    color: #fff;
+}
+.x-panel-header-title-default-framed{
+	color: #fff;
+}
+.main-menu .x-btn-focus.x-btn-default-toolbar-medium{
+    background-image: none;
+    background-color: #4a5b68;
+}
+.main-menu .x-btn-default-toolbar-medium{
+    border-width: 0px;
+    overflow: visible;
+    padding-left: 0px;
+}
+.main-menu .x-btn-icon-el.x-btn-icon-el-default-toolbar-medium{
+    width:60px;
+    height:100%;
+}
+.main-menu .x-btn-inner.x-btn-inner-default-toolbar-medium {
+    position:relative;
+    top:-19px;
+    font-size: 12px;
+    border-bottom: 5px solid #d90a0a;
+    background-color: rgba(58,56,56,0.45)!important;
+    height: 22px;
+    text-overflow: clip;
+    text-align: center;
+}
+.main-menu .fixpadding .x-btn-inner.x-btn-inner-default-toolbar-medium {
+    padding: 0;
+}
+.main-menu .fixpadding .x-btn-arrow-right .x-btn-inner.x-btn-inner-default-toolbar-medium {
+    padding-right: 10px;
+}
+
+.main-menu .x-btn-arrow-right .x-btn-inner.x-btn-inner-default-toolbar-medium {
+    padding-right: 10px;
+}
+
+.main-menu .x-btn-arrow-right .x-btn-inner.x-btn-inner-default-toolbar-medium{
+    background-image: url('../../images/btnarrow.gif');
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.main-menu .x-btn-button-default-toolbar-medium{
+    height: 54px;
+}
+.main-menu .x-btn-text.x-btn-icon-top .x-btn-icon-el-default-toolbar-medium{
+    margin-bottom: 0px;
+    margin-top: 1px;
+}
+/* unfortunate hack since Webkit has an issue with Margin-top */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+.main-menu .x-btn-text.x-btn-icon-top .x-btn-icon-el-default-toolbar-medium{    
+	margin-top: 22px;
+  }
+}
+
+_:-ms-fullscreen, :root .main-menu .x-btn-text.x-btn-icon-top .x-btn-icon-el-default-toolbar-medium{  
+     margin-top: 22px;
+}
+
+.x-menu-item-icon-default.x-menu-item-icon {
+    background-image: none !important;
+    white-space: normal;
+    display: none;
+}
+.x-menu-item-checked .x-menu-item-icon-default.x-menu-item-checkbox {
+    background-image: url(../../js/lib/extjs/themes/ext-theme-classic/resources/images/menu/default-checked.gif) !important;
+    display: block;
+}
+.x-menu-item-unchecked .x-menu-item-icon-default.x-menu-item-checkbox{
+	background-image: url(../../js/lib/extjs/themes/ext-theme-classic/resources/images/menu/default-unchecked.gif) !important;
+	display: block;
+}
+span[id*="menucheckitem"]{
+    margin-left: 30px !important;
+}
+.x-menu-item-text-default.x-menu-item-indent{
+    margin-left: 7px;
+    width: 100%;
+}
+.x-form-trigger-default, .N2N_OrderPad_BackDefault div .x-form-trigger-default{
+    background-image: url('../../images/icons/orderpad-arrow-box.png');
+    background-color:#ADADAD;
+    background-position: 0px 0px;
+    border-color: #ADADAD;
+}
+.x-form-trigger-default.x-form-trigger-over{
+    background-image: url('../../images/icons/arrow-box.png');
+    border-color:#ADADAD;
+    background-position: 0px 0px;
+}
+.x-form-trigger-default.x-form-trigger-over.x-form-trigger-focus,.x-form-trigger.x-form-trigger-default.x-form-trigger-click{
+    background-position: 0px 0px;
+    background-image: url('../../images/icons/arrow-box.png');
+}
+.N2N_OrderPad_BackBuy div .x-form-trigger-default{
+    border-color:#3C3939;
+}
+.N2N_OrderPad_BackSell div .x-form-trigger-default{
+    border-color:#3C3939;
+}
+.x-form-trigger-default.x-form-trigger-focus{
+    background-position: 0px 0px;
+}
+.N2N_OrderPad_BackBuy div .x-form-trigger-default{
+    background-color:#505050;
+}
+.N2N_OrderPad_BackSell div .x-form-trigger-default{
+    background-color:#505050;
+}
+.N2N_OrderPad_BackBuy div .x-form-text-wrap-default{
+    border: 1px solid  #505050;
+}
+.N2N_OrderPad_BackSell div .x-form-text-wrap-default{
+    border: 1px solid  #505050;
+}
+.N2N_OrderPad_BackDefault div .x-form-text-wrap-default{
+    border: 1px solid  #505050;
+}
+.N2N_OrderPad_BackDefault div .x-form-trigger-default{
+    background-color: #9a9a9a;
+}
+
+.ordPad-BuyBtn, .ordPad-BuyBtn.x-btn.x-btn-focus.x-btn-default-small{
+    background-color: #49E200;
+    border-color: #62CD00;
+}
+
+.ordPad-BuyBtn .x-btn-inner-default-small{
+    color:#000;
+}
+.ordPad-BuyBtn.x-btn-over.x-btn-default-small{
+    background-color: #7DFF00;
+}
+.ordPad-BuyBtn.x-btn.x-btn-pressed.x-btn-default-small{
+    background-color: #3A9303;
+}
+
+.ordPad-SellBtn .x-btn-inner-default-small{
+    color:#000;
+}
+.N2N_OrderPad_BackSell div .x-form-layout-wrap,
+.N2N_OrderPad_BackBuy div .x-form-layout-wrap,
+.N2N_OrderPad_BackDefault div .x-form-layout-wrap{
+    border-spacing: 0px 5px;
+    padding-right: 2px;
+}
+.N2N_OrderPad_BackSell div .x-btn-inner-default-small,
+.N2N_OrderPad_BackBuy div .x-btn-inner-default-small,
+.N2N_OrderPad_BackDefault div .x-btn-inner-default-small{
+    padding:2.5px 10px;
+}
+.N2N_OrderPad_BackDefault div{
+    background-color: #ffffff;
+    color: #000;
+}
+.N2N_OrderPad_BackBuy div{
+    background-color: #8BF74F;
+    color: #000;
+}
+.N2N_OrderPad_BackSell div{
+    background-color:#FE7679;
+    color: #000;
+}
+body.x-border-layout-ct, div.x-border-layout-ct, div#app-main {
+    background-color:#505050;
+}
+.x-tab-bar-default, .charts .x-tab-bar-default{
+    border-color: #47515d;
+    border-top-width:0px;
+    background-image: none;
+    background-color: #27313c;
+}
+
+.x-grid-with-col-lines .x-grid-cell{
+    border-right-width: 1px !important;
+}
+.x-toolbar-item .x-btn-icon-left .x-btn-inner-default-toolbar-small, 
+.n2n .x-btn-icon-right>.x-btn-inner-default-small, 
+.n2n .x-btn-icon-left>.x-btn-inner-default-small {
+    display: none;
+}
+.x-fieldset-default{
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    border: none;
+}
+.x-fieldset-body{
+    border-top: 1px #505050 solid;
+    padding-top: 5px;
+}
+#colChart .x-panel-body.x-panel-body-default.x-layout-fit{
+    left: -13px !important;
+}
+.mobileview #colChart .x-panel-body.x-panel-body-default.x-layout-fit{
+    left: 0 !important;
+}
+.x-btn-over.x-btn-default-toolbar-small{
+    background-color: #fff;
+}
+.x-menu-icon-separator-default{
+    border-left:none;
+    background: none; 
+
+}
+.x-tab-bar-top>.x-tab-bar-body-default{
+    padding-bottom: 0px;
+}
+.x-panel-header-default{
+    border-color: #27313C;
+}
+.x-panel-header-default-top{
+    -webkit-box-shadow: #ececec 0 0px 0 0 inset; 
+    -moz-box-shadow: #ececec 0 0px 0 0 inset;
+    box-shadow: #ececec 0 0px 0 0 inset; 
+}
+.x-form-text-wrap{
+    background-color: #fff;
+}
+.x-tab-icon-el-default{
+    /*width: 2px!important;*/
+}
+
+/* the tab don't want to have spacing in between */
+.x-tab-default-top{
+    padding-left: 5px;
+    margin-left: 1px;
+}
+.main-menu .x-btn-arrow-right::after, .x-btn-split-right::after{
+    background-position: 0px 50px;
+}
+.main-menu .x-btn-wrap-default-toolbar-medium.x-btn-arrow-right::after{
+    background-image: none; 
+    display: none; 
+}
+.x-btn-wrap-default-toolbar-medium.x-btn-arrow-right::after,.x-btn-wrap-default-toolbar-small.x-btn-arrow-right::after{
+    background-image: url('../../images/icons/arrow.png');
+}
+.x-tbar-page-first{
+    background-image: url('../../images/FastNextL.png');
+}
+.x-tbar-page-prev{
+    background-image: url('../../images/nextL.png');
+}
+.x-tbar-page-next{
+    background-image: url('../../images/nextR.png');
+}
+.x-tbar-page-last{
+    background-image: url('../../images/FastNextR.png');
+}
+.x-item-disabled .x-tbar-page-first{
+    background-image: url('../../images/FastNextL_dis_1.png');
+}
+.x-item-disabled .x-tbar-page-prev{
+    background-image: url('../../images/nextL_dis_1.png');
+}
+.x-item-disabled .x-tbar-page-next{
+    background-image: url('../../images/nextR_dis_1.png');
+}
+.x-item-disabled .x-tbar-page-last{
+    background-image: url('../../images/FastNextR_dis_1.png');
+}
+.x-btn.x-btn-disabled.x-btn-default-toolbar-small{
+    border: none;
+}
+.x-btn-default-small{
+    border: none;
+}
+.fix_whitebutton .x-btn-over .x-btn-inner-default-small {
+    border: none;
+    color: #000;
+}
+.fix_whitebutton .x-btn-menu-active .x-btn-inner-default-small, 
+.fix_whitebutton .x-btn-pressed .x-btn-inner-default-small {
+    border: none;
+    color: #fff;
+}
+.x-btn-over.x-btn-default-small{
+    border: none;
+    color: #fff;
+}
+.x-toolbar-default{
+    padding: 2px 2px 2px 2px;
+}
+.x-toolbar-text-default{
+    color:#fff !important;
+}
+.x-splitter-vertical{
+/*    background-color: #27313C;*/
+}
+.x-column-header-trigger{
+    background-image: url('../../images/blue-drop-down-button_1.png');
+}
+.x-column-header-last{
+    border-right-width: 0px!important;
+}
+.x-tool-img.x-tool-collapse-top{
+    background-image: url('../../images/collapse.png');
+}
+.x-tool-img.x-tool-expand-bottom{
+    background-image: url('../../images/expand.png');
+}
+
+.x-btn-wrap-default-small.x-btn-arrow-right::after{
+    background-image: url('../../images/icons/arrow.png');
+}
+.x-tool-img.x-tool-minimize{
+    background-image: url('../../images/reduce.png');
+}
+.x-tool-img.x-tool-maximize{
+    background-image: url('../../images/enlarge-column.png');
+    background-position: 0 0;
+}
+.n2n .fix_restore .x-tool-img.x-tool-maximize, .x-tool-img.x-tool-restore{
+    background-image: url('../../images/column.png');
+}
+/* the close button position on the tab*/
+.x-tab-default .x-tab-close-btn{
+    background-image: url('../../images/X.png');
+    background-position: -2px -10px;
+    top: 20.5%;
+}
+
+.x-tab-default.x-tab-active .x-tab-close-btn{
+	background-position: -2px -10px;
+}
+.activescreen .x-tab-default.x-tab-active .x-tab-close-btn {
+    background-image: url('../../images/X2.png');
+}
+.x-tool-img.x-tool-up{
+    background-image: url('../../images/collapse.png');
+}
+.x-tool-img.x-tool-down{
+    background-image: url('../../images/expand.png');
+}
+.x-toolbar-more-icon{
+    background-image: url('../../images/default-more.gif');
+}
+.x-toolbar-more-icon.x-rtl {
+    background-image: url('../../images/default-more-left.gif');
+}
+.x-btn-focus.x-btn-default-toolbar-small{
+    background-image: none;
+    background-color: #505050;
+}
+.x-form-item-label-default{
+    /*line-height: 11px;*/
+}
+.main-menu.x-toolbar-default{
+    padding:0px;
+    height:60px;
+}
+.x-form-trigger-default{
+    border: 0px;
+}
+.x-btn.x-btn-menu-active.x-btn-default-small, 
+.x-btn.x-btn-pressed.x-btn-default-small{
+    background-color: #505558;
+    background-image: none;
+}
+.add-wl{
+    background-image: url('../../images/icons/add_1.png') !important;
+}
+.extensive-remove {
+    background-image: url('../../images/icons/vote_minus_s_1.png') !important;
+}
+.x-btn.x-btn-menu-active.x-btn-default-toolbar-small,
+.x-btn.x-btn-pressed.x-btn-default-toolbar-small{
+    background-color: #5b646d;   
+    background-image: none;
+}
+
+.price-chart .stacked-column-icon {
+	background-image: url('../../images/icons/index.png');
+}
+
+.price-chart .x-tab-active .stacked-column-icon {
+	background-image: url('../../images/icons/index-dc.png');
+}
+
+.price-chart .stacked-column-icon-wh {
+	background-image: url('../../images/icons/index_1.png');
+}
+
+.price-chart .x-tab-active .stacked-column-icon-wh {
+	background-image: url('../../images/icons/index-dc_1.png');
+}
+
+.price-chart .pie-charts-icon{
+	background-image: url('../../images/icons/pie.png');
+}
+
+.price-chart .x-tab-active .pie-charts-icon {
+	background-image: url('../../images/icons/pie-dc.png');
+}
+
+.price-chart .pie-charts-icon-wh {
+	background-image: url('../../images/icons/pie_1.png');
+}
+
+.price-chart .x-tab-active .pie-charts-icon-wh {
+	background-image: url('../../images/icons/pie-dc_1.png');
+}
+.summary-indexTab{
+    background-image: url('../../images/icons/index_1.png');
+}
+.summary-pieTab {
+    background-image: url('../../images/icons/pie_1.png');
+}
+.x-tab-active .summary-indexTab {
+    background-image: url('../../images/icons/index-dc_1.png');
+}
+.x-tab-active .summary-pieTab {
+    background-image: url('../../images/icons/pie-dc_1.png');
+}
+#summaryPanel .x-tab-default-top{
+    padding:2px;
+}
+#summaryPanel .x-box-inner{
+    left: -3px; 
+}
+.mobileview #summaryPanel .x-box-inner{
+    left: 0; 
+}
+#summaryPanel .x-tab-bar-right>.x-tab-bar-strip-default{
+    width: 1px;
+}
+.n2n .adderRmCls .x-grid-cell-inner{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+
+}
+.x-btn-inner-default-small{
+    color: #fff;
+}
+.x-btn-focus.x-btn-default-small{
+    background-image: none;
+    background-color: #4A5764;
+}
+.x-btn-over.x-btn-default-small{
+    background-color: #738497;
+    background-image: none;
+}
+.orderpad .x-btn-over.x-btn-default-small{
+    background-color: #697079;
+    background-image: none;
+}
+.orderpad .x-btn.x-btn-focus.x-btn-default-small{
+    background-color: #3A3F45;
+}
+.orderpad .x-btn-default-small{
+    background-color: #4A5058;
+    border: 1px solid #AAB4BD;
+    color: #fff;
+    background-image: none;
+}
+.n2n .orderpad  .ordPad-BuyBtn{
+    background-color: #007F8A;
+    border: 1px solid #64CA37;
+}
+
+.orderpad  .ordPad-BuyBtn .x-btn-inner-default-small{
+    /*color:#000;*/
+    background-image: none;
+}
+.orderpad  .ordPad-BuyBtn.x-btn-over.x-btn-default-small{
+    background-color: #099BA8;
+    border: 1px solid #64CA37;
+    background-image: none;
+}
+.orderpad  .ordPad-BuyBtn.x-btn.x-btn-pressed.x-btn-default-small, .orderpad  .ordPad-BuyBtn.x-btn.x-btn-focus.x-btn-default-small{
+    background-color: #01717B;
+    border: 1px solid #64CA37;
+    background-image: none;
+}
+
+.orderpad  .ordPad-SellBtn{
+    background-color: #EC0038;
+    border-color: transparent;
+    background-image: none;
+
+}
+.orderpad  .ordPad-SellBtn .x-btn-inner-default-small{
+    /*color:#000;*/
+}
+.orderpad  .ordPad-SellBtn.x-btn-over.x-btn-default-small{
+    background-color: #FF134B;
+    border: 1px solid #fa4b70;
+    background-image: none;
+}
+.orderpad  .ordPad-SellBtn.x-btn.x-btn-pressed.x-btn-default-small,.ordPad-SellBtn.x-btn.x-btn-focus.x-btn-default-small{
+    background-color: #CB0231;
+    border: 1px solid #fa4b70;
+    background-image: none;
+}
+.x-fieldset-default.x-fieldset-collapsed .x-tool-toggle,.x-fieldset-default.x-fieldset-collapsed .x-tool-over .x-tool-toggle{
+    background-position: 0% 0%;
+    background-image: url('../../images/increase_1.png');
+}
+.x-fieldset-header-tool-default .x-tool-toggle, .x-fieldset-header-tool-default.x-tool-over .x-tool-toggle{
+    background-position: 0% 0%;
+    background-image: url('../../images/decrease_1.png');
+}
+.x-form-spinner-default{
+    width: 16px;
+    border:0px;
+}
+.x-form-trigger-spinner-default{
+    width:16px;
+}
+.main-menu .x-btn-default-toolbar-medium.x-btn-over .x-btn-icon-el{
+    background-color: #1B2934;
+}
+.main-menu .x-btn-default-toolbar-medium.x-btn-focus{
+    background-color: #1B2934;
+}
+.main-menu .x-btn-default-toolbar-medium.x-btn-menu-active{
+    background-color: transparent;
+}
+.orderpad .x-btn-inner-default-small{
+    color: #fff;
+}
+.x-form-spinner-up-default {
+    background-image: url('../../images/up-button_1.png');
+    background-position: 0 0;
+    background-color: #505050;
+}
+.x-form-spinner-down-default{
+    background-position: 0 0;
+    background-image: url('../../images/down-button_1.png');
+    background-color: #505050;
+}
+.x-form-spinner-up-default.x-form-spinner-over, 
+.x-form-spinner-up-default.x-form-spinner-over.x-form-spinner-focus,
+.x-form-spinner-up-default.x-form-spinner-focus,
+.x-form-spinner-down-default.x-form-spinner-over,
+.x-form-spinner-down-default.x-form-spinner-focus,
+.x-form-spinner-down-default.x-form-spinner-over.x-form-spinner-focus{
+    background-color: #9a9a9a;
+    background-position: 0 0;
+}
+.x-window-body,.x-message-box .x-window-body {
+    background-color: #FEFFFF;
+}
+.x-window-header-default-top,.x-panel-header-default-framed-top{
+    background-color:#26313C;
+    background-image: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow:none;
+}
+.x-window-default{
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+    -moz-border-radius: 0px;
+    background-color:#26313C;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow:none;
+}
+
+/* the light blue border for order pad*/
+.x-window-default.x-window-closable{
+	border: 2px solid rgba(119, 205, 255, 0.77);
+}
+/* To make resize handle works with blue border instead of current black inside */
+/*
+.x-window-default.x-window-closable {
+    border: none;
+}
+.n2n .x-window .x-window-handle {
+    background-color: rgba(119, 205, 255, 0.77);    
+    filter: alpha(opacity=1);
+    opacity: 1;
+}
+.n2n .x-resizable-handle-north, .n2n .x-resizable-handle-south {
+    height: 3px;
+}
+.n2n .x-resizable-handle-east, .n2n .x-resizable-handle-west {
+    width: 3px;
+}
+.n2n .x-resizable-handle-northeast, .n2n .x-resizable-handle-northwest,
+.n2n .x-resizable-handle-southeast, .n2n .x-resizable-handle-southwest {
+    width: 3px;
+    height: 3px;
+}
+.n2n .x-resizable-handle-north-over, .n2n .x-resizable-handle-south-over,
+.n2n .x-resizable-handle-east-over, .n2n .x-resizable-handle-west-over {
+    background-image: none;
+}
+*/
+
+.x-window-body-default{
+    border-width: 0px;
+}
+.x-tool-over .x-tool-close{
+    background-position: 0px 0px;
+    background-color: #525253;
+}
+.x-window-header-default .x-tool-img{
+    background-color: transparent;
+}
+.x-tool-img.x-tool-close{
+    background-image: url(../../images/icons/cancel_1.png);
+}
+
+.x-btn.x-btn-disabled.x-btn-default-small{
+    background-color: #525253;
+    background-image: none;
+}
+.x-window-body .x-panel-body, .x-portlet .x-panel-body, .x-tabpanel-child .x-panel-body, .fix_themebg{
+    background-color: #FEFFFF !important;
+}
+.fix-tbar-bg {
+    background-color: #FEFFFF !important;
+}
+.fix-tbar-bg.x-toolbar label {
+    color: #000;
+}
+.x-window-header-title-default{
+    color: #fff;
+}
+.x-window-body  .x-tab-bar-default-top,.x-window-body  .x-tab-default-bottom,.x-window-body  .x-tab-bar-default-bottom{
+    background-color: #E5EAED;
+}
+.x-window-body .x-tab-default-top,.x-window-body .x-tab-default-bottom{
+	background: #c0ced6;
+	border-radius: 0px 7px 0px 0px; 
+}
+.x-window-body  .x-tab.x-tab-active.x-tab-default-top,.x-window-body  .x-tab.x-tab-active.x-tab-default-bottom{
+    background: #e5eaed;
+    border-radius: 0px 7px 0px 0px;
+}
+
+/* the active total, buy or sell tab in Pie Chart tab should be just like normal button, no round border*/
+.pie-charts .x-tab.x-tab-default-bottom, 
+.x-window-body .pie-charts .x-tab.x-tab-default-bottom {
+    border-radius: 0px;
+}
+
+.x-window-body .x-tab.x-tab-active.x-tab-default .x-tab-inner-default{
+    color: #000;
+}
+.x-window-body .x-tab-bar-top>.x-tab-bar-strip-default{
+    height: 0px;
+}
+.x-window-body .x-panel-body-default{
+    border: none;
+}
+.x-window-body .x-tab-default-top{
+/*     -webkit-border-radius: 0px; */
+/*     border-radius: 0px; */
+/*     -moz-border-radius: 0px; */
+}
+.x-window-body .x-box-target{
+    height:0px;
+}
+.x-window-body .x-tab-default-top{
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.x-window-body .x-panel-header-default{
+    background-color: #E5EAED;
+}
+.x-window-body .x-panel-header-title-default{
+    color: #000;
+}
+.x-window-body .x-column.x-window-item{
+    background-color: #E5EAED;
+}
+.x-btn-over.x-btn-default-toolbar-small{
+	background-color: #5b646d;
+    background-image: none;
+}
+.x-btn-pressed.x-btn-default-toolbar-small.x-btn-over{
+    background-color: #4a5158;
+    background-image: none;
+}
+.x-grid-header-ct{
+    background-color: #E5EAED;
+    background-image: none;
+}
+.x-btn-over.x-btn-default-small{
+    background-image: none;
+    background-color: #505558;
+}
+.x-tab-bar-right>.x-tab-bar-body-default{
+    padding-left:0px;
+}
+.x-window-body .x-panel-header-default-framed-top{
+    /*background-color: #E5EAED;*/
+}
+.x-window-body .x-panel-default-framed{
+      -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+.x-panel-default-framed{
+    background-color: transparent;
+}
+
+.x-window-body .x-panel.x-panel-default-framed.x-column{
+    margin: 0px !important;
+}
+#peratioform .x-panel-header-default-framed-top{
+    border-right-width: 0px;
+}
+#peratioform.x-panel.x-panel-default-framed.x-column{
+     border-right-width: 0px;
+}
+
+.comp_icon.comp_calculator{
+    background-image: none;
+}
+.x-window-header-title-default>.x-title-icon-wrap-default.x-title-icon-left{
+     width:0px;
+    height: 0px;
+}
+.x-window-body .x-tab-inner-default {
+    color: #000;
+}
+.x-window-body .x-btn-default-small, .x-panel .x-btn-default-small {
+    /* commented so that orderpad submit button in white theme is green/red
+    background-color: #607082;
+    */
+}
+.x-window-body .x-btn-over.x-btn-default-small, .x-panel .x-btn-over.x-btn-default-small {
+    background-color: #738497;
+}
+.x-fieldset-default.x-fieldset-collapsed .x-tool-toggle,.x-fieldset-default.x-fieldset-collapsed .x-tool-over .x-tool-toggle{
+    background-position: 0% 0%;
+    background-image: url('../../images/expand_1.png');
+}
+.x-fieldset-header-tool-default .x-tool-toggle, .x-fieldset-header-tool-default.x-tool-over .x-tool-toggle{
+    background-position: 0% 0%;
+    background-image: url('../../images/collapse_1.png');
+}
+
+.menubtn .x-btn-icon-el {
+    margin-top: 1px;
+    margin-left: 1px;
+}
+
+.fix_tool_btn.fix_black .x-btn-icon-el-default-small {
+    width: 16px!important;
+    height: 16px!important;
+}
+/*In stock tracker and stock info, should not have light blue thin strip*/
+.fixblack.activescreen .x-tab-bar-top>.x-tab-bar-strip-default,
+.fixblack.activescreen .stock-info .x-docked-noborder-top.x-tab-bar-top>.x-tab-bar-strip-default {
+    height: 5px;
+    background-color: #364152;
+}
+
+.fixblack.activescreen .toptab.x-tab-bar-top>.x-tab-bar-strip-default {
+    height: 5px;
+    background-color: #85e4ff;
+}
+/*In stock tracker, active tab font color should be white, as the tab is not light blue*/
+.fixblack.activescreen .x-tab.x-tab-active.x-tab-default .x-tab-inner-default {
+    color: #fff;
+}
+.fixblack.activescreen .x-tab.x-tab-active.x-tab-default.x-tab-closable .x-tab-inner-default {
+    color: #000;
+}
+/*Not to highlight light blue at stock tracker*/
+.fixblack.activescreen .x-tab.x-tab-active.x-tab-default-top {
+	background: #131b27;
+	border-radius: 0px 7px 0px 0px; 
+}
+
+/*round at one corner for the active tab*/
+.fixblack.activescreen .x-tab.x-tab-active.x-tab-default-top.x-tab-closable {
+	background: #89fbff;
+	border-radius: 0px 7px 0px 0px;
+	border-color: #abfcff;
+}
+
+.x-tab-bar-top>.x-tab-bar-strip-default {
+    height: 5px;
+    background-color: #131B27;
+}
+.fixblack.activescreen {
+    border: 1px solid transparent!important;
+}
+
+.splitscr  > .x-panel-body {
+    top: 23px !important;
+}
+.n2n #colInfo {
+    padding-top: 4px;
+}
+.n2n .splitscr #colInfo {
+    padding-top: 26px;
+}
+
+.fix_btn.x-btn {
+    background-color: #27313C;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+}
+
+.fix_btn.x-btn-over.x-btn {
+    background-color: #5b646d;
+    background-image: none;
+    border: 1px solid #9d9d9d;
+}
+
+.n2n .extrabtn {
+    top: 2px !important;
+}
+.n2n .btn0 {
+    right: 25px !important;
+}
+.n2n .btn1 {
+    right: 2px !important;
+}
+
+#sbtnSearchAcc a.x-btn {
+    margin-top: -11px !important;
+}
+
+#sbtnSearchAcc span.x-btn-icon-el-default-small {
+    height: 16px;
+}
+
+#summaryPanel .x-tab-default-top {
+    background-image: none;
+    background-color: transparent;
+    border: none;
+}
+
+.n2n .home-msg {
+    color: #fff;
+}
+
+.n2n .x-message-box-question {
+    background-image: url(../../images/icons/question_w.png);
+}
+
+.n2n .x-message-box-warning {
+    background-image: url(../../images/icons/warn_w.png);
+}
+.n2n .x-message-box-info {
+    background-image: url(../../images/icons/info_w.png);
+}
+
+.n2n .state-btn.x-btn-default-toolbar-small {
+    background-color: #5b646d;
+    background-image: none;
+    border-color: transparent;
+}
+
+.n2n .splitscr.dropbar-over > .scr-layer {
+    /*border: 2px solid #85e4ff;*/
+}
+
+.n2n .dd-add-tab .x-dd-drop-icon {
+    background-image: url(../../images/icons/addtab.png);
+}
+.n2n .dd-add-popup .x-dd-drop-icon {
+    background-image: url(../../images/icons/undock.png);
+}
+.x-dd-drag-ghost .x-tab-inner-default, .n2n .x-dd-drag-ghost .x-menu-item-text-default, .n2n .x-dd-drag-ghost .x-btn-inner-default-toolbar-medium {
+    color: #6f6f6f;
+}
+
+.n2n .x-dd-drop-ok .x-dd-drop-icon {
+    background-image: url(../../images/icons/dropok.png);
+}
+
+.n2n .x-dd-drop-nodrop div.x-dd-drop-icon {
+    background-image: url(../../images/icons/dropno.png);
+}
+
+.n2n .x-dd-drop-ok {
+    background-color: #7bf503;
+}
+
+.n2n .x-dd-drop-nodrop {
+    background-color: #f5034d;
+}
+
+.n2n .x-dd-drop-ok .x-dd-drag-ghost, .n2n .x-dd-drop-nodrop .x-dd-drag-ghost {
+    background-color: transparent;
+    border-color: transparent;
+    color: #151922;
+}
+
+.x-menu.fix_firefox_menu_top {
+    top: 60px !important;
+}
+
+.applybtn.x-btn {
+    margin-left: 8px;
+    margin-bottom: 8px;
+}
+.flatbtn.x-btn {
+    background-color: #505050;
+    border: none;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    background-image: none;
+    color: #fff;
+}
+.flatbtn.x-btn-over.x-btn {
+    background-color: #5B646D;
+}
+.flatbtn.x-btn-disabled.x-btn{
+    background-color: #898A97;
+}
+.flatbtn.x-btn-disabled.x-btn .x-btn-inner {
+    color: #505050;
+    background-color: #fff;
+}
+.rightbtn.x-btn {
+    position: absolute;
+    right: 9px;
+}
+
+/* the thin line between the top most panel with the summary panel, should be white */
+#app-main-targetEl{
+	background-color: #fff;
+}
+
+.stacked-column-charts .x-hide-visibility {
+	visibility: hidden !important;
+}
+
+/* no tab strip inside the price chart tab, don't want to see another layer */
+.price-chart .x-tab-bar-strip {
+ 	display: none; 
+}
+
+.price-chart .x-panel-body {
+	border-top: 0px;
+	border-bottom: 0px;
+}
+
+/* for the stock tracker price chart, the bar chart and pie chart tab background */
+.fixblack.activescreen .price-chart a.x-tab-default-top.x-tab.x-tab-active,
+.fixblack .price-chart a.x-tab-default-top.x-tab.x-tab-active,
+.price-chart a.x-tab-default-top.x-tab {
+	border: none;
+	background-color: transparent;
+	padding: 2px;
+}
+
+.pie-charts a.x-tab-default-bottom {
+	border-top-width: 1px;
+}
+
+/* the pie chart bottom don't show the tab background */
+.pie-charts .x-tab-bar-bottom {
+	background-color: #FEFFFF;
+}
+
+/*the first menu label should not be center, else some long menu label will be blocked*/
+.smallermenu .x-box-target .x-toolbar-item:first-child .x-btn-inner{
+	float: left;
+	left: 3%;
+}
+.bar-up {
+    background-color: #10b210;
+}
+.bar-down {
+    background-color: #ed1414;
+}
+.mobileview .bigbtn .x-btn-inner {
+    color: #000;
+}
+
+/* tracker record */
+.trackerrecord {
+    width: 110px;
+    height: 90px;
+    margin: 10px 0px 0px 10px;
+    display: inline-block;
+    table-layout: fixed;
+    border: 1px solid #FFD600;
+    line-height: 13px;
+    font-weight: bold;
+}
+.trackerrecord .tr-title {
+    width: 100px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.trackerrecord .first-td {
+    width: 65px;
+}
+.trackerrecord .back-img {
+    width: 35px;
+}
+.trackerrecord.N2N_FontUp .back-img {
+    background: transparent url("../../images/tcliteSub/ArrowUp_35.png") no-repeat right top;
+}
+
+.trackerrecord.N2N_FontDown .back-img {
+    background: transparent url("../../images/tcliteSub/ArrowDown_35.png") no-repeat right top;
+}
+.trackerrecord.N2N_FontUnchange_yellow .back-img {
+    background: transparent url("../../images/tcliteSub/UnChg_35.png") no-repeat right top;
+}
+.n2n .trackerrecord.x-item-selected {
+    border-width: 2px;
+}
+
+.trackerrecord.tdv2 tr td {
+    text-align: center;
+}
+.n2n .trackerrecord.tdv2 {
+    margin: 5px 0px 0px 5px;
+    border: 1px solid transparent;
+    width: 70px;
+}
+.trackerrecord.tdv2 .tr-title, .trackerrecord.tdv2 tr {
+    width: 63px;
+}
+
+/* ipad hide the menu title when click, because cannot mouseover */
+.smallermenu a.x-box-item span.x-btn-inner.x-btn-inner-default-toolbar-medium,
+.smallermenu.main-menu a.x-box-item span.x-btn-inner.x-btn-inner-default-toolbar-medium.hidden,
+.smallermenu.main-menu a.x-btn-pressed.x-box-item span.x-btn-inner.x-btn-inner-default-toolbar-medium.touchend-item{
+	visibility:hidden;
+}
+
+/* ipad display the menu title when click, because cannot mouseover */
+.smallermenu.main-menu a.x-btn-pressed.x-box-item.x-btn-menu-active span.x-btn-inner.x-btn-inner-default-toolbar-medium:not(.hidden),
+.smallermenu.main-menu a.x-box-item.x-toolbar-item span.x-btn-inner.x-btn-inner-default-toolbar-medium.visible,
+.smallermenu.main-menu a.x-btn-pressed.x-box-item span.x-btn-inner.x-btn-inner-default-toolbar-medium.touchstart-item {
+	visibility:visible;
+}
+
+.n2n .x-btn.text-btn {
+    background-color: #738497;
+    background-image: none;
+    color: #fff;
+    margin-right: 5px;
+    padding: 0;
+}
+.x-btn.layout-btn {
+    height: 16px;
+    width: 16px;
+    font-weight: bold;
+}
+.x-btn.layout-btn .x-btn-inner-default-small {
+    font-weight: bold;
+}
+.x-btn.layout-btn .x-btn-inner-default-small {
+    padding: 0;
+}
+.x-toolbar-item .text-btn .x-btn-icon-left .x-btn-inner-default-toolbar-small, .n2n .text-btn .x-btn-icon-right>.x-btn-inner-default-small, .n2n .text-btn .x-btn-icon-left>.x-btn-inner-default-small {
+    display: inline-block;
+}
+
+.layout-btn-1.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L1_active.png) !important;
+}
+.layout-btn-2.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L2_active.png) !important;
+}
+.layout-btn-3.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L3_active.png) !important;
+}
+.layout-btn-4.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L4_active.png) !important;
+}
+.layout-btn-5.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L5_active.png) !important;
+}
+.layout-btn-6.x-btn-pressed .x-btn-icon-el {
+    background-image: url(../../images/icons/L6_active.png) !important;
+}
+
+.stacked-column-charts text {
+    fill: #000!important;
+}
+.stacked-column-charts tspan, .chart-title {
+    color: #000;
+}
+
+.icon-fitcolumn {
+    background-image: url(../../images/icons/fitcolumn.png)
+}
+.icon-worldindices {
+    background-image: url(../../images/icons/worldindices.png)
+}
+.icon-saveaswl {
+    background-image: url(../../images/icons/saveaswl.png)
+}
+.icon-clear {
+    background-image: url(../../images/icons/clear.png)
+}
+.icon-play {
+    background-image: url(../../images/icons/play.png)
+}
+.icon-pause {
+    background-image: url(../../images/icons/pause2.png)
+}
+.icon-multirow {
+    background-image: url(../../images/icons/multirow.png)
+}
+.icon-r2l {
+    background-image: url(../../images/icons/righttoleft.png)
+}
+.icon-l2r {
+    background-image: url(../../images/icons/lefttoright.png)
+}
+
+/* toast */
+.x-window.toast-box {
+    border-radius: 10px;
+    padding: 10px 8px;
+    background-color: #474747!important;
+    opacity: 0.9 !important;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+.toast-box .x-autocontainer-innerCt {
+    vertical-align: middle;
+}
+
+.toast-box .x-window-body, .toast-box .x-window-body .x-panel-body {
+    background-color: #474747!important;
+    color: #fff;
+    font-weight: bold;
+}
+
+.N2N_FontUp .x-form-field {
+    color: #008000!important;
+}
+.N2N_FontDown .x-form-field {
+    color :#CC0000 !important;
+}
+.N2N_FontUnchange .x-form-field {
+    color: #2F4F4F!important;
+}

@@ -1,0 +1,121 @@
+.text-primary,
+.text-primary-500 {
+  color: var(--color-primary) !important;
+}
+
+.modal {
+  background-color: var(--modal-bg);
+}
+
+.custom-modal {
+  align-content: center;
+  padding: 15px;
+}
+
+.custom-modal .modal-dialog {
+  margin: 1.75rem auto;
+  max-width: 960px;
+  width: 100%;
+}
+
+.custom-modal .modal-content {
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  place-self: center;
+  min-height: 555px;
+  min-width: 300px;
+}
+
+.custom-modal .modal-body {
+  border-radius: 8px;
+  padding: 20px;
+  height: 80vh;
+  max-height: 555px;
+  overflow: hidden;
+}
+
+.custom-modal iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.custom-modal .modal--close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  cursor: pointer;
+  z-index: 2100;
+  padding: 4px;
+  transition: opacity 0.2s ease;
+  background: none;
+  width: auto;
+  margin: auto;
+  line-height: normal;
+}
+
+.custom-modal .modal--close .close-icon {
+  width: 28px;
+  height: 28px;
+  stroke: #111;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.custom-modal .modal--close:hover .close-icon {
+  /* stroke: var(--color-primary); */
+  transform: scale(1.1);
+}
+
+/* Loading style */
+.iframe-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Disappear animation */
+.fade-scale-out {
+  /* animation: fadeScaleOut 0.2s ease forwards; */
+  animation: fadeScaleOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeScaleOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.modal-mw {
+  max-width: 480px;
+}
+
+.modal-pz {
+  padding: 0px;
+}
+
+@media (max-width: 500px) {
+  .custom-modal .modal-body {
+    max-height: 600px;
+  }
+}

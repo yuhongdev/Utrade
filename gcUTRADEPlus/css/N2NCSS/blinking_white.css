@@ -1,0 +1,161 @@
+@CHARSET "ISO-8859-1";
+
+
+.N2N_FontUp{
+    color				: #008000  !important; /* green */
+}
+.N2N_FontDown {
+    color				: #CC0000  !important; /* red */
+}
+.N2N_FontUnchange{
+    color				: #2F4F4F  !important; /* black */
+}
+.N2N_FontColorString{
+    color				: #2F4F4F  !important; /* black */
+}
+.N2N_FontUnchange_yellow{
+    color				: #8e9005  !important; /* yellow */
+}
+.N2N_FontOnBlink{
+    color				: #FFFFFF  !important; /* white */
+}
+
+.N2N_BackUp {
+    background-color	: #008000  !important; /* green */
+}
+.N2N_BackDown {
+    background-color	: #CC0000  !important; /* red */
+}
+.N2N_BackUnchange {
+    background-color	: #2F4F4F  !important;/* black */
+}
+
+
+.marketdepth .N2N_FontUnchange{
+    color				: #253333  !important; /* black */
+}
+.marketdepth .N2N_FontUp{
+    color				: #105922 !important; /* green */
+}
+.marketdepth .N2N_FontDown {
+    color				: #F50A16  !important; /* red */
+}
+
+.N2N_FontStockName_1{
+    color				: #DF0101;
+}
+.N2N_FontStockName_2, .N2N_FontStockName_2 .x-menu-item-text-default {
+    color				: #04B4AE;
+}
+.N2N_FontStockName_3{
+    color				: #008000;
+}
+.N2N_FontStockName_4{
+    color				: #FF00FF;
+}
+
+
+.N2N_priceUpStyle{
+    font-size	: 9pt  !important; 
+    font-weight	: bold;	 
+}
+
+.N2N_priceDownStyle{
+    font-size	: 9pt  !important; 
+    font-weight	: bold;	 
+}
+
+
+
+
+
+
+/*		color		*/
+.N2N_FontWhite{
+    color				: #FFFFFF; /* white */
+}
+
+.N2N_FontBlue{
+    color				: blue; /* white */
+}
+
+
+
+/*		style		*/
+.N2N_FontSize_13{
+    font-size			: 13pt !important;
+}
+.N2N_FontBold{
+    font-weight			: bold !important;
+}
+
+
+
+
+
+.stockInfoLabel_color{
+    color				: blue;
+}
+
+.MarketDepthLast_background{
+    background-color	: #D3D3D3 !important;
+}
+
+
+
+.N2N_OrderPad_BackBuy{
+    background-color 	: lightgreen;
+    color				: #000000;
+}
+.N2N_OrderPad_BackBuy div{
+    background-color 	: lightgreen;
+    color				: #000000;
+}
+
+.N2N_OrderPad_BackSell{
+    background-color 	: salmon;
+    color				: #000000;
+}
+.N2N_OrderPad_BackSell div{
+    background-color 	: salmon;
+    color				: #000000;
+}
+
+.N2N_OrderPad_BackDefault{
+    background-color 	: #EEEEEE;
+    color				: #000000;
+}
+.N2N_OrderPad_BackDefault div{
+    background-color 	: #EEEEEE;
+    color				: #000000;
+}
+
+
+
+/*		 market depth, stock info search stock style		*/
+table.search-item-selected {
+    background-color	: #EDEDED !important;
+}
+.x-grid-table{
+    border-collapse:collapse;
+}
+.x-grid-row-selected .x-grid-td {  
+    border-width:1px 0px !important;
+}
+/*** Market Streamer styles ***/
+.x-grid-row .x-grid-cell.currentCursor {
+    background-color: #05F5F5;
+}
+.x-viewport, .x-viewport>.x-body {
+    /* overflow: auto; */
+}
+.fix_themebg {
+    background-color: #fff;
+}
+#exchangeratewin .x-window-body { 
+    background-color:#fff;
+    color: #000;
+}
+#exchangeratewin .x-form-item-label-default{
+    color: #000;
+}

@@ -1,0 +1,1 @@
+var sRanking_ID='4 October 2012|diamond|Jackpot|Amazon Lily|Wuthering Height|In hoc signo vinces|Twin Tower|Sleeping Dogs|Breaking Dawn|ukwm indonesia 3|ICS|';

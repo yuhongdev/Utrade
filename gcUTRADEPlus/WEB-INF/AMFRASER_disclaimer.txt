@@ -1,0 +1,54 @@
+<html>
+<head>
+<style type="text/css">
+            body {
+                font-family: Helvetica,tahoma,verdana,arial;
+                font-size: 8pt;
+                font-weight: lighter;
+                padding: 0px;
+                margin: 0px;
+                height:500px;
+            }
+
+            .header {
+                font-family: Helvetica,tahoma,verdana,arial;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+
+            .content {
+                font-family: Helvetica,tahoma,verdana,arial;
+                font-size: 9pt;
+                font-weight: lighter;
+            }
+
+            .important {
+                font-family: Helvetica,tahoma,verdana,arial;
+                font-size: 9pt;
+                font-weight: bold;
+                color: red;
+            }
+        </style>
+</head>
+   <body style='background:#FFFFFF;margin:5px 5px 5px 5px'>
+   	<table cellspacing=0 cellpadding=0 border=0 width='100%' bgcolor='white'>
+   		<tr>
+   			<td colspan='2'>
+   				<table cellspacing=0 cellpadding=5 class='clsTableBorder' width='100%'>
+   					<tr>
+   						<td class='signup'>
+   							<table cellspacing=0 cellpadding=5 border=0 bordercolor='#FFFFFF' width='100%'>
+   								<tr>
+   									<td align=center><img src='http://www.amfraser.com.sg/gcsg/img/Home/Amfraser.jpg'></td>
+   									<td class='signup'><p align=justify>In order to gain access to your stock portfolio, you are required to read and understand the authorization statement below. Please click on 'AGREED' button if you agree to the authorization or click on 'NOT AGREED' button if you do not agree to the authorization.</p></td>
+   									<td width='10'></td>
+   								</tr>
+   								<tr>
+   									<td colspan='3' class='signup'><div id=divTermCond style='overflow: auto'><b><u>AUTHORISATION TO ACCESS TO STOCK PORTFOLIO</u></b><br><p align=justify>I/WE HEREBY AUTHORISE AND CONSENT TO AMFRASER SECURITIES PTE. LTD. AND ITS AUTHORISED OFFICERS TO ENQUIRE AND ACCESS INTO MY/OUR TRADING ACCOUNT(S) MAINTAINED WITH AMFRASER SECURITIES PTE. LTD. AND TO DISCLOSE ALL OR PART OF MY/OUR STOCK PORTFOLIO TO ME/US, TO MY/OUR TRADING REPRESENTATIVE OR TO THE AUTHORISED OFFICERS, AS THE CASE MAY BE, FOR THE PURPOSE OF FACILITATING MY/OUR SALE OR PURCHASE OF SECURITIES TRANSACTIONS. I/WE HEREBY CONFIRM THAT THIS AUTHORIZATION SHALL BE VALID FOR AN INDEFINITE PERIOD UNTIL REVOKED BY ME/US IN WRITING.<br><br>I/WE DECLARE AND UNDERSTAND THAT THE DISCLOSURE OF MY/OUR STOCK PORTFOLIO IS MADE ON BEST EFFORT BASIS BASED ON SOURCES WHICH AMFRASER SECURITIES PTE. LTD. BELIEVED TO BE RELIABLE. IT HAS BEEN HIGHLIGHTED TO ME/US THAT THIS STOCK PORTFOLIO IS FOR INFORMATIONAL PURPOSES ONLY AND ONLY CAPTURES ONLINE TRANSACTIONS. IT IS NOT ADJUSTED FOR CORPORATE ACTIONS AND CARE SHOULD BE TAKEN WHEN MANUALLY CHANGING THE PORTFOLIO TO AVOID ERRORS.<br><br>PRIOR TO EXECUTION OF ANY TRADE, I/WE ARE ADVISED TO VERIFY THE ACCURACY OF ALL INFORMATION AS WELL AS MAINTAINING PROPER ACCOUNTING OF MY/OUR SHARE TRANSACTIONS AND COUNTER-CHECKING THEM WITH MY/OUR LATEST SHAREHOLDING STATEMENTS. THUS, I/WE SHALL NOT HOLD AMFRASER SECURITIES PTE. LTD. LIABLE FOR ANY INFORMATIONAL ERRORS, INCOMPLETENESS, OR DELAYS, OR FOR ANY ACTIONS TAKEN IN RELIANCE ON THE INFORMATION CONTAINED HEREIN. I/WE HEREBY UNDERTAKE TO INFORM AMFRASER SECURITIES PTE. LTD. IMMEDIATELY SHOULD THERE BE ANY DISCREPANCIES IN MY/OUR STOCK PORTFOLIO. <br><br>I/WE HEREBY CONFIRM AND DECLARE THAT I/WE HAVE READ AND UNDERSTOOD THE ABOVE AUTHORIZATION AND HEREBY RELEASE AMFRASER SECURITIES PTE. LTD. FROM ALL LIABILITIES OF WHATSOEVER NATURE ARISING FROM THIS AUTHORIZATION. I/WE AGREE AND UNDERTAKE TO INDEMNIFY AMFRASER SECURITIES PTE. LTD. FROM ALL CLAIMS AND DEMANDS AS A RESULT OF ANY UNAUTHORIZED ACTS OF MY TRADING REPRESENTATIVE OR AUTHORIZED OFFICERS, AS THE CASE MAY BE.<br><br>% ROI = GAIN OR LOSS/TOTAL COST * 100<p></div></td>
+   								</tr>
+   							</table>
+   						</td>
+   					</tr>
+   				</table>
+   				</td></tr></table></body>
+</html>

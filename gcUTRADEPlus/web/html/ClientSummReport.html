@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8'>
+	<title>Unicapital - Client Outstanding Position</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../js/jquery-3.6.0.js"></script>
+	
+	<script src="../js/pace.min.js"></script>
+	<link rel="stylesheet" href="../../style/pace.css">
+	
+	<script type="text/javascript" charset="utf-8" src="../js/bootstrap3.3.5.min.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script src="../js/jquery.jcryption.min.js"></script>
+	<script src="../js/AesUtil.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/pbkdf2.js"></script>    
+	<script src="../js/organictabs.jquery.js"></script>
+	<script src="../js/jquery.tablify.min.js"></script>
+	
+	<link rel="stylesheet" href="../../style/normalize.css">
+	<link rel="stylesheet" href="../../style/bootstrap3.3.5.css">
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	
+	<script src="../js/common_util.js"></script>
+	<script src="../js/login_conf.js"></script>
+	<script src="../js/report_main.js"></script>
+	<script src="../js/report_conf.js"></script>
+	<script>
+		$(function() {
+			$("#tabbed").organicTabs({
+				"speed": 200
+			});
+		});
+		
+		<!--Check login status-->
+		$(document).ready(function(){
+                        chkSess();
+			console.log("Login Agent Value :" + login_agent);
+			if(login_agent!=null){
+				if(login_agent){
+					trdAccATP();
+				}else{
+					$('#summaryTbl').hide();
+					$('#tabbed').hide();
+					location.href='../../web/html/noSession.html';
+				}
+			}			
+		});
+</script>
+	
+	<!--[if !IE]><!-->
+	<style>
+		#page-wrap {
+		
+			padding-top: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		/* Table Filtering */
+		table.clsSection thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		table.clsSection tr:nth-of-type(odd) { 	background: #fff;	}
+		table.clsSection tr { border: none;}		
+		table.clsSection td { 
+			/* Behave  like a "row" */
+			border: none;		 
+		}
+		/* 
+		Max width before this PARTICULAR table gets nasty
+		This query will take effect for any screen smaller than 700px
+		*/
+		@media 
+		only screen and (max-width: 760px),
+		(min-device-width: 320px) and (max-device-width: 760px)  {
+
+			/* Force table to not be like tables anymore for responsive 1*/
+			table.responsive, table.responsive thead, table.responsive tbody, table.responsive th, table.responsive td, table.responsive tr { 
+				display: block; 
+			}
+		
+			/* Hide table headers (but not display: none;, for responsive 1) */
+			table.responsive thead tr { 
+				position: absolute;
+				top: -9999px;
+				left: -9999px;
+			}
+		
+			table.responsive tr { 
+				border: none;
+			}
+		
+			table.responsive td { 
+				/* Behave  like a "row" */
+				border: none;
+				border-bottom: 1px solid #eee; 
+				position: relative;
+				padding-left: 50%; 
+				text-align:left !important;
+			}
+		
+			table.responsive td:before { 
+				/* Now like a table header */
+				position: absolute;
+				/* Top/left values mimic padding */
+				top: 1px;
+				left: 4px;
+				width: 45%; 
+				padding-right: 10px; 
+				white-space: nowrap;
+			}
+			
+			
+		
+			/*
+			Label the data responsive 1
+			*/
+			table.responsive td:nth-of-type(1):before { content: "Trans Date"; font-weight:bold; background-color:#ddd } 
+			table.responsive td:nth-of-type(2):before { content: "Due Date"; }
+			table.responsive td:nth-of-type(3):before { content: "Ref No"; }
+			table.responsive td:nth-of-type(4):before { content: "Stock Name"; }
+			table.responsive td:nth-of-type(5):before { content: "Price"; }
+			table.responsive td:nth-of-type(6):before { content: "Qty"; }
+			table.responsive td:nth-of-type(7):before { content: "Amount"; }
+			table.responsive td:nth-of-type(8):before { content: "Curr"; }
+			table.responsive td:nth-of-type(9):before { content: "Exchg"; }
+			table.responsive td:nth-of-type(10):before { content: "**PHP Equivalent"; }
+			table.responsive td:nth-of-type(11):before { content: "PHP Acc Int/ LPC"; }
+			table.responsive td:nth-of-type(12):before { content: "View Details"; }
+			
+			/* Force table to not be like tables anymore for resposive 2 */
+		table#tblContraDtlHdr.responsive2, table#tblContraDtlHdr.responsive2 thead, table#tblContraDtlHdr.responsive2 tbody, table#tblContraDtlHdr.responsive2 th, table#tblContraDtlHdr.responsive2 td, table#tblContraDtlHdr.responsive2 tr { 
+			display: block; 
+		}
+		
+		/* Hide table headers (but not display: none;, for resposive 2) */
+		table#tblContraDtlHdr.responsive2 thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		table#tblContraDtlHdr.responsive2 tr { 
+			border: none;
+			border-bottom: 1px solid #aaa;  }
+		
+		table#tblContraDtlHdr.responsive2 td { 
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee; 
+			position: relative;
+			padding-left: 40%; 
+		}
+		
+		table#tblContraDtlHdr.responsive2 td:before { 
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 1px;
+			left: 4px;
+			width: 35%; 
+			padding-right: 10px; 
+			white-space: nowrap;
+			
+		}
+		
+	
+		/*
+		Label the data resposive 2
+		*/
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(1):before { content: "Contra No"; font-weight:bold; background-color:#ddd } 
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(2):before { content: "Contract Date"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(3):before { content: "Contract No"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(4):before { content: "Qty"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(5):before { content: "Stock Price"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(6):before { content: "Funding Cost"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(7):before { content: "Debit"; }
+		table#tblContraDtlHdr.responsive2 td:nth-of-type(8):before { content: "Credit"; }
+			
+		}
+	
+		/* Smartphones (portrait and landscape) ----------- */
+		@media only screen
+		and (min-device-width : 320px)
+		and (max-device-width : 375px) {
+			body { 
+				padding: 0; 
+				margin: 0; 
+				width: 100%; 
+			}
+			
+			select { 
+				max-width:80%;
+				min-width:140px;}
+
+			#txtTrdAccSrch{max-width:55%;min-width:140px;}
+			
+		}
+		
+		@media only screen
+		and (min-device-width : 375px)
+		and (max-device-width : 627px) {
+			body { 
+				padding: 0; 
+				margin: 0; 
+				width: 100%; 
+			}
+			
+			select { 
+				max-width:86%;
+				min-width:140px;}
+
+			#txtTrdAccSrch{max-width:55%;min-width:140px;}
+			
+		}
+	
+		/* iPads (portrait and landscape) ----------- */
+		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+			body { 
+				width: 100%; 
+			}
+			
+		}
+	
+		/* PC ----------- */
+		@media only screen and (min-device-width: 769px) {
+			body { 
+				width: 100%; 
+			}
+			
+		}
+		
+	 @media print {
+		@page {size: landscape; margin: 0.5cm}
+	
+		
+	}
+	</style>
+	
+<!--	<style>
+  .tabbedcls{
+  	display:none;
+  }
+</style>-->
+	<!--<![endif]-->
+</head>
+<body bgcolor="#FFFFFF">
+	<div id="page-wrap">
+		<div class=" container">
+			<div class="row ">
+				<div class="col-xs-12 clsSectionHeader">
+					<div class="col-xs-12">&nbsp;Summary of Client's Outstanding Position</div>
+				</div>
+				<div class=" col-xs-offset-12 hidden-print"><img class=" visible-lg-inline visible-md-inline" onClick="Print_OnClick();" style="cursor:pointer" title="Print" src="../css/images/butPrint.gif" border="0" height="18" width="18"></div>
+			</div>
+			<div class="col-xs-12 container-fluid">
+				<div class="row">
+					<div class="col-xs-2" style="min-width:85px">Client's Name</div>
+					<div class="col">:</div>
+					<div>
+						<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-2 " style="min-width:85px">Account Number</div>
+					<div class="col">:</div>
+					<div class="col-xs-8" id="searchTxt">
+						<select style="" onChange="AccInfoEncryptValue()"  name="selTrdAcc" id="TrdAccSel"></select>
+						</div>
+						
+				</div>
+				<!--<div class="row">
+					<div class="col-xs-2 " style="min-width:85px">Exchange</div>
+					<div class="col">:</div>
+					<div>
+						<select onChange="AccInfoEncryptValue()" name="selExchCode" id="selExchCode">
+							<option selected="selected" value="">ALL</option>
+							<option value="KL">Bursa Stock Exchange</option>
+							<option value="SI">Singapore Stock Exchange</option>
+							<option value="HK">Hong Kong Stock Exchange</option>
+							<option value="N">America Stock Exchange</option>
+							<option value="AX">Australia Stock Exchange</option>
+							<option value="JK">Jakarta Stock Exchange</option>
+						</select>
+					</div>
+				</div>-->
+				<!--<div class="row">
+					<div class="col-xs-2 " style="min-width:85px">Currency</div>
+					<div class="col">:</div>
+					<div>
+						<select onChange="AccInfoEncryptValue()" name="selCurrCode" id="selCurrCode">
+							<option selected="selected" value="">ALL</option>
+							<option value="MYR">MYR</option>
+							<option value="SGD">SGD</option>
+							<option value="HKD">HKD</option>
+							<option value="USD">USD</option>
+							<option value="AUD">AUD</option>
+							<option value="IDR">IDR</option>
+						</select>
+					</div>
+				</div>-->
+			</div>
+				
+			<div class="row">
+				<div class="col-xs-12">
+					<p class="clear dotline"></p>
+				</div>
+			</div>
+			<table id="accSummTbl" style="max-width:600px">
+			</table>
+			<p id="noDataMsg" class="nofound"></p>
+			<div class="col-xs-12 container-fluid"  style="margin-left:0px">
+			<div id = "KLExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="KLupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "KLaTag"style="cursor:pointer" onclick="hideDiv('KL')">&nbsp; [KL] Bursa Stock Exchange</a></td>
+					</tr>
+				</table>
+				<table id ="KLsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (PHP)</th>
+							<th>Due To You (PHP)</th>
+						</tr>
+					</thead>
+					<tbody id="KLsummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<div id = "SIExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="SIupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "SIaTag" style="cursor:pointer" onclick="hideDiv('SI')">&nbsp; [SI] Singapore Stock Exchange</a></td>
+					</tr>
+				</table>
+				<table id ="SIsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (MYR)</th>
+							<th>Due To You (MYR)</th>
+						</tr>
+					</thead>
+					<tbody id="SIsummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<div id = "HKExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="HKupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "HKaTag" style="cursor:pointer" onclick="hideDiv('HK')">&nbsp; [HK ] Hong Kong Stock Exchange</a></td>
+					</tr>
+				</table>
+				<table id ="HKsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (MYR)</th>
+							<th>Due To You (MYR)</th>
+						</tr>
+					</thead>
+					<tbody id="HKsummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<div id = "NExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="NupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "NaTag" style="cursor:pointer" onclick="hideDiv('N')">&nbsp; [N] America Stock Exchange </a></td>
+					</tr>
+				</table>
+				<table id ="NsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (MYR)</th>
+							<th>Due To You (MYR)</th>
+						</tr>
+					</thead>
+					<tbody id="NsummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<div id = "AXExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="AXupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "AXaTag" style="cursor:pointer" onclick="hideDiv('AX')">&nbsp; [AX] Australia Stock Exchange</a></td>
+					</tr>
+				</table>
+				<table id ="AXsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (MYR)</th>
+							<th>Due To You (MYR)</th>
+						</tr>
+					</thead>
+					<tbody id="AXsummaryTbody">
+					</tbody>
+				</table>
+			</div>
+			<div id = "JKExchg" style="margin-bottom:20px; display:none">
+				<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="JKupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "JKaTag" style="cursor:pointer" onclick="hideDiv('JK')">&nbsp; [JK] Jakarta Stock Exchange</a></td>
+					</tr>
+				</table>
+				<table id ="JKsummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (MYR)</th>
+							<th>Due To You (MYR)</th>
+						</tr>
+					</thead>
+					<tbody id="JKsummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<div id = "OtherExchg" style="margin-bottom:20px; display:none">
+				<!--<table>
+					<tr>
+						<td bgcolor="#ffffff" style="border:0px"><img id="JKupDwnImg" src="../css/images/Icon_DropUp.gif" border="0" name="imgExchg1"><a id= "JKaTag" style="cursor:pointer" onclick="hideDiv('JK')">&nbsp; [JK] Jakarta Stock Exchange</a></td>
+					</tr>
+				</table>-->
+				<table id ="OthersummaryTbl" style="max-width:600px; display:none">
+					<thead>
+						<tr>
+							<th>Account Summary</th>
+							<th>Due From You (PHP)</th>
+							<th>Due To You (PHP)</th>
+						</tr>
+					</thead>
+					<tbody id="OthersummaryTbody">
+					</tbody>
+				</table>
+			</div>	
+			<p class="clear"></p>
+			<div class="tabbedcls" id="tabbed" style="display:none">
+				<ul class="nav hidden-print">
+					<li class="nav-one"><a href="#contract" class="current">Contract</a></li>
+					<li class="nav-two"><a href="#other">Other</a></li>
+					<li class="nav-two"><a href="#trust">Trust</a></li>
+					
+				</ul>
+				
+				<div class="list-wrap">
+				
+					<div id="contract" style="background-color:#FFFFFF" class="visible-tabhidden-print">
+						<div class=" title visible-print">Contract</div>
+					  
+					</div>
+					 
+					<div id="other" style="display: none;background-color:#FFFFFF" class="visible-tabhidden-print" >
+					   <div class=" title visible-print" >Other</div>
+					</div>
+					
+					<div id="trust" style="display:none;background-color:#FFFFFF;" class="visible-tabhidden-print">
+					   <div class=" title visible-print" >Trust</div>
+					</div>
+				</div> <!-- END List Wrap -->
+			 </div>
+			</div> <!-- END Organic Tabs (Example One) -->
+	 
+			<p class="clear"> </p>
+			<!--<div class="col-xs-12 container-fluid"  style="margin-left:0px">
+
+			<b>Noted:</b>
+			<ol>
+				<font color="#444">
+					<li>The (-) symbol indicates Contra Gain.</li>
+					<li>**The MYR equivalent for Non-MYR trades is an amount based on the 
+					exchange rate prevailing on the date of contract / deposition, which may
+					be different from the actual conversion rate applied on the date of 
+					withdrawal. </li>
+				</font>
+			</ol>
+			<br>
+			<b>Additional notes for Islamic Broking:</b>
+			<ol>
+				<font color="#444">
+					<li>LPC stands for &quot;Late Payment Charges&quot;.</li>
+					<li>The word "Interest" is not applicable to Islamic Broking. In Islamic Broking, the word "Late Payment Charges" is to denote Ta'widh (compensation) and Gharamah (penalty) charges.</li>
+					<li>*** Islamic Trust and deposit account does not bear any returns and earning of interest is only applicable to conventional account. </li>
+				</font>
+			</ol>
+			</p>
+			</div>-->
+			<form id="frmSelEnc" name="frmSelEnc" method="post">
+				<input type="hidden" id="input" name="input" />
+				<input type="submit" id="selSubmit" name="selSubmit" style="display:none;" />
+			</form>
+			<input type="hidden" id="crypted" name="crypted" value="" onchange="clientSummbeginEnc();" />
+			<input type="hidden" id="selCryptedResponse" name="selCryptedResponse" value="" />
+		</div>
+	</div>
+	<!----MODAL:CONTRACT DETAIL START --->
+ <div class="modal fade " id="modalContraDtlHdr" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+      <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          </div>
+          <div class="modal-body">
+           		<div id="divContraDtlHdr" class="container-fluid">
+      <div class="row clsSectionHeader">
+        <div class="col-xs-12 "> &nbsp;Client's Contra Detail Information</div>
+      </div>
+      <br>
+      <table id ="tblContraDtlHdr" class="responsive2">
+        <thead>
+          <tr>
+            <th>Contra No</th>
+            <th>Contract Date</th>
+            <th>Contract No</th>
+            <th>Qty</th>
+            <th>Stock Price</th>
+            <th>Funding Cost</th>
+            <th>Debit</th>
+            <th>Credit</th>
+          </tr>
+          </thead>
+          <tbody id="tblContraDtlHdrTbody">
+          
+        </tbody>
+      </table>
+    </div>
+           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn  btn-sm btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!----MODAL:CONTRACT DETAIL  END --->
+
+	<script language="JavaScript">
+		function Print_OnClick(){
+			window.print();
+		}
+		
+		function openReport(){
+			AccInfoEncryptValue();
+		}
+
+		function hideTable(){
+			$('#OthersummaryTbl').css("display","none");
+			$('.tabbedcls').css("display","none");
+		}
+		
+		function div_OnClick(value){
+			var sDiv, sTblNm, divVis;
+			var newVal = "show"
+			sDiv = value+"Exchg";
+			sTblNm = value+"summaryTbl";
+			divVis = $('#'+sDiv).css("display", "");
+			
+			if(divVis){
+				newVal="hide";
+			}
+			
+			if(newVal=="show"){
+				$('#'+sTblNm).css("display","");
+				$('#upDwnImg').attr("src", "../css/images/Icon_DropUp.gif");
+			}else{
+				$('#'+sTblNm).css("display","none");
+				$('#upDwnImg').attr("src", "../css/images/Icon_DropDown.gif");
+				newVal="show";
+			}
+			
+			console.log(newVal);
+			console.log(sTblNm);
+		}
+		
+		function hideDiv(value){
+			$('#'+value+'summaryTbl').css("display", "none");
+			$('#'+value+'upDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+			$('#'+value+'aTag').attr("onclick", "showDiv('"+value+"')");
+			/*if(value == "KL"){
+				$('#KLsummaryTbl').css("display", "none");
+				$('#KLupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#KLaTag').attr("onclick", "showDiv('KL')");
+			}
+			else if(value == "SI"){
+				$('#SIsummaryTbl').css("display", "none");
+				$('#SIupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#SIaTag').attr("onclick", "showDiv('SI')");
+			}
+			else if(value == "HK"){
+				$('#HKsummaryTbl').css("display", "none");
+				$('#HKupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#HKaTag').attr("onclick", "showDiv('HK')");
+			}
+			else if(value == "N"){
+				$('#NsummaryTbl').css("display", "none");
+				$('#NupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#NaTag').attr("onclick", "showDiv('N')");
+			}
+			else if(value == "AX"){
+				$('#AXsummaryTbl').css("display", "none");
+				$('#AXupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#AXaTag').attr("onclick", "showDiv('AX')");
+			}
+			else if(value == "JK"){
+				$('#JKsummaryTbl').css("display", "none");
+				$('#JKupDwnImg').attr("src", "/img/gcCIMB/Icon_DropDown.gif");
+				$('#JKaTag').attr("onclick", "showDiv('JK')");
+			}*/
+		}
+		
+		function showDiv(value){
+			$('#'+value+'summaryTbl').css("display", "");
+			$('#'+value+'upDwnImg').attr("src", "../css/images/Icon_DropUp.gif");
+			$('#'+value+'aTag').attr("onclick", "hideDiv('"+value+"')");
+			/*if(value == "KL"){
+				$('#KLsummaryTbl').css("display", "");
+				$('#KLupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#KLaTag').attr("onclick", "hideDiv('KL')");
+			}
+			else if(value == "SI"){
+				$('#SIsummaryTbl').css("display", "");
+				$('#SIupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#SIaTag').attr("onclick", "hideDiv('SI')");
+			}
+			else if(value == "HK"){
+				$('#HKsummaryTbl').css("display", "");
+				$('#HKupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#HKaTag').attr("onclick", "hideDiv('HK')");
+			}
+			else if(value == "N"){
+				$('#NsummaryTbl').css("display", "");
+				$('#NupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#NaTag').attr("onclick", "hideDiv('N')");
+			}
+			else if(value == "AX"){
+				$('#AXsummaryTbl').css("display", "");
+				$('#AXupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#AXaTag').attr("onclick", "hideDiv('AX')");
+			}
+			else if(value == "JK"){
+				$('#JKsummaryTbl').css("display", "");
+				$('#JKupDwnImg').attr("src", "/img/gcCIMB/Icon_DropUp.gif");
+				$('#JKaTag').attr("onclick", "hideDiv('JK')");
+			}*/
+		}
+	</script>
+</body>
+</html>

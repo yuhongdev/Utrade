@@ -1,0 +1,275 @@
+@CHARSET "ISO-8859-1";
+
+
+.N2N_FontUp{
+    color				: #00ff00  !important; /* green */
+}
+.N2N_FontDown {
+    color				: #ff0000  !important; /* red */
+    text-shadow			: 0 0 0 #ff0000;
+}
+.N2N_FontUnchange{
+    color				: #ffffff  !important; /* black */
+}
+.N2N_FontColorString{
+    color				: #ffffff  !important; /* black */
+}
+.marketdepth .N2N_FontUnchange{
+    color				: #253333  !important; /* black */
+}
+.marketdepth .N2N_FontUp{
+    color				: #105922 !important; /* green */
+}
+.marketdepth .N2N_FontDown {
+    color				: #F50A16  !important; /* red */
+}
+.N2N_FontUnchange_yellow{
+    color				: #FFFF00  !important; /* yellow */
+}
+.N2N_FontOnBlink{
+    color				: #FFFFFF  !important; /* white */
+}
+
+.N2N_BackUp {
+    background-color	: #008800  !important; /* green */
+}
+.N2N_BackDown {
+    background-color	: #CC0000  !important; /* red */
+}
+.N2N_BackUnchange {
+    background-color	: #008800  !important;/* black */
+}
+
+
+
+
+/* pn17 / gn3   */
+.N2N_FontStockName_1{
+    color				: #ff0000 !important;
+}
+
+/* ace - mkt   */
+.N2N_FontStockName_2, .N2N_FontStockName_2 .x-menu-item-text-default {
+    color				: #66ccff !important;
+}
+
+/* strcwarr , etf   */
+.N2N_FontStockName_3{
+    color				: #00ff00 !important;
+}
+
+/* bond & loan , ipo / new listing   */
+.N2N_FontStockName_4{
+    color				: #ff00ff !important;
+}
+
+.N2N_priceUpStyle{
+    font-size	: 9pt  !important; 
+    font-weight	: bold;	 
+}
+
+.N2N_priceDownStyle{
+    font-size	: 9pt  !important; 
+    font-weight	: bold;	 
+}
+
+
+
+
+
+
+/*		color		*/
+.N2N_FontWhite{
+    color				: #FFFFFF; /* white */
+}
+
+.N2N_FontBlue{
+    color				: blue;
+}
+
+
+
+/*		style		*/
+.N2N_FontSize_13{
+    font-size			: 13pt !important;
+}
+.N2N_FontBold{
+    font-weight			: bold !important;
+}
+
+
+
+
+
+.stockInfoLabel_color{
+    color				: #66ccff;
+}
+
+.MarketDepthLast_background{
+    background-color	: #252525 !important;
+}
+
+
+
+.N2N_OrderPad_BackBuy{
+    background-color 	: lightgreen;
+    color				: #000000;
+}
+.N2N_OrderPad_BackBuy div{
+    background-color 	: lightgreen;
+    color				: #000000;
+}
+
+.N2N_OrderPad_BackSell{
+    background-color 	: salmon;
+    color				: #000000;
+}
+.N2N_OrderPad_BackSell div{
+    background-color 	: salmon;
+    color				: #000000;
+}
+
+.N2N_OrderPad_BackDefault{
+    background-color 	: #EEEEEE;
+    color				: #000000;
+}
+.N2N_OrderPad_BackDefault div{
+    background-color 	: #EEEEEE;
+    color				: #000000;
+}
+
+
+/*		 market depth, stock info search stock style		*/
+table.search-item-selected {
+    background-color	: #3C4857 !important;
+}
+.x-column-header{
+    color:#fff;
+    border-color:#000000;
+}
+.x-grid-view{
+    background-color:#000000;
+
+}
+.x-grid-table{
+    border-collapse:collapse;
+}
+.x-grid-row .x-grid-cell {
+    color:#fff;
+    /*border-width:0px 0px 0px 0px!important;*/
+    font: 11px/13px arial,tahoma,helvetica,sans-serif;
+    /*    background-color: #000000;*/
+    /* border-bottom-color:#56667c!important; */
+}
+.resetgrid .x-grid-row .x-grid-cell {
+    color:#000;
+}
+.x-grid-with-row-lines .x-grid-item {
+    border-color: #505454;
+}
+.x-grid-item {
+    background-color: #000;
+}
+.resetgrid .x-grid-item {
+    background-color: #fff;
+}
+.x-grid-item-selected, .x-grid-item-focused {
+    /*background-color:#434444 !important;*/
+    background-image: none;
+}
+
+.n2n .x-grid-item-alt{
+    background-color: #1c1d1d !important;
+}
+/*** Market Streamer styles ***/
+.x-grid-row .x-grid-cell.currentCursor {
+    background-color: #3B9C9C;
+}
+.x-grid-empty{
+    color:#fff;
+    background-color: #000;
+}
+.x-nlg .x-grid-header-ct,.x-nlg .x-column-header{
+    background-image: url("../../images/N2N_Image/black/grid3-hrow.gif");
+    border-color:#000;
+
+}
+.x-column-header-inner {
+    background-color: #787777;
+    background-image: url("../../images/N2N_Image/black/grid3-hrow.gif");
+
+}
+.x-column-header-over,.x-column-header-sort-ASC,.x-column-header-sort-DESC{
+    background-image: url("../../images/N2N_Image/black/grid3-hrow-over.gif");
+    /*     background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#ebf3fd),color-stop(39%,#ebf3fd),color-stop(40%,#d9e8fb),color-stop(100%,#d9e8fb));
+         background-image:-webkit-linear-gradient(top,#ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
+         background-image:-moz-linear-gradient(top,#ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
+         background-image:-o-linear-gradient(top,#ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb);
+         background-image:linear-gradient(top,#ebf3fd,#ebf3fd 39%,#d9e8fb 40%,#d9e8fb)*/
+}
+/*.x-column-header-text{
+    color:#fff;
+}*/
+/*.x-column-header-trigger {
+    background: url("../../images/N2N_Image/black/grid3-hrow.gif") no-repeat scroll left center #C5C5C5;
+}*/
+
+.x-grid-header-ct{
+    background-image: url("../../images/N2N_Image/black/grid3-hrow.gif");
+}
+.x-grid-body{
+    border-color:#56667c;
+    border-top-color:#000;
+
+}
+.x-box-inner{
+    /*color:#000;*/
+}
+a{
+    color:#66CCFF;
+}
+.fxconversion .x-window-body .x-panel-body, .x-window-body .x-panel-body, .x-portlet .x-panel-body, .x-tabpanel-child .x-panel-body, .fix_themebg, .x-container .x-panel-body {
+    background-color: #000;
+    color: #fff;    
+}
+.x-viewport, .x-viewport>.x-body {
+    /* overflow: auto; */
+}
+.resetbg .x-panel-body, .resetgrid .x-grid-view {
+    color: #000;
+    background-color: #fff;
+}
+.resetgrid .x-grid-item-selected, .resetgrid .x-grid-item-focused {
+    background-color:#e0e0e0 !important;
+    background-image: none;
+}
+.resetgrid .x-grid-with-row-lines .x-grid-item, .resetgrid .x-grid-with-row-lines .x-grid-item:first-child {
+    border-color: #bfb8b8;
+}
+/* for FX conversion */
+
+
+.exchangeRate .x-grid-row-alt{
+    background-color: #DADADA;
+}
+
+#exchangeratewin .x-window-body { 
+    background-color:#000;
+    color: #fff;
+}
+#exchangeratewin .x-form-item-label-default{
+    color: #fff;
+}
+
+.n2n .x-grid-group-hd {
+    background: transparent!important;
+}
+.n2n .x-grid-group-title {
+    color: #fff!important;
+}
+.n2n .x-column-header.x-column-header-focus {
+    color: #fff;
+}
+.n2n .home-msg {
+    color: #fff;
+}

@@ -1,0 +1,833 @@
+/* 
+    Document   : black
+    Created on : Oct 25, 2016, 2:57:42 PM
+    Author     : ratha
+    Description:
+        Styles for black theme
+*/
+
+/* ========== overwrite ========== */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3);
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,0.15),inset 0 -1px 0 rgba(255,255,255,0.1)
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255,255,255,0.6);
+    box-shadow:inset 1px 1px 1px rgba(255,255,255,0.37)
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: rgba(255,255,255,0.75);
+    box-shadow:inset 1px 1px 3px rgba(255,255,255,0.5)
+}
+
+/* whitescroll (to use with white background) */
+.white-scroll::-webkit-scrollbar-thumb, .x-boundlist .x-boundlist-list-ct::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07);
+}
+.white-scroll::-webkit-scrollbar-thumb:hover, .x-boundlist .x-boundlist-list-ct::-webkit-scrollbar-thumb:hover {
+    background-color:rgba(0,0,0,.4);
+    box-shadow:inset 1px 1px 1px rgba(0,0,0,.25);
+}
+.white-scroll::-webkit-scrollbar-thumb:active, .x-boundlist .x-boundlist-list-ct::-webkit-scrollbar-thumb:active {
+    background-color:rgba(0,0,0,0.5);
+    box-shadow:inset 1px 1px 3px rgba(0,0,0,0.35);
+}
+
+/* ========== common ========== */
+a {
+    color: #66CCFF;
+}
+a.bratetext, .n2n .msg_blue {
+    color: #7A7AFB !important;
+}
+.n2n .msg_red {
+    color: #FB4242;
+}
+
+/* ========== font ========== */
+.N2N_FontUp {
+    color: #00ff00 !important; /* green */
+}
+.N2N_FontDown {
+    color: #ff0000 !important; /* red */
+    text-shadow: 0 0 0 #ff0000;
+}
+.N2N_FontUnchange {
+    color: #ffffff  !important; /* black */
+}
+.N2N_FontColorString {
+    color: #ffffff !important; /* black */
+}
+.N2N_FontUnchange_yellow {
+    color: #FFFF00 !important; /* yellow */
+}
+.N2N_FontOnBlink {
+    color: #FFFFFF  !important; /* white */
+}
+.N2N_BackUp {
+    background-color: #008800 !important; /* green */
+}
+.N2N_BackDown {
+    background-color: #CC0000 !important; /* red */
+}
+.N2N_BackUnchange {
+    background-color: #008800 !important; /* black */
+}
+
+/* pn17/gn3 */
+.N2N_FontStockName_1 {
+    color: #ff0000 !important;
+}
+/* ace-mkt */
+.N2N_FontStockName_2, .N2N_FontStockName_2 .x-menu-item-text-default {
+    color: #66ccff !important;
+}
+/* strcwarr,etf */
+.N2N_FontStockName_3 {
+    color: #00ff00 !important;
+}
+/* bond & loan, ipo, new listing */
+.N2N_FontStockName_4 {
+    color: #ff00ff !important;
+}
+.N2N_FontWhite {
+    color: #FFFFFF; /* white */
+}
+.N2N_FontBlue {
+    color: blue;
+}
+.N2N_FontSize_13 {
+    font-size: 13pt !important;
+}
+.N2N_FontBold {
+    font-weight: bold !important;
+}
+.stockInfoLabel_color {
+    color: #66ccff;
+}
+.marketdepth .N2N_FontUnchange {
+    color: #253333 !important; /* black */
+}
+.marketdepth .N2N_FontUp { 
+    color: #105922 !important; /* green */
+}
+.marketdepth .N2N_FontDown {
+    color: #F50A16 !important; /* red */
+}
+.MarketDepthLast_background {
+    background-color: #252525 !important;
+}
+
+/* ========== container, panel, window ========== */
+.fxconversion .x-window-body .x-panel-body, .x-window-body .x-panel-body, 
+.x-portlet .x-panel-body, .x-tabpanel-child .x-panel-body, 
+.fix_themebg, .x-container .x-panel-body {
+    background-color: #000;
+    color: #fff;    
+}
+.x-panel-body-default {
+    background-color: #282D32;
+}
+
+.x-window-body .x-panel-body, .x-portlet .x-panel-body, 
+.x-tabpanel-child .x-panel-body, .fix_themebg {
+    background-color: #282D32;
+}
+.x-window-body .x-tab-default-top.x-tab-default, .x-window-body .x-tab-default-bottom {
+    background: #27313c;
+    border-radius: 0px 7px 0px 0px;
+}
+.x-window-body-default {
+    background-color: #151922!important;
+    border-width: 0px;
+}
+.x-window-header-default-top,.x-panel-header-default-framed-top {
+    background-color:#0c1118;
+    background-image: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow:none;
+}
+.x-window-body, .x-message-box .x-window-body {
+    background-color: #151922;
+}
+.fix_black .x-window-body {
+    background-color: #fff !important;
+}
+.x-window-header-title-default {
+    color: #fff;
+}
+.fxconversion .x-window-body .x-panel-body, 
+.x-window-body .x-panel-body, .x-portlet .x-panel-body, 
+.x-tabpanel-child .x-panel-body, .fix_themebg {
+    background-color: #151922 !important;
+}
+.x-window-header-title-default {
+    color: #fff;
+}
+.x-window-body .x-panel-body-default {
+    border: none;
+}
+.x-window-body .x-box-target {
+    height:0px;
+}
+.x-window-body .x-panel-header-default {
+    background-color: #131B27;
+}
+.x-window-body .x-panel-header-title-default {
+    color: #fff;
+}
+.x-window-body .x-column.x-window-item {
+    background-color: #131B27;
+}
+.x-window-body .x-panel-header-default-framed-top {
+    background-color: #1b2935;
+}
+.x-window-body .x-panel.x-panel-default-framed.x-column {
+    border-color: #47515C;
+}
+.x-window-body .x-panel-header-default-framed {
+    border-color: #47515C;
+}
+
+.x-css-shadow {
+    display: none!important;
+}
+.x-splitter-vertical {
+    background-color: #282D32;
+}
+
+.x-panel-header-default {
+    background-image: none;
+    background-color:#131b27;
+}
+.x-panel-header-title-default-framed {
+    color: #fff;
+}
+.x-panel-body-default {
+    border-color: #47515d;
+    border-collapse: collapse;
+}
+.x-panel-default-framed {
+    background-color: #151922;
+}
+.force_black.thumb-wrap.x-item-over {
+    background-color:#a3a3a3;
+    border: none;
+}
+.force_black.thumb-wrap.x-item-selected {
+    background-color: #716f6f;
+    border: none;
+}
+.thumb-wrap.x-view-item-focused {
+    background-color: #716f6f;
+    border: none;
+    outline: none !important;
+}
+
+/* ========== message box ========== */
+.n2n .x-message-box-question {
+    background-image: url(img/black/common/question.png);
+}
+.n2n .x-message-box-warning {
+    background-image: url(img/black/common/warn.png);
+}
+.n2n .x-message-box-info {
+    background-image: url(img/black/common/info.png);
+}
+
+/* ========== tab ========== */
+.top-panel > .x-tab-bar-default-top, .x-tab-default-bottom, .x-tab-bar-default-bottom {
+    background-image: none ;
+}
+.x-window-body .x-tab-bar-body .x-tab.x-tab-active.x-tab-default-top,
+.x-tab.x-tab-active.x-tab-default-bottom.x-top.x-tab-top {
+    background: #151922;
+    border-radius: 0px 7px 0px 0px; 
+}
+.x-tab.x-tab-active.x-tab-default .x-tab-inner-default {
+    color: #fff;
+}
+.x-tab-bar .x-btn-default-small {
+    border: none;
+}
+.x-tab-bar-body .x-btn-default-small {
+    background-color: transparent;
+}
+.x-window-body  .x-tab-bar-default-top,.x-window-body .x-tab-default-bottom,
+.x-window-body  .x-tab-bar-default-bottom {
+    background-color: #131B27;
+}
+.x-window-body .x-tab-default-top,
+.x-window-body .x-tab-default-bottom {
+    background-color: transparent;
+}
+.x-window-body .x-tab.x-tab-active.x-tab-default-top,
+.x-window-body .x-tab.x-tab-active.x-tab-default-bottom {
+    background-color: #151922;
+}
+.x-window-body .x-tab.x-tab-active.x-tab-default .x-tab-inner-default,
+.x-window-body .x-tab-inner-default {
+    color: #fff;
+}
+.x-window-body .x-tab-bar-top>.x-tab-bar-strip-default {
+    height: 0px;
+}
+.x-window-body .x-tab-default-top {
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+.x-window-body .x-tab-default-top{
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.x-tab-over.x-tab-default-top, .x-tab-over.x-tab-default-left, .x-tab-over.x-tab-default-right {
+    background: #566780;
+    border-radius: 0px 7px 0px 0px; 
+    border-color: #7b8798;
+}
+.x-tab-bar-top>.x-tab-bar-strip-default {
+    height: 5px;
+    background-color: #364152;
+}
+
+/* ========== order pad ========== */
+.N2N_OrderPad_BackBuy {
+    background-color: lightgreen;
+    color: #000000;
+}
+.N2N_OrderPad_BackBuy div {
+    background-color: lightgreen;
+    color: #000000;
+}
+.N2N_OrderPad_BackSell {
+    background-color: salmon;
+    color: #000000;
+}
+.N2N_OrderPad_BackSell div {
+    background-color: salmon;
+    color: #000000;
+}
+.N2N_OrderPad_BackDefault {
+    background-color: #EEEEEE;
+    color: #000000;
+}
+.N2N_OrderPad_BackDefault div {
+    background-color: #EEEEEE;
+    color: #000000;
+}
+.N2N_OrderPad_BackDefault div {
+    background-color: #282C2D;
+    color: #fff;
+}
+.N2N_OrderPad_BackBuy div {
+    background-color: #8BF74F;
+}
+.N2N_OrderPad_BackSell div {
+    background-color: #FE7679;
+}
+.N2N_OrderPad_BackDefault div .x-form-item-label-default {
+    color: #fff;
+}
+.N2N_OrderPad_BackDefault div .x-form-cb-label {
+    color: #fff;
+}
+.N2N_OrderPad_BackDefault div .x-btn-inner-default-small {
+    color: #fff;
+}
+.orderpad .x-form-cb-label {
+    color: #000;
+}
+.orderpad .x-btn-over.x-btn-default-small {
+    background-color: #697079;
+}
+.orderpad .x-btn.x-btn-focus.x-btn-default-small {
+    background-color: #3A3F45;
+}
+.orderpad .x-btn-default-small {
+    background-color: #4A5058;
+    border: 1px solid #AAB4BD;
+}
+.orderpad  .ordPad-BuyBtn .x-btn-inner-default-small {
+    color:#fff;
+}
+.orderpad  .ordPad-BuyBtn.x-btn-over.x-btn-default-small {
+    background-color: #099BA8;
+    border: 1px solid #64CA37;
+}
+.orderpad  .ordPad-BuyBtn.x-btn.x-btn-pressed.x-btn-default-small, 
+.orderpad  .ordPad-BuyBtn.x-btn.x-btn-focus.x-btn-default-small {
+    background-color: #01717B;
+    border: 1px solid #64CA37;
+}
+.n2n .orderpad  .ordPad-SellBtn {
+    background-color: #EC0038;
+    border-color: transparent;
+
+}
+.orderpad  .ordPad-SellBtn .x-btn-inner-default-small {
+    color:#fff;
+}
+.orderpad .ordPad-SellBtn.x-btn-over.x-btn-default-small {
+    background-color: #FF134B;
+    border: 1px solid #fa4b70;
+}
+.orderpad .ordPad-SellBtn.x-btn.x-btn-pressed.x-btn-default-small,
+.ordPad-SellBtn.x-btn.x-btn-focus.x-btn-default-small {
+    background-color: #CB0231;
+    border: 1px solid #fa4b70;
+}
+#sbtnSearchAcc a.x-btn, #sbtnSearchAcc a.x-btn.x-btn-over {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+#ordConfAltRows{
+	background-color: #383a40;
+}
+#ordConfBuyHeader{
+	background-color: #8BF74F;
+}
+#ordConfSellHeader{
+	background-color: #ff4040;
+}
+#ordConfBuyText{
+	color: #8BF74F;
+}
+#ordConfSellText{
+	color: #ff4040;
+}
+/* ========== toolbar ========== */
+.fix-tbar-bg {
+    background-color: #282D32 !important;
+}
+.fix-tbar-bg.x-toolbar label {
+    color: #fff;
+}
+.x-toolbar-default {
+    background-color:#131b27;
+    background-image: none;
+    border: none;
+}
+.x-toolbar-default {
+    border-color: #ffffff;
+}
+
+/* ========== form ========== */
+.x-fieldset-header-default>.x-fieldset-header-text {
+    color: #D1DDEF;
+}
+.x-form-cb-label {
+    color: #fff;
+}
+.x-form-item-label-default {
+    color:#fff;
+}
+.x-fieldset-body {
+    border-top: 1px solid #4C555F;
+}
+.x-form-display-field-default {
+    color: #fff;
+}
+.x-fieldset-default.x-fieldset-collapsed .x-tool-toggle,
+.x-fieldset-default.x-fieldset-collapsed .x-tool-over .x-tool-toggle {
+    background-position: 0% 0%;
+}
+.x-fieldset-header-tool-default .x-tool-toggle, 
+.x-fieldset-header-tool-default.x-tool-over .x-tool-toggle {
+    background-position: 0% 0%;
+}
+.x-form-spinner-up-default.x-form-spinner-over, 
+.x-form-spinner-up-default.x-form-spinner-over.x-form-spinner-focus,
+.x-form-spinner-up-default.x-form-spinner-focus,
+.x-form-spinner-down-default.x-form-spinner-over,
+.x-form-spinner-down-default.x-form-spinner-focus,
+.x-form-spinner-down-default.x-form-spinner-over.x-form-spinner-focus{
+    background-color: #9a9a9a;
+    background-position: 0 0;
+}
+.x-form-spinner-default {
+    width: 16px;
+    border:0px;
+}
+.x-form-trigger-spinner-default {
+    width:16px;
+}
+.n2n .x-form-trigger, .N2N_OrderPad_BackDefault div .x-form-trigger-default {
+    background-color:#505050;
+    background-position: 0px 1px;
+    border-color: #505050;
+}
+.n2n .x-form-trigger.x-form-trigger-over {
+    border-color:#505050;
+    background-position: 0px 1px;
+}
+.n2n .x-form-trigger.x-form-trigger-over.x-form-trigger-focus,
+.n2n .x-form-trigger.x-form-trigger-click {
+    background-position: 0px 1px;
+}
+.x-fieldset-default.x-fieldset-collapsed .x-tool-toggle, 
+.x-fieldset-default.x-fieldset-collapsed .x-tool-over .x-tool-toggle {
+    background-image: url('img/black/common/expand_1.png');
+}
+.x-fieldset-header-tool-default .x-tool-toggle, 
+.x-fieldset-header-tool-default.x-tool-over .x-tool-toggle {
+    background-image: url('img/black/common/collapse_1.png');
+}
+
+/* ========== menu ========== */
+.x-menu-default {
+    border: none;
+}
+.x-menu-body-default {
+    background-color: #35404a;
+}
+.x-menu-item-default.x-menu-item-active {
+    background-image: none;
+    background-color: #1b2935;
+    border-color: #1b2935;
+}
+.x-menu-item-text-default, .n2n .x-menu-item-indent-default {
+    color: #fff;
+}
+.x-menu-icon-separator-default {
+    border-left:none;
+    background: none; 
+}
+.main-menu .x-btn-focus.x-btn-default-toolbar-medium {
+    background-image: none;
+    background-color: #1b2935;
+}
+.x-menu-item-default.x-menu-item-separator {
+    border-top: #253848;
+    background-color: #253848;
+}
+
+/* ========== grid ========== */
+.x-grid-view {
+    background-color: #000000;
+}
+.x-grid-table {
+    border-collapse:collapse;
+}
+.x-column-header {
+    color:#fff;
+}
+.x-grid-row .x-grid-cell {
+    color:#fff;
+    font: 11px/13px arial,tahoma,helvetica,sans-serif;
+    border-color: #1b2027;
+}
+.resetgrid .x-grid-row .x-grid-cell {
+    color:#000;
+}
+.x-grid-with-row-lines .x-grid-item {
+    border-color: #505454;
+}
+.x-grid-item {
+    background-color: #000;
+}
+.resetgrid .x-grid-item {
+    background-color: #fff;
+}
+.x-grid-item-selected, .x-grid-item-focused {
+    background-image: none;
+}
+.x-grid-empty {
+    color:#fff;
+    background-color: #000;
+}
+.resetbg .x-panel-body, .resetgrid .x-grid-view {
+    color: #000;
+    background-color: #fff;
+}
+.resetgrid .x-grid-item-selected, .resetgrid .x-grid-item-focused {
+    background-color: #e0e0e0 !important;
+    background-image: none;
+}
+.resetgrid .x-grid-with-row-lines .x-grid-item, .resetgrid .x-grid-with-row-lines .x-grid-item:first-child {
+    border-color: #bfb8b8;
+}
+.n2n .x-grid-group-hd {
+    background: transparent!important;
+}
+.n2n .x-grid-group-title {
+    color: #fff!important;
+}
+.x-grid-header-ct {
+    background-image:none;
+    background-color:#1b2935;
+}
+.n2n .x-column-header.x-column-header-focus {
+    color: #fff;
+}
+.x-column-header {
+    background-color:#1b2935;
+    background-image: none;
+    border-color: #47515d;
+}
+.x-column-header-over, 
+.x-column-header-sort-ASC, 
+.x-column-header-sort-DESC {
+    background-color:#5b646d !important;
+    background-image: none;
+
+}
+.x-grid-header-ct {
+    border-color: #47515d;
+    border-width: 1px;
+}
+.x-column-header-inner {
+    background-image: none;
+    background-color: #1b2935;
+}
+.x-column-header-sort-DESC .x-column-header-text {
+    background-image: url('img/black/common/sort-desc.gif');
+}
+.x-column-header-sort-ASC .x-column-header-text {
+    background-image: url('img/black/common/sort-asc.gif');
+}
+.x-grid-view, .x-grid-item {
+    background-color: #000000;
+}
+.n2n .x-grid-row-summary .x-grid-cell {
+    background-color: #2a2c30!important;
+}
+.n2n .x-grid-item-alt {
+    background-color: #1c1d1d !important;
+}
+.x-grid-with-row-lines .x-grid-item {
+    border-color: #1b2027;
+}
+.x-grid-item-selected, .x-grid-item-selected.x-grid-item-over {
+    background-color: #1c1d1d;
+}
+.n2n .x-grid-row .x-grid-cell-selected {
+    background-color: #42454b;
+}
+.x-grid-item-over {
+    background-color: #33363a;
+}
+
+/* ========== search grid ========== */
+table.search-item-selected {
+    background-color: #3C4857 !important;
+}
+
+/* ========== button ========== */
+.x-btn-inner-default-small{
+    color: #000000;
+}
+.x-btn-over.x-btn-default-small {
+    background-color: #5b646d;
+    background-image: none;
+}
+.x-btn-over.x-btn-default-toolbar-small {
+    background-color: #5b646d;
+    background-image: none;
+}
+.normal-btn .x-btn-over.x-btn-default-small {
+    background-color: #738497;
+}
+.x-btn-inner-default-small {
+    color: #fff;
+}
+.x-btn.x-btn-menu-active.x-btn-default-toolbar-small {
+    background-image: none;
+    background-color: #505558;
+}
+.x-btn.x-btn-disabled.x-btn-default-small {
+    background-color: #383a40;
+    background-image: none;
+}
+.fix_btn.x-btn, .extrabtn.sync_ct {
+    background-color: #131b27;
+}
+.fix_btn.mf_filter_btn.x-btn, .extrabtn.sync_ct {
+    background-color: #009b4d;
+}
+
+.x-btn-over.x-btn-default-small.icon-pdf {
+    background-color: #5b646d;
+    background-image: url('img/main/common/pdf.png');
+}
+
+/* ========== tracker ========== */
+/* do not show the thin line above Total, Buy and sell tab*/
+.charts.pie-charts .x-tab-bar-strip-default {
+    background-color: #27313c;
+}
+/* the pie chart bottom don't show the tab background */
+.pie-charts .x-tab-bar-bottom {
+    background-color: #151922;
+}
+.x-window-body .pie-charts .x-tab-default-bottom {
+    background-color: #27313c;
+    border-radius: 0px;
+}
+.n2n .stacked-column-charts text {
+    fill: #fff!important;
+}
+.n2n .stacked-column-charts tspan, .n2n .chart-title {
+    color: #fff;
+}
+.icon-chart {
+    background-image: url('img/black/common/chart.png');
+}
+.x-tab-active .icon-chart {
+    background-image: url('img/black/common/chart_active.png');
+}
+.icon-pie {
+    background-image: url('img/black/common/pie.png');
+}
+.icon-reset2{
+    background-image: url('img/black/common/reset.png'); 
+}
+.x-tab-active .icon-pie {
+    background-image: url('img/black/common/pie_active.png');
+}
+
+/* ========== market summary ========== */
+.apply-black .icon-vol {
+    background-image: url(img/black/summary/vol.png);
+}
+.apply-black .icon-value {
+    background-image: url(img/black/summary/value.png);
+}
+.apply-black .icon-trade {
+    background-image: url(img/black/summary/trade.png);
+}
+.apply-black .icon-up {
+    background-image: url(img/black/summary/up.png);
+}
+.apply-black .icon-down {
+    background-image: url(img/black/summary/down.png);
+}
+.apply-black .icon-unchange {
+    background-image: url(img/black/summary/unchange.png);
+}
+.apply-black .icon-untrade {
+    background-image: url(img/black/summary/untrade.png);
+}
+.apply-black .icon-mktfrval {
+    background-image: url(img/black/summary/mktfrval.png);
+}
+
+/* ========== streamer ========== */
+.x-grid-row .x-grid-cell.currentCursor {
+    background-color: #3B9C9C;
+}
+
+/* ========== tracker record ========== */
+.n2n .trackerrecord {
+    border: 1px solid #FFD600;
+}
+
+/* ========== exchange rate ========== */
+.exchangeRate .x-grid-row-alt {
+    background-color: #DADADA;
+}
+#exchangeratewin .x-window-body { 
+    background-color: #000;
+    color: #fff;
+}
+#exchangeratewin .x-form-item-label-default{
+    color: #fff;
+}
+
+/* ========== fx conversion ========== */
+.fxconversion.x-window-default, .x-window-default {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-color:#0c1118;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow:none;
+    -moz-background-clip: padding-box;     /* Firefox 3.6 */
+    -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+    background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+.confirmation .x-window-body {
+    color: #ffffff;
+}
+
+/* ========== color picker ========== */
+.x-colorpicker .x-panel-body-default {
+    background-color: #131A22;
+}
+.x-colorpicker {
+    background-color: #131A22 !important;
+    border: 3px solid rgba(255,255,255,0.3) !important;
+    -moz-background-clip: padding-box !important;     /* Firefox 3.6 */
+    -webkit-background-clip: padding !important;  /* Safari 4? Chrome 6? */
+    background-clip: padding-box !important;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+.x-colorpicker .x-box-inner {
+    color: #fff;
+}
+
+/* ========== other ========== */
+a#bRate {
+    color:#66CCFF !important;
+}
+.adderRmCls {
+    background-color: rgba(19,27,39,0.4);  
+    padding-left:0px;
+    padding-right:0px;
+    text-align: center;
+}
+.color-combobox.x-vbox-form-item {
+    background-color: transparent;
+}
+
+
+
+/* ========== mobile ========== */
+.n2n .home-msg {
+    color: #fff;
+}
+
+.n2n .buy-title .x-panel-header-title {
+    color: #00ff00 !important;
+}
+.n2n .sell-title .x-panel-header-title {
+    color: #ff0000 !important;
+}
+
+/* ========== color bar ========== */
+.bgpc.one-color {
+    color: #FFF;
+}
+
+/* ========== Mutual Fund ========== */
+.mutualfund {
+    background-color: #2b303f;
+}
+
+.mutualfund .fullname {
+    line-height: 1.3;
+    color: #eeedef;
+    font-size: 15px;
+}
+
+.mutualfund .change {
+    margin: 20px 0px 5px 0px;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.mutualfund .performance {
+    color: #7a7b7f;
+}
+
+.mfcard-selected {
+    border: 1px solid #FFD600!important;
+}

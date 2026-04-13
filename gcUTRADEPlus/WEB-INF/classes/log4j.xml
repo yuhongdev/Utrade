@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n" />
+        </layout>
+    </appender>
+    <appender name="home" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/gcUTRADEPlus/homeController/stdout.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %l - %m%n" />
+        </layout>
+    </appender>
+    <appender name="login" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/gcUTRADEPlus/loginController/stdout.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %l - %m%n" />
+        </layout>
+    </appender>
+    <appender name="register" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/gcUTRADEPlus/registerController/stdout.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %l - %m%n" />
+        </layout>
+    </appender>
+    <logger name="com.n2n.rest.HomeController">
+		<level value="debug" />
+		<appender-ref ref="home" />
+	</logger>
+	<logger name="com.n2n.rest.LoginController">
+		<level value="debug" />
+		<appender-ref ref="login" />
+	</logger>
+	<logger name="com.n2n.rest.RegisterController">
+		<level value="debug" />
+		<appender-ref ref="register" />
+	</logger>
+</log4j:configuration>

@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIP Schedule</title>
+    <script src="../js/jquery-3.6.0.js"></script>
+<link href="../fonts/icomoon/styles.css" rel="stylesheet" type="text/css">
+<link href="../css/bootstrap-5.3.6.min.css" rel="stylesheet" type="text/css"/>
+<link href="../css/elements.css" rel="stylesheet" type="text/css"/>
+<link href="../css/sip.css" rel="stylesheet" type="text/css"/>
+<link href="../css/jquery-ui_v1.12.0.css" rel="stylesheet" type="text/css"/>
+<link href="../css/loading.css" rel="stylesheet" type="text/css"/>
+ <link href="../css/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+<!--imp ort datepicker-->
+ <!-- REST API -->
+	<script src="../js/AesUtil.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/pbkdf2.js"></script>    
+	<script type="text/javascript" src="../js/jquery.jcryption.min.js?v1"></script>
+	<script type="text/javascript" src="../js/common_util.js?v1"></script>
+	<script src="../js/login_conf.js"></script>
+	<script src="../js/sip_main.js"></script>
+	<script src="../js/sip_conf.js"></script>
+	
+<script>   
+$(document).ready(function(){
+            chkSess();
+			console.log("Login Agent Value :" + login_agent);
+			if(login_agent!=null){
+				if(login_agent){
+					trdAccATP();
+				
+					
+				}else{
+					$('#tblSIPAdv').css("display","none");
+					$('.container').hide();
+					alert("Please Login");
+
+				}
+			}			
+		});		
+ function startSIP(){
+		manSIP();
+}
+/*$('#redirect').on('click', function() { //When clicking on the close or fade layer...
+    $('#fade , .popbox').fadeOut(function() {
+        $('#fade, a.close').remove();  //fade them both out
+    });
+    return false;
+});*/
+
+
+
+	
+	function increase(){
+		var a = 1;
+		var textBox = document.getElementById("text");
+		textBox.value = a;
+		a++;
+	}            
+</script>
+</head>
+        <body>
+        <div class="container max800">
+<!--          <div class="topbar"> <div class="clsSectionHeader col-xs-12">&nbsp;SIP Advisor</div></div> -->
+			 <h3 class="tit_h3">SIP Advisor</h3>
+		  <div class="clearfix"></div>
+		  <div style="display:none">
+			<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
+			<span id="CliCode"></span>
+				<select style=""   name="selTrdAcc" id="TrdAccSel"></select>
+
+			</div>
+              <!-- divAdvisor -->
+			  <div  id="divAdvisor" class="wrap_in">
+                <div class="tbl_col">
+				<table class="table table-bordered " >
+                      <thead>
+					  
+                      <tr>
+                        <th scope="col" class="tit_h3 center">Stock Investment <span>Program Advisor</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="center">Please be informed that you have an upcoming SIP order(s) that need(s) to be posted.<br />
+                          SIP Orders cannot be entered when the market is closed.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+			    </div>
+                <div class="tbl_col tbl_col_last table-responsive ">
+				<table id="tblSIPAdv" class="table table-bordered center mb10"  >
+                    <thead class="center">
+                      <tr>
+                        <th scope="col" class="center">Schedule Date</th>
+                        <th scope="col" class="center">Stock Code</th>
+                        <th scope="col" class="center">Cash Value</th>
+                        <th scope="col" class="center col-sm-5">Action</th>
+                      </tr>
+                    <!--  <tr>
+                        <td>10/10/2017</td>
+                        <td>ALI</td>
+                        <td>2,000</td>
+                        <td>
+						<div>						
+						<a class="btn-glow2 btn_nor1 btn_s1 xsmb5 " onclick="">Buy Now</a> 
+						<a class="btn-glow2 btn_nor1 btn_s1 xsmb5 " data-toggle="confirmation" data-placement="bottom">Skip</a></div></td>
+                      </tr>-->
+					  
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+				 
+                </div>
+				<div class="clearfix"></div>
+				<div class="mt10 center" >
+				<a id="redirect" class="btn btn-glow2 btn_nor1 btn_s1 " onclick="parent.closepopup();" >Remind Me Later</a>
+				</div>
+				<a id="refresh" style="display:none" onclick="parent.reloadpopup();" >Refresh</a>
+				</div>
+				<div class="center">Will be prompted next time you log-in</div>
+				
+				 <div class="disclaimer" >
+				 <div class="ttl">
+				  <a data-toggle="collapse" href="#collapseDisclaimer" role="button" aria-expanded="false" aria-controls="collapseExample">
+					Disclaimer
+				  </a>
+				  </div>
+				  <div class="collapse" id="collapseDisclaimer">
+			  <div class="msg">
+				Order queue shall be based on price time priority and fulfilment based on available shares in the market at the order limit price.
+			  </div>
+			</div> 
+				 </div>
+		  </div>
+     
+        </div>
+
+	<!-- Mainly scripts -->
+
+    <script src="../js/bootstrap.min.js"></script>
+	<!-- TouchSpin -->
+    <script src="../js/jquery.bootstrap-touchspin.min.js"></script>
+	<script>
+	$(".touchspin1").TouchSpin({
+                buttondown_class: 'btn btn-white',
+                buttonup_class: 'btn btn-white'
+            });
+
+            $(".touchspin2").TouchSpin({
+                min: 0,
+                max: 100,
+                step: 0.1,
+                decimals: 2,
+                boostat: 5,
+                maxboostedstep: 10,
+                postfix: '%',
+                buttondown_class: 'btn btn-white',
+                buttonup_class: 'btn btn-white'
+            });
+
+            $(".touchspin3").TouchSpin({
+                verticalbuttons: true,
+                buttondown_class: 'btn btn-white',
+                buttonup_class: 'btn btn-white'
+            });
+
+	</script>
+	
+	<script type="text/javascript" src="../js/bootstrap-tooltip.js?v1"></script>
+	<script type="text/javascript" src="../js/bootstrap-confirmation.js?v1"></script>
+    <script>
+	  	$(function () {
+	  		$('[data-toggle="confirmation"]').confirmation()
+	  	})
+  	</script>
+</body>
+</html>

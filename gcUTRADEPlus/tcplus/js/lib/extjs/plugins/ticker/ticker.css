@@ -1,0 +1,37 @@
+﻿.x-ticker-wrap { 
+	/*border: solid 1px black; */
+	overflow: hidden; 
+	height: 100%;
+}
+
+.x-ticker-body { 
+	/*height: 100%;*/
+	padding: 5px;
+}
+.x-ticker-body.left { 
+	display: inline-block;
+}
+.x-ticker-body.right { 
+	display: inline-block;
+}
+.x-ticker-body.up { 
+}
+.x-ticker-body.down { 
+}
+
+.x-ticker-item {
+}
+
+.x-ticker-item.left {
+	display: table-cell;
+}
+
+.x-ticker-item.right {
+	display: table-cell;
+}
+
+.x-ticker-item.up {
+}
+
+.x-ticker-item.down {
+}

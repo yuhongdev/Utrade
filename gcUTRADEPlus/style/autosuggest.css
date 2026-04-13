@@ -1,0 +1,28 @@
+div.suggestions {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid black;
+    position: absolute;  
+    background-color: #efefef; 
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    TEXT-ALIGN: left;
+	scrollbar-face-color: #6699FF;
+	scrollbar-shadow-color: #FFFFFF; 
+	scrollbar-highlight-color: #FFFFFF; 
+	scrollbar-3dlight-color: #6699CC; 
+	scrollbar-darkshadow-color: #336699;
+	scrollbar-track-color: #FFFFFF; 
+	scrollbar-arrow-color: #FFFFFF;
+}
+
+div.suggestions div {
+    cursor: default;
+    padding: 0px 3px;
+}
+
+div.suggestions div.current {
+    background-color: #3366cc;
+    color: white;
+}
