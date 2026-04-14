@@ -6,6 +6,9 @@ ENV CATALINA_OPTS="-Xms512m -Xmx2048m"
 # Remove default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
+# Create symlink for legacy paths
+RUN mkdir -p /usr/share/tomcat && ln -s /usr/local/tomcat/webapps /usr/share/tomcat/webapps
+
 # Copy configurations
 COPY docker/conf/ /usr/local/tomcat/conf/
 
