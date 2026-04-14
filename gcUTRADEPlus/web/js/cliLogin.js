@@ -101,11 +101,16 @@ function initLoginFormValidation(BMSSetting){
 			}
 		},
 		submitHandler: function(form){
-			login();
+			// MFA: legacy login() disabled. The Bootstrap 5 passport modal
+			// (.openModalBtn[data-type="login"] → login-popup-bootstrap5.js)
+			// is the new login entrypoint. Calling login() here would run the
+			// pre-MFA jCryption+AES handshake which throws "Malformed UTF-8"
+			// inside AesUtil.decrypt against the /getNewKey response.
+			// login();
 			return false;
 		}
-	});		
-	
+	});
+
 	//frmForgetPwd validation
 	$("#frmForgetPwd").validate({
 		errorElement:'span',
@@ -377,7 +382,11 @@ $(document).ready(function(){
 		chgLayout(2);
 	});
 	initLoginFormValidation(BMSSetting);
-	chkSess();
+	// MFA: legacy chkSess() disabled. It called getRestApiResp(ct=1) which
+	// ran encryptValue() → encValWAES() → AesUtil.decrypt() on page load,
+	// throwing "Malformed UTF-8" against the /getNewKey response. Session
+	// state is handled server-side by LoginV3Controller in the MFA flow.
+	// chkSess();
 
 	$("#frmForceChgHint_hintType").change(function(){
 		if($("#frmForceChgHint_hintType").val()=="OTR"){
