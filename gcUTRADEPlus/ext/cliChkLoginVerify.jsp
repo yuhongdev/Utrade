@@ -95,7 +95,7 @@ m_sLog = new StringBuffer();
 m_sLog.append("["+new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP
 		+" SSO-cliChkLoginXX: IC="+ sIC +", LoginID="+ sLoginID +", BHCliCode="+ sBHCliCode +", BHBranch="+ sBHBranch +", BHCode="+sBHCode
 		+", IPAddress="+ sIPAddress +"\r");
-com.n2n.util.Logging.logAPAgent1(m_sLog,"SSOLog", "/usr/share/tomcat/logs");
+com.n2n.util.Logging.logAPAgent1(m_sLog,"SSOLog", "/usr/local/tomcat/logs");
 
 	if (bCont) {
 		m_sRet = verifyClicksRedirection(sIC, sLoginID, sBHCliCode, sBHBranch, sBHCode);
@@ -128,7 +128,7 @@ com.n2n.util.Logging.logAPAgent1(m_sLog,"SSOLog", "/usr/share/tomcat/logs");
 					m_sLog = new StringBuffer();
 					m_sLog.append("["+new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP
 						+" SSO-cliChkLoginXX: "+ sCliCode +"|"+ sValue +"|"+ session.getId());
-					com.n2n.util.Logging.logAPAgent1(m_sLog, "SSOLog", "/usr/share/tomcat/logs");
+					com.n2n.util.Logging.logAPAgent1(m_sLog, "SSOLog", "/usr/local/tomcat/logs");
 				} else {
 					sEncryptedToken = "";
 				}
@@ -143,7 +143,7 @@ com.n2n.util.Logging.logAPAgent1(m_sLog,"SSOLog", "/usr/share/tomcat/logs");
 				m_sLog.append("["+ new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP
 					+" SSO-cliChkLoginXX: IC="+ sIC +", Token="+ sEncryptedToken
 					+", iTradeStatus="+ sStatus +", errorCode="+ sErrCode +", sToken=" + sToken);
-				com.n2n.util.Logging.logAPAgent1(m_sLog, "SSOLog", "/usr/share/tomcat/logs");
+				com.n2n.util.Logging.logAPAgent1(m_sLog, "SSOLog", "/usr/local/tomcat/logs");
 				
 				setSSOValue(session, sCliCode, sEncryptedToken);
 			} // end check the m_sRet is not empty string

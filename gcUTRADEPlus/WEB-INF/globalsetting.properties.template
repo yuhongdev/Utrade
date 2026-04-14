@@ -1,0 +1,36 @@
+# =============================================================================
+# globalsetting.properties - TEMPLATE
+# =============================================================================
+# This file is NOT committed to source control (it contains secrets).
+# Copy this to your local docker/gcUTRADEPlus/WEB-INF/globalsetting.properties
+# and fill in the values from PROD.
+#
+# The base values for most keys below come from your PROD globalsetting.properties.
+# Keys marked [MFA - Doc1 Step5] are NEW additions required for MFA integration.
+# Keys marked [MFA - Doc2 Step4] are NEW additions required for the frontend modal.
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# [MFA - Doc1 Step5] Brokerlogin JAR encryption keys
+# Copy these values from your PROD globalsetting.properties.
+# Note from spec: "all the above values don't have to changed" (same for all envs)
+# ---------------------------------------------------------------------------
+prv=FILL_FROM_PROD
+encKey=FILL_FROM_PROD
+encGetKeyPassphrase=FILL_FROM_PROD
+loginTempCookieName=tempdata
+loginTempCookieSecretKey=FILL_FROM_PROD
+loginTempCookieMaxAge=3600
+loginTokenKey=FILL_FROM_PROD
+
+# ---------------------------------------------------------------------------
+# [MFA - Doc2 Step4] Passport broker context token
+# Value is broker-specific - obtain from the Passport/MFA team for your broker.
+# Example format (AFFIN case): LkV69ZRVgax3i2sNLFQrGg==
+# ---------------------------------------------------------------------------
+passportLoginBc=FILL_FROM_PROD_OR_MFA_TEAM
+
+# ---------------------------------------------------------------------------
+# [Existing] Copy remaining keys from your PROD globalsetting.properties below.
+# These include database connection, ATP URLs, session config, etc.
+# ---------------------------------------------------------------------------

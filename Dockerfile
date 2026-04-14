@@ -14,7 +14,7 @@ COPY docker/lib/ /usr/local/tomcat/lib/
 
 # Deploy applications
 COPY docker/gcUTRADEPlus /usr/local/tomcat/webapps/gcUTRADEPlus
-COPY PROD/gcUTRADE /usr/local/tomcat/webapps/gcUTRADE
+# COPY PROD/gcUTRADE /usr/local/tomcat/webapps/gcUTRADE
 
 EXPOSE 8080
 
