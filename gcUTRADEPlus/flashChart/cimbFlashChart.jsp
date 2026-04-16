@@ -48,7 +48,7 @@
 <script type='text/javascript' src='<%=g_sJSPath%>/suggestions.js'></script>
 <script type='text/javascript' src='<%=g_sJSPath%>/stkCodeNameSuggListSG.js'></script>
 <script type='text/javascript' src='<%=g_sJSPath%>/ajax.js'></script>
-<script type='text/javascript' src='<%=g_sJSPath%>/jquery-3.6.0.js'></script>
+<script type='text/javascript' src='<%=g_sJSPath%>/jquery-3.7.1.min.js'></script>
 <link rel='stylesheet' type='text/css' href='<%=g_sStylePath%>/autosuggest.css' />
 <script language = 'javascript'>
 	var form = document.getElementById("frmFastQuote");

@@ -12,7 +12,7 @@
 
 	</head>
 	<body style="min-height:500px">
-	
+
 		<div style="position:relative">
 			<div class="box" >
 				<!-- start divLogin -->
@@ -22,7 +22,7 @@
 				<h1 id="modal-recoverLabel">Login </h1>
 				</div>
 				<form id="frmLogin" class="form-area">
-		
+
 				<div class="group">
 				<input type="text" id="frmLogin_userID" name="frmLogin_userID" class="form-control" placeholder="Username">
 				 <i class="fa fa-user"></i>
@@ -35,23 +35,23 @@
             <input id="checkbox101" type="checkbox" checked>
             <label for="checkbox101"> Remember Me</label>
           </div>
-          <button type="submit" class="btn btn-secondary w-100 openModalBtn" data-type="login">LOGIN</button>
+          <button type="button" class="btn btn-secondary w-100 openModalBtn" data-type="login">LOGIN</button>
 		</div>
-				
+
 			</form>
 			 <div class="footer-links row">
 		<div class="col-6"></div>
         <div class="col-6 text-end"><a href="javascript:void(0);" class="openModalBtn" data-type="fgtPin"><i class="fa fa-lock"></i> Forgot password</a></div>
       </div>
     </div>
-		
+
 		<div id="divLogon" name="divLogon" style="display:none">
 		<div class="box-body">
         <div class="top">
 					<h1 id="modal-recoverLabel">Welcome </h1>
 					<label id="lblUsername">user</label>
 		</div>
-			<div class="form-area">	
+			<div class="form-area">
 			<div class="form-actions">
 				<input onclick="top.location = tradingHall_url" class="btn btn-secondary w-100 mb-2" value="Trading Hall" type="submit">
 				<li class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="chgPwd" >Change Password </li>
@@ -64,16 +64,16 @@
 				<div class="footer-links row">
 				<div class="col-6 text-start">
 				<a id="btnChgHint" name="btnChgHint" onClick="chgLayout(6);" value="ChangeHint" type="button"><i class="fa fa-lock"></i> Change Hint </a>
-						</div>	
+						</div>
 				</div>
 		</div>
-		
+
 		<div id="divForgetPwd" name="divForgetPwd" style="display:none">
 			<div class="box-body">
                 <div class="top">
 					<h1 id="modal-recoverLabel">Forgot password </h1>
 				</div>
-			<form id="frmForgetPwd" name="frmForgetPwd" class="form-area"> 
+			<form id="frmForgetPwd" name="frmForgetPwd" class="form-area">
 			<div class="group">
 				<input type="text" id="frmForgetPwd_userID" name="frmForgetPwd_userID" class="form-control" placeholder="user ID" size="30" />
 				<i class="fa fa-key"></i>
@@ -88,7 +88,7 @@
 				<i class="fa fa-key"></i>
 			</div>
 				<input type="submit" value="SUBMIT" class="btn btn-default btn-block" />
-				
+
 			</form>
 		</div>
 		<div class="footer-links row">
@@ -96,7 +96,7 @@
 			<a  id="frmForgetPwd_btnClose" name="frmForgetPwd_btnClose" value="Close" onClick="chgLayout(8);" type="button"><i class="fa fa-times-circle"></i> Close </a></div>
 		</div>
 		</div>
-		
+
 		<div id="divForgetPin" name="divForgetPin" style="display:none">
 			<div class="box-body">
             <div class="top">
@@ -115,14 +115,14 @@
 				<input type="text" id="frmForgetPin_ansHint" name="frmForgetPin_ansHint" class="form-control" placeholder="Answer to Hint" />
 				<i class="fa fa-unlock-alt"></i>
 				</div>
-				
+
 				<input type="submit" value="submit"class="btn btn-default btn-block" />
 			</form>
 		</div>
 		<div class="footer-links row">
 			<div class="col-xs-6 text-left">
 				<a id="frmForgetPin_btnClose" name="frmForgetPin_btnClose" value="Close" onClick="chgLayout(1);" type="button"><i class="fa fa-times-circle"></i> Close </a>
-				</div>	
+				</div>
 			</div>
 		</div>
 		<div id="divForceChgPwd" name="divForceChgPwd" style="display:none">
@@ -138,7 +138,7 @@
 				<div class="group">
 				<input type="password" id="frmForceChgPwd_newPwd" name="frmForceChgPwd_newPwd" class="form-control" placeholder="New Password">
 				<i class="fa fa-key"></i>
-				</div>	
+				</div>
 				<div class="group">
 				<input type="password" id="frmForceChgPwd_confPwd" name="frmForceChgPwd_confPwd" class="form-control" placeholder="Confirm New Password"/>
 				<i class="fa fa-key"></i>
@@ -155,7 +155,7 @@
 				<div class="box-body">
 					<div class="top">
 						<h1 id="modal-recoverLabel">Change PIN </h1>
-						
+
 					</div>
 			<form id="frmForceChgPin" name="frmForceChgPin" class="form-area">
 			<div class="group">
@@ -176,7 +176,7 @@
 					<div class="footer-links row">
 						<div class="col-xs-6 text-left">
 							<a id="frmForceChgPin_btnClose" name="frmForceChgPin_btnClose" value="Close" onClick="chgLayout(1);" type="button"><i class="fa fa-times-circle"></i> Close </a>
-						</div>	
+						</div>
 					</div>
 				</div>
 		<div id="divForceChgHint" name="divForceChgHint" style="display:none">
@@ -204,22 +204,25 @@
 		<div class="footer-links row">
 			<div class="col-xs-6 text-left">
 				<a id="frmForceChgHint_btnClose" name="frmForceChgHint_btnClose" onClick="chgLayout(1);" value="Close" type="button"><i class="fa fa-times-circle"></i> Close </a>
-			</div>	
+			</div>
 		</div>
 		</div>
 		</div>
 		</div>
-		<script src="../js/jquery-3.6.0.js"></script>		
+		<script src="../js/jquery-3.7.1.min.js"></script>
 		<script src="../js/jquery.jcryption.min.js"></script>
+    	<script src="../../js/crypto/crypto-js-4.2.0.min.js"></script>
 		<script src="../js/AesUtil.js"></script>
-		<script src="../js/aes.js"></script>
-		<script src="../js/pbkdf2.js"></script>				
+		<!-- <script src="../js/aes.js"></script>
+		<script src="../js/pbkdf2.js"></script> -->
 		<script src="../js/common_util.js"></script>
 		<script src="../js/login_confv2.js"></script>
 		<script src="../js/login_main.js"></script>
 		<script src="../js/bms_setting.js"></script>
-		<script src="../js/validate/jquery.validate.js"></script>
+		<script src="../js/validate/jquery.validate-1.22.0.min.js"></script>
 		<script src="../js/cliLogin.js"></script>
+		<script src="../js/bootstrap-5.3.6.bundle.min.js"></script>
+		<script src="../../login/passport-login-bc.jsp"></script>
 		<script src="/passport/login/js/login-popup-bootstrap5.js"></script>
 	</body>
 </html>
