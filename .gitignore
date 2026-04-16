@@ -1,0 +1,22 @@
+# Backup and temporary files
+*.bak
+*.backup
+*~
+*.tmp
+
+# globalsetting.properties backups and variants
+gcUTRADEPlus/WEB-INF/globalsetting.properties*
+gcUTRADEPlus/WEB-INF/globalsetting_*.properties
+
+# Sensitive configuration files
+gcUTRADEPlus/key.jsp
+gcUTRADEPlus/jsmxd.json
+
+# IDE and OS files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
