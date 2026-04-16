@@ -185,9 +185,10 @@
                     <div class="form-area">
                         <div class="form-actions">
                             <input onclick="top.location = tradingHall_url" class="btn btn-secondary w-100 mb-2" value="Trading Hall" type="submit">
-                            <li class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="chgPwd">Change Password </li>
-                            <li class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="chgPin">Change PIN</li>
-                            <li class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="fgtPin">Forgot PIN </li>
+                            <button type="button" class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="chgPwd">Change Password</button>
+                            <button type="button" class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="chgPin">Change PIN</button>
+                            <button type="button" class="btn btn-secondary w-100 mb-2 openModalBtn" data-type="fgtPin">Forgot PIN</button>
+                            <button type="button" onclick="confirmLogout()" class="btn btn-secondary w-100 mb-2">Log Out</button>
                             <li onclick="confirmLogout()" class="btn btn-secondary w-100 mb-2">Log Out </li>
                         </div>
                     </div>
