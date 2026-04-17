@@ -255,29 +255,29 @@
 	<div id="page-wrap">
 		<div class=" container">
 			<div class="row ">
-				<div class="col-xs-12 clsSectionHeader">
-					<div class="col-xs-12">&nbsp;Summary of Client's Outstanding Position</div>
+				<div class="col-12 clsSectionHeader">
+					<div class="col-12">&nbsp;Summary of Client's Outstanding Position</div>
 				</div>
-				<div class=" col-xs-offset-12 hidden-print"><img class=" visible-lg-inline visible-md-inline" onClick="Print_OnClick();" style="cursor:pointer" title="Print" src="../css/images/butPrint.gif" border="0" height="18" width="18"></div>
+				<div class=" col-offset-12 hidden-print"><img class=" visible-lg-inline visible-md-inline" onClick="Print_OnClick();" style="cursor:pointer" title="Print" src="../css/images/butPrint.gif" border="0" height="18" width="18"></div>
 			</div>
-			<div class="col-xs-12 container-fluid">
+			<div class="col-12 container-fluid">
 				<div class="row">
-					<div class="col-xs-2" style="min-width:85px">Client's Name</div>
+					<div class="col-2" style="min-width:85px">Client's Name</div>
 					<div class="col">:</div>
 					<div>
 						<span id="LoginID"></span> <label id="lblCliName">[<span id="CliName"></span>]</label>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-2 " style="min-width:85px">Account Number</div>
+					<div class="col-2 " style="min-width:85px">Account Number</div>
 					<div class="col">:</div>
-					<div class="col-xs-8" id="searchTxt">
+					<div class="col-8" id="searchTxt">
 						<select style="" onChange="AccInfoEncryptValue()"  name="selTrdAcc" id="TrdAccSel"></select>
 						</div>
 						
 				</div>
 				<!--<div class="row">
-					<div class="col-xs-2 " style="min-width:85px">Exchange</div>
+					<div class="col-2 " style="min-width:85px">Exchange</div>
 					<div class="col">:</div>
 					<div>
 						<select onChange="AccInfoEncryptValue()" name="selExchCode" id="selExchCode">
@@ -292,7 +292,7 @@
 					</div>
 				</div>-->
 				<!--<div class="row">
-					<div class="col-xs-2 " style="min-width:85px">Currency</div>
+					<div class="col-2 " style="min-width:85px">Currency</div>
 					<div class="col">:</div>
 					<div>
 						<select onChange="AccInfoEncryptValue()" name="selCurrCode" id="selCurrCode">
@@ -309,14 +309,14 @@
 			</div>
 				
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-12">
 					<p class="clear dotline"></p>
 				</div>
 			</div>
 			<table id="accSummTbl" style="max-width:600px">
 			</table>
 			<p id="noDataMsg" class="nofound"></p>
-			<div class="col-xs-12 container-fluid"  style="margin-left:0px">
+			<div class="col-12 container-fluid"  style="margin-left:0px">
 			<div id = "KLExchg" style="margin-bottom:20px; display:none">
 				<table>
 					<tr>
@@ -471,7 +471,7 @@
 			</div> <!-- END Organic Tabs (Example One) -->
 	 
 			<p class="clear"> </p>
-			<!--<div class="col-xs-12 container-fluid"  style="margin-left:0px">
+			<!--<div class="col-12 container-fluid"  style="margin-left:0px">
 
 			<b>Noted:</b>
 			<ol>
@@ -507,12 +507,12 @@
       <div class="modal-dialog  modal-lg">
         <div class="modal-content">
          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">x</button>
           </div>
           <div class="modal-body">
            		<div id="divContraDtlHdr" class="container-fluid">
       <div class="row clsSectionHeader">
-        <div class="col-xs-12 "> &nbsp;Client's Contra Detail Information</div>
+        <div class="col-12 "> &nbsp;Client's Contra Detail Information</div>
       </div>
       <br>
       <table id ="tblContraDtlHdr" class="responsive2">
@@ -535,7 +535,7 @@
     </div>
            </div>
           <div class="modal-footer">
-            <button type="button" class="btn  btn-sm btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn  btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

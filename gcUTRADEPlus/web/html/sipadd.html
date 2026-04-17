@@ -180,7 +180,7 @@ eventer(messageEvent, function (e) {
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
           <tbody>
             <tr>
-              <td class="clsSectionHeader col-xs-12">&nbsp;Create SIP Schedule</td>
+              <td class="clsSectionHeader col-12">&nbsp;Create SIP Schedule</td>
             </tr>
           </tbody>
         </table>
@@ -201,9 +201,9 @@ eventer(messageEvent, function (e) {
                   <th scope="row" >Stock Code</th>
                   <td> 
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 						<input id="stkCode" class="form-control " type="text"  disabled/>
-						<span data-toggle="modal" data-target="#stocklist" class="input-group-addon" onclick="refreshIframe();"><i class="icon-list3"></i> List</span>
+						<span data-bs-toggle="modal" data-bs-target="#stocklist" class="input-group-text" onclick="refreshIframe();"><i class="icon-list3"></i> List</span>
 					
 				
 					</div>
@@ -214,7 +214,7 @@ eventer(messageEvent, function (e) {
                   <th scope="row">Cash Value</th>
                   <td>
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 				  		<input id="cashValue" name="" class="form-control" type="text" />
 					</div>
 					</div>
@@ -224,7 +224,7 @@ eventer(messageEvent, function (e) {
                   <th scope="row">Period</th>
 				  <td >
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 					  <select id="period" class="form-control" name=""  >
 						  <option selected="selected" value="Weekly"  class="">Weekly</option>
 						  <option value="Monthly">Monthly</option>
@@ -244,7 +244,7 @@ eventer(messageEvent, function (e) {
 				   <div class="form-group-sm">
 						<div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
 						<input id="startDate1" class="form-control" type="text" readonly />
-						<span class="input-group-addon"><i class="icon-calendar22"></i></span>
+						<span class="input-group-text"><i class="icon-calendar22"></i></span>
 					</div>
 					</div>
 					
@@ -253,7 +253,7 @@ eventer(messageEvent, function (e) {
                 <tr>
                   <th scope="row">Duration</th>
                   <td ><div class="form-group-sm">
-				  <div id="" class="input-group col-xs-12">
+				  <div id="" class="input-group col-12">
 				  <select id="duration" name="select" class="form-control">
                       <option selected="selected" value="0.5"  class="">6 Months</option>
                       <option value="1">1 Year</option>
@@ -266,10 +266,10 @@ eventer(messageEvent, function (e) {
                 </tr>
                 <tr>
 				
-                  <th scope="row">Order Mode <a data-toggle="popover" data-container="body" oncontextmenu="return false;" data-placement="right" type="button" data-html="true" href="#" id="odrMode"  tabindex="-1"data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
+                  <th scope="row">Order Mode <a data-bs-toggle="popover" data-container="body" oncontextmenu="return false;" data-placement="right" type="button" data-html="true" href="#" id="odrMode"  tabindex="-1"data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
 				  </th>
                   <td ><div class="form-group-sm">
-				  	<div id="" class="input-group col-xs-12">
+				  	<div id="" class="input-group col-12">
 				  	<select id="orderMode" name="" class="form-control">
 				  	<option selected="selected" value="Automatic">Automatic</option>
                       <option  value="Manual" >Manual</option>
@@ -283,7 +283,7 @@ eventer(messageEvent, function (e) {
                   <th scope="row">Account</th>
 				  <td >
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 					<form id="frmTrdAcc" onsubmit="return frmTrdAccSrch_OnSubmit(this);">
 					 <select id="TrdAccSel" name="selTrdAcc2" class="form-control"> 
 						  <option selected disabled>Please select Account</option>
@@ -303,7 +303,7 @@ eventer(messageEvent, function (e) {
             <div class="btnRArea">
               <div class="btn_r"> <a onClick="clear1()" class="btn btn-sm btn_gb3 btn_s1" name="">Clear</a></div>
               <div class="btn_r"><a id="submit1" class="btn btn-sm btn_gb3 btn_s1" onclick="return addSchRev();" >Submit</a></div>
-			  <a data-toggle="tab" href="#addSIP-step2" id="goStep2" class="btn_gb3 btn_s1" style="display:none" >Go</a>
+			  <a data-bs-toggle="tab" href="#addSIP-step2" id="goStep2" class="btn_gb3 btn_s1" style="display:none" >Go</a>
             </div>
 			<div class="btnRArea">
               <div class="btn_l"> <a href="sipsta.html" onClick="" class="btn_gb3 btn_s1" name="">Back</a></div>
@@ -385,7 +385,7 @@ eventer(messageEvent, function (e) {
 			<p>&nbsp;</p>
             <div class="ls_note">
               <p class="red"> Important:</p>
-              <p>You are creating an <b>SIP</b> calendar. Please review carefully<!-- <a href="#otherNote" data-toggle="collapse" class="collapsed" aria-expanded="false" style="display:">click here</a>--></p>
+              <p>You are creating an <b>SIP</b> calendar. Please review carefully<!-- <a href="#otherNote" data-bs-toggle="collapse" class="collapsed" aria-expanded="false" style="display:">click here</a>--></p>
 			  
               
             </div>
@@ -394,8 +394,8 @@ eventer(messageEvent, function (e) {
                 <label for="PIN">Trading PIN:</label>
                 <input id="tradingPin" type="password" class=" form-control-static "  onkeypress='return validateQty(event);' maxlength="6" style="max-width:138px">
                
-				<a data-toggle="tab" id="submit2" onClick="return addSchedule()" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
-				<a data-toggle="tab" href="#addSIP-step3" onclick="#" id="goAdd" style="display:none"> Go </a>
+				<a data-bs-toggle="tab" id="submit2" onClick="return addSchedule()" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
+				<a data-bs-toggle="tab" href="#addSIP-step3" onclick="#" id="goAdd" style="display:none"> Go </a>
                 <a href="sipsta.html" onClick="#" class=" btn btn-sm btn_gb3 btn_s1 "> Cancel </a>
                 
               </div>
@@ -413,7 +413,7 @@ eventer(messageEvent, function (e) {
 				  <p></p>
 				  <div class=" table tbl_row_in big">
 					<div class="row">
-					  <div class="col-md-12 col-xs-12">
+					  <div class="col-md-12 col-12">
 						<table id="tblAddSub">
 						  <colgroup>
 						  <col style="width:30%">
@@ -451,7 +451,7 @@ eventer(messageEvent, function (e) {
 						  </tbody>
 						</table>
 					  </div>
-					  <div class="col-md-12 col-xs-12"></div>
+					  <div class="col-md-12 col-12"></div>
 					  <p></p>
 					</div>
 					<div  class="ls_note" >
@@ -479,7 +479,7 @@ eventer(messageEvent, function (e) {
     <div class="modal-dialog">
       <div class="modal-content" >
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		  <br>
         </div>
         <div class="modal-body">
@@ -488,7 +488,7 @@ eventer(messageEvent, function (e) {
 		  <iframe src="stocklist.html" height="400" name="stocklist" width="100%" frameborder="0"></iframe>
 		  <!-- Button Area -->
 				 <div class="btnRArea">
-              <div class="btn_r"> <a data-dismiss="modal" id="closestockList" class="btn_gb3 btn_s1">Close</a> </div>
+              <div class="btn_r"> <a data-bs-dismiss="modal" id="closestockList" class="btn_gb3 btn_s1">Close</a> </div>
            	  </div>
             </div>
 		</div>
@@ -504,7 +504,7 @@ eventer(messageEvent, function (e) {
 
     <script>
 	  	$(function () {
-	  		$('[data-toggle="confirmation"]').confirmation()
+	  		$('[data-bs-toggle="confirmation"]').confirmation()
 	  	})
   	</script>
 
@@ -539,13 +539,13 @@ function goBack() {
 
 <script>
 	$(function () {
-	  $('[data-toggle="tooltip"]').tooltip()
+	  $('[data-bs-toggle="tooltip"]').tooltip()
 	})
 </script>
 
 
 <script>
-  $("[data-toggle=popover]").each(function(i, obj) {
+  $("[data-bs-toggle=popover]").each(function(i, obj) {
 	$(this).popover({
 	  html: true,
 	  content: function() {

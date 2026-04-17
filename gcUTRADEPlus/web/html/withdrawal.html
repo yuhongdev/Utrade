@@ -49,15 +49,15 @@
 
                         <p>&nbsp;</p>
                         <div class="tbl_row_in3">
-                            <span><a class="btn btn-lg btn-success" data-toggle="tab" href="#WDrequest" onclick="getAcc();" role="button">Withdrawal Request </a></span>
-                            <span><a class="btn btn-lg btn-success" data-toggle="tab" href="#WDhistory" onclick="withdrawalHistoryReq();" role="button">Withdrawal History</a></span>
+                            <span><a class="btn btn-lg btn-success" data-bs-toggle="tab" href="#WDrequest" onclick="getAcc();" role="button">Withdrawal Request </a></span>
+                            <span><a class="btn btn-lg btn-success" data-bs-toggle="tab" href="#WDhistory" onclick="withdrawalHistoryReq();" role="button">Withdrawal History</a></span>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="WDrequest" class="tab-pane fade">
                 <div class="topbar">
-                    <div class="clsSectionHeader col-xs-12">&nbsp;Withdrawal Request &nbsp; </div>
+                    <div class="clsSectionHeader col-12">&nbsp;Withdrawal Request &nbsp; </div>
                 </div>
                 <!---tab-content - child-->
                 <div class="tab-content">
@@ -81,7 +81,7 @@
                                             <th scope="row">Trading Account</th>
                                             <td>
                                                 <div class="form-group-sm ">
-                                                    <div id="" class="input-group col-xs-12">
+                                                    <div id="" class="input-group col-12">
                                                         <select class="form-control" id="selectAcc" name="selectAcc" onchange="getFund()">
                                                         </select>
                                                     </div>
@@ -112,7 +112,7 @@
                                             <th scope="row">Amount to withdraw (PHP)
                                                 <br/> <small>*min. PHP 500</small></th>
                                             <td>
-                                                <div id="" class="input-group col-xs-12">
+                                                <div id="" class="input-group col-12">
 
                                                     <input type="text" min="0" step=".01" id="withdrawAmount" class="form-control" aria-label="Amount (to the nearest dollar) " autocomplete="off" />
                                                 </div>
@@ -127,9 +127,9 @@
                             <!-- Button Area -->
                             <div class="btnRArea">
                                 <div class="btn_r"><a class="btn btn-sm btn_gb3 btn_s1" id="submit1" onClick="return chkFund()" ;>Submit</a></div>
-                                <a data-toggle="tab" href="#withdrawRequest-step2" id='goNext' style="display:none"> Go </a>
+                                <a data-bs-toggle="tab" href="#withdrawRequest-step2" id='goNext' style="display:none"> Go </a>
                                 <div class="btn_r"> <a onClick="clear1();" class="btn btn-sm btn_gb3 btn_s1" name="">Clear</a></div>
-                                <div class="btn_l"> <a data-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
+                                <div class="btn_l"> <a data-bs-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
                             </div>
 
                             <div class="clearfix"></div>
@@ -181,13 +181,13 @@
                                     <div class="form-inline form-group-sm center ">
                                         <label for="PIN">Trading PIN:</label>
                                         <input id="txtPIN" type="password" class=" form-control " onkeypress='return validateQty(event);' maxlength="6">
-                                        <input id="butSubmit" name="butSubmit" type="button" value="Submit" onClick="sendwithdrawalReq()" class="btn_gb3 btn_s1" data-toggle="tab">
-                                        <a data-toggle="tab" id="goStep3" href="#withdrawRequest-step3" style="display:none">go</a>
+                                        <input id="butSubmit" name="butSubmit" type="button" value="Submit" onClick="sendwithdrawalReq()" class="btn_gb3 btn_s1" data-bs-toggle="tab">
+                                        <a data-bs-toggle="tab" id="goStep3" href="#withdrawRequest-step3" style="display:none">go</a>
                                     </div>
                                 </div>
                                 <!-- Button Area -->
                                 <div class="btnRArea">
-                                    <div class="btn_l"><a data-toggle="tab" href="#withdrawRequest-step1" id='goStep1' onclick="getAcc()" class="btn_gb3 btn_s1">Back</a></div>
+                                    <div class="btn_l"><a data-bs-toggle="tab" href="#withdrawRequest-step1" id='goStep1' onclick="getAcc()" class="btn_gb3 btn_s1">Back</a></div>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -203,7 +203,7 @@
                             <p></p>
                             <div class=" table tbl_row_in big">
                                 <div class="row">
-                                    <div class="col-md-12 col-xs-12">
+                                    <div class="col-md-12 col-12">
                                         <table id="tbl_wdSuccess">
                                             <colgroup>
                                                 <col style="width:30%">
@@ -244,13 +244,13 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-12 col-xs-12"></div>
+                                    <div class="col-md-12 col-12"></div>
                                     <p></p>
                                 </div>
                             </div>
                             <!-- Button Area -->
                             <div class="btnRArea center">
-                                <input id="butSubmit" name="butSubmit" onclick="$('#goStep1').trigger('click');withdrawalHistoryReq();" type="button" value="Check Withdrawal Status" class="btn_ btn_gb3 btn_m2" data-toggle="tab" href="#WDhistory">
+                                <input id="butSubmit" name="butSubmit" onclick="$('#goStep1').trigger('click');withdrawalHistoryReq();" type="button" value="Check Withdrawal Status" class="btn_ btn_gb3 btn_m2" data-bs-toggle="tab" href="#WDhistory">
                             </div>
 
                             <p></p>
@@ -283,7 +283,7 @@
             <div id="WDhistory" class="tab-pane fade">
                 <!-- Menu Button Start -->
                 <div class="topbar">
-                    <div class="clsSectionHeader col-xs-12">&nbsp;Withdrawal History &nbsp; </div>
+                    <div class="clsSectionHeader col-12">&nbsp;Withdrawal History &nbsp; </div>
 
                     <!--<h3 class="tit_h3">Withdrawal Statuse</h3>-->
                     <div class="tit f_left">
@@ -304,13 +304,13 @@
 
                     <div class="f_right">
 
-                        <a data-toggle="tab" href="#WDrequest" class=" btn-flat general btnBig" onclick="getAcc();" id="menu2">
+                        <a data-bs-toggle="tab" href="#WDrequest" class=" btn-flat general btnBig" onclick="getAcc();" id="menu2">
                             <div class="glyphicon glyphicon-plus " aria-hidden="true"></div>
                             <span>  Withdrawal Request</span> </a>
                     </div>
                     <div class="opt_filter f_left">
                         <div class="dropdown f_right">
-                            <button href="#modal-optFilter" role="button" class="btn" data-toggle="modal">
+                            <button href="#modal-optFilter" role="button" class="btn" data-bs-toggle="modal">
                                 <span class="icon-1x icon-filter4 white"></span>
                                 <span class="caret white"></span>
                             </button>
@@ -324,14 +324,14 @@
                     <table id="tbl_WD" class="responsive">
                         <thead>
                             <tr>
-                                <th class="col-md-1 col-sm-1 col-xs-1 center" scope="col">Request No</th>
-                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col"> Request Date</th>
-                                <th class="col-md-3 col-sm-3 col-xs-3 center" scope="col">Account</th>
-                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Withdraw Date</th>
-                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Amount</th>
-                                <!-- <th class="col-md-3 col-sm-2 col-xs-2 center" scope="col">Receipt No</th>-->
-                                <th class="col-md-2 col-sm-2 col-xs-2 center" scope="col">Status</th>
-                                <!--<th  class="col-md-3 col-sm-3 col-xs-3 no-sort" scope="col"></th>-->
+                                <th class="col-md-1 col-sm-1 col-1 center" scope="col">Request No</th>
+                                <th class="col-md-2 col-sm-2 col-2 center" scope="col"> Request Date</th>
+                                <th class="col-md-3 col-sm-3 col-3 center" scope="col">Account</th>
+                                <th class="col-md-2 col-sm-2 col-2 center" scope="col">Withdraw Date</th>
+                                <th class="col-md-2 col-sm-2 col-2 center" scope="col">Amount</th>
+                                <!-- <th class="col-md-3 col-sm-2 col-2 center" scope="col">Receipt No</th>-->
+                                <th class="col-md-2 col-sm-2 col-2 center" scope="col">Status</th>
+                                <!--<th  class="col-md-3 col-sm-3 col-3 no-sort" scope="col"></th>-->
                             </tr>
                         </thead>
                         <tbody class="WDbody">
@@ -344,7 +344,7 @@
 			  <td>7,000.00</td>
 			  <td>0000000585</td>
 			  <td><b>APPROVED</b></td>
-			  <td class="td-actbtn"><div class="printWD"><a href="#" class="btn-flat btn_gb1 btn_s1" data-toggle="modal" data-target="#modal-printWD" ><span class="glyphicon glyphicon-zoom-in " aria-hidden="true"></span></a></div></td>
+			  <td class="td-actbtn"><div class="printWD"><a href="#" class="btn-flat btn_gb1 btn_s1" data-bs-toggle="modal" data-bs-target="#modal-printWD" ><span class="glyphicon glyphicon-zoom-in " aria-hidden="true"></span></a></div></td>
 			</tr>-->
                         </tbody>
                     </table>
@@ -352,7 +352,7 @@
                 <!-- WD Table End -->
                 <!-- Button Area -->
                 <div class="btnRArea">
-                    <div class="btn_l"> <a data-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
+                    <div class="btn_l"> <a data-bs-toggle="tab" href="#accOverview" onclick="refresh1();" class="btn_gb3 btn_s1" name="">Back</a></div>
                 </div>
                 <p>&nbsp;</p>
 
@@ -366,7 +366,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     </div>
                     <div class="modal-body">
                         <form name="" action="" method="POST">
@@ -429,7 +429,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     </div>
                     <div class="modal-body">
                         <!--========-->
@@ -448,7 +448,7 @@
                                                 <th scope="row">Account</th>
                                                 <td>
                                                     <div class="form-group-sm">
-                                                        <div id="" class="input-group col-xs-12">
+                                                        <div id="" class="input-group col-12">
                                                             <select class="form-control" name="TrdAccSel1" id="TrdAccSel1">
                                                             </select>
                                                         </div>
@@ -460,7 +460,7 @@
                                                 <th scope="row">Status</th>
                                                 <td>
                                                     <div class="form-group-sm ">
-                                                        <div id="" class="input-group col-xs-12">
+                                                        <div id="" class="input-group col-12">
                                                             <select class="form-control" name="" id="statusFilter">
                                                                 <option selected="selected" value="" class="">ALL</option>
                                                                 <option value="Approved">APPROVED</option>
@@ -476,7 +476,7 @@
                                                     <br/> <small>(*max last 90days)</small> </th>
                                                 <td>
                                                     <div class="form-group-sm dropdown-submenu ">
-                                                        <div id="" class="input-group col-xs-12 ">
+                                                        <div id="" class="input-group col-12 ">
                                                             <input id="optDate" type="text" class="form-control" name="daterange" value="04/01/2018 - 04/30/2018" />
                                                         </div>
                                                     </div>
@@ -489,7 +489,7 @@
                                 <div class="clearfix"></div>
                                 <!-- Button Area -->
                                 <div class="btnRArea">
-                                    <div class="btn_r"> <a href="javascript:void(0)" data-dismiss="modal" onClick="changeFilter();" class="btn_gb3 btn_s1" name="">Filter</a></div>
+                                    <div class="btn_r"> <a href="javascript:void(0)" data-bs-dismiss="modal" onClick="changeFilter();" class="btn_gb3 btn_s1" name="">Filter</a></div>
                                 </div>
                                 <div><span id="filterStatus" style='display:none'>ALL</span> <span id="filterAcc" style='display:none'>ALL</span><span id="startDate" style='display:none'></span><span id="lastDate" style='display:none'></span></div>
                                 <div class="clearfix"></div>
@@ -566,12 +566,12 @@
 
         <script>
             $(function() {
-                $('[data-toggle="tooltip"]').tooltip()
+                $('[data-bs-toggle="tooltip"]').tooltip()
             })
         </script>
 
         <script>
-            $("[data-toggle=popover]").each(function(i, obj) {
+            $("[data-bs-toggle=popover]").each(function(i, obj) {
                 $(this).popover({
                     html: true,
                     content: function() {

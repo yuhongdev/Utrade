@@ -80,7 +80,7 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
           <tbody>
             <tr>
-              <td class="clsSectionHeader col-xs-12">&nbsp;Create SIP Schedule</td>
+              <td class="clsSectionHeader col-12">&nbsp;Create SIP Schedule</td>
             </tr>
           </tbody>
         </table>
@@ -100,9 +100,9 @@
                   <th scope="row" >Stock Code</th>
                   <td> 
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 						<input id="stkCode" class="form-control " type="text"  />
-						<span data-toggle="modal" data-target="#stocklist" class="input-group-addon"><i class="icon-list3"></i> List</span>
+						<span data-bs-toggle="modal" data-bs-target="#stocklist" class="input-group-text"><i class="icon-list3"></i> List</span>
 					
 				
 					</div>
@@ -113,7 +113,7 @@
                   <th scope="row">Cash Value</th>
                   <td>
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 				  		<input id="cashValue" name="" class="form-control" type="text" />
 					</div>
 					</div>
@@ -123,7 +123,7 @@
                   <th scope="row">Period</th>
 				  <td >
 				  <div class="form-group-sm ">
-					<div id="" class="input-group col-xs-12">
+					<div id="" class="input-group col-12">
 					  <select id="period" class="form-control" name=""  >
 						  <option selected="selected" value="Weekly"  class="">Weekly</option>
 						  <option value="Monthy">Monthly</option>
@@ -143,7 +143,7 @@
 				   <div class="form-group-sm">
 						<div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
 						<input id="startDate" class="form-control" type="text" readonly />
-						<span class="input-group-addon"><i class="icon-calendar22"></i></span>
+						<span class="input-group-text"><i class="icon-calendar22"></i></span>
 					</div>
 					</div>
 					
@@ -152,7 +152,7 @@
                 <tr>
                   <th scope="row">Duration</th>
                   <td ><div class="form-group-sm">
-				  <div id="" class="input-group col-xs-12">
+				  <div id="" class="input-group col-12">
 				  <select id="duration" name="select" class="form-control">
                       <option selected="selected" value="6mth"  class="">6 Months</option>
                       <option value="1yr">1 Year</option>
@@ -165,10 +165,10 @@
                 </tr>
                 <tr>
 				
-                  <th scope="row">Order Mode <a data-toggle="popover" data-container="body" data-placement="right" type="button" data-html="true" href="#" id="odrMode" data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
+                  <th scope="row">Order Mode <a data-bs-toggle="popover" data-container="body" data-placement="right" type="button" data-html="true" href="#" id="odrMode" data-trigger="hover"><i class="glyphicon glyphicon-info-sign"></i></a>
 				  </th>
                   <td ><div class="form-group-sm">
-				  	<div id="" class="input-group col-xs-12">
+				  	<div id="" class="input-group col-12">
 				  	<select id="orderMode" name="" class="form-control">
                       <option selected="selected" value="mannual" >Manual</option>
                       <option value="1yr">Automatic</option>
@@ -184,7 +184,7 @@
 			<!-- Button Area -->
             <div class="btnRArea">
               <div class="btn_r"> <a href="javascript:void(0)" onClick="" class="btn_gb3 btn_s1" name="">Clear</a></div>
-              <div class="btn_r"><a data-toggle="tab" href="#addSIP-step2" class="btn_gb3 btn_s1" onclick="addSchRev()" >Submit</a></div>
+              <div class="btn_r"><a data-bs-toggle="tab" href="#addSIP-step2" class="btn_gb3 btn_s1" onclick="addSchRev()" >Submit</a></div>
             </div>
 			<div class="clearfix"></div>
             <!-- Button Area -->
@@ -255,7 +255,7 @@
 			<p>&nbsp;</p>
             <div class="ls_note">
               <p class="red"> Important:</p>
-              <p>You are creating an <b>SIP</b> calendar. Please review carefully<!-- <a href="#otherNote" data-toggle="collapse" class="collapsed" aria-expanded="false" style="display:">click here</a>--></p>
+              <p>You are creating an <b>SIP</b> calendar. Please review carefully<!-- <a href="#otherNote" data-bs-toggle="collapse" class="collapsed" aria-expanded="false" style="display:">click here</a>--></p>
 			  
               
             </div>
@@ -264,8 +264,8 @@
                 <label for="PIN">Trading PIN:</label>
                 <input id="tradingPin" type="password" class=" form-control-static " id="acc1"  maxlength="" style="max-width:138px">
                
-				<a data-toggle="tab" href="#addSIP-step3" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
-				<a data-toggle="tab" onclick="goBack()" class="btn btn-sm btn_gb3 btn_s1"> Back </a>
+				<a data-bs-toggle="tab" href="#addSIP-step3" class="btn btn-sm btn_gb3 btn_s1"> Confirm </a>
+				<a data-bs-toggle="tab" onclick="goBack()" class="btn btn-sm btn_gb3 btn_s1"> Back </a>
                 <a href="javascript:void(0)" onClick="#" class=" btn btn-sm btn_gb3 btn_s1 "> Cancel </a>
                 
               </div>
@@ -283,7 +283,7 @@
 				  <p></p>
 				  <div class=" table tbl_row_in big">
 					<div class="row">
-					  <div class="col-md-12 col-xs-12">
+					  <div class="col-md-12 col-12">
 						<table id="tblAddSub">
 						  <colgroup>
 						  <col style="width:30%">
@@ -321,7 +321,7 @@
 						  </tbody>
 						</table>
 					  </div>
-					  <div class="col-md-12 col-xs-12"></div>
+					  <div class="col-md-12 col-12"></div>
 					  <p></p>
 					</div>
 					<div  class="ls_note" >
@@ -349,7 +349,7 @@
     <div class="modal-dialog">
       <div class="modal-content" >
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" id=""><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		  <br>
         </div>
         <div class="modal-body">
@@ -358,7 +358,7 @@
 		  <iframe src="stocklist.html" height="400"  width="100%" frameborder="0"></iframe>
 		  <!-- Button Area -->
 				 <div class="btnRArea">
-              <div class="btn_r"> <a data-dismiss="modal" class="btn_gb3 btn_s1">Close</a> </div>
+              <div class="btn_r"> <a data-bs-dismiss="modal" class="btn_gb3 btn_s1">Close</a> </div>
            	  </div>
             </div>
 		</div>
@@ -374,7 +374,7 @@
 
     <script>
 	  	$(function () {
-	  		$('[data-toggle="confirmation"]').confirmation()
+	  		$('[data-bs-toggle="confirmation"]').confirmation()
 	  	})
   	</script>
 
@@ -405,13 +405,13 @@ function goBack() {
 
 <script>
 	$(function () {
-	  $('[data-toggle="tooltip"]').tooltip()
+	  $('[data-bs-toggle="tooltip"]').tooltip()
 	})
 </script>
 
 
 <script>
-  $("[data-toggle=popover]").each(function(i, obj) {
+  $("[data-bs-toggle=popover]").each(function(i, obj) {
 	$(this).popover({
 	  html: true,
 	  content: function() {
