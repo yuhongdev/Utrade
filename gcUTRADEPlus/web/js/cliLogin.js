@@ -101,7 +101,9 @@ function initLoginFormValidation(BMSSetting){
 			}
 		},
 		submitHandler: function(form){
-			login();
+			// login();
+
+			triggerPopup("login"); // trigger login popup for 2FA
 			return false;
 		}
 	});		
@@ -367,6 +369,7 @@ function handlePasswordValidationRules(byCategory, filterVal, callback) {
 		error: function (jqXHR, textStatus, error) {
 			console.log("Error while getting password security level => " + textStatus);
 			console.error(error);
+			callback({});  ///
 		}
 	});
 }
