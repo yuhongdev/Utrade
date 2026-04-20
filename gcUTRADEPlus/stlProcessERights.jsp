@@ -147,7 +147,7 @@ System.out.println("Process sRefresh....."+sRefresh);
 <script language=JavaScript src="<%=g_sJSPath%>/jquery.jcryption.min.js"></script>
 <script language=JavaScript src="<%=g_sJSPath%>/validate/jquery.uniform.js"></script>
 <script language=JavaScript src="<%=g_sJSPath%>/validate/jquery.metadata.js"></script>
-<script language=JavaScript src="<%=g_sJSPath%>/validate/jquery.validate-1.22.0.min.js"></script>
+<script language=JavaScript src="<%=g_sJSPath%>/validate/jquery.validate-1.22.1.min.js"></script>
 <script language=JavaScript src="<%=g_sJSPath%>/crypto-js-4.2.0.min.js"></script>
 <script language=JavaScript src="<%=g_sJSPath%>/AesUtil.js"></script>
 // <script language=JavaScript src="<%=g_sJSPath%>/aes.js"></script>
