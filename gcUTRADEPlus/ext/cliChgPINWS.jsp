@@ -66,7 +66,7 @@ String sStatus="", sErrorCode="";
 m_sLog = new StringBuffer();
 m_sLog.append("["+new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP
 +"loginID:"+loginID+" newPIN:"+newPIN+" BHCode:"+BHCode+" BHCliCode:"+BHCliCode+" ClientIP"+sIPAddress);
-com.n2n.util.Logging.logAPAgent1(m_sLog,"WSLog", "/usr/share/tomcat/logs");
+com.n2n.util.Logging.logAPAgent1(m_sLog,"WSLog", "/usr/local/tomcat/logs");
 
 	if (bCont) {
 		if(loginID.equals("") || newPIN.equals("") || BHCode.equals("") || BHCliCode.equals("")){
@@ -83,7 +83,7 @@ com.n2n.util.Logging.logAPAgent1(m_sLog,"WSLog", "/usr/share/tomcat/logs");
 					
 					m_sLog = new StringBuffer();
 					m_sLog.append("["+ new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP + "loginID:"+loginID+" m_sRet:"+m_sRet);
-					com.n2n.util.Logging.logAPAgent1(m_sLog, "WSLog", "/usr/share/tomcat/logs");		
+					com.n2n.util.Logging.logAPAgent1(m_sLog, "WSLog", "/usr/local/tomcat/logs");		
 				} // end check the m_sRet is not empty string
 			}else{
 				sErrorCode = "9999";
@@ -97,7 +97,7 @@ com.n2n.util.Logging.logAPAgent1(m_sLog,"WSLog", "/usr/share/tomcat/logs");
 		}
 		
 		m_sLog.append("["+ new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+"]"+ sClientIP + "loginID:"+loginID+" sStatus:"+sStatus+" errorCode:"+sErrorCode);
-		com.n2n.util.Logging.logAPAgent1(m_sLog, "WSLog", "/usr/share/tomcat/logs");	
+		com.n2n.util.Logging.logAPAgent1(m_sLog, "WSLog", "/usr/local/tomcat/logs");	
 					
 		out.print("--_BeginData_\r\n");
 		out.print("APIStatus="+sStatus+"\r\n");

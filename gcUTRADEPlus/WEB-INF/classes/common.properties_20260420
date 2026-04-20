@@ -269,7 +269,7 @@ mode=mode
 modifiedDt=mdfDt
 clientCode=clicde
 accExchCode=accExch
-Fav.Stk.List=/usr/local/tomcat/webapps/gcUTRADEPlus/ref/favStkList.json
+Fav.Stk.List=/usr/share/tomcat/webapps/gcUTRADEPlus/ref/favStkList.json
 
 #Withdrawal Properties
 WDR.ae=|0|1|
