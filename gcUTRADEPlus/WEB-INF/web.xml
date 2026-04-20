@@ -48,15 +48,15 @@
 		<servlet-class>XMLReader.xmlreader</servlet-class>
 		<init-param>
 			<param-name>ConfigProperty</param-name>
-			<param-value>//usr//share//tomcat//webapps//gcUTRADEPlus//WEB-INF//globalsetting.properties</param-value>
+			<param-value>//usr//local//tomcat//webapps//gcUTRADEPlus//WEB-INF//globalsetting.properties</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Log4jConfig</param-name>
-			<param-value>//usr//share//tomcat//webapps//gcUTRADEPlus//WEB-INF//PassportSessionLog.cfg</param-value>
+			<param-value>//usr//local//tomcat//webapps//gcUTRADEPlus//WEB-INF//PassportSessionLog.cfg</param-value>
 		</init-param>
 		<init-param>
 			<param-name>LanguageProperty</param-name>
-			<param-value>//usr//share/tomcat//webapps//gcUTRADEPlus//WEB-INF//LanguageFile.properties</param-value>
+			<param-value>//usr//local/tomcat//webapps//gcUTRADEPlus//WEB-INF//LanguageFile.properties</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -82,7 +82,7 @@
 		</init-param>
 		<init-param>
     			<param-name>GlobalSetting</param-name>
-    			<param-value>//usr//share/tomcat//webapps//gcUTRADEPlus//WEB-INF//globalsetting.properties</param-value>
+    			<param-value>//usr//local/tomcat//webapps//gcUTRADEPlus//WEB-INF//globalsetting.properties</param-value>
     		</init-param>	
 		<init-param>
 			<param-name>BHCODE</param-name>
@@ -140,7 +140,7 @@
 		<servlet-class>com.n2n.servlet.N2NUploadServlet</servlet-class>
 		<init-param>
 			<param-name>fileXferBasePath</param-name>
-			<param-value>//usr//share/tomcat//webapps//gcUTRADEPlus//download//</param-value>
+			<param-value>//usr//local/tomcat//webapps//gcUTRADEPlus//download//</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Download_URL</param-name>
