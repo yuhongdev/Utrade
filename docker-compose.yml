@@ -1,0 +1,29 @@
+services:
+  tcplus-utrade:
+    image: XXXXXXXX/n2n-tcplus/tcplus-utrade:dev-20260420
+    container_name: app-tcplus-utrade
+    restart: always
+    ports:
+      - "18001:8080"
+    networks:
+      - passport-network
+    volumes:
+      - /home/tcplus/utrade/logs/tomcat:/usr/local/tomcat/logs
+      - /home/tcplus/utrade/logs/logback:/home/tomcat/logs/utrade
+
+      - /home/tcplus/utrade/config/globalsetting.properties:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/globalsetting.properties
+      - /home/tcplus/utrade/config/context.xml:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/context.xml
+      - /home/tcplus/utrade/config/feedsetting.txt:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/feedsetting.txt
+      - /home/tcplus/utrade/config/web.xml:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/web.xml
+      - /home/tcplus/utrade/config/logBack_Linux.xml:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/classes/logBack_Linux.xml
+      - /home/tcplus/utrade/config/logging.properties:/usr/local/tomcat/conf/logging.properties
+      - /home/tcplus/utrade/config/tcplus:/usr/local/tomcat/webapps/gcUTRADEPlus/WEB-INF/classes/com/n2n/conf/tcplus
+      - /home/tcplus/utrade/config/conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - /home/tcplus/utrade/init_replace.sh:/init_replace.sh
+
+    # Noted: PROD no need init_replace.sh, details see deploy folder.
+    command: bash /init_replace.sh
+
+networks:
+  passport-network:
+    external: true
