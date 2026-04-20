@@ -206,8 +206,8 @@ try {
 	</script>
 	<script language='JavaScript' src='<%=g_sJSPath%>/LinkFunc.js'></script>
 	<script type="text/javascript" src="<%=g_sJSPath%>/popupWindow.js"></script>
-	<!--<script type="text/javascript" src="<%=g_sJSPath%>/jquery-3.6.0.js"></script>-->
-	<script type="text/javascript" src="<%=g_sJSPath%>/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src="<%=g_sJSPath%>/jquery-3.7.1.min.js"></script>
+	<!--<script type="text/javascript" src="<%=g_sJSPath%>/jquery-2.1.1.js"></script>-->
 	<!--<script type="text/javascript" src="/MNA-theme/js/vendor/jquery-2.1.1.js"></script>-->
 
 	<script type="text/javascript" src="<%=g_sJSPath%>/device.min.js"></script>
@@ -290,7 +290,9 @@ try {
 %>
 		});
 		
-		$(window).bind("orientationchange resize",function(){
+		// $(window).bind("orientationchange resize",function(){
+		
+		$(window).on("orientationchange resize", function() {
 			//alert("window on resize/orientation change");
 			console.log("window on resize/orientation change");
 			getScreenSize();
