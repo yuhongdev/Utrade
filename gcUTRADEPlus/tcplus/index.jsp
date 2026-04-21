@@ -1,6 +1,6 @@
 <%@include file="/common.jsp"%>
 <%@include file="/util/sessionCheck.jsp"%>
-<%@ page import = "com.n2n.util.CommonUtil" %>
+<%-- <%@ page import = "com.n2n.util.CommonUtil" %> --%>
 
 <%!
 public String getClientIP(HttpServletRequest request){
@@ -22,7 +22,7 @@ public String getClientIP(HttpServletRequest request){
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 <%
 	String clientIP = getClientIP(request);
-	CommonUtil.logAPAgent("index.jsp", clientIP, request.getSession().getId(), String.valueOf(request.getSession().getAttribute("loginid")), String.valueOf(request.getSession().getAttribute("clicode")), String.valueOf(request.getSession().getAttribute("userPram")), String.valueOf(request.getSession().getAttribute("uuid")));    
+	// CommonUtil.logAPAgent("index.jsp", clientIP, request.getSession().getId(), String.valueOf(request.getSession().getAttribute("loginid")), String.valueOf(request.getSession().getAttribute("clicode")), String.valueOf(request.getSession().getAttribute("userPram")), String.valueOf(request.getSession().getAttribute("uuid")));    
     System.out.println("Session index.jsp "+request.getSession().getId());
     String sid = request.getParameter("sid")!=null?request.getParameter("sid").toString().trim():"";
     System.out.println("Client IP in index.jsp for client:"+g_sLoginId+":"+clientIP+":"+sid);
@@ -415,7 +415,7 @@ try {
 	oN2NSession.setLogoutStatus(1);
 }
 } else {
-	CommonUtil.logAPAgent("index.jsp", getClientIP(request), request.getSession().getId(), String.valueOf(request.getSession().getAttribute("loginid")), String.valueOf(request.getSession().getAttribute("clicode")), String.valueOf(request.getSession().getAttribute("userPram")), String.valueOf(request.getSession().getAttribute("uuid")));
+	// CommonUtil.logAPAgent("index.jsp", getClientIP(request), request.getSession().getId(), String.valueOf(request.getSession().getAttribute("loginid")), String.valueOf(request.getSession().getAttribute("clicode")), String.valueOf(request.getSession().getAttribute("userPram")), String.valueOf(request.getSession().getAttribute("uuid")));
 	System.out.println("[index.jsp] validSession:"+validSession+"|"+"userPram:"+session.getAttribute("userPram")+"|LoginId:"+g_sLoginId+"|loginid:"+session.getAttribute("loginid"));
 	out.println("<script language='javascript'>");
 	out.println("	alert('" + oN2NSession.getSetting("InvalidSession.MultipleLogin.EN") + "');");

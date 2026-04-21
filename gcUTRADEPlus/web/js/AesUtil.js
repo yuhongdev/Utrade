@@ -7,7 +7,9 @@ AesUtil.prototype.generateKey = function (salt, passPhrase) {
   var key = CryptoJS.PBKDF2(
     passPhrase,
     CryptoJS.enc.Hex.parse(salt),
-    { keySize: this.keySize, iterations: this.iterationCount });
+    // { keySize: this.keySize, iterations: this.iterationCount });
+
+      { keySize: this.keySize, iterations: this.iterationCount, hasher: CryptoJS.algo.SHA1 });
   return key;
 }
 
@@ -35,6 +37,7 @@ AesUtil.prototype.decrypt = function (salt, iv, passPhrase, cipherText) {
     console.error("Decryption failed:", e);
     return "";
   }
+}
 
   function JSChecksum(s) {
     var i;
