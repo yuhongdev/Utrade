@@ -18,6 +18,11 @@
         	<error-code>404</error-code>
         	<location>/error404.html</location> 
     	</error-page>
+
+  <taglib>
+    <taglib-uri>/tld/N2N_HtmlObject.tld</taglib-uri>
+    <taglib-location>/tld/N2N_HtmlObject.tld</taglib-location>
+  </taglib>
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
