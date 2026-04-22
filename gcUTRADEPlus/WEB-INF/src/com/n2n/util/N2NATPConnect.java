@@ -834,7 +834,12 @@ public class N2NATPConnect {
 			context.setAtpPublicIP("218.100.22.127");
 		}
 		if (mResult.get("PrivateIP")!=null && !("").equals(mResult.get("PrivateIP"))) {
-			context.setAtpPrivateIP((java.lang.String) mResult.get("PrivateIP"));	
+			// context.setAtpPrivateIP((java.lang.String) mResult.get("PrivateIP"));	
+			// Strip http(s):// prefix that new ATP server adds to PrivateIP field
+			String rawPrivateIP = (java.lang.String) mResult.get("PrivateIP");
+			if (rawPrivateIP.startsWith("https://")) rawPrivateIP = rawPrivateIP.substring(8);
+			else if (rawPrivateIP.startsWith("http://")) rawPrivateIP = rawPrivateIP.substring(7);
+			context.setAtpPrivateIP(rawPrivateIP);
 		} else {
 			context.setAtpPrivateIP("218.100.22.127");
 		}		
