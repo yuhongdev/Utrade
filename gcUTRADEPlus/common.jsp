@@ -241,7 +241,7 @@
 	        String atpURL = session.getAttribute("ATPURLpublic")!=null?session.getAttribute("ATPURLpublic").toString().trim():oN2NSession.getSetting("atpURL");
 	        com.n2n.util.N2NATPPushConnect atp = new com.n2n.util.N2NATPPushConnect(atpURL);
 			com.n2n.connection.LoginContext context = new com.n2n.connection.LoginContext();
-			context = atp.getCliInfo(clibean, oN2NSession.getSetting("tradeforgetpinpwdID"), oN2NSession.getSetting("BHCode"));
+			context = atp.getCliInfo(clibean, session, oN2NSession);
 			java.util.List resultList = new java.util.ArrayList();
 			if (context.getErrorMsg().equals("")) {
 				resultList = context.getResultsList();
