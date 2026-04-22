@@ -19,6 +19,7 @@ boolean validSession = true;
 		if (session.getAttribute("userPram").equals("")) {
 			validSession = false;
 			System.out.println("[sessionCheck] FAIL: userPram is empty");
+<<<<<<< HEAD
 		}
 	}
 	if (session.getAttribute("uuid") != null) { // is first time login

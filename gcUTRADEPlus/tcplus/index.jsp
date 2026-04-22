@@ -22,6 +22,11 @@ public String getClientIP(HttpServletRequest request){
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" >
 <%
 	String clientIP = getClientIP(request);
+
+	// CommonUtil.logAPAgent(...) disabled: import com.n2n.util.CommonUtil is commented out (line 3)
+	// because Logging.logAPAgent1() requires a log file path configured in globalsetting.properties
+	// that is not guaranteed to exist in all environments — enabling it without the config would crash the page.
+
 	// CommonUtil.logAPAgent("index.jsp", clientIP, request.getSession().getId(), String.valueOf(request.getSession().getAttribute("loginid")), String.valueOf(request.getSession().getAttribute("clicode")), String.valueOf(request.getSession().getAttribute("userPram")), String.valueOf(request.getSession().getAttribute("uuid")));    
     System.out.println("Session index.jsp "+request.getSession().getId());
     String sid = request.getParameter("sid")!=null?request.getParameter("sid").toString().trim():"";
