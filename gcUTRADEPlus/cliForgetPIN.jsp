@@ -101,7 +101,9 @@
 			    	clibean.setLoginID(sLoginID);
 			    	clibean.setCategory(null);
 					
-	    			context = atp.getCliInfo(clibean, oN2NSession.getSetting("tradeforgetpinpwdID"), oN2NSession.getSetting("BHCode"));
+	    			// context = atp.getCliInfo(clibean, oN2NSession.getSetting("tradeforgetpinpwdID"), oN2NSession.getSetting("BHCode"));
+
+					context = atp.getCliInfo(clibean, session, oN2NSession);
 	    			java.util.List resultList = new java.util.ArrayList();
 	    			String results[] = null;
 	    			if (context.getErrorMsg().equals("")) {
@@ -131,7 +133,8 @@
 			    	clibean.setHint(sHint);
 			    	clibean.setHintAns(sHintAns);
 
-	    			context = atp.verifyHintPwdPIN("2", clibean, oN2NSession.getSetting("tradeforgetpinpwdID"),oN2NSession.getSetting("BHCode"));
+	    			// context = atp.verifyHintPwdPIN("2", clibean, oN2NSession.getSetting("tradeforgetpinpwdID"),oN2NSession.getSetting("BHCode"));
+					context = atp.verifyHintPwdPIN("2", clibean, session, oN2NSession.getSetting("tradeforgetpinpwdID"),oN2NSession);
 	    			java.util.List resultList = new java.util.ArrayList();
 	    			String results[] = null;
 	    			System.out.println("context:"+context.getErrorMsg());
