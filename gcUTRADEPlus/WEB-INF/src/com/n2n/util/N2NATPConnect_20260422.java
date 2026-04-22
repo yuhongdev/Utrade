@@ -46,10 +46,8 @@ public class N2NATPConnect {
 		}
 	}
 
-	public com.n2n.connection.LoginContext login(java.lang.String loginID, java.lang.String passwd, HttpSession session, N2NSession oN2NSession2) throws com.n2n.connection.TCException {
+	public com.n2n.connection.LoginContext login(java.lang.String loginID, java.lang.String passwd, HttpSession session) throws com.n2n.connection.TCException {
 		java.lang.String data = "";
-
-		com.n2n.DB.N2NSession oN2NSession = (com.n2n.DB.N2NSession)session.getAttribute("oN2NSession");
 
 		loginID = encryptString(loginID);
 		passwd = encryptString(passwd);
@@ -57,7 +55,7 @@ public class N2NATPConnect {
 			java.lang.System.out.println((new StringBuilder("encPass:")).append(passwd).toString());
 		}
 		data = readData((new StringBuilder(java.lang.String.valueOf(m_atpDest))).append("TradeLogin").toString(), null, new java.lang.String[] { "PullMode=1", (new StringBuilder("UserName=")).append(loginID).toString(), (new StringBuilder("Password=")).append(passwd).toString(), "Compress=0",
-				"AppName=A", "EncryptedUP=1", (new StringBuilder("BHCode=")).append(oN2NSession.getSetting("BHCode")).toString() });
+				"AppName=A", "EncryptedUP=1", (new StringBuilder("BHCode=")).append(oN2NSession.getSetting("WebBHCode")).toString() });
 //				"AppName=A" });
 
 		com.n2n.connection.LoginContext context = processLoginMessage(data, session);
@@ -836,7 +834,12 @@ public class N2NATPConnect {
 			context.setAtpPublicIP("218.100.22.127");
 		}
 		if (mResult.get("PrivateIP")!=null && !("").equals(mResult.get("PrivateIP"))) {
-			context.setAtpPrivateIP((java.lang.String) mResult.get("PrivateIP"));	
+			// context.setAtpPrivateIP((java.lang.String) mResult.get("PrivateIP"));	
+			// Strip http(s):// prefix that new ATP server adds to PrivateIP field
+			String rawPrivateIP = (java.lang.String) mResult.get("PrivateIP");
+			if (rawPrivateIP.startsWith("https://")) rawPrivateIP = rawPrivateIP.substring(8);
+			else if (rawPrivateIP.startsWith("http://")) rawPrivateIP = rawPrivateIP.substring(7);
+			context.setAtpPrivateIP(rawPrivateIP);
 		} else {
 			context.setAtpPrivateIP("218.100.22.127");
 		}		
